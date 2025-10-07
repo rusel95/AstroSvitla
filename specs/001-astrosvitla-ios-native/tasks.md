@@ -173,11 +173,11 @@
   - [X] Implement timezone conversion helpers
   - [X] **Test**: Unit test for timezone conversions
 
-- [ ] **T2.1.2**: Implement planet position calculations
-  - [ ] Add method for calculating single planet position
-  - [ ] Add method for calculating all planets
-  - [ ] Handle coordinate conversions
-  - [ ] **Test**: Unit test against known reference data
+- [X] **T2.1.2**: Implement planet position calculations
+  - [X] Add method for calculating single planet position
+  - [X] Add method for calculating all planets
+  - [X] Handle coordinate conversions
+  - [X] **Test**: Unit test against known reference data
 
 - [ ] **T2.1.3**: Implement house calculations
   - [ ] Add method for calculating house cusps (Placidus)

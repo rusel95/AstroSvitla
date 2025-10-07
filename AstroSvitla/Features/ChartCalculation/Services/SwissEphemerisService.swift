@@ -108,4 +108,72 @@ final class SwissEphemerisService {
         let local = try localDate(birthDate: birthDate, birthTime: birthTime, timeZone: timeZone)
         return timeZone.secondsFromGMT(for: local)
     }
+
+    // MARK: - Planet Calculations
+
+    /// Calculates a single planet position at the provided UTC date.
+    func calculatePlanet(_ planet: PlanetType, at utcDate: Date) -> Planet {
+        let swissPlanet = mapToSwissPlanet(planet)
+        let coordinate = Coordinate(body: swissPlanet, date: utcDate)
+
+        let sign = mapToDomainSign(coordinate.tropical.sign)
+        let normalizedLongitude = normalizeDegrees(coordinate.longitude)
+        let retrograde = coordinate.speedLongitude < 0
+
+        return Planet(
+            name: planet,
+            longitude: normalizedLongitude,
+            latitude: coordinate.latitude,
+            sign: sign,
+            house: 0,
+            isRetrograde: retrograde,
+            speed: coordinate.speedLongitude
+        )
+    }
+
+    /// Calculates all planet positions (Sun through Pluto) at the provided UTC date.
+    func calculatePlanets(at utcDate: Date) -> [Planet] {
+        PlanetType.allCases.map { calculatePlanet($0, at: utcDate) }
+    }
+}
+
+// MARK: - Private Helpers
+
+private extension SwissEphemerisService {
+    func mapToSwissPlanet(_ planet: PlanetType) -> SwissEphemeris.Planet {
+        switch planet {
+        case .sun: return .sun
+        case .moon: return .moon
+        case .mercury: return .mercury
+        case .venus: return .venus
+        case .mars: return .mars
+        case .jupiter: return .jupiter
+        case .saturn: return .saturn
+        case .uranus: return .uranus
+        case .neptune: return .neptune
+        case .pluto: return .pluto
+        }
+    }
+
+    func mapToDomainSign(_ zodiac: SwissEphemeris.Zodiac) -> ZodiacSign {
+        switch zodiac {
+        case .aries: return .aries
+        case .taurus: return .taurus
+        case .gemini: return .gemini
+        case .cancer: return .cancer
+        case .leo: return .leo
+        case .virgo: return .virgo
+        case .libra: return .libra
+        case .scorpio: return .scorpio
+        case .sagittarius: return .sagittarius
+        case .capricorn: return .capricorn
+        case .aquarius: return .aquarius
+        case .pisces: return .pisces
+        }
+    }
+
+    func normalizeDegrees(_ value: Double) -> Double {
+        let normalized = value.truncatingRemainder(dividingBy: 360)
+        return normalized >= 0 ? normalized : normalized + 360
+    }
 }
