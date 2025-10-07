@@ -179,10 +179,10 @@
   - [X] Handle coordinate conversions
   - [X] **Test**: Unit test against known reference data
 
-- [ ] **T2.1.3**: Implement house calculations
-  - [ ] Add method for calculating house cusps (Placidus)
-  - [ ] Determine zodiac sign for each house
-  - [ ] **Test**: Unit test against known reference data
+- [X] **T2.1.3**: Implement house calculations
+  - [X] Add method for calculating house cusps (Placidus)
+  - [X] Determine zodiac sign for each house
+  - [X] **Test**: Unit test against known reference data
 
 - [ ] **T2.1.4**: Implement aspect calculations
   - [ ] Add method for calculating aspects between planets

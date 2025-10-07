@@ -135,6 +135,53 @@ final class SwissEphemerisService {
     func calculatePlanets(at utcDate: Date) -> [Planet] {
         PlanetType.allCases.map { calculatePlanet($0, at: utcDate) }
     }
+
+    /// Calculates Placidus houses, returning domain models alongside ascendent and midheaven degrees.
+    func calculateHouses(
+        at utcDate: Date,
+        latitude: Double,
+        longitude: Double,
+        houseSystem: HouseSystem = .placidus
+    ) -> (houses: [House], ascendant: Double, midheaven: Double) {
+
+        let cusps = HouseCusps(
+            date: utcDate,
+            latitude: latitude,
+            longitude: longitude,
+            houseSystem: houseSystem
+        )
+
+        let houseCusps: [(number: Int, cusp: Cusp)] = [
+            (1, cusps.first),
+            (2, cusps.second),
+            (3, cusps.third),
+            (4, cusps.fourth),
+            (5, cusps.fifth),
+            (6, cusps.sixth),
+            (7, cusps.seventh),
+            (8, cusps.eighth),
+            (9, cusps.ninth),
+            (10, cusps.tenth),
+            (11, cusps.eleventh),
+            (12, cusps.twelfth),
+        ]
+
+        let houses = houseCusps.map { entry in
+            let degree = normalizeDegrees(entry.cusp.tropical.value)
+            let sign = mapToDomainSign(entry.cusp.tropical.sign)
+
+            return House(
+                number: entry.number,
+                cusp: degree,
+                sign: sign
+            )
+        }
+
+        let ascendant = normalizeDegrees(cusps.ascendent.tropical.value)
+        let midheaven = normalizeDegrees(cusps.midHeaven.tropical.value)
+
+        return (houses, ascendant, midheaven)
+    }
 }
 
 // MARK: - Private Helpers

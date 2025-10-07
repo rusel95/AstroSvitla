@@ -103,6 +103,54 @@ struct SwissEphemerisServiceTests {
         #expect(Set(planets.map(\.name)).count == PlanetType.allCases.count)
     }
 
+    @Test
+    func testCalculateHousesMatchesSwissEphemeris() {
+        let date = makeDate(year: 2023, month: 7, day: 4, hour: 14, minute: 15, timeZone: utc)
+        let latitude = 50.4501
+        let longitude = 30.5234
+
+        let result = service.calculateHouses(at: date, latitude: latitude, longitude: longitude)
+
+        let swissCusps = HouseCusps(
+            date: date,
+            latitude: latitude,
+            longitude: longitude,
+            houseSystem: .placidus
+        )
+
+        let swissAsc = normalize(swissCusps.ascendent.tropical.value)
+        let swissMC = normalize(swissCusps.midHeaven.tropical.value)
+
+        #expect(abs(result.ascendant - swissAsc) < 0.0001)
+        #expect(abs(result.midheaven - swissMC) < 0.0001)
+        #expect(result.houses.count == 12)
+
+        let swissHouses: [Cusp] = [
+            swissCusps.first,
+            swissCusps.second,
+            swissCusps.third,
+            swissCusps.fourth,
+            swissCusps.fifth,
+            swissCusps.sixth,
+            swissCusps.seventh,
+            swissCusps.eighth,
+            swissCusps.ninth,
+            swissCusps.tenth,
+            swissCusps.eleventh,
+            swissCusps.twelfth,
+        ]
+
+        for (index, house) in result.houses.enumerated() {
+            let swissCusp = swissHouses[index]
+            let expectedDegree = normalize(swissCusp.tropical.value)
+            let expectedSign = mapToDomainSign(swissCusp.tropical.sign)
+
+            #expect(house.number == index + 1)
+            #expect(abs(house.cusp - expectedDegree) < 0.0001)
+            #expect(house.sign == expectedSign)
+        }
+    }
+
     private func makeDate(
         year: Int,
         month: Int,
