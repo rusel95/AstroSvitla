@@ -73,93 +73,93 @@
   - [ ] Add SwissEphemeris: `https://github.com/vsmithers1087/SwissEphemeris`
   - [ ] Verify package builds successfully
 
-- [ ] **T1.1.4**: Create folder structure
-  - [ ] Create `App/` folder
-  - [ ] Create `Core/` with subfolders (Navigation, Networking, Storage, Extensions)
-  - [ ] Create `Models/` with subfolders (SwiftData, Domain)
-  - [ ] Create `Features/` with subfolders for each feature
-  - [ ] Create `Resources/` with subfolders (Assets, AstrologyRules, Localizations)
-  - [ ] Create `Shared/` with subfolders (Components, Utilities)
+- [X] **T1.1.4**: Create folder structure
+  - [X] Create `App/` folder
+  - [X] Create `Core/` with subfolders (Navigation, Networking, Storage, Extensions)
+  - [X] Create `Models/` with subfolders (SwiftData, Domain)
+  - [X] Create `Features/` with subfolders for each feature
+  - [X] Create `Resources/` with subfolders (Assets, AstrologyRules, Localizations)
+  - [X] Create `Shared/` with subfolders (Components, Utilities)
 
-- [ ] **T1.1.5**: Setup .gitignore
-  - [ ] Add `**/Config.swift` to gitignore
-  - [ ] Add standard iOS/Xcode ignores
-  - [ ] Add SwiftData database files ignore
+- [X] **T1.1.5**: Setup .gitignore
+  - [X] Add `**/Config.swift` to gitignore
+  - [X] Add standard iOS/Xcode ignores
+  - [X] Add SwiftData database files ignore
 
-- [ ] **T1.1.6**: Create Config.swift template
-  - [ ] Create `Config.swift.example` with placeholder API key
-  - [ ] Document setup instructions in comments
-  - [ ] Verify file is gitignored
+- [X] **T1.1.6**: Create Config.swift template
+  - [X] Create `Config.swift.example` with placeholder API key
+  - [X] Document setup instructions in comments
+  - [X] Verify file is gitignored
 
 ### P1.2: SwiftData Models (→ T1.1.6)
 
-- [ ] **T1.2.1**: Implement User model
-  - [ ] Create `Models/SwiftData/User.swift`
-  - [ ] Add @Model macro
-  - [ ] Add id (@Attribute(.unique))
-  - [ ] Add createdAt, lastActiveAt
-  - [ ] Add relationships to charts and purchases
-  - [ ] **Test**: Unit test for User creation
+- [X] **T1.2.1**: Implement User model
+  - [X] Create `Models/SwiftData/User.swift`
+  - [X] Add @Model macro
+  - [X] Add id (@Attribute(.unique))
+  - [X] Add createdAt, lastActiveAt
+  - [X] Add relationships to charts and purchases
+  - [X] **Test**: Unit test for User creation
 
-- [ ] **T1.2.2**: Implement BirthChart model
-  - [ ] Create `Models/SwiftData/BirthChart.swift`
-  - [ ] Add all birth data fields
-  - [ ] Add chartDataJSON field
-  - [ ] Add relationship to User and ReportPurchases
-  - [ ] Add computed properties
-  - [ ] **Test**: Unit test for BirthChart CRUD operations
+- [X] **T1.2.2**: Implement BirthChart model
+  - [X] Create `Models/SwiftData/BirthChart.swift`
+  - [X] Add all birth data fields
+  - [X] Add chartDataJSON field
+  - [X] Add relationship to User and ReportPurchases
+  - [X] Add computed properties
+  - [X] **Test**: Unit test for BirthChart CRUD operations
 
-- [ ] **T1.2.3**: Implement ReportPurchase model
-  - [ ] Create `Models/SwiftData/ReportPurchase.swift`
-  - [ ] Add report content fields
-  - [ ] Add purchase info fields
-  - [ ] Add relationship to BirthChart
-  - [ ] Add computed properties
-  - [ ] **Test**: Unit test for ReportPurchase creation
+- [X] **T1.2.3**: Implement ReportPurchase model
+  - [X] Create `Models/SwiftData/ReportPurchase.swift`
+  - [X] Add report content fields
+  - [X] Add purchase info fields
+  - [X] Add relationship to BirthChart
+  - [X] Add computed properties
+  - [X] **Test**: Unit test for ReportPurchase creation
 
-- [ ] **T1.2.4**: Setup ModelContainer
-  - [ ] Create `Core/Storage/ModelContainer+Shared.swift`
-  - [ ] Configure schema with all models
-  - [ ] Implement default user initialization
-  - [ ] Integrate into AstroSvitlaApp.swift
-  - [ ] **Test**: Integration test for container setup
+- [X] **T1.2.4**: Setup ModelContainer
+  - [X] Create `Core/Storage/ModelContainer+Shared.swift`
+  - [X] Configure schema with all models
+  - [X] Implement default user initialization
+  - [X] Integrate into AstroSvitlaApp.swift
+  - [X] **Test**: Integration test for container setup
 
 ### P1.3: Domain Models [P] (→ T1.2.4)
 
-- [ ] **T1.3.1**: Implement NatalChart domain model
-  - [ ] Create `Models/Domain/NatalChart.swift`
-  - [ ] Add Codable conformance
-  - [ ] Add all required fields
-  - [ ] **Test**: Unit test for JSON serialization
+- [X] **T1.3.1**: Implement NatalChart domain model
+  - [X] Create `Models/Domain/NatalChart.swift`
+  - [X] Add Codable conformance
+  - [X] Add all required fields
+  - [X] **Test**: Unit test for JSON serialization
 
-- [ ] **T1.3.2**: Implement Planet domain model
-  - [ ] Create `Models/Domain/Planet.swift`
-  - [ ] Create PlanetType enum
-  - [ ] Add all required fields
-  - [ ] **Test**: Unit test for Planet initialization
+- [X] **T1.3.2**: Implement Planet domain model
+  - [X] Create `Models/Domain/Planet.swift`
+  - [X] Create PlanetType enum
+  - [X] Add all required fields
+  - [X] **Test**: Unit test for Planet initialization
 
-- [ ] **T1.3.3**: Implement House domain model
-  - [ ] Create `Models/Domain/House.swift`
-  - [ ] Add all required fields
-  - [ ] **Test**: Unit test for House initialization
+- [X] **T1.3.3**: Implement House domain model
+  - [X] Create `Models/Domain/House.swift`
+  - [X] Add all required fields
+  - [X] **Test**: Unit test for House initialization
 
-- [ ] **T1.3.4**: Implement Aspect domain model
-  - [ ] Create `Models/Domain/Aspect.swift`
-  - [ ] Create AspectType enum with angle calculations
-  - [ ] Add orb validation
-  - [ ] **Test**: Unit test for Aspect logic
+- [X] **T1.3.4**: Implement Aspect domain model
+  - [X] Create `Models/Domain/Aspect.swift`
+  - [X] Create AspectType enum with angle calculations
+  - [X] Add orb validation
+  - [X] **Test**: Unit test for Aspect logic
 
-- [ ] **T1.3.5**: Implement ZodiacSign enum
-  - [ ] Create `Models/Domain/ZodiacSign.swift`
-  - [ ] Add Element and Modality enums
-  - [ ] Add computed properties (element, modality, degree range)
-  - [ ] **Test**: Unit test for zodiac calculations
+- [X] **T1.3.5**: Implement ZodiacSign enum
+  - [X] Create `Models/Domain/ZodiacSign.swift`
+  - [X] Add Element and Modality enums
+  - [X] Add computed properties (element, modality, degree range)
+  - [X] **Test**: Unit test for zodiac calculations
 
-- [ ] **T1.3.6**: Implement ReportArea enum
-  - [ ] Create `Models/Domain/ReportArea.swift`
-  - [ ] Add display names, prices, icons
-  - [ ] Add StoreKit product ID mapping
-  - [ ] **Test**: Unit test for ReportArea properties
+- [X] **T1.3.6**: Implement ReportArea enum
+  - [X] Create `Models/Domain/ReportArea.swift`
+  - [X] Add display names, prices, icons
+  - [X] Add StoreKit product ID mapping
+  - [X] **Test**: Unit test for ReportArea properties
 
 ---
 

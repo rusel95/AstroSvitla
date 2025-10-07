@@ -12,6 +12,8 @@ import SwissEphemeris
 @main
 struct AstroSvitlaApp: App {
 
+    private let sharedModelContainer: ModelContainer
+
     init() {
         // CRITICAL: Initialize SwissEphemeris before any astronomical calculations
         // This sets the path to ephemeris data files (bundled with the library)
@@ -26,20 +28,13 @@ struct AstroSvitlaApp: App {
             print("⚠️ Configuration warning: \(error.localizedDescription)")
         }
         #endif
-    }
-
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            sharedModelContainer = try ModelContainer.astroSvitlaShared()
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
-    }()
+    }
 
     var body: some Scene {
         WindowGroup {

@@ -1,0 +1,79 @@
+//
+//  Config.swift.example
+//  AstroSvitla
+//
+//  Copy this file to Config.swift and fill in the required secrets
+//  before building the app locally. The real Config.swift file is
+//  gitignored and must never be committed.
+//
+
+import Foundation
+
+enum Config {
+
+    // MARK: - OpenAI Configuration
+
+    /// Replace with your project-specific OpenAI API key
+    static let openAIAPIKey = "YOUR_OPENAI_API_KEY_HERE"
+
+    /// OpenAI model to use for report generation
+    static let openAIModel = "gpt-4o"
+
+    /// Base URL for OpenAI API requests
+    static let openAIBaseURL = "https://api.openai.com/v1"
+
+    // MARK: - App Configuration
+
+    static let appVersion = "1.0.0"
+    static let buildNumber = "1"
+    static let bundleIdentifier = "com.astrosvitla.astroinsight"
+
+    // MARK: - StoreKit Product IDs
+
+    enum ProductID {
+        static let generalReport = "com.astrosvitla.astroinsight.report.general"
+        static let financesReport = "com.astrosvitla.astroinsight.report.finances"
+        static let careerReport = "com.astrosvitla.astroinsight.report.career"
+        static let relationshipsReport = "com.astrosvitla.astroinsight.report.relationships"
+        static let healthReport = "com.astrosvitla.astroinsight.report.health"
+
+        static var all: [String] {
+            [
+                generalReport,
+                financesReport,
+                careerReport,
+                relationshipsReport,
+                healthReport,
+            ]
+        }
+    }
+
+    // MARK: - Feature Flags
+
+    static let debugLoggingEnabled = true
+    static let analyticsEnabled = false
+
+    // MARK: - Validation Helpers
+
+    static var isOpenAIConfigured: Bool {
+        openAIAPIKey.isEmpty == false &&
+        openAIAPIKey != "YOUR_OPENAI_API_KEY_HERE"
+    }
+
+    static func validate() throws {
+        guard isOpenAIConfigured else {
+            throw ConfigError.missingAPIKey("OpenAI API key not configured in Config.swift")
+        }
+    }
+}
+
+enum ConfigError: LocalizedError {
+    case missingAPIKey(String)
+
+    var errorDescription: String? {
+        switch self {
+        case .missingAPIKey(let message):
+            return message
+        }
+    }
+}

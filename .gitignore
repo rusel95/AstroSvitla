@@ -94,6 +94,12 @@ iOSInjectionProject/
 ## Config file with API keys (CRITICAL - never commit!)
 AstroSvitla/Config/Config.swift
 
+## SwiftData persistent stores
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.store
+
 ## macOS
 .DS_Store
 
