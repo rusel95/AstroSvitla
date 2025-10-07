@@ -104,6 +104,86 @@ struct SwissEphemerisServiceTests {
     }
 
     @Test
+    func testCalculateAspectsMatchesSwissEphemeris() {
+        let date = makeDate(year: 2023, month: 7, day: 4, hour: 14, minute: 15, timeZone: utc)
+        let planets = service.calculatePlanets(at: date)
+
+        let aspects = service.calculateAspects(for: planets)
+        #expect(!aspects.isEmpty)
+
+        // Validate Sun/Mercury aspect using SwissEphemeris
+        guard
+            let sun = planets.first(where: { $0.name == .sun }),
+            let mercury = planets.first(where: { $0.name == .mercury })
+        else {
+            Issue.record("Required planets missing from calculation output")
+            return
+        }
+
+        guard let swissAspect = SwissEphemeris.Aspect(
+            a: sun.longitude,
+            b: mercury.longitude,
+            orb: 8.0
+        ) else {
+            Issue.record("SwissEphemeris returned no aspect for Sun/Mercury")
+            return
+        }
+
+        let expectedType: AspectType
+        let expectedOrb: Double
+
+        switch swissAspect {
+        case .conjunction(let remainder):
+            expectedType = .conjunction
+            expectedOrb = abs(remainder)
+        case .sextile(let remainder):
+            expectedType = .sextile
+            expectedOrb = abs(remainder)
+        case .square(let remainder):
+            expectedType = .square
+            expectedOrb = abs(remainder)
+        case .trine(let remainder):
+            expectedType = .trine
+            expectedOrb = abs(remainder)
+        case .opposition(let remainder):
+            expectedType = .opposition
+            expectedOrb = abs(remainder)
+        }
+
+        guard let aspect = aspects.first(where: {
+            ($0.planet1 == .sun && $0.planet2 == .mercury) ||
+            ($0.planet1 == .mercury && $0.planet2 == .sun)
+        }) else {
+            Issue.record("Service did not produce Sun-Mercury aspect")
+            return
+        }
+
+        #expect(aspect.type == expectedType)
+        #expect(abs(aspect.orb - expectedOrb) < 0.01)
+    }
+
+    @Test
+    func testAspectOrbOverrideFiltersResults() {
+        let date = makeDate(year: 2023, month: 7, day: 4, hour: 14, minute: 15, timeZone: utc)
+        let planets = service.calculatePlanets(at: date)
+
+        let defaultAspects = service.calculateAspects(for: planets)
+
+        let tightOverrides: [AspectType: Double] = [
+            .conjunction: 0.5,
+            .sextile: 0.5,
+            .square: 0.5,
+            .trine: 0.5,
+            .opposition: 0.5,
+        ]
+
+        let filteredAspects = service.calculateAspects(for: planets, orbOverrides: tightOverrides)
+
+        #expect(filteredAspects.count <= defaultAspects.count)
+        #expect(filteredAspects.allSatisfy { $0.orb <= 0.5 })
+    }
+
+    @Test
     func testCalculateHousesMatchesSwissEphemeris() {
         let date = makeDate(year: 2023, month: 7, day: 4, hour: 14, minute: 15, timeZone: utc)
         let latitude = 50.4501

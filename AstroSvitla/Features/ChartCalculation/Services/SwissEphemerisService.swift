@@ -136,6 +136,29 @@ final class SwissEphemerisService {
         PlanetType.allCases.map { calculatePlanet($0, at: utcDate) }
     }
 
+    /// Calculates major aspects (Conjunction, Sextile, Square, Trine, Opposition) between the supplied planets.
+    func calculateAspects(
+        for planets: [Planet],
+        orbOverrides: [AspectType: Double] = [:]
+    ) -> [Aspect] {
+        var aspects: [Aspect] = []
+
+        for i in 0..<planets.count {
+            for j in (i + 1)..<planets.count {
+                let first = planets[i]
+                let second = planets[j]
+
+                guard let aspect = aspectBetween(first, second, orbOverrides: orbOverrides) else {
+                    continue
+                }
+
+                aspects.append(aspect)
+            }
+        }
+
+        return aspects
+    }
+
     /// Calculates Placidus houses, returning domain models alongside ascendent and midheaven degrees.
     func calculateHouses(
         at utcDate: Date,
@@ -222,5 +245,81 @@ private extension SwissEphemerisService {
     func normalizeDegrees(_ value: Double) -> Double {
         let normalized = value.truncatingRemainder(dividingBy: 360)
         return normalized >= 0 ? normalized : normalized + 360
+    }
+
+    func aspectBetween(
+        _ planetA: Planet,
+        _ planetB: Planet,
+        orbOverrides: [AspectType: Double]
+    ) -> Aspect? {
+        let difference = angularDifference(planetA.longitude, planetB.longitude)
+
+        guard let type = AspectType.majorAspect(for: difference, orbOverrides: orbOverrides) else {
+            return nil
+        }
+
+        let maxOrb = orbOverrides[type] ?? type.maxOrb
+        let orb = abs(type.angle - difference)
+
+        guard orb <= maxOrb else {
+            return nil
+        }
+
+        let isApplying = isApplyingAspect(
+            planetA: planetA,
+            planetB: planetB,
+            aspectType: type
+        )
+        return Aspect(
+            planet1: planetA.name,
+            planet2: planetB.name,
+            type: type,
+            orb: orb,
+            isApplying: isApplying
+        )
+    }
+
+    func angularDifference(_ longitudeA: Double, _ longitudeB: Double) -> Double {
+        let diff = abs(longitudeA - longitudeB).truncatingRemainder(dividingBy: 360)
+        return diff > 180 ? 360 - diff : diff
+    }
+
+    func isApplyingAspect(
+        planetA: Planet,
+        planetB: Planet,
+        aspectType: AspectType,
+        deltaDays: Double = 0.01
+    ) -> Bool {
+        let currentOrb = abs(aspectType.angle - angularDifference(planetA.longitude, planetB.longitude))
+
+        let futureLongitudeA = normalizeDegrees(planetA.longitude + planetA.speed * deltaDays)
+        let futureLongitudeB = normalizeDegrees(planetB.longitude + planetB.speed * deltaDays)
+        let futureOrb = abs(aspectType.angle - angularDifference(futureLongitudeA, futureLongitudeB))
+
+        return futureOrb < currentOrb
+    }
+}
+
+private extension AspectType {
+    static func majorAspect(
+        for angle: Double,
+        orbOverrides: [AspectType: Double]
+    ) -> AspectType? {
+        let thresholds: [(AspectType, Double)] = [
+            (.conjunction, 0),
+            (.sextile, 60),
+            (.square, 90),
+            (.trine, 120),
+            (.opposition, 180),
+        ]
+
+        for (type, target) in thresholds {
+            let maxOrb = orbOverrides[type] ?? type.maxOrb
+            if abs(angle - target) <= maxOrb {
+                return type
+            }
+        }
+
+        return nil
     }
 }

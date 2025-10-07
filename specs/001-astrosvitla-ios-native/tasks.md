@@ -184,11 +184,11 @@
   - [X] Determine zodiac sign for each house
   - [X] **Test**: Unit test against known reference data
 
-- [ ] **T2.1.4**: Implement aspect calculations
-  - [ ] Add method for calculating aspects between planets
-  - [ ] Implement orb tolerance checking
-  - [ ] Filter to major aspects only (MVP)
-  - [ ] **Test**: Unit test for aspect detection
+- [X] **T2.1.4**: Implement aspect calculations
+  - [X] Add method for calculating aspects between planets
+  - [X] Implement orb tolerance checking
+  - [X] Filter to major aspects only (MVP)
+  - [X] **Test**: Unit test for aspect detection
 
 - [ ] **T2.1.5**: Implement retrograde detection
   - [ ] Add method to check planet speed
