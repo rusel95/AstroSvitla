@@ -1,6 +1,6 @@
-# Feature Specification: AstroInsight - iOS Natal Chart & AI Predictions App
+# Feature Specification: AstroSvitla - iOS Natal Chart & AI Predictions App
 
-**Feature Branch**: `001-astroinsight-ios-native`
+**Feature Branch**: `001-astrosvitla-ios-native`
 **Created**: 2025-10-07
 **Status**: Draft
 **Input**: User description: "iOS native astrology app with personalized natal chart calculations and AI-powered life area predictions using pay-per-report model"

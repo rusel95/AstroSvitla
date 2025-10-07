@@ -1,8 +1,8 @@
-# Feature 001: AstroInsight - iOS Natal Chart & AI Predictions App
+# Feature 001: AstroSvitla - iOS Natal Chart & AI Predictions App
 
 > **Status**: Draft - Ready for Implementation
 > **Created**: 2025-10-07
-> **Branch**: `001-astroinsight-ios-native`
+> **Branch**: `001-astrosvitla-ios-native`
 
 ---
 
@@ -17,7 +17,7 @@
 
 ## 🎯 Feature Overview
 
-**AstroInsight** is a native iOS astrology app that provides personalized natal chart calculations and AI-powered life area predictions using a pay-per-report business model.
+**AstroSvitla** is a native iOS astrology app that provides personalized natal chart calculations and AI-powered life area predictions using a pay-per-report business model.
 
 ### Core Value Proposition
 
@@ -54,7 +54,7 @@ Users pay only for specific life area reports they want ($5.99-$9.99), avoiding 
 ## 📊 Project Structure
 
 ```
-specs/001-astroinsight-ios-native/
+specs/001-astrosvitla-ios-native/
 ├── README.md              # This file
 ├── spec.md                # Feature specification (business requirements)
 ├── plan.md                # Implementation plan (technical approach)
@@ -91,13 +91,13 @@ Before starting implementation, ensure you have:
 
 1. **Clone repository and checkout feature branch**
    ```bash
-   git checkout 001-astroinsight-ios-native
+   git checkout 001-astrosvitla-ios-native
    ```
 
 2. **Create Xcode project** (see [plan.md](./plan.md) Phase 1.1)
    ```bash
    # Open Xcode > New Project > iOS App
-   # Product Name: AstroInsight
+   # Product Name: AstroSvitla
    # Organization: com.astrosvitla
    # Interface: SwiftUI
    # iOS Deployment: 17.0
@@ -108,7 +108,7 @@ Before starting implementation, ensure you have:
 
 4. **Setup API keys**
    ```bash
-   cp AstroInsight/App/Config.swift.example AstroInsight/App/Config.swift
+   cp AstroSvitla/App/Config.swift.example AstroSvitla/App/Config.swift
    # Edit Config.swift and add your OpenAI API key
    ```
 
@@ -197,7 +197,7 @@ Follow the implementation plan in sequential order:
 ## 📱 App Store Information
 
 ### Product Name
-**AstroInsight: Natal Chart**
+**AstroSvitla: Natal Chart**
 
 ### Category
 - Primary: Lifestyle

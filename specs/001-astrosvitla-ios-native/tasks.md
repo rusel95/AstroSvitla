@@ -1,6 +1,6 @@
-# Implementation Tasks: AstroInsight
+# Implementation Tasks: AstroSvitla
 
-**Feature**: 001-astroinsight-ios-native
+**Feature**: 001-astrosvitla-ios-native
 **Spec**: [spec.md](./spec.md)
 **Plan**: [plan.md](./plan.md)
 **Data Model**: [data-model.md](./data-model.md)
@@ -57,7 +57,7 @@
 ### P1.1: Project Setup
 
 - [ ] **T1.1.1**: Create Xcode iOS App project
-  - [ ] Product Name: AstroInsight
+  - [ ] Product Name: AstroSvitla
   - [ ] Organization: com.astrosvitla
   - [ ] Interface: SwiftUI
   - [ ] iOS Deployment Target: 17.0
@@ -121,7 +121,7 @@
   - [ ] Create `Core/Storage/ModelContainer+Shared.swift`
   - [ ] Configure schema with all models
   - [ ] Implement default user initialization
-  - [ ] Integrate into AstroInsightApp.swift
+  - [ ] Integrate into AstroSvitlaApp.swift
   - [ ] **Test**: Integration test for container setup
 
 ### P1.3: Domain Models [P] (→ T1.2.4)

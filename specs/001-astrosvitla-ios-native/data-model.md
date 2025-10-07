@@ -1,6 +1,6 @@
-# Data Model: AstroInsight
+# Data Model: AstroSvitla
 
-**Feature**: 001-astroinsight-ios-native
+**Feature**: 001-astrosvitla-ios-native
 **Related**: [spec.md](./spec.md) | [plan.md](./plan.md)
 **Created**: 2025-10-07
 
@@ -8,7 +8,7 @@
 
 ## Overview
 
-AstroInsight uses **SwiftData** (iOS 17+) for local persistence with offline-first architecture. All user data (charts, reports, purchases) stored locally on device with no cloud sync in MVP.
+AstroSvitla uses **SwiftData** (iOS 17+) for local persistence with offline-first architecture. All user data (charts, reports, purchases) stored locally on device with no cloud sync in MVP.
 
 ### Technology Choice
 
@@ -536,13 +536,13 @@ enum ReportArea: String, Codable, CaseIterable {
 ## ModelContainer Setup
 
 ```swift
-// In AstroInsightApp.swift
+// In AstroSvitlaApp.swift
 
 import SwiftUI
 import SwiftData
 
 @main
-struct AstroInsightApp: App {
+struct AstroSvitlaApp: App {
 
     var body: some Scene {
         WindowGroup {
@@ -849,7 +849,7 @@ let configuration = ModelConfiguration(
 ```swift
 import XCTest
 import SwiftData
-@testable import AstroInsight
+@testable import AstroSvitla
 
 class BirthChartModelTests: XCTestCase {
     var container: ModelContainer!

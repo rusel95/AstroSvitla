@@ -1,6 +1,6 @@
-# Research Documentation: AstroInsight
+# Research Documentation: AstroSvitla
 
-**Feature**: 001-astroinsight-ios-native
+**Feature**: 001-astrosvitla-ios-native
 **Phase**: Phase 0 - Research & Validation
 **Created**: 2025-10-07
 

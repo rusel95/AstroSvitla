@@ -1,6 +1,6 @@
-# Implementation Plan: AstroInsight - iOS Natal Chart & AI Predictions App
+# Implementation Plan: AstroSvitla - iOS Natal Chart & AI Predictions App
 
-**Feature**: 001-astroinsight-ios-native
+**Feature**: 001-astrosvitla-ios-native
 **Spec**: [spec.md](./spec.md)
 **Constitution**: [/memory/constitution.md](/memory/constitution.md)
 **Created**: 2025-10-07
@@ -123,7 +123,7 @@ Tech stack specified in PRD:
 **Tasks**:
 1. Create new iOS App project (SwiftUI, iOS 17.0+)
 2. Configure project settings:
-   - Product Name: AstroInsight
+   - Product Name: AstroSvitla
    - Organization Identifier: com.astrosvitla
    - Bundle ID: com.astrosvitla.astroinsight
    - Portrait orientation only
@@ -132,9 +132,9 @@ Tech stack specified in PRD:
    - SwissEphemeris: `https://github.com/vsmithers1087/SwissEphemeris`
 4. Create folder structure:
    ```
-   AstroInsight/
+   AstroSvitla/
    ├── App/
-   │   ├── AstroInsightApp.swift
+   │   ├── AstroSvitlaApp.swift
    │   └── Config.swift (gitignored)
    ├── Core/
    │   ├── Navigation/
@@ -1162,10 +1162,10 @@ Tech stack specified in PRD:
 ## Appendix: File Structure
 
 ```
-AstroInsight/
-├── AstroInsight/
+AstroSvitla/
+├── AstroSvitla/
 │   ├── App/
-│   │   ├── AstroInsightApp.swift
+│   │   ├── AstroSvitlaApp.swift
 │   │   └── Config.swift (gitignored - contains OpenAI API key)
 │   │
 │   ├── Core/
@@ -1294,7 +1294,7 @@ AstroInsight/
 │           ├── AppColors.swift
 │           └── Formatters.swift
 │
-├── AstroInsightTests/
+├── AstroSvitlaTests/
 │   ├── ChartCalculationTests/
 │   │   ├── SwissEphemerisServiceTests.swift
 │   │   ├── ChartCalculatorTests.swift
@@ -1312,7 +1312,7 @@ AstroInsight/
 │       ├── MockOpenAIResponses.swift
 │       └── MockStoreKitProducts.swift
 │
-├── AstroInsightUITests/
+├── AstroSvitlaUITests/
 │   ├── OnboardingFlowTests.swift
 │   ├── ChartInputFlowTests.swift
 │   ├── PurchaseFlowTests.swift
