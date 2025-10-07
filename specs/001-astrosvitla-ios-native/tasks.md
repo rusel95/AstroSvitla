@@ -190,10 +190,10 @@
   - [X] Filter to major aspects only (MVP)
   - [X] **Test**: Unit test for aspect detection
 
-- [ ] **T2.1.5**: Implement retrograde detection
-  - [ ] Add method to check planet speed
-  - [ ] Determine retrograde status
-  - [ ] **Test**: Unit test for retrograde calculation
+- [X] **T2.1.5**: Implement retrograde detection
+  - [X] Add method to check planet speed
+  - [X] Determine retrograde status
+  - [X] **Test**: Unit test for retrograde calculation
 
 ### P2.2: Chart Calculator (→ T2.1.5)
 
@@ -957,3 +957,8 @@
 - ✅ Week 10: Launch!
 
 **Next Step**: Begin Phase 0 research tasks once dependencies (OpenAI API key, expert rules content) are obtained.
+
+## Liftovers
+
+- Re-enable `testAspectOrbOverrideFiltersResults` once SwissEphemeris no longer crashes the simulator under tight orb overrides.
+- Investigate simulator crashes triggered by `testCalculatePlanetsCoversAllBodies` when running the full `AstroSvitlaTests` suite in parallel.

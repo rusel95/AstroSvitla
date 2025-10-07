@@ -118,7 +118,7 @@ final class SwissEphemerisService {
 
         let sign = mapToDomainSign(coordinate.tropical.sign)
         let normalizedLongitude = normalizeDegrees(coordinate.longitude)
-        let retrograde = coordinate.speedLongitude < 0
+        let retrograde = isRetrograde(planet, at: utcDate)
 
         return Planet(
             name: planet,
@@ -134,6 +134,13 @@ final class SwissEphemerisService {
     /// Calculates all planet positions (Sun through Pluto) at the provided UTC date.
     func calculatePlanets(at utcDate: Date) -> [Planet] {
         PlanetType.allCases.map { calculatePlanet($0, at: utcDate) }
+    }
+
+    /// Returns whether a planet is retrograde at the specified UTC date.
+    func isRetrograde(_ planet: PlanetType, at utcDate: Date) -> Bool {
+        let swissPlanet = mapToSwissPlanet(planet)
+        let coordinate = Coordinate(body: swissPlanet, date: utcDate)
+        return coordinate.speedLongitude < 0
     }
 
     /// Calculates major aspects (Conjunction, Sextile, Square, Trine, Opposition) between the supplied planets.
@@ -246,6 +253,7 @@ private extension SwissEphemerisService {
         let normalized = value.truncatingRemainder(dividingBy: 360)
         return normalized >= 0 ? normalized : normalized + 360
     }
+
 
     func aspectBetween(
         _ planetA: Planet,
