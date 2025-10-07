@@ -167,11 +167,11 @@
 
 ### P2.1: SwissEphemeris Wrapper (→ P1.3)
 
-- [ ] **T2.1.1**: Create SwissEphemerisService
-  - [ ] Create `Features/ChartCalculation/Services/SwissEphemerisService.swift`
-  - [ ] Initialize ephemeris data path
-  - [ ] Implement timezone conversion helpers
-  - [ ] **Test**: Unit test for timezone conversions
+- [X] **T2.1.1**: Create SwissEphemerisService
+  - [X] Create `Features/ChartCalculation/Services/SwissEphemerisService.swift`
+  - [X] Initialize ephemeris data path
+  - [X] Implement timezone conversion helpers
+  - [X] **Test**: Unit test for timezone conversions
 
 - [ ] **T2.1.2**: Implement planet position calculations
   - [ ] Add method for calculating single planet position
