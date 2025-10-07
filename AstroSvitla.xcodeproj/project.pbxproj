@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		85479E082E95466A0055CC08 /* SwissEphemeris in Frameworks */ = {isa = PBXBuildFile; productRef = 85479E072E95466A0055CC08 /* SwissEphemeris */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		85F4817F2E805C4D0031646F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85479E082E95466A0055CC08 /* SwissEphemeris in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +130,7 @@
 			);
 			name = AstroSvitla;
 			packageProductDependencies = (
+				85479E072E95466A0055CC08 /* SwissEphemeris */,
 			);
 			productName = AstroSvitla;
 			productReference = 85F4816D2E805C4B0031646F /* AstroSvitla.app */;
@@ -208,6 +214,9 @@
 			);
 			mainGroup = 85F481642E805C4B0031646F;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				85479E062E95466A0055CC08 /* XCRemoteSwiftPackageReference "SwissEphemeris" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 85F4816E2E805C4B0031646F /* Products */;
 			projectDirPath = "";
@@ -630,6 +639,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		85479E062E95466A0055CC08 /* XCRemoteSwiftPackageReference "SwissEphemeris" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vsmithers1087/SwissEphemeris";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.99;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		85479E072E95466A0055CC08 /* SwissEphemeris */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 85479E062E95466A0055CC08 /* XCRemoteSwiftPackageReference "SwissEphemeris" */;
+			productName = SwissEphemeris;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 85F481652E805C4B0031646F /* Project object */;
 }
