@@ -26,5 +26,6 @@ struct ChartCalculatorTests {
         #expect(result.houses.count == 12)
         #expect(result.ascendant >= 0 && result.ascendant < 360)
         #expect(result.midheaven >= 0 && result.midheaven < 360)
+        #expect(result.planets.allSatisfy { (1...12).contains($0.house) })
     }
 }
