@@ -7,9 +7,27 @@
 
 import SwiftUI
 import SwiftData
+import SwissEphemeris
 
 @main
 struct AstroSvitlaApp: App {
+
+    init() {
+        // CRITICAL: Initialize SwissEphemeris before any astronomical calculations
+        // This sets the path to ephemeris data files (bundled with the library)
+        JPLFileManager.setEphemerisPath()
+
+        // Optional: Validate configuration
+        #if DEBUG
+        do {
+            try Config.validate()
+            print("✅ Configuration validated successfully")
+        } catch {
+            print("⚠️ Configuration warning: \(error.localizedDescription)")
+        }
+        #endif
+    }
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
