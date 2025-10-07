@@ -203,13 +203,13 @@
   - [X] Orchestrate SwissEphemeris calls
   - [X] **Test**: Unit test for orchestration logic
 
-- [ ] **T2.2.2**: Implement complete chart calculation
-  - [ ] Calculate all 10 planets
-  - [ ] Calculate 12 houses
-  - [ ] Calculate major aspects
-  - [ ] Determine zodiac signs
-  - [ ] Identify retrogrades
-  - [ ] **Test**: Integration test with complete flow
+- [X] **T2.2.2**: Implement complete chart calculation
+  - [X] Calculate all 10 planets
+  - [X] Calculate 12 houses
+  - [X] Calculate major aspects
+  - [X] Determine zodiac signs
+  - [X] Identify retrogrades
+  - [X] **Test**: Integration test with complete flow
 
 - [ ] **T2.2.3**: Add async/await support
   - [ ] Make calculate() async
@@ -962,3 +962,4 @@
 
 - Re-enable `testAspectOrbOverrideFiltersResults` once SwissEphemeris no longer crashes the simulator under tight orb overrides.
 - Investigate simulator crashes triggered by `testCalculatePlanetsCoversAllBodies` when running the full `AstroSvitlaTests` suite in parallel.
+- Add real timeout/cancellation handling to async `ChartCalculator.calculate` to satisfy T2.2.3 requirements.

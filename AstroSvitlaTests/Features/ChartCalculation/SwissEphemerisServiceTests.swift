@@ -78,10 +78,10 @@ struct SwissEphemerisServiceTests {
     }
 
     @Test
-    func testCalculatePlanetMatchesReferenceCoordinate() {
+    func testCalculatePlanetMatchesReferenceCoordinate() throws {
         let date = makeDate(year: 2023, month: 7, day: 4, hour: 14, minute: 15, timeZone: utc)
 
-        let planet = service.calculatePlanet(.sun, at: date)
+        let planet = try service.calculatePlanet(.sun, at: date)
         let reference = Coordinate(body: SwissEphemeris.Planet.sun, date: date)
         let expectedLongitude = normalize(reference.longitude)
         let expectedSign = mapToDomainSign(reference.tropical.sign)
@@ -95,18 +95,18 @@ struct SwissEphemerisServiceTests {
     }
 
     @Test
-    func testCalculatePlanetsCoversAllBodies() {
+    func testCalculatePlanetsCoversAllBodies() throws {
         let date = makeDate(year: 2023, month: 7, day: 4, hour: 14, minute: 15, timeZone: utc)
-        let planets = service.calculatePlanets(at: date)
+        let planets = try service.calculatePlanets(at: date)
 
         #expect(planets.count == PlanetType.allCases.count)
         #expect(Set(planets.map(\.name)).count == PlanetType.allCases.count)
     }
 
     @Test
-    func testCalculateAspectsMatchesSwissEphemeris() {
+    func testCalculateAspectsMatchesSwissEphemeris() throws {
         let date = makeDate(year: 2023, month: 7, day: 4, hour: 14, minute: 15, timeZone: utc)
-        let planets = service.calculatePlanets(at: date)
+        let planets = try service.calculatePlanets(at: date)
 
         let aspects = service.calculateAspects(for: planets)
         #expect(!aspects.isEmpty)
@@ -185,24 +185,24 @@ struct SwissEphemerisServiceTests {
     // }
 
     @Test
-    func testRetrogradeDetectionForMercury() {
+    func testRetrogradeDetectionForMercury() throws {
         let retrogradeDate = makeDate(year: 2023, month: 9, day: 10, hour: 12, minute: 0, timeZone: utc)
         let directDate = makeDate(year: 2023, month: 7, day: 1, hour: 12, minute: 0, timeZone: utc)
 
-        let retrogradeMercury = service.calculatePlanet(.mercury, at: retrogradeDate)
-        let directMercury = service.calculatePlanet(.mercury, at: directDate)
+        let retrogradeMercury = try service.calculatePlanet(.mercury, at: retrogradeDate)
+        let directMercury = try service.calculatePlanet(.mercury, at: directDate)
 
         #expect(retrogradeMercury.isRetrograde)
         #expect(!directMercury.isRetrograde)
     }
 
     @Test
-    func testRetrogradeDetectionForOuterPlanet() {
+    func testRetrogradeDetectionForOuterPlanet() throws {
         let retrogradeDate = makeDate(year: 2023, month: 9, day: 10, hour: 12, minute: 0, timeZone: utc)
         let directDate = makeDate(year: 2024, month: 2, day: 1, hour: 12, minute: 0, timeZone: utc)
 
-        let retrogradeNeptune = service.calculatePlanet(.neptune, at: retrogradeDate)
-        let directNeptune = service.calculatePlanet(.neptune, at: directDate)
+        let retrogradeNeptune = try service.calculatePlanet(.neptune, at: retrogradeDate)
+        let directNeptune = try service.calculatePlanet(.neptune, at: directDate)
 
         #expect(retrogradeNeptune.isRetrograde)
         #expect(!directNeptune.isRetrograde)
@@ -218,12 +218,12 @@ struct SwissEphemerisServiceTests {
     }
 
     @Test
-    func testCalculateHousesMatchesSwissEphemeris() {
+    func testCalculateHousesMatchesSwissEphemeris() throws {
         let date = makeDate(year: 2023, month: 7, day: 4, hour: 14, minute: 15, timeZone: utc)
         let latitude = 50.4501
         let longitude = 30.5234
 
-        let result = service.calculateHouses(at: date, latitude: latitude, longitude: longitude)
+        let result = try service.calculateHouses(at: date, latitude: latitude, longitude: longitude)
 
         let swissCusps = HouseCusps(
             date: date,

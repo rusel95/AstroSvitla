@@ -29,7 +29,7 @@ final class ChartCalculator {
         latitude: Double,
         longitude: Double,
         locationName: String
-    ) throws -> NatalChart {
+    ) async throws -> NatalChart {
 
         let utcDate: Date
         do {
@@ -42,7 +42,7 @@ final class ChartCalculator {
             throw ChartCalculatorError.invalidTimeZone(timeZoneIdentifier)
         }
 
-        let houseResult = ephemerisService.calculateHouses(
+        let houseResult = try ephemerisService.calculateHouses(
             at: utcDate,
             latitude: latitude,
             longitude: longitude
@@ -52,7 +52,7 @@ final class ChartCalculator {
             throw ChartCalculatorError.invalidHouseData
         }
 
-        let planets = ephemerisService
+        let planets = try ephemerisService
             .calculatePlanets(at: utcDate)
             .map { assignHouse(for: $0, using: houseResult.houses) }
 

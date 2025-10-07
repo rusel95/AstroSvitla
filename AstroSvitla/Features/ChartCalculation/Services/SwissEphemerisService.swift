@@ -112,7 +112,7 @@ final class SwissEphemerisService {
     // MARK: - Planet Calculations
 
     /// Calculates a single planet position at the provided UTC date.
-    func calculatePlanet(_ planet: PlanetType, at utcDate: Date) -> Planet {
+    func calculatePlanet(_ planet: PlanetType, at utcDate: Date) throws -> Planet {
         let swissPlanet = mapToSwissPlanet(planet)
         let coordinate = Coordinate(body: swissPlanet, date: utcDate)
 
@@ -132,8 +132,8 @@ final class SwissEphemerisService {
     }
 
     /// Calculates all planet positions (Sun through Pluto) at the provided UTC date.
-    func calculatePlanets(at utcDate: Date) -> [Planet] {
-        PlanetType.allCases.map { calculatePlanet($0, at: utcDate) }
+    func calculatePlanets(at utcDate: Date) throws -> [Planet] {
+        try PlanetType.allCases.map { try calculatePlanet($0, at: utcDate) }
     }
 
     /// Returns whether a planet is retrograde at the specified UTC date.
@@ -172,7 +172,7 @@ final class SwissEphemerisService {
         latitude: Double,
         longitude: Double,
         houseSystem: HouseSystem = .placidus
-    ) -> (houses: [House], ascendant: Double, midheaven: Double) {
+    ) throws -> (houses: [House], ascendant: Double, midheaven: Double) {
 
         let cusps = HouseCusps(
             date: utcDate,
