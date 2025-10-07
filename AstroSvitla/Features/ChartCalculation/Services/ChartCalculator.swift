@@ -1,11 +1,17 @@
 import Foundation
 
-struct ChartCalculatorResult {
-    let planets: [Planet]
-    let houses: [House]
-    let aspects: [Aspect]
-    let ascendant: Double
-    let midheaven: Double
+enum ChartCalculatorError: LocalizedError, Equatable {
+    case invalidTimeZone(String)
+    case invalidHouseData
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidTimeZone(let identifier):
+            return "Invalid timezone identifier: \(identifier)"
+        case .invalidHouseData:
+            return "House calculation returned invalid data."
+        }
+    }
 }
 
 final class ChartCalculator {
@@ -21,14 +27,20 @@ final class ChartCalculator {
         birthTime: Date,
         timeZoneIdentifier: String,
         latitude: Double,
-        longitude: Double
-    ) throws -> ChartCalculatorResult {
+        longitude: Double,
+        locationName: String
+    ) throws -> NatalChart {
 
-        let utcDate = try ephemerisService.utcDate(
-            birthDate: birthDate,
-            birthTime: birthTime,
-            timeZoneIdentifier: timeZoneIdentifier
-        )
+        let utcDate: Date
+        do {
+            utcDate = try ephemerisService.utcDate(
+                birthDate: birthDate,
+                birthTime: birthTime,
+                timeZoneIdentifier: timeZoneIdentifier
+            )
+        } catch {
+            throw ChartCalculatorError.invalidTimeZone(timeZoneIdentifier)
+        }
 
         let houseResult = ephemerisService.calculateHouses(
             at: utcDate,
@@ -36,18 +48,28 @@ final class ChartCalculator {
             longitude: longitude
         )
 
+        guard houseResult.houses.count == 12 else {
+            throw ChartCalculatorError.invalidHouseData
+        }
+
         let planets = ephemerisService
             .calculatePlanets(at: utcDate)
             .map { assignHouse(for: $0, using: houseResult.houses) }
 
         let aspects = ephemerisService.calculateAspects(for: planets)
 
-        return ChartCalculatorResult(
+        return NatalChart(
+            birthDate: birthDate,
+            birthTime: birthTime,
+            latitude: latitude,
+            longitude: longitude,
+            locationName: locationName,
             planets: planets,
             houses: houseResult.houses,
             aspects: aspects,
             ascendant: houseResult.ascendant,
-            midheaven: houseResult.midheaven
+            midheaven: houseResult.midheaven,
+            calculatedAt: Date()
         )
     }
 
@@ -69,8 +91,6 @@ final class ChartCalculator {
     }
 
     private func houseContaining(planetLongitude: Double, houses: [House]) -> House? {
-        guard houses.count == 12 else { return nil }
-
         let ordered = houses.sorted { $0.number < $1.number }
 
         for index in 0..<ordered.count {

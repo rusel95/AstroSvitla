@@ -197,11 +197,11 @@
 
 ### P2.2: Chart Calculator (→ T2.1.5)
 
-- [ ] **T2.2.1**: Create ChartCalculator service
-  - [ ] Create `Features/ChartCalculation/Services/ChartCalculator.swift`
-  - [ ] Implement calculate() method
-  - [ ] Orchestrate SwissEphemeris calls
-  - [ ] **Test**: Unit test for orchestration logic
+- [X] **T2.2.1**: Create ChartCalculator service
+  - [X] Create `Features/ChartCalculation/Services/ChartCalculator.swift`
+  - [X] Implement calculate() method
+  - [X] Orchestrate SwissEphemeris calls
+  - [X] **Test**: Unit test for orchestration logic
 
 - [ ] **T2.2.2**: Implement complete chart calculation
   - [ ] Calculate all 10 planets
@@ -958,7 +958,7 @@
 
 **Next Step**: Begin Phase 0 research tasks once dependencies (OpenAI API key, expert rules content) are obtained.
 
-## Liftovers
+## Leftovers
 
 - Re-enable `testAspectOrbOverrideFiltersResults` once SwissEphemeris no longer crashes the simulator under tight orb overrides.
 - Investigate simulator crashes triggered by `testCalculatePlanetsCoversAllBodies` when running the full `AstroSvitlaTests` suite in parallel.
