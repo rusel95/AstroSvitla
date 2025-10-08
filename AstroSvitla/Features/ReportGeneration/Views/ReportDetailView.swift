@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ReportDetailView: View {
     let birthDetails: BirthDetails
+    let natalChart: NatalChart
     let report: GeneratedReport
     var onGenerateAnother: (() -> Void)?
     var onStartOver: (() -> Void)?
@@ -10,6 +11,7 @@ struct ReportDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 header
+                chartSection
                 summarySection
                 influencesSection
                 analysisSection
@@ -30,6 +32,18 @@ struct ReportDetailView: View {
                 .foregroundStyle(.secondary)
             Text(birthDetails.formattedLocation)
                 .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var chartSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Натальна карта")
+                .font(.headline)
+            NatalChartWheelView(chart: natalChart)
+                .frame(height: 350)
+                .background(Color(.systemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -114,6 +128,19 @@ struct ReportDetailView: View {
                 birthDate: .now,
                 birthTime: .now,
                 location: "Kyiv, Ukraine"
+            ),
+            natalChart: NatalChart(
+                birthDate: .now,
+                birthTime: .now,
+                latitude: 50.4501,
+                longitude: 30.5234,
+                locationName: "Kyiv",
+                planets: [],
+                houses: [],
+                aspects: [],
+                ascendant: 127.5,
+                midheaven: 215.3,
+                calculatedAt: .now
             ),
             report: GeneratedReport(
                 area: .career,

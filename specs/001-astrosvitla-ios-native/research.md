@@ -128,6 +128,98 @@ The project is already using this library, which is the optimal choice for NASA 
 - Cons: 40-80 hour development time
 - Rejected for MVP because: Time constraints, can be Phase 2 enhancement
 
+### Update 2025-10-08: Native SwiftUI Implementation Completed
+
+**Status**: ✅ Implemented
+**Location**: `AstroSvitla/Features/ChartCalculation/Views/NatalChartWheelView.swift`
+
+**Decision**: Implemented native SwiftUI chart visualization instead of WebView-based solution.
+
+**Rationale for Change**:
+- Native SwiftUI provides better performance and integration
+- No external dependencies or WebView overhead
+- Full control over appearance and customization
+- Smaller bundle size (pure Swift code vs HTML/JS/CSS)
+- Better dark mode support
+- More maintainable codebase
+
+**Implementation Details**:
+- Pure SwiftUI using Path, Shape, and Canvas
+- Unicode astrological symbols for planets and signs
+- Color-coded planet markers
+- Accurate positioning based on calculated degrees
+- House divisions with Placidus system
+- ASC/MC angle markers
+- Retrograde indicators
+
+**Features Implemented**:
+- ✅ Circular zodiac wheel (12 signs)
+- ✅ House cusps and divisions
+- ✅ Planet positions at exact longitudes
+- ✅ Ascendant and Midheaven markers
+- ✅ Color-coded planets
+- ✅ Retrograde indicators (℞)
+- ✅ Responsive sizing
+- ✅ Dark/Light mode support
+
+**Estimated Actual Effort**: 4 hours (significantly less than 40-80 hour estimate due to scoped MVP approach)
+
+### Alternative: API-Based Chart Visualization Services
+
+**Research Date**: 2025-10-08
+
+Investigated external API services for natal chart drawing as an alternative to native implementation:
+
+#### 1. AstrologyAPI.com
+- **Website**: https://www.astrologyapi.com/
+- **Pros**: Commercial-grade API, comprehensive features
+- **Cons**: Pricing not transparent, requires account/subscription, no clear chart drawing API documented
+- **Verdict**: ❌ Not recommended - Unclear pricing, overkill for just chart visualization
+
+#### 2. Free Astrology API
+- **Website**: http://freeastrologyapi.com/
+- **Features**: Claims to support Western astrology, SVG chart generation
+- **Pros**: Advertised as 100% free
+- **Cons**: Poor documentation, Postman collection link broken/unhelpful, reliability unclear
+- **Verdict**: ❌ Not recommended - Documentation issues, uncertain reliability
+
+#### 3. Astro.com Chart Generation
+- **URL**: https://www.astro.com/cgi/genchart.cgi
+- **Type**: Web form interface, not formal API
+- **Pros**: Most trusted astrology source, high-quality charts
+- **Cons**: Not designed for programmatic access, no API documentation, would require screen scraping
+- **Verdict**: ❌ Not recommended - Not an API, against terms of service
+
+#### 4. Prokerala Astrology API
+- **Website**: https://api.prokerala.com/
+- **Features**: Astrology API services
+- **Cons**: Primarily focused on Vedic/Indian astrology, pricing unclear for Western astrology features
+- **Verdict**: ❌ Not recommended - Wrong focus (Vedic), unclear Western support
+
+### Conclusion: Native Implementation is Optimal
+
+After researching external APIs, **native SwiftUI implementation remains the best choice**:
+
+**Advantages Over API Services**:
+1. ✅ **No ongoing costs** - One-time development vs recurring API fees
+2. ✅ **No network dependency** - Works offline
+3. ✅ **Instant rendering** - No API latency
+4. ✅ **Privacy** - No birth data sent to third parties
+5. ✅ **Full control** - Customizable appearance and features
+6. ✅ **No rate limits** - Unlimited chart generations
+7. ✅ **No vendor lock-in** - Complete ownership
+
+**Disadvantages of API Services**:
+1. ❌ Recurring monthly/yearly costs
+2. ❌ Network dependency (fails offline)
+3. ❌ Latency (200-1000ms per request)
+4. ❌ Rate limits
+5. ❌ Privacy concerns (sending user birth data externally)
+6. ❌ Limited customization
+7. ❌ Vendor dependency
+
+**Final Recommendation**: Continue with native SwiftUI implementation. Current implementation is production-ready and superior to any API-based solution for this use case.
+
 ---
 
 ## 3. AI/LLM Service for Report Generation

@@ -13,9 +13,32 @@ struct NatalChartWheelView: View {
             let houseRadius = outerRadius * 0.4
 
             ZStack {
-                // Outer zodiac circle
+                // Background circle
+                Circle()
+                    .fill(Color(.systemBackground))
+                    .stroke(Color.secondary.opacity(0.3), lineWidth: 2)
+                    .frame(width: outerRadius * 2, height: outerRadius * 2)
+                    .position(center)
+
+                // Outer zodiac circle with colored backgrounds
                 ForEach(0..<12, id: \.self) { index in
                     ZodiacSegment(index: index, center: center, radius: outerRadius)
+                }
+
+                // Inner circle for aspect lines background
+                Circle()
+                    .fill(Color(.systemBackground).opacity(0.95))
+                    .frame(width: houseRadius * 2.4, height: houseRadius * 2.4)
+                    .position(center)
+
+                // Aspect lines (drawn first, behind planets)
+                ForEach(chart.aspects) { aspect in
+                    AspectLine(
+                        aspect: aspect,
+                        planets: chart.planets,
+                        center: center,
+                        radius: innerRadius * 0.85
+                    )
                 }
 
                 // House lines
@@ -46,6 +69,15 @@ struct NatalChartWheelView: View {
                     )
                 }
 
+                // Planet degree labels
+                ForEach(chart.planets) { planet in
+                    PlanetDegreeLabel(
+                        planet: planet,
+                        center: center,
+                        radius: innerRadius + 25
+                    )
+                }
+
                 // Ascendant marker
                 AscendantMarker(
                     degree: chart.ascendant,
@@ -63,6 +95,7 @@ struct NatalChartWheelView: View {
                 // Center circle
                 Circle()
                     .fill(Color(.systemBackground))
+                    .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
                     .frame(width: houseRadius * 1.2, height: houseRadius * 1.2)
                     .position(center)
             }
@@ -88,7 +121,21 @@ struct ZodiacSegment: View {
         let endAngle = Angle(degrees: Double(index + 1) * 30 - 90)
 
         ZStack {
-            // Segment arc
+            // Segment background (pie slice)
+            Path { path in
+                path.move(to: center)
+                path.addArc(
+                    center: center,
+                    radius: radius,
+                    startAngle: startAngle,
+                    endAngle: endAngle,
+                    clockwise: false
+                )
+                path.closeSubpath()
+            }
+            .fill(signColor(sign).opacity(0.1))
+
+            // Segment border arc
             Path { path in
                 path.addArc(
                     center: center,
@@ -100,9 +147,17 @@ struct ZodiacSegment: View {
             }
             .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
 
+            // Radial line separator
+            Path { path in
+                path.move(to: center)
+                path.addLine(to: polarToCartesian(center: center, radius: radius, angle: startAngle.degrees))
+            }
+            .stroke(Color.secondary.opacity(0.2), lineWidth: 0.5)
+
             // Sign symbol
             Text(signSymbol(sign))
-                .font(.system(size: 20))
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(signColor(sign))
                 .position(
                     polarToCartesian(
                         center: center,
@@ -110,6 +165,15 @@ struct ZodiacSegment: View {
                         angle: startAngle.degrees + 15
                     )
                 )
+        }
+    }
+
+    private func signColor(_ sign: ZodiacSign) -> Color {
+        switch sign.element {
+        case .fire: return .red
+        case .earth: return .green
+        case .air: return .yellow
+        case .water: return .blue
         }
     }
 
@@ -128,6 +192,87 @@ struct ZodiacSegment: View {
         case .aquarius: return "♒"
         case .pisces: return "♓"
         }
+    }
+}
+
+// MARK: - Aspect Line
+
+struct AspectLine: View {
+    let aspect: Aspect
+    let planets: [Planet]
+    let center: CGPoint
+    let radius: CGFloat
+
+    var body: some View {
+        guard let planet1 = planets.first(where: { $0.name == aspect.planet1 }),
+              let planet2 = planets.first(where: { $0.name == aspect.planet2 }) else {
+            return AnyView(EmptyView())
+        }
+
+        let angle1 = planet1.longitude - 90
+        let angle2 = planet2.longitude - 90
+        let point1 = polarToCartesian(center: center, radius: radius, angle: angle1)
+        let point2 = polarToCartesian(center: center, radius: radius, angle: angle2)
+
+        return AnyView(
+            Path { path in
+                path.move(to: point1)
+                path.addLine(to: point2)
+            }
+            .stroke(aspectColor(aspect.type), style: StrokeStyle(lineWidth: aspectLineWidth(aspect.type), dash: aspectDash(aspect.type)))
+            .opacity(0.4)
+        )
+    }
+
+    private func aspectColor(_ type: AspectType) -> Color {
+        switch type {
+        case .conjunction: return .blue
+        case .opposition: return .red
+        case .trine: return .green
+        case .square: return .orange
+        case .sextile: return .purple
+        }
+    }
+
+    private func aspectLineWidth(_ type: AspectType) -> CGFloat {
+        switch type {
+        case .conjunction: return 2.5
+        case .opposition: return 2.0
+        case .trine: return 2.0
+        case .square: return 1.5
+        case .sextile: return 1.5
+        }
+    }
+
+    private func aspectDash(_ type: AspectType) -> [CGFloat] {
+        switch type {
+        case .conjunction: return []
+        case .opposition: return []
+        case .trine: return []
+        case .square: return [5, 3]
+        case .sextile: return [3, 2]
+        }
+    }
+}
+
+// MARK: - Planet Degree Label
+
+struct PlanetDegreeLabel: View {
+    let planet: Planet
+    let center: CGPoint
+    let radius: CGFloat
+
+    var body: some View {
+        let angle = planet.longitude - 90
+        let position = polarToCartesian(center: center, radius: radius, angle: angle)
+
+        let degrees = Int(planet.longitude) % 30
+        let minutes = Int((planet.longitude.truncatingRemainder(dividingBy: 1)) * 60)
+
+        Text("\(degrees)°\(String(format: "%02d", minutes))'")
+            .font(.system(size: 8, weight: .medium))
+            .foregroundStyle(.secondary)
+            .position(position)
     }
 }
 

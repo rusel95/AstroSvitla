@@ -76,6 +76,7 @@ struct ContentView: View {
         case .report(let details, let chart, _, let report):
             ReportDetailView(
                 birthDetails: details,
+                natalChart: chart,
                 report: report,
                 onGenerateAnother: {
                     flowState = .areaSelection(details, chart)

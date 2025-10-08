@@ -158,9 +158,11 @@ struct OpenAIService {
     private func logUsage(_ usage: ChatResult.CompletionUsage?) {
         #if DEBUG
         guard Config.debugLoggingEnabled, let usage else { return }
-        let totalTokens = usage.totalTokens ?? (usage.promptTokens ?? 0) + (usage.completionTokens ?? 0)
+        let promptTokens = usage.promptTokens
+        let completionTokens = usage.completionTokens
+        let totalTokens = usage.totalTokens
         let estimatedCost = Double(totalTokens) / 1000.0 * 0.0007
-        debugPrint("ℹ️ OpenAI usage — prompt: \(usage.promptTokens ?? 0) tokens, completion: \(usage.completionTokens ?? 0) tokens, total: \(totalTokens), est. cost $\(String(format: "%.6f", estimatedCost))")
+        debugPrint("ℹ️ OpenAI usage — prompt: \(promptTokens) tokens, completion: \(completionTokens) tokens, total: \(totalTokens), est. cost $\(String(format: "%.6f", estimatedCost))")
         #endif
     }
 
@@ -179,7 +181,7 @@ struct OpenAIService {
         switch error {
         case .emptyData:
             return .noContent
-        case .statusError(let response, let statusCode):
+        case .statusError(_, let statusCode):
             switch statusCode {
             case 401:
                 return .missingAPIKey

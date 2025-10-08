@@ -5,7 +5,8 @@ actor AIReportGenerator {
     private let openAIService: OpenAIService
     private let knowledgeProvider: AstrologyKnowledgeProvider
 
-    nonisolated init(
+    @MainActor
+    init(
         openAIService: OpenAIService = OpenAIService(),
         knowledgeProvider: AstrologyKnowledgeProvider = AstrologyKnowledgeProvider()
     ) {
@@ -23,10 +24,6 @@ actor AIReportGenerator {
             birthDetails: birthDetails,
             natalChart: natalChart
         )
-
-        guard openAIService.isConfigured else {
-            throw ReportGenerationError.missingAPIKey
-        }
 
         return try await openAIService.generateReport(
             for: area,

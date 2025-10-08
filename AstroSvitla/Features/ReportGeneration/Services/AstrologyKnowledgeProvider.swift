@@ -40,7 +40,7 @@ actor AstrologyKnowledgeProvider {
         }
     }
 
-    private func buildChartContext(from chart: NatalChart) -> [String] {
+    nonisolated private func buildChartContext(from chart: NatalChart) -> [String] {
         var context: [String] = []
 
         // Sun position
