@@ -7,6 +7,15 @@ struct ReportDetailView: View {
     var onGenerateAnother: (() -> Void)?
     var onStartOver: (() -> Void)?
 
+    @State private var isExportingPDF = false
+    @State private var exportErrorMessage: String?
+    @State private var isShowingErrorAlert = false
+    @State private var shareURL: URL?
+    @State private var isPresentingShareSheet = false
+    @State private var isShowingSuccessAlert = false
+
+    private let pdfGenerator = ReportPDFGenerator()
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
@@ -22,6 +31,30 @@ struct ReportDetailView: View {
         }
         .navigationTitle("Звіт: \(report.area.displayName)")
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $isPresentingShareSheet) {
+            if let url = shareURL {
+                ShareSheet(activityItems: [url]) { completed in
+                    if completed {
+                        isShowingSuccessAlert = true
+                    }
+                    cleanupShareURL()
+                }
+            }
+        }
+        .alert("Не вдалося експортувати", isPresented: $isShowingErrorAlert, actions: {
+            Button("Закрити", role: .cancel) {
+                isShowingErrorAlert = false
+            }
+        }, message: {
+            Text(exportErrorMessage ?? "Спробуйте ще раз трохи пізніше.")
+        })
+        .alert("Збережено", isPresented: $isShowingSuccessAlert, actions: {
+            Button("Гаразд", role: .cancel) {
+                isShowingSuccessAlert = false
+            }
+        }, message: {
+            Text("PDF збережено або надіслано успішно.")
+        })
     }
 
     private var header: some View {
@@ -97,6 +130,23 @@ struct ReportDetailView: View {
 
     private var actionButtons: some View {
         VStack(spacing: 12) {
+            Button {
+                exportReport()
+            } label: {
+                if isExportingPDF {
+                    ProgressView()
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                } else {
+                    Label("Експортувати у PDF", systemImage: "square.and.arrow.up")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                }
+            }
+            .background(Color.accentColor.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .disabled(isExportingPDF)
+
             if let onGenerateAnother {
                 Button("Згенерувати для іншої сфери") {
                     onGenerateAnother()
@@ -117,6 +167,42 @@ struct ReportDetailView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func exportReport() {
+        guard isExportingPDF == false else { return }
+
+        Task { @MainActor in
+            isExportingPDF = true
+            do {
+                let pdfData = try pdfGenerator.makePDF(
+                    birthDetails: birthDetails,
+                    natalChart: natalChart,
+                    report: report
+                )
+                let url = try writePDFToTemporaryLocation(data: pdfData)
+                shareURL = url
+                isPresentingShareSheet = true
+            } catch {
+                exportErrorMessage = error.localizedDescription
+                isShowingErrorAlert = true
+            }
+            isExportingPDF = false
+        }
+    }
+
+    private func writePDFToTemporaryLocation(data: Data) throws -> URL {
+        let filename = "AstroSvitla-\(report.area.rawValue)-\(UUID().uuidString).pdf"
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+        try data.write(to: url, options: .atomic)
+        return url
+    }
+
+    private func cleanupShareURL() {
+        if let url = shareURL {
+            try? FileManager.default.removeItem(at: url)
+        }
+        shareURL = nil
     }
 }
 

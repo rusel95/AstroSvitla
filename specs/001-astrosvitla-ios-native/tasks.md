@@ -586,24 +586,24 @@
 
 ### P7.2: PDF Export [P] (→ T7.1.1)
 
-- [ ] **T7.2.1**: Create PDFGenerator
-  - [ ] Create `Features/ReportGeneration/Services/PDFGenerator.swift`
-  - [ ] Render report text to PDF
-  - [ ] Include chart image
-  - [ ] Add footer with date
+- [X] **T7.2.1**: Create PDFGenerator
+  - [X] Create `Features/ReportGeneration/Services/PDFGenerator.swift`
+  - [X] Render report text to PDF
+  - [X] Include chart image
+  - [X] Add footer with date
   - [ ] **Test**: PDF generation test
 
-- [ ] **T7.2.2**: Integrate with UIActivityViewController
-  - [ ] Add "Export PDF" button
-  - [ ] Show share sheet
+- [X] **T7.2.2**: Integrate with UIActivityViewController
+  - [X] Add "Export PDF" button
+  - [X] Show share sheet
   - [ ] **Test**: Share flow test
 
-- [ ] **T7.2.3**: Handle errors
-  - [ ] Show error if PDF generation fails
+- [X] **T7.2.3**: Handle errors
+  - [X] Show error if PDF generation fails
   - [ ] **Test**: Error handling test
 
-- [ ] **T7.2.4**: Add confirmation feedback
-  - [ ] Show "Saved" message
+- [X] **T7.2.4**: Add confirmation feedback
+  - [X] Show "Saved" message
   - [ ] **Test**: Feedback test
 
 ### P7.3: Report List Screen [P] (→ T1.2.3)
