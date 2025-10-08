@@ -245,12 +245,12 @@
   - [ ] Create `Features/Onboarding/Views/OnboardingView.swift`
   - [ ] Implement PageTabViewStyle
   - [ ] Add navigation dots
-  - [ ] **Test**: Snapshot test for layout
+  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)* for layout
 
 - [ ] **T3.1.2**: Create OnboardingPageView component
   - [ ] Create page template with image + text
   - [ ] Implement Skip and Next buttons
-  - [ ] **Test**: Snapshot test for each page
+  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)* for each page
 
 - [ ] **T3.1.3**: Add onboarding content
   - [ ] Page 1: "Discover Your Destiny"
@@ -272,23 +272,23 @@
 
 ### P3.2: Birth Data Input Form (→ T3.1.5)
 
-- [ ] **T3.2.1**: Create ChartInputView
-  - [ ] Create `Features/ChartInput/Views/ChartInputView.swift`
-  - [ ] Add Form with DatePickers
-  - [ ] Add location search field
-  - [ ] Add "Calculate Chart" button
-  - [ ] **Test**: Snapshot test
+- [X] **T3.2.1**: Create ChartInputView
+  - [X] Create `Features/ChartInput/Views/ChartInputView.swift`
+  - [X] Add Form with DatePickers
+  - [X] Add location search field
+  - [X] Add "Calculate Chart" button
+  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
 
-- [ ] **T3.2.2**: Create ChartInputViewModel
-  - [ ] Create validation logic
-  - [ ] Add published properties for form fields
-  - [ ] Add computed isValid property
+- [X] **T3.2.2**: Create ChartInputViewModel
+  - [X] Create validation logic
+  - [X] Add published properties for form fields
+  - [X] Add computed isValid property
   - [ ] **Test**: Unit test for validation
 
-- [ ] **T3.2.3**: Implement form validation
-  - [ ] Validate date range (1900-2100)
-  - [ ] Validate all fields filled
-  - [ ] Show inline error messages
+- [X] **T3.2.3**: Implement form validation
+  - [X] Validate date range (1900-2100)
+  - [X] Validate all fields filled
+  - [X] Show inline error messages
   - [ ] **Test**: UI test for validation
 
 - [ ] **T3.2.4**: Add localization
@@ -299,27 +299,27 @@
 
 ### P3.3: Location Search (→ T3.2.2)
 
-- [ ] **T3.3.1**: Create LocationSearchView
-  - [ ] Create `Features/ChartInput/Views/LocationSearchView.swift`
-  - [ ] Add searchable text field
-  - [ ] Add results list
-  - [ ] **Test**: Snapshot test
+- [X] **T3.3.1**: Create LocationSearchView
+  - [X] Create `Features/ChartInput/Views/LocationSearchView.swift`
+  - [X] Add searchable text field
+  - [X] Add results list
+  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
 
-- [ ] **T3.3.2**: Create LocationService
-  - [ ] Create `Features/ChartInput/Services/LocationService.swift`
-  - [ ] Implement CLGeocoder integration
-  - [ ] Add debounced search (300ms)
-  - [ ] Format results (City, Country)
+- [X] **T3.3.2**: Create LocationService
+  - [X] Create `Features/ChartInput/Services/LocationService.swift`
+  - [X] Implement CLGeocoder integration
+  - [X] Add debounced search (300ms)
+  - [X] Format results (City, Country)
   - [ ] **Test**: Integration test with CLGeocoder
 
-- [ ] **T3.3.3**: Handle search errors
-  - [ ] No internet connection error
-  - [ ] No results found error
+- [X] **T3.3.3**: Handle search errors
+  - [X] No internet connection error
+  - [X] No results found error
   - [ ] **Test**: Mock tests for error scenarios
 
-- [ ] **T3.3.4**: Implement result selection
-  - [ ] Extract coordinates on selection
-  - [ ] Update form with location
+- [X] **T3.3.4**: Implement result selection
+  - [X] Extract coordinates on selection
+  - [X] Update form with location
   - [ ] **Test**: UI test for selection flow
 
 ---
@@ -331,7 +331,7 @@
 - [ ] **T4.1.1**: Create ChartView with Canvas
   - [ ] Create `Features/ChartVisualization/Views/ChartView.swift`
   - [ ] Setup Canvas drawing context
-  - [ ] **Test**: Snapshot test for empty canvas
+  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)* for empty canvas
 
 - [ ] **T4.1.2**: Implement ChartRenderer
   - [ ] Create `Features/ChartVisualization/Renderers/ChartRenderer.swift`
@@ -342,23 +342,23 @@
 - [ ] **T4.1.3**: Draw zodiac wheel
   - [ ] Draw outer circle with 12 segments
   - [ ] Add zodiac sign glyphs/labels
-  - [ ] **Test**: Snapshot test
+  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
 
 - [ ] **T4.1.4**: Draw house lines
   - [ ] Draw house cusps
   - [ ] Draw inner house divisions
-  - [ ] **Test**: Snapshot test
+  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
 
 - [ ] **T4.1.5**: Draw planet positions
   - [ ] Add planet glyphs at correct degrees
   - [ ] Use SF Symbols or custom icons
   - [ ] Add ascendant marker
-  - [ ] **Test**: Snapshot test for various charts
+  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)* for various charts
 
 - [ ] **T4.1.6**: Support light/dark mode
   - [ ] Define color schemes
   - [ ] Apply adaptive colors
-  - [ ] **Test**: Snapshot tests for both modes
+  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*s for both modes
 
 ### P4.2: Chart Display Screen (→ T4.1.6)
 
@@ -367,7 +367,7 @@
   - [ ] Add ChartView (300x300)
   - [ ] Add birth info display
   - [ ] Add "Select Life Area" button
-  - [ ] **Test**: Snapshot test
+  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
 
 - [ ] **T4.2.2**: Add navigation integration
   - [ ] Navigate from ChartInputView on successful calculation
@@ -495,16 +495,16 @@
 
 ### P6.1: Area Selection Screen (→ P4.2.4)
 
-- [ ] **T6.1.1**: Create AreaSelectionView
-  - [ ] Create `Features/AreaSelection/Views/AreaSelectionView.swift`
-  - [ ] Display 5 area cards in grid/list
-  - [ ] **Test**: Snapshot test
+- [X] **T6.1.1**: Create AreaSelectionView
+  - [X] Create `Features/AreaSelection/Views/AreaSelectionView.swift`
+  - [X] Display 5 area cards in grid/list
+  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
 
-- [ ] **T6.1.2**: Create AreaCard component
-  - [ ] Create `Features/AreaSelection/Views/AreaCard.swift`
-  - [ ] Show icon, title, description, price
-  - [ ] Add tap gesture
-  - [ ] **Test**: Snapshot test
+- [X] **T6.1.2**: Create AreaCard component
+  - [X] Create `Features/AreaSelection/Views/AreaCard.swift`
+  - [X] Show icon, title, description, price
+  - [X] Add tap gesture
+  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
 
 - [ ] **T6.1.3**: Create AreaSelectionViewModel
   - [ ] Fetch purchased reports for chart
@@ -523,7 +523,7 @@
   - [ ] **Test**: Animation tests
 
 - [ ] **T6.1.6**: Add localization
-  - [ ] Localize area names and descriptions
+  - [ ] Localize area names and descriptions *(Deferred - see Leftovers)*
   - [ ] **Test**: Localization tests
 
 ### P6.2: StoreKit Integration (→ T1.1.2)
@@ -565,12 +565,12 @@
 
 ### P6.3: Purchase Flow UI (→ T6.2.5)
 
-- [ ] **T6.3.1**: Create PurchaseSheet
-  - [ ] Create `Features/Purchase/Views/PurchaseSheet.swift`
-  - [ ] Show area name and price
-  - [ ] Add "Confirm Purchase" button
+- [X] **T6.3.1**: Create PurchaseSheet
+  - [X] Create `Features/Purchase/Views/PurchaseConfirmationView.swift`
+  - [X] Show area name and price
+  - [X] Add "Confirm Purchase" button
   - [ ] Show loading state
-  - [ ] **Test**: Snapshot test
+  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
 
 - [ ] **T6.3.2**: Create PurchaseViewModel
   - [ ] Initiate StoreKit purchase
@@ -585,7 +585,7 @@
   - [ ] **Test**: Haptic feedback test
 
 - [ ] **T6.3.4**: Add error messages
-  - [ ] Localize all error messages
+  - [ ] Localize all error messages *(Deferred - see Leftovers)*
   - [ ] **Test**: Error message display test
 
 ---
@@ -594,22 +594,22 @@
 
 ### P7.1: Report Display Screen (→ T6.3.2)
 
-- [ ] **T7.1.1**: Create ReportView
-  - [ ] Create `Features/ReportGeneration/Views/ReportView.swift`
+- [X] **T7.1.1**: Create ReportView
+  - [X] Create `Features/ReportGeneration/Views/ReportDetailView.swift`
   - [ ] Add ScrollView with chart at top
-  - [ ] Display report sections
-  - [ ] Add action buttons
-  - [ ] **Test**: Snapshot test
+  - [X] Display report sections
+  - [X] Add action buttons
+  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
 
-- [ ] **T7.1.2**: Implement report formatting
-  - [ ] Bold "Key Influences" section
-  - [ ] Good line spacing for analysis
-  - [ ] Bulleted list for recommendations
+- [X] **T7.1.2**: Implement report formatting
+  - [X] Bold "Key Influences" section
+  - [X] Good line spacing for analysis
+  - [X] Bulleted list for recommendations
   - [ ] **Test**: Formatting tests
 
 - [ ] **T7.1.4**: Support dark mode
   - [ ] Test dark mode colors
-  - [ ] **Test**: Dark mode snapshot tests
+  - [ ] **Test**: Dark mode snapshot tests *(Deferred - see Leftovers)*
 
 - [ ] **T7.1.5**: Add scroll-to-top button
   - [ ] Show when scrolled down
@@ -644,7 +644,7 @@
   - [ ] Group reports by chart
   - [ ] Show chart name, birth date
   - [ ] List reports with icons and dates
-  - [ ] **Test**: Snapshot test
+  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
 
 - [ ] **T7.3.2**: Create ReportListViewModel
   - [ ] Fetch all reports from SwiftData
@@ -664,17 +664,17 @@
 
 ## Phase 8: Localization (Week 7)
 
-### P8.1: English Localization
+### P8.1: English Localization *(Deferred - see Leftovers)*
 
-- [ ] **T8.1.1**: Create English strings file
-  - [ ] Create `Resources/Localizations/en.lproj/Localizable.strings`
+- [ ] **T8.1.1**: Create English strings file *(Deferred - see Leftovers)*
+  - [ ] Create `Resources/Localizations/en.lproj/Localizable.strings` *(Deferred - see Leftovers)*
   - [ ] Add all UI labels, buttons, messages
   - [ ] Add error messages
   - [ ] Add onboarding content
   - [ ] Add life area names and descriptions
   - [ ] **Test**: String extraction test
 
-- [ ] **T8.1.2**: Apply LocalizedStringKey in views
+- [ ] **T8.1.2**: Apply LocalizedStringKey in views *(Deferred - see Leftovers)*
   - [ ] Update all Text() views
   - [ ] Update all button labels
   - [ ] **Test**: Localization loading test
@@ -684,10 +684,10 @@
   - [ ] **Test**: Formatting tests
 
 - [ ] **T8.1.4**: Manual review
-  - [ ] Test all screens in English
+  - [ ] Test all screens in English *(Deferred - see Leftovers)*
   - [ ] **Manual verification**
 
-### P8.2: Ukrainian Localization (→ T8.1.4)
+### P8.2: Ukrainian Localization *(Deferred - see Leftovers)* (→ T8.1.4)
 
 - [ ] **T8.2.1**: Create Ukrainian strings file
   - [ ] Create `Resources/Localizations/uk.lproj/Localizable.strings`
@@ -704,11 +704,11 @@
   - [ ] **Test**: Ukrainian formatting tests
 
 - [ ] **T8.2.4**: Manual review
-  - [ ] Test all screens in Ukrainian
+  - [ ] Test all screens in Ukrainian *(Deferred - see Leftovers)*
   - [ ] Check for text overflow issues
   - [ ] **Native speaker review required**
 
-### P8.3: Language Detection (→ T8.2.4)
+### P8.3: Language Detection *(Deferred - see Leftovers)* (→ T8.2.4)
 
 - [ ] **T8.3.1**: Implement language detection
   - [ ] Read Locale.current.language
@@ -910,3 +910,5 @@
 - Re-enable `testAspectOrbOverrideFiltersResults` once SwissEphemeris no longer crashes the simulator under tight orb overrides.
 - Investigate simulator crashes triggered by `testCalculatePlanetsCoversAllBodies` when running the full `AstroSvitlaTests` suite in parallel.
 - Add real timeout/cancellation handling to async `ChartCalculator.calculate` to satisfy T2.2.3 requirements.
+- UI snapshot coverage (T3.2.1, T3.3.1, T6.1.1, T6.1.2, T6.3.1, T7.1.1, T7.2.1, dark-mode variants) deferred until visual design stabilizes.
+- Localization expansion (P8.1–P8.3, T6.1.6, T6.3.4) deferred until post-MVP release when bilingual content/spec is ready.

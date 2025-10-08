@@ -179,29 +179,27 @@ func getAreaFocus(_ area: ReportArea) -> String {
 
 ```json
 {
-  "candidates": [
+  "id": "resp_abc123",
+  "object": "response",
+  "model": "gpt-4o-mini",
+  "created": 1730000000,
+  "output": [
     {
-      "content": {
-        "parts": [
-          {
-            "text": "<GENERATED_REPORT_TEXT>"
-          }
-        ],
-        "role": "model"
-      },
-      "finishReason": "STOP",
-      "safetyRatings": [
+      "id": "msg_abc123",
+      "type": "message",
+      "role": "assistant",
+      "content": [
         {
-          "category": "HARM_CATEGORY_HARASSMENT",
-          "probability": "NEGLIGIBLE"
+          "type": "output_text",
+          "text": "<GENERATED_REPORT_TEXT>"
         }
       ]
     }
   ],
-  "usageMetadata": {
-    "promptTokenCount": 420,
-    "candidatesTokenCount": 650,
-    "totalTokenCount": 1070
+  "usage": {
+    "input_tokens": 420,
+    "output_tokens": 650,
+    "total_tokens": 1070
   }
 }
 ```
@@ -209,20 +207,19 @@ func getAreaFocus(_ area: ReportArea) -> String {
 ### Swift Model (SDK)
 
 ```swift
-// Using Swift SDK - response is simplified
-let response: GenerateContentResponse = try await model.generateContent(prompt)
+let response = try await client.responses.generate(
+    model: model,
+    prompt: .init(prompt)
+)
 
-// Access generated text
-if let reportText = response.text {
-    // reportText contains the generated report
+if let reportText = response.outputText {
     print(reportText)
 }
 
-// Access usage metadata (optional)
-if let usage = response.usageMetadata {
-    print("Prompt tokens: \(usage.promptTokenCount)")
-    print("Response tokens: \(usage.candidatesTokenCount)")
-    print("Total tokens: \(usage.totalTokenCount)")
+if let usage = response.usage {
+    print("Prompt tokens: \(usage.inputTokens)")
+    print("Response tokens: \(usage.outputTokens)")
+    print("Total tokens: \(usage.totalTokens)")
 }
 ```
 
@@ -330,17 +327,17 @@ func generateReportWithRetry(
 
 | Metric | Limit | Notes |
 |--------|-------|-------|
-| Requests per minute (RPM) | 15 | Per API key |
-| Requests per day (RPD) | 1,500 | Free tier |
-| Tokens per minute (TPM) | Unknown | Monitor usage |
-| Tokens per day | Unknown | Monitor usage |
+| Requests per minute (RPM) | 5 | Default developer limit |
+| Requests per day (RPD) | Pay-as-you-go | Billed usage |
+| Tokens per minute (TPM) | 30,000 | Default developer limit |
+| Tokens per day | Pay-as-you-go | Billed usage |
 
 ### Paid Tier (If Needed)
 
 | Metric | Limit | Cost |
 |--------|-------|------|
-| Requests per minute | 1,000+ | Scalable |
-| Tokens | Pay-per-use | ~$0.00002-0.0001 per report |
+| Requests per minute | 60+ | Increase via quota request |
+| Tokens | Pay-per-use | ~-e.00045 per 500-word report |
 
 ### Cost Monitoring
 
@@ -355,10 +352,10 @@ struct UsageTracker {
         totalTokens += tokens
 
         // OpenAI GPT-4o Mini pricing (estimated)
-        // Input: ~$0.000001 per token
-        // Output: ~$0.000002 per token
-        // Average ~800 tokens per report
-        let costPerReport: Decimal = 0.0001
+        // Input: $0.0003 per 1K tokens
+        // Output: $0.0004 per 1K tokens
+        // Average ~750 tokens per report
+        let costPerReport: Decimal = 0.00045
         totalCost += costPerReport
     }
 
