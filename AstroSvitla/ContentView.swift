@@ -43,6 +43,7 @@ struct ContentView: View {
         case .areaSelection(let details, let chart):
             AreaSelectionView(
                 birthDetails: details,
+                natalChart: chart,
                 onAreaSelected: { area in
                     flowState = .purchase(details, chart, area)
                 },
@@ -104,6 +105,9 @@ struct ContentView: View {
                     locationName: details.location
                 )
 
+                // Print chart data to console
+                printChartData(chart)
+
                 await MainActor.run {
                     flowState = .areaSelection(details, chart)
                 }
@@ -135,6 +139,53 @@ struct ContentView: View {
                     flowState = .purchase(details, chart, area)
                 }
             }
+        }
+    }
+
+    private func printChartData(_ chart: NatalChart) {
+        print("\n" + String(repeating: "=", count: 60))
+        print("📊 NATAL CHART CALCULATION RESULTS")
+        print(String(repeating: "=", count: 60))
+
+        print("\n🔮 ANGLES:")
+        print("   Ascendant: \(formatDegree(chart.ascendant)) (\(ZodiacSign.from(degree: chart.ascendant).rawValue))")
+        print("   Midheaven: \(formatDegree(chart.midheaven)) (\(ZodiacSign.from(degree: chart.midheaven).rawValue))")
+
+        print("\n🪐 PLANETS (\(chart.planets.count)):")
+        for planet in chart.planets {
+            let retro = planet.isRetrograde ? " ℞" : ""
+            print("   \(planet.name.rawValue.padding(toLength: 8, withPad: " ", startingAt: 0)): \(formatDegree(planet.longitude)) \(planet.sign.rawValue.padding(toLength: 12, withPad: " ", startingAt: 0)) House \(planet.house)\(retro)")
+            print("      └─ Speed: \(String(format: "%.4f", planet.speed))°/day")
+        }
+
+        print("\n🏠 HOUSES (\(chart.houses.count)):")
+        for house in chart.houses.sorted(by: { $0.number < $1.number }) {
+            print("   House \(String(format: "%2d", house.number)): \(formatDegree(house.cusp)) (\(house.sign.rawValue))")
+        }
+
+        print("\n⚡️ ASPECTS (\(chart.aspects.count)):")
+        for aspect in chart.aspects {
+            print("   \(aspect.planet1.rawValue) \(aspectSymbol(aspect.type)) \(aspect.planet2.rawValue) - \(aspect.type.rawValue) (orb: \(String(format: "%.2f", aspect.orb))°)")
+        }
+
+        print("\n📅 Calculated at: \(chart.calculatedAt.formatted(date: .abbreviated, time: .standard))")
+        print(String(repeating: "=", count: 60) + "\n")
+    }
+
+    private func formatDegree(_ degree: Double) -> String {
+        let normalized = degree.truncatingRemainder(dividingBy: 360)
+        let degrees = Int(normalized)
+        let minutes = Int((normalized - Double(degrees)) * 60)
+        return String(format: "%3d°%02d'", degrees, minutes)
+    }
+
+    private func aspectSymbol(_ type: AspectType) -> String {
+        switch type {
+        case .conjunction: return "☌"
+        case .opposition: return "☍"
+        case .trine: return "△"
+        case .square: return "□"
+        case .sextile: return "⚹"
         }
     }
 }

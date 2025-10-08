@@ -2,8 +2,11 @@ import SwiftUI
 
 struct AreaSelectionView: View {
     let birthDetails: BirthDetails
+    let natalChart: NatalChart
     var onAreaSelected: (ReportArea) -> Void
     var onEditDetails: (() -> Void)?
+
+    @State private var showChartDetails = false
 
     var body: some View {
         List {
@@ -21,6 +24,12 @@ struct AreaSelectionView: View {
                         .foregroundStyle(.secondary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+
+                Button {
+                    showChartDetails = true
+                } label: {
+                    Label("Переглянути деталі карти", systemImage: "chart.bar.doc.horizontal")
+                }
             }
 
             Section("Оберіть сферу життя") {
@@ -42,6 +51,18 @@ struct AreaSelectionView: View {
                 }
             }
         }
+        .sheet(isPresented: $showChartDetails) {
+            NavigationStack {
+                ChartDetailsView(chart: natalChart, birthDetails: birthDetails)
+                    .toolbar {
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Готово") {
+                                showChartDetails = false
+                            }
+                        }
+                    }
+            }
+        }
     }
 
 }
@@ -54,6 +75,19 @@ struct AreaSelectionView: View {
                 birthDate: .now,
                 birthTime: .now,
                 location: "Kyiv, Ukraine"
+            ),
+            natalChart: NatalChart(
+                birthDate: .now,
+                birthTime: .now,
+                latitude: 50.4501,
+                longitude: 30.5234,
+                locationName: "Kyiv",
+                planets: [],
+                houses: [],
+                aspects: [],
+                ascendant: 127.5,
+                midheaven: 215.3,
+                calculatedAt: .now
             ),
             onAreaSelected: { _ in },
             onEditDetails: {}

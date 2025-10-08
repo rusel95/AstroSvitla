@@ -1,0 +1,305 @@
+import SwiftUI
+import Foundation
+
+struct NatalChartWheelView: View {
+    let chart: NatalChart
+
+    var body: some View {
+        GeometryReader { geometry in
+            let size = min(geometry.size.width, geometry.size.height)
+            let center = CGPoint(x: size / 2, y: size / 2)
+            let outerRadius = size / 2 - 20
+            let innerRadius = outerRadius * 0.6
+            let houseRadius = outerRadius * 0.4
+
+            ZStack {
+                // Outer zodiac circle
+                ForEach(0..<12, id: \.self) { index in
+                    ZodiacSegment(index: index, center: center, radius: outerRadius)
+                }
+
+                // House lines
+                ForEach(chart.houses) { house in
+                    HouseLine(
+                        house: house,
+                        center: center,
+                        innerRadius: houseRadius,
+                        outerRadius: outerRadius
+                    )
+                }
+
+                // House numbers
+                ForEach(chart.houses) { house in
+                    HouseNumber(
+                        house: house,
+                        center: center,
+                        radius: houseRadius * 0.7
+                    )
+                }
+
+                // Planets
+                ForEach(chart.planets) { planet in
+                    PlanetMarker(
+                        planet: planet,
+                        center: center,
+                        radius: innerRadius
+                    )
+                }
+
+                // Ascendant marker
+                AscendantMarker(
+                    degree: chart.ascendant,
+                    center: center,
+                    radius: outerRadius
+                )
+
+                // Midheaven marker
+                MidheavenMarker(
+                    degree: chart.midheaven,
+                    center: center,
+                    radius: outerRadius
+                )
+
+                // Center circle
+                Circle()
+                    .fill(Color(.systemBackground))
+                    .frame(width: houseRadius * 1.2, height: houseRadius * 1.2)
+                    .position(center)
+            }
+            .frame(width: size, height: size)
+        }
+        .aspectRatio(1, contentMode: .fit)
+    }
+}
+
+// MARK: - Zodiac Segment
+
+struct ZodiacSegment: View {
+    let index: Int
+    let center: CGPoint
+    let radius: CGFloat
+
+    var sign: ZodiacSign {
+        ZodiacSign.allCases[index]
+    }
+
+    var body: some View {
+        let startAngle = Angle(degrees: Double(index) * 30 - 90)
+        let endAngle = Angle(degrees: Double(index + 1) * 30 - 90)
+
+        ZStack {
+            // Segment arc
+            Path { path in
+                path.addArc(
+                    center: center,
+                    radius: radius,
+                    startAngle: startAngle,
+                    endAngle: endAngle,
+                    clockwise: false
+                )
+            }
+            .stroke(Color.secondary.opacity(0.3), lineWidth: 1)
+
+            // Sign symbol
+            Text(signSymbol(sign))
+                .font(.system(size: 20))
+                .position(
+                    polarToCartesian(
+                        center: center,
+                        radius: radius - 15,
+                        angle: startAngle.degrees + 15
+                    )
+                )
+        }
+    }
+
+    private func signSymbol(_ sign: ZodiacSign) -> String {
+        switch sign {
+        case .aries: return "♈"
+        case .taurus: return "♉"
+        case .gemini: return "♊"
+        case .cancer: return "♋"
+        case .leo: return "♌"
+        case .virgo: return "♍"
+        case .libra: return "♎"
+        case .scorpio: return "♏"
+        case .sagittarius: return "♐"
+        case .capricorn: return "♑"
+        case .aquarius: return "♒"
+        case .pisces: return "♓"
+        }
+    }
+}
+
+// MARK: - House Line
+
+struct HouseLine: View {
+    let house: House
+    let center: CGPoint
+    let innerRadius: CGFloat
+    let outerRadius: CGFloat
+
+    var body: some View {
+        Path { path in
+            let angle = house.cusp - 90 // Adjust for 0° = East
+            let start = polarToCartesian(center: center, radius: innerRadius, angle: angle)
+            let end = polarToCartesian(center: center, radius: outerRadius, angle: angle)
+
+            path.move(to: start)
+            path.addLine(to: end)
+        }
+        .stroke(Color.primary.opacity(0.5), lineWidth: 1)
+    }
+}
+
+// MARK: - House Number
+
+struct HouseNumber: View {
+    let house: House
+    let center: CGPoint
+    let radius: CGFloat
+
+    var body: some View {
+        let nextHouse = house.number % 12 + 1
+        let nextCusp = house.cusp + 30 // Approximate
+        let midAngle = (house.cusp + nextCusp) / 2 - 90
+
+        Text("\(house.number)")
+            .font(.system(size: 12, weight: .medium))
+            .foregroundStyle(.secondary)
+            .position(polarToCartesian(center: center, radius: radius, angle: midAngle))
+    }
+}
+
+// MARK: - Planet Marker
+
+struct PlanetMarker: View {
+    let planet: Planet
+    let center: CGPoint
+    let radius: CGFloat
+
+    var body: some View {
+        let angle = planet.longitude - 90
+        let position = polarToCartesian(center: center, radius: radius, angle: angle)
+
+        ZStack {
+            Circle()
+                .fill(planetColor(planet.name))
+                .frame(width: 24, height: 24)
+
+            Text(planetSymbol(planet.name))
+                .font(.system(size: 14))
+                .foregroundStyle(.white)
+
+            if planet.isRetrograde {
+                Text("℞")
+                    .font(.system(size: 8))
+                    .foregroundStyle(.white)
+                    .offset(x: 10, y: -8)
+            }
+        }
+        .position(position)
+    }
+
+    private func planetSymbol(_ planet: PlanetType) -> String {
+        switch planet {
+        case .sun: return "☉"
+        case .moon: return "☽"
+        case .mercury: return "☿"
+        case .venus: return "♀"
+        case .mars: return "♂"
+        case .jupiter: return "♃"
+        case .saturn: return "♄"
+        case .uranus: return "♅"
+        case .neptune: return "♆"
+        case .pluto: return "♇"
+        }
+    }
+
+    private func planetColor(_ planet: PlanetType) -> Color {
+        switch planet {
+        case .sun: return .orange
+        case .moon: return .gray
+        case .mercury: return .yellow
+        case .venus: return .pink
+        case .mars: return .red
+        case .jupiter: return .purple
+        case .saturn: return .brown
+        case .uranus: return .cyan
+        case .neptune: return .blue
+        case .pluto: return .indigo
+        }
+    }
+}
+
+// MARK: - Ascendant Marker
+
+struct AscendantMarker: View {
+    let degree: Double
+    let center: CGPoint
+    let radius: CGFloat
+
+    var body: some View {
+        let angle = degree - 90
+        let position = polarToCartesian(center: center, radius: radius + 15, angle: angle)
+
+        Text("ASC")
+            .font(.system(size: 10, weight: .bold))
+            .foregroundStyle(.blue)
+            .position(position)
+    }
+}
+
+// MARK: - Midheaven Marker
+
+struct MidheavenMarker: View {
+    let degree: Double
+    let center: CGPoint
+    let radius: CGFloat
+
+    var body: some View {
+        let angle = degree - 90
+        let position = polarToCartesian(center: center, radius: radius + 15, angle: angle)
+
+        Text("MC")
+            .font(.system(size: 10, weight: .bold))
+            .foregroundStyle(.green)
+            .position(position)
+    }
+}
+
+// MARK: - Helper Functions
+
+private func polarToCartesian(center: CGPoint, radius: CGFloat, angle: Double) -> CGPoint {
+    let radians = CGFloat(angle * .pi / 180)
+    return CGPoint(
+        x: center.x + radius * cos(radians),
+        y: center.y + radius * sin(radians)
+    )
+}
+
+// MARK: - Preview
+
+#Preview {
+    NatalChartWheelView(
+        chart: NatalChart(
+            birthDate: Date(),
+            birthTime: Date(),
+            latitude: 50.4501,
+            longitude: 30.5234,
+            locationName: "Kyiv",
+            planets: [
+                Planet(id: UUID(), name: .sun, longitude: 287.5, latitude: 0, sign: .capricorn, house: 6, isRetrograde: false, speed: 1.0),
+                Planet(id: UUID(), name: .moon, longitude: 123.2, latitude: 0, sign: .cancer, house: 12, isRetrograde: false, speed: 13.0),
+                Planet(id: UUID(), name: .mercury, longitude: 275.3, latitude: 0, sign: .capricorn, house: 6, isRetrograde: true, speed: 0.5),
+            ],
+            houses: (1...12).map { House(id: UUID(), number: $0, cusp: Double($0 - 1) * 30, sign: ZodiacSign.allCases[($0 - 1) % 12]) },
+            aspects: [],
+            ascendant: 127.5,
+            midheaven: 215.3,
+            calculatedAt: Date()
+        )
+    )
+    .padding()
+    .background(Color(.systemBackground))
+}
