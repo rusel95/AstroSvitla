@@ -26,7 +26,7 @@ struct BirthDetails: Sendable {
     }
 
     var displayName: String {
-        name.isEmpty ? "Your Chart" : name
+        name.isEmpty ? "Ваша карта" : name
     }
 
     var formattedBirthDate: String {

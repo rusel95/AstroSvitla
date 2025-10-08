@@ -11,13 +11,13 @@ struct ContentView: View {
             content
                 .animation(.default, value: flowState.animationID)
         }
-        .alert("Something went wrong", isPresented: Binding(
+        .alert("Щось пішло не так", isPresented: Binding(
             get: { errorMessage != nil },
             set: { if !$0 { errorMessage = nil } }
         )) {
-            Button("OK", role: .cancel) { errorMessage = nil }
+            Button("Гаразд", role: .cancel) { errorMessage = nil }
         } message: {
-            Text(errorMessage ?? "Unknown error")
+            Text(errorMessage ?? "Невідома помилка")
         }
     }
 
@@ -133,23 +133,23 @@ private struct GeneratingReportView: View {
                 .scaleEffect(1.5)
 
             VStack(spacing: 8) {
-                Text("Crafting your \(area.displayName.lowercased()) insights…")
+                Text("Створюємо ваш звіт для сфери «\(area.displayName.lowercased())»…")
                     .font(.headline)
-                Text("We are blending expert astrology rules with \(birthDetails.displayName.lowercased())'s birth data.")
+                Text("Ми поєднуємо експертні астрологічні правила з вашими даними народження.")
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
             }
             .padding(.horizontal)
 
             if let onCancel {
-                Button("Cancel") {
+                Button("Скасувати") {
                     onCancel()
                 }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGroupedBackground))
-        .navigationTitle("Generating Report")
+        .navigationTitle("Створення звіту")
     }
 }
 

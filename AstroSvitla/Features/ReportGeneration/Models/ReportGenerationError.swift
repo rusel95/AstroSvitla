@@ -12,19 +12,19 @@ enum ReportGenerationError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .missingAPIKey:
-            return "OpenAI API key is not configured. Update Config.swift to enable report generation."
+            return "Ключ OpenAI API не налаштовано. Оновіть Config.swift, щоб увімкнути генерацію звітів."
         case .invalidResponse:
-            return "OpenAI returned a response in an unexpected format."
+            return "OpenAI повернув відповідь у неочікуваному форматі."
         case .noContent:
-            return "OpenAI returned an empty response."
+            return "OpenAI повернув порожню відповідь."
         case .rateLimited:
-            return "OpenAI rate limit exceeded. Please try again shortly."
+            return "Перевищено ліміт запитів OpenAI. Спробуйте знову трохи пізніше."
         case .serviceUnavailable:
-            return "OpenAI service is temporarily unavailable."
+            return "Сервіс OpenAI тимчасово недоступний."
         case .network(let underlying):
-            return "Network error: \(underlying.localizedDescription)"
+            return "Помилка мережі: \(underlying.localizedDescription)"
         case .cancelled:
-            return "Report generation was cancelled."
+            return "Генерацію звіту скасовано."
         }
     }
 }

@@ -12,7 +12,7 @@ struct PurchaseConfirmationView: View {
                 summaryCard
                 purchaseInfo
                 Button(action: onGenerateReport) {
-                    Text("Generate \(area.displayName) Report")
+                    Text("Згенерувати звіт «\(area.displayName)»")
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.accentColor)
@@ -23,11 +23,11 @@ struct PurchaseConfirmationView: View {
             }
             .padding()
         }
-        .navigationTitle("Confirm Purchase")
+        .navigationTitle("Підтвердження покупки")
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 if let onBack {
-                    Button("Back", action: onBack)
+                    Button("Назад", action: onBack)
                 }
             }
         }
@@ -54,7 +54,7 @@ struct PurchaseConfirmationView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(birthDetails.displayName)
                     .font(.headline)
-                Text("\(birthDetails.formattedBirthDate) at \(birthDetails.formattedBirthTime)")
+                Text("\(birthDetails.formattedBirthDate) о \(birthDetails.formattedBirthTime)")
                     .foregroundStyle(.secondary)
                 Text(birthDetails.formattedLocation)
                     .foregroundStyle(.secondary)
@@ -67,12 +67,12 @@ struct PurchaseConfirmationView: View {
 
     private var purchaseInfo: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("What happens next")
+            Text("Що далі")
                 .font(.headline)
 
-            Label("We will use your birth details with expert astrology rules to craft a personalized report.", systemImage: "sparkles")
-            Label("This is a one-time purchase. You can revisit the generated report anytime from the Reports tab (coming soon).", systemImage: "doc.text.magnifyingglass")
-            Label("You will not be charged during this preview build.", systemImage: "lock.open")
+            Label("Ми використаємо ваші дані народження та експертні астрологічні правила, щоб створити персональний звіт.", systemImage: "sparkles")
+            Label("Це одноразова покупка. Ви зможете повертатися до згенерованого звіту в розділі «Звіти» (незабаром).", systemImage: "doc.text.magnifyingglass")
+            Label("У цьому прев'ю-збірці з вас не стягуватиметься плата.", systemImage: "lock.open")
         }
     }
 

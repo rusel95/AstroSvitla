@@ -72,7 +72,7 @@ final class BirthDataInputViewModel: ObservableObject {
     }
 
     var locationDisplay: String {
-        location.isEmpty ? "Select location" : location
+        location.isEmpty ? "Виберіть місце" : location
     }
 
     // MARK: - Private Helpers

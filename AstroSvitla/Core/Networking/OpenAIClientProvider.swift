@@ -23,7 +23,10 @@ final class OpenAIClientProvider: OpenAIClientProviding {
 
     private func makeConfiguration() -> OpenAI.Configuration? {
         guard let components = URLComponents(string: Config.openAIBaseURL) else {
-            return OpenAI.Configuration(token: Config.openAIAPIKey)
+            return OpenAI.Configuration(
+                token: Config.openAIAPIKey,
+                customHeaders: makeCustomHeaders()
+            )
         }
 
         let host = components.host ?? "api.openai.com"
@@ -36,7 +39,15 @@ final class OpenAIClientProvider: OpenAIClientProviding {
             port: components.port ?? 443,
             scheme: components.scheme ?? "https",
             basePath: basePath,
-            timeoutInterval: 90.0
+            timeoutInterval: 90.0,
+            customHeaders: makeCustomHeaders()
         )
+    }
+
+    private func makeCustomHeaders() -> [String: String] {
+        guard let projectID = Config.openAIProjectID, projectID.isEmpty == false else {
+            return [:]
+        }
+        return ["OpenAI-Project": projectID]
     }
 }

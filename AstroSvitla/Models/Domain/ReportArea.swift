@@ -9,11 +9,11 @@ enum ReportArea: String, Codable, CaseIterable, Sendable {
 
     var displayName: String {
         switch self {
-        case .finances: return "Finances"
-        case .career: return "Career"
-        case .relationships: return "Relationships"
-        case .health: return "Health"
-        case .general: return "General Overview"
+        case .finances: return "Фінанси"
+        case .career: return "Кар'єра"
+        case .relationships: return "Стосунки"
+        case .health: return "Здоров'я"
+        case .general: return "Загальний огляд"
         }
     }
 

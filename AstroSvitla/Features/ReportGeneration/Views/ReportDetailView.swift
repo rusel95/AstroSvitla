@@ -18,7 +18,7 @@ struct ReportDetailView: View {
             }
             .padding()
         }
-        .navigationTitle("\(report.area.displayName) Report")
+        .navigationTitle("Звіт: \(report.area.displayName)")
         .navigationBarTitleDisplayMode(.inline)
     }
 
@@ -36,7 +36,7 @@ struct ReportDetailView: View {
 
     private var summarySection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Overview")
+            Text("Короткий огляд")
                 .font(.headline)
             Text(report.summary)
         }
@@ -45,7 +45,7 @@ struct ReportDetailView: View {
 
     private var influencesSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Key Influences")
+            Text("Ключові впливи")
                 .font(.headline)
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(report.keyInfluences, id: \.self) { influence in
@@ -59,7 +59,7 @@ struct ReportDetailView: View {
 
     private var analysisSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Detailed Analysis")
+            Text("Детальний аналіз")
                 .font(.headline)
             Text(report.detailedAnalysis)
                 .fixedSize(horizontal: false, vertical: true)
@@ -69,7 +69,7 @@ struct ReportDetailView: View {
 
     private var recommendationsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Recommendations")
+            Text("Рекомендації")
                 .font(.headline)
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(report.recommendations, id: \.self) { recommendation in
@@ -84,7 +84,7 @@ struct ReportDetailView: View {
     private var actionButtons: some View {
         VStack(spacing: 12) {
             if let onGenerateAnother {
-                Button("Generate another area") {
+                Button("Згенерувати для іншої сфери") {
                     onGenerateAnother()
                 }
                 .frame(maxWidth: .infinity)
@@ -94,7 +94,7 @@ struct ReportDetailView: View {
             }
 
             if let onStartOver {
-                Button("Start over") {
+                Button("Почати спочатку") {
                     onStartOver()
                 }
                 .frame(maxWidth: .infinity)

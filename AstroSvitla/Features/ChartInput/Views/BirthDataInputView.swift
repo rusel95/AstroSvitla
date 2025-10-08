@@ -14,24 +14,24 @@ struct BirthDataInputView: View {
 
     var body: some View {
         Form {
-            Section("Demo Mode") {
-                Text("Currently using pre-filled birth details while the vector store integration is prepared.")
+            Section("Демо-режим") {
+                Text("Наразі використовуються попередньо заповнені дані народження, поки ми готуємо інтеграцію з векторною базою знань.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
 
-            Section("Person") {
-                TextField("Name (optional)", text: $viewModel.name)
+            Section("Особа") {
+                TextField("Ім'я (необов'язково)", text: $viewModel.name)
                     .disabled(true)
             }
 
-            Section("Birth Details") {
-                DatePicker("Date", selection: $viewModel.birthDate, in: viewModel.dateRange, displayedComponents: .date)
+            Section("Дані народження") {
+                DatePicker("Дата", selection: $viewModel.birthDate, in: viewModel.dateRange, displayedComponents: .date)
                     .disabled(true)
-                DatePicker("Time", selection: $viewModel.birthTime, displayedComponents: .hourAndMinute)
+                DatePicker("Час", selection: $viewModel.birthTime, displayedComponents: .hourAndMinute)
                     .disabled(true)
                 HStack {
-                    Text("Location")
+                    Text("Місце")
                     Spacer()
                     Text(viewModel.locationDisplay)
                         .foregroundStyle(.primary)
@@ -39,15 +39,15 @@ struct BirthDataInputView: View {
                 }
             }
         }
-        .navigationTitle("Birth Details")
+        .navigationTitle("Дані народження")
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 if let onCancel {
-                    Button("Back", action: onCancel)
+                    Button("Назад", action: onCancel)
                 }
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button("Continue") {
+                Button("Продовжити") {
                     onContinue(viewModel.makeDetails())
                 }
                 .disabled(viewModel.isValid == false)
@@ -61,7 +61,7 @@ struct BirthDataInputView: View {
                 }
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Close") {
+                        Button("Закрити") {
                             showLocationSearch = false
                         }
                     }

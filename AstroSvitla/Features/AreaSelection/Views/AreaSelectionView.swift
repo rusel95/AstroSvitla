@@ -7,7 +7,7 @@ struct AreaSelectionView: View {
 
     var body: some View {
         List {
-            Section("Birth Summary") {
+            Section("Дані про народження") {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(birthDetails.displayName)
                         .font(.headline)
@@ -23,7 +23,7 @@ struct AreaSelectionView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
 
-            Section("Choose Life Area") {
+            Section("Оберіть сферу життя") {
                 ForEach(ReportArea.allCases, id: \.self) { area in
                     Button {
                         onAreaSelected(area)
@@ -34,11 +34,11 @@ struct AreaSelectionView: View {
             }
         }
         .listStyle(.insetGrouped)
-        .navigationTitle("Pick Life Area")
+        .navigationTitle("Оберіть сферу")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 if let onEditDetails {
-                    Button("Edit details", action: onEditDetails)
+                    Button("Змінити дані", action: onEditDetails)
                 }
             }
         }
