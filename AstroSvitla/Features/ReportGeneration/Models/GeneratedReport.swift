@@ -1,6 +1,6 @@
 import Foundation
 
-struct GeneratedReport: Identifiable, Sendable {
+struct GeneratedReport: Identifiable, Sendable, Codable {
     let id = UUID()
     let area: ReportArea
     let summary: String

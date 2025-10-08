@@ -1,4 +1,5 @@
 import Foundation
+import CoreLocation
 import SwiftData
 
 @Model
@@ -61,6 +62,35 @@ final class BirthChart {
         chartDataJSON = jsonString
         updatedAt = Date()
     }
+
+    func decodedNatalChart() -> NatalChart? {
+        guard chartDataJSON.isEmpty == false,
+              let data = chartDataJSON.data(using: .utf8) else { return nil }
+        return try? BirthChart.chartDecoder.decode(NatalChart.self, from: data)
+    }
+
+    func makeBirthDetails() -> BirthDetails {
+        let tz = TimeZone(identifier: timezone) ?? .current
+        let coordinate = latitude == 0 && longitude == 0 ? nil : CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        return BirthDetails(
+            name: name,
+            birthDate: birthDate,
+            birthTime: birthTime,
+            location: locationName,
+            timeZone: tz,
+            coordinate: coordinate
+        )
+    }
+
+    func encodedChartData(from chart: NatalChart) -> String? {
+        guard let data = try? BirthChart.chartEncoder.encode(chart) else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
+
+    static func encodedChartJSON(from chart: NatalChart) -> String? {
+        guard let data = try? chartEncoder.encode(chart) else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
 }
 
 private extension BirthChart {
@@ -76,5 +106,17 @@ private extension BirthChart {
         formatter.dateStyle = .none
         formatter.timeStyle = .short
         return formatter
+    }()
+
+    static let chartDecoder: JSONDecoder = {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        return decoder
+    }()
+
+    static let chartEncoder: JSONEncoder = {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        return encoder
     }()
 }

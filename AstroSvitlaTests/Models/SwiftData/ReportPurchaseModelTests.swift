@@ -10,6 +10,10 @@ struct ReportPurchaseModelTests {
         let report = ReportPurchase(
             area: ReportArea.finances.rawValue,
             reportText: "Sample content",
+            summary: "Summary",
+            keyInfluences: ["Influence"],
+            detailedAnalysis: "Detailed analysis",
+            recommendations: ["Recommendation"],
             language: "en",
             price: Decimal(string: "6.99")!,
             currency: "USD",
@@ -23,6 +27,7 @@ struct ReportPurchaseModelTests {
         #expect(report.wordCount == 2)
         #expect(report.areaDisplayName == "Finances")
         #expect(report.estimatedReadingTime == 1)
+        #expect(report.generatedReport?.summary == "Summary")
     }
 
     @Test
@@ -30,6 +35,10 @@ struct ReportPurchaseModelTests {
         let report = ReportPurchase(
             area: ReportArea.health.rawValue,
             reportText: "Health insights",
+            summary: "Summary",
+            keyInfluences: [],
+            detailedAnalysis: "Detailed analysis",
+            recommendations: [],
             language: "en",
             price: Decimal(string: "5.99")!,
             transactionId: "txn_456"

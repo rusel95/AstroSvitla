@@ -241,28 +241,28 @@
 
 ### P3.1: Onboarding Flow (→ P1.3)
 
-- [ ] **T3.1.1**: Create OnboardingView
-  - [ ] Create `Features/Onboarding/Views/OnboardingView.swift`
-  - [ ] Implement PageTabViewStyle
-  - [ ] Add navigation dots
+- [X] **T3.1.1**: Create OnboardingView
+  - [X] Create `Features/Onboarding/Views/OnboardingView.swift`
+  - [X] Implement PageTabViewStyle
+  - [X] Add navigation dots
   - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)* for layout
 
-- [ ] **T3.1.2**: Create OnboardingPageView component
-  - [ ] Create page template with image + text
-  - [ ] Implement Skip and Next buttons
+- [X] **T3.1.2**: Create OnboardingPageView component
+  - [X] Create page template with image + text
+  - [X] Implement Skip and Next buttons
   - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)* for each page
 
 - [ ] **T3.1.3**: Add onboarding content
-  - [ ] Page 1: "Discover Your Destiny"
-  - [ ] Page 2: "Pay Only for What You Need"
-  - [ ] Page 3: "Expert Knowledge + AI Power"
-  - [ ] Add placeholder images to Assets
+  - [X] Page 1: "Discover Your Destiny"
+  - [X] Page 2: "Pay Only for What You Need"
+  - [X] Page 3: "Expert Knowledge + AI Power"
+  - [X] Add placeholder visuals *(SF Symbols used for all pages)*
   - [ ] **Test**: Content rendering tests
 
-- [ ] **T3.1.4**: Implement onboarding state
-  - [ ] Create OnboardingViewModel
-  - [ ] Save completion to UserDefaults
-  - [ ] Add logic to show only once
+- [X] **T3.1.4**: Implement onboarding state
+  - [X] Create OnboardingViewModel
+  - [X] Save completion to UserDefaults
+  - [X] Add logic to show only once
   - [ ] **Test**: Unit test for state persistence
 
 - [ ] **T3.1.5**: Add localization
@@ -608,25 +608,25 @@
 
 ### P7.3: Report List Screen [P] (→ T1.2.3)
 
-- [ ] **T7.3.1**: Create ReportListView
-  - [ ] Create `Features/ReportGeneration/Views/ReportListView.swift`
-  - [ ] Group reports by chart
-  - [ ] Show chart name, birth date
-  - [ ] List reports with icons and dates
+- [X] **T7.3.1**: Create ReportListView
+  - [X] Create `Features/ReportGeneration/Views/ReportListView.swift`
+  - [X] Group reports by chart
+  - [X] Show chart name, birth date
+  - [X] List reports with icons and dates
   - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
 
-- [ ] **T7.3.2**: Create ReportListViewModel
-  - [ ] Fetch all reports from SwiftData
-  - [ ] Group by chart
-  - [ ] Sort by purchase date
+- [X] **T7.3.2**: Create ReportListViewModel
+  - [X] Fetch all reports from SwiftData
+  - [X] Group by chart
+  - [X] Sort by purchase date
   - [ ] **Test**: Unit test for grouping logic
 
-- [ ] **T7.3.3**: Add navigation
-  - [ ] Tap report to view full report
+- [X] **T7.3.3**: Add navigation
+  - [X] Tap report to view full report
   - [ ] **Test**: Navigation test
 
-- [ ] **T7.3.4**: Handle empty state
-  - [ ] Show "No reports yet" message
+- [X] **T7.3.4**: Handle empty state
+  - [X] Show "No reports yet" message
   - [ ] **Test**: Empty state test
 
 ---

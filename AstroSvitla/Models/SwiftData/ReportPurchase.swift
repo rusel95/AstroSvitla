@@ -8,6 +8,10 @@ final class ReportPurchase {
 
     var area: String
     var reportText: String
+    var summary: String
+    var keyInfluences: [String]
+    var detailedAnalysis: String
+    var recommendations: [String]
     var language: String
 
     var price: Decimal
@@ -25,6 +29,10 @@ final class ReportPurchase {
         id: UUID = UUID(),
         area: String,
         reportText: String,
+        summary: String,
+        keyInfluences: [String] = [],
+        detailedAnalysis: String,
+        recommendations: [String] = [],
         language: String,
         price: Decimal,
         currency: String = "USD",
@@ -33,6 +41,10 @@ final class ReportPurchase {
         self.id = id
         self.area = area
         self.reportText = reportText
+        self.summary = summary
+        self.keyInfluences = keyInfluences
+        self.detailedAnalysis = detailedAnalysis
+        self.recommendations = recommendations
         self.language = language
         self.price = price
         self.currency = currency
@@ -66,5 +78,16 @@ final class ReportPurchase {
 
     func isForArea(_ reportArea: ReportArea) -> Bool {
         area == reportArea.rawValue
+    }
+
+    var generatedReport: GeneratedReport? {
+        guard let reportArea = ReportArea(rawValue: area) else { return nil }
+        return GeneratedReport(
+            area: reportArea,
+            summary: summary,
+            keyInfluences: keyInfluences,
+            detailedAnalysis: detailedAnalysis,
+            recommendations: recommendations
+        )
     }
 }
