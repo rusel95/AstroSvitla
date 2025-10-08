@@ -80,18 +80,19 @@ struct ContentView: View {
     }
 
     private func generateReport(details: BirthDetails, area: ReportArea) {
-        flowState = .generating(details, area)
+        let demoDetails = ReportGenerationDemoData.sampleBirthDetails
+        flowState = .generating(demoDetails, area)
 
         Task {
             do {
-                let report = try await reportGenerator.generateReport(for: area, birthDetails: details)
+                let report = try await reportGenerator.generateReport(for: area, birthDetails: demoDetails)
                 await MainActor.run {
-                    flowState = .report(details, area, report)
+                    flowState = .report(demoDetails, area, report)
                 }
             } catch {
                 await MainActor.run {
                     errorMessage = error.localizedDescription
-                    flowState = .purchase(details, area)
+                    flowState = .purchase(demoDetails, area)
                 }
             }
         }

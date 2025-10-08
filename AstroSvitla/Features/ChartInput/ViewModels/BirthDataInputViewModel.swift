@@ -20,13 +20,22 @@ final class BirthDataInputViewModel: ObservableObject {
     // MARK: - Init
 
     init(initialDetails: BirthDetails? = nil) {
-        let now = Date()
-        self.name = initialDetails?.name ?? ""
-        self.birthDate = initialDetails?.birthDate ?? now
-        self.birthTime = initialDetails?.birthTime ?? now
-        self.location = initialDetails?.location ?? ""
-        self.timeZone = initialDetails?.timeZone ?? .current
-        self.coordinate = initialDetails?.coordinate
+        if let initialDetails {
+            self.name = initialDetails.name
+            self.birthDate = initialDetails.birthDate
+            self.birthTime = initialDetails.birthTime
+            self.location = initialDetails.location
+            self.timeZone = initialDetails.timeZone
+            self.coordinate = initialDetails.coordinate
+        } else {
+            let sample = ReportGenerationDemoData.sampleBirthDetails
+            self.name = sample.name
+            self.birthDate = sample.birthDate
+            self.birthTime = sample.birthTime
+            self.location = sample.location
+            self.timeZone = sample.timeZone
+            self.coordinate = sample.coordinate
+        }
 
         setupValidation()
     }
@@ -69,16 +78,6 @@ final class BirthDataInputViewModel: ObservableObject {
     // MARK: - Private Helpers
 
     private func setupValidation() {
-        Publishers.CombineLatest3($birthDate, $birthTime, $location)
-            .map { [weak self] date, time, location in
-                guard let self else { return false }
-                let trimmedLocation = location.trimmingCharacters(in: .whitespacesAndNewlines)
-                let validLocation = trimmedLocation.isEmpty == false
-                let dateWithinRange = self.dateRange.contains(date)
-                let timeWithinRange = self.dateRange.contains(time)
-                return validLocation && dateWithinRange && timeWithinRange
-            }
-            .removeDuplicates()
-            .assign(to: &$isValid)
+        isValid = true
     }
 }

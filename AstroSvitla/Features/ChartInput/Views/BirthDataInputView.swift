@@ -14,45 +14,28 @@ struct BirthDataInputView: View {
 
     var body: some View {
         Form {
+            Section("Demo Mode") {
+                Text("Currently using pre-filled birth details while the vector store integration is prepared.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+
             Section("Person") {
                 TextField("Name (optional)", text: $viewModel.name)
-                    .focused($focusedField, equals: .name)
-                    .submitLabel(.next)
-                    .onSubmit { showLocationSearch = true }
+                    .disabled(true)
             }
 
             Section("Birth Details") {
-                DatePicker(
-                    "Date",
-                    selection: $viewModel.birthDate,
-                    in: viewModel.dateRange,
-                    displayedComponents: .date
-                )
-
-                DatePicker(
-                    "Time",
-                    selection: $viewModel.birthTime,
-                    displayedComponents: .hourAndMinute
-                )
-
-                Button {
-                    showLocationSearch = true
-                } label: {
-                    HStack {
-                        Text("Location")
-                        Spacer()
-                        Text(viewModel.locationDisplay)
-                            .foregroundStyle(viewModel.location.isEmpty ? .secondary : .primary)
-                            .multilineTextAlignment(.trailing)
-                            .lineLimit(2)
-                    }
-                }
-            }
-
-            if viewModel.isValid == false {
-                Section {
-                    Label("Enter birth location to continue.", systemImage: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.orange)
+                DatePicker("Date", selection: $viewModel.birthDate, in: viewModel.dateRange, displayedComponents: .date)
+                    .disabled(true)
+                DatePicker("Time", selection: $viewModel.birthTime, displayedComponents: .hourAndMinute)
+                    .disabled(true)
+                HStack {
+                    Text("Location")
+                    Spacer()
+                    Text(viewModel.locationDisplay)
+                        .foregroundStyle(.primary)
+                        .lineLimit(2)
                 }
             }
         }

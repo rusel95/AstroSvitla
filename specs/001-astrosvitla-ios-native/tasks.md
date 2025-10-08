@@ -421,34 +421,7 @@
   - [ ] Provide hook for future analytics/alerts
   - [ ] **Test**: Logging instrumentation test
 
-### P5.2: Astrology Rules Engine [P] (→ P1.3)
-
-- [ ] **T5.2.1**: Create AstrologyRule model
-  - [ ] Create `Models/Domain/AstrologyRule.swift`
-  - [ ] Add Codable conformance
-  - [ ] **Test**: JSON parsing test
-
-- [ ] **T5.2.2**: Create AstrologyRulesEngine
-  - [ ] Create `Features/ChartCalculation/Services/AstrologyRulesEngine.swift`
-  - [ ] Implement rule loading from JSON
-  - [ ] **Test**: Rule loading test
-
-- [ ] **T5.2.3**: Create sample rule JSON files
-  - [ ] `Resources/AstrologyRules/finances/planets_in_houses.json`
-  - [ ] `Resources/AstrologyRules/career/mc_analysis.json`
-  - [ ] `Resources/AstrologyRules/relationships/venus_aspects.json`
-  - [ ] `Resources/AstrologyRules/health/6th_house.json`
-  - [ ] `Resources/AstrologyRules/general/dominant_planets.json`
-  - [ ] Add 5-10 rules per file
-  - [ ] **Test**: JSON validation test
-
-- [ ] **T5.2.4**: Implement rule matching
-  - [ ] Match rules by planet + house + sign
-  - [ ] Score rules by relevance
-  - [ ] Return top 10 matches
-  - [ ] **Test**: Matching logic unit test
-
-### P5.3: AI Report Generator (→ T5.1.6, T5.2.4)
+### P5.3: AI Report Generator (→ T5.1.6)
 
 - [X] **T5.3.1**: Create AIReportGenerator
   - [ ] Create `Features/ReportGeneration/Services/AIReportGenerator.swift`
@@ -466,7 +439,7 @@
 - [X] **T5.3.3**: Implement report generation flow
   - [ ] Get relevant rules
   - [ ] Build comprehensive prompt
-  - [ ] Call OpenAIService (replace temporary HardcodedReportGenerator)
+  - [ ] Call OpenAIService (surface errors instead of fallback)
   - [ ] Parse response
   - [ ] Return Report object
   - [ ] **Test**: End-to-end test with real API
@@ -909,5 +882,5 @@
 - UI snapshot coverage (T3.2.1, T3.3.1, T6.1.1, T6.1.2, T6.3.1, T7.1.1, T7.2.1, dark-mode variants) deferred until visual design stabilizes.
 - Localization expansion (P8.1–P8.3, T6.1.6, T6.3.4) deferred until post-MVP release when bilingual content/spec is ready.
 - Switch prompts/tests back to multilingual once localization resumes.
-- Remove temporary `HardcodedReportGenerator` after T5.3.3 lands.
+- Remove temporary `HardcodedReportGenerator` after vector store integration replaces stub data.
 - Replace stubbed `AstrologyKnowledgeProvider` responses with real vector-store queries post T5.0.3.
