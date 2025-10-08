@@ -45,6 +45,13 @@ enum ZodiacSign: String, Codable, CaseIterable, Sendable {
         let start = Double(index) * 30.0
         return start...(start + 30.0)
     }
+
+    /// Convert an ecliptic longitude degree (0-360) to zodiac sign
+    static func from(degree: Double) -> ZodiacSign {
+        let normalizedDegree = degree.truncatingRemainder(dividingBy: 360)
+        let signIndex = Int(normalizedDegree / 30.0)
+        return ZodiacSign.allCases[signIndex % 12]
+    }
 }
 
 enum Element: String, Codable, Sendable {

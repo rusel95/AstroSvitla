@@ -32,8 +32,7 @@ struct AreaCard: View {
     }
 }
 
-#Preview {
+#Preview(traits: .sizeThatFitsLayout) {
     AreaCard(area: .general)
         .padding()
-        .previewLayout(.sizeThatFits)
 }

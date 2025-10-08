@@ -14,28 +14,44 @@ struct BirthDataInputView: View {
 
     var body: some View {
         Form {
-            Section("Демо-режим") {
-                Text("Наразі використовуються попередньо заповнені дані народження, поки ми готуємо інтеграцію з векторною базою знань.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-
             Section("Особа") {
                 TextField("Ім'я (необов'язково)", text: $viewModel.name)
-                    .disabled(true)
+                    .focused($focusedField, equals: .name)
             }
 
             Section("Дані народження") {
                 DatePicker("Дата", selection: $viewModel.birthDate, in: viewModel.dateRange, displayedComponents: .date)
-                    .disabled(true)
                 DatePicker("Час", selection: $viewModel.birthTime, displayedComponents: .hourAndMinute)
-                    .disabled(true)
-                HStack {
-                    Text("Місце")
-                    Spacer()
-                    Text(viewModel.locationDisplay)
-                        .foregroundStyle(.primary)
-                        .lineLimit(2)
+                Button {
+                    showLocationSearch = true
+                } label: {
+                    HStack {
+                        Text("Місце")
+                            .foregroundStyle(.primary)
+                        Spacer()
+                        Text(viewModel.locationDisplay)
+                            .foregroundStyle(viewModel.location.isEmpty ? .secondary : .primary)
+                            .lineLimit(2)
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+
+            Section {
+                Text("Введіть точні дані народження для розрахунку натальної карти. Час має бути максимально точним для коректного визначення будинків.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+
+            if viewModel.hasSavedData {
+                Section {
+                    Button(role: .destructive) {
+                        viewModel.clearData()
+                    } label: {
+                        Label("Очистити збережені дані", systemImage: "trash")
+                    }
                 }
             }
         }

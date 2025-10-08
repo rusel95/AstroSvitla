@@ -14,13 +14,29 @@ final class BirthDataInputViewModel: ObservableObject {
     @Published var timeZone: TimeZone
     @Published var coordinate: CLLocationCoordinate2D?
     @Published private(set) var isValid: Bool = false
+    @Published private(set) var hasSavedData: Bool = false
 
     private var cancellables: Set<AnyCancellable> = []
+    private let storage = BirthDetailsStorage.shared
 
     // MARK: - Init
 
     init(initialDetails: BirthDetails? = nil) {
+        // Initialize with default values first
+        self.name = ""
+        self.birthDate = Calendar.current.date(byAdding: .year, value: -25, to: Date()) ?? Date()
+        self.birthTime = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: Date()) ?? Date()
+        self.location = ""
+        self.timeZone = .current
+        self.coordinate = nil
+
+        // Now setup validation and auto-save
+        setupValidation()
+        setupAutoSave()
+
+        // Then override with provided or saved details
         if let initialDetails {
+            // Use provided details (e.g., when editing)
             self.name = initialDetails.name
             self.birthDate = initialDetails.birthDate
             self.birthTime = initialDetails.birthTime
@@ -28,16 +44,38 @@ final class BirthDataInputViewModel: ObservableObject {
             self.timeZone = initialDetails.timeZone
             self.coordinate = initialDetails.coordinate
         } else {
-            let sample = ReportGenerationDemoData.sampleBirthDetails
-            self.name = sample.name
-            self.birthDate = sample.birthDate
-            self.birthTime = sample.birthTime
-            self.location = sample.location
-            self.timeZone = sample.timeZone
-            self.coordinate = sample.coordinate
+            // Load saved data asynchronously
+            loadSavedData()
         }
+    }
 
-        setupValidation()
+    private func loadSavedData() {
+        Task { @MainActor in
+            if let savedDetails = await storage.load() {
+                self.name = savedDetails.name
+                self.birthDate = savedDetails.birthDate
+                self.birthTime = savedDetails.birthTime
+                self.location = savedDetails.location
+                self.timeZone = savedDetails.timeZone
+                self.coordinate = savedDetails.coordinate
+                self.hasSavedData = true
+            }
+        }
+    }
+
+    func clearData() {
+        Task {
+            await storage.clear()
+            await MainActor.run {
+                self.name = ""
+                self.birthDate = Calendar.current.date(byAdding: .year, value: -25, to: Date()) ?? Date()
+                self.birthTime = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: Date()) ?? Date()
+                self.location = ""
+                self.timeZone = .current
+                self.coordinate = nil
+                self.hasSavedData = false
+            }
+        }
     }
 
     // MARK: - Derived Values
@@ -78,6 +116,33 @@ final class BirthDataInputViewModel: ObservableObject {
     // MARK: - Private Helpers
 
     private func setupValidation() {
-        isValid = true
+        Publishers.CombineLatest($location, $coordinate)
+            .map { location, coordinate in
+                !location.isEmpty && coordinate != nil
+            }
+            .assign(to: &$isValid)
+    }
+
+    private func setupAutoSave() {
+        // Save data whenever any field changes (with debounce to avoid excessive saves)
+        Publishers.CombineLatest4(
+            $name,
+            $birthDate,
+            $birthTime,
+            $location
+        )
+        .combineLatest($timeZone, $coordinate)
+        .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
+        .sink { [weak self] _ in
+            guard let self = self else { return }
+            let details = self.makeDetails()
+            Task {
+                await self.storage.save(details)
+                await MainActor.run {
+                    self.hasSavedData = true
+                }
+            }
+        }
+        .store(in: &cancellables)
     }
 }

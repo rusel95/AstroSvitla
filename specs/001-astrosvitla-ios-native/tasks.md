@@ -211,29 +211,29 @@
   - [X] Identify retrogrades
   - [X] **Test**: Integration test with complete flow
 
-- [ ] **T2.2.3**: Add async/await support
-  - [ ] Make calculate() async
-  - [ ] Add error handling
-  - [ ] Add timeout handling
-  - [ ] **Test**: Test async behavior
+- [X] **T2.2.3**: Add async/await support
+  - [X] Make calculate() async
+  - [X] Add error handling
+  - [X] Add timeout handling
+  - [X] **Test**: Test async behavior
 
-- [ ] **T2.2.4**: Optimize performance
-  - [ ] Add result caching if needed
-  - [ ] Ensure <3 second calculation time
-  - [ ] **Test**: Performance benchmark test
+- [X] **T2.2.4**: Optimize performance
+  - [X] Add result caching if needed
+  - [X] Ensure <3 second calculation time
+  - [X] **Test**: Performance benchmark test
 
 ### P2.3: Chart Serialization (→ T2.2.4)
 
-- [ ] **T2.3.1**: Implement NatalChart JSON encoding
-  - [ ] Create `Models/Domain/NatalChart+JSON.swift`
-  - [ ] Implement Codable conformance
-  - [ ] Handle nested structures
-  - [ ] **Test**: Round-trip serialization test
+- [X] **T2.3.1**: Implement NatalChart JSON encoding
+  - [X] Create `Models/Domain/NatalChart+JSON.swift`
+  - [X] Implement Codable conformance
+  - [X] Handle nested structures
+  - [X] **Test**: Round-trip serialization test
 
-- [ ] **T2.3.2**: Implement deserialization helpers
-  - [ ] Add safe decoding with error handling
-  - [ ] Add validation on decode
-  - [ ] **Test**: Test with corrupted data
+- [X] **T2.3.2**: Implement deserialization helpers
+  - [X] Add safe decoding with error handling
+  - [X] Add validation on decode
+  - [X] **Test**: Test with corrupted data
 
 ---
 

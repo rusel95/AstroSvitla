@@ -8,7 +8,12 @@ struct AIPromptBuilder {
         let user: String
     }
 
-    func makePrompt(for area: ReportArea, birthDetails: BirthDetails, knowledgeSnippets: [String]) -> Prompt {
+    func makePrompt(
+        for area: ReportArea,
+        birthDetails: BirthDetails,
+        natalChart: NatalChart,
+        knowledgeSnippets: [String]
+    ) -> Prompt {
         let systemMessage = """
         Ти — професійний астролог з понад 20 роками досвіду. Твоя задача — писати теплі, практичні та мотиваційні інтерпретації натальних карт українською мовою. Відповіді мають бути без згадок про гороскопи «на кожен день» та без шаблонних фраз. Пиши чітко, сучасно, з повагою до особистого шляху людини.
         """
@@ -46,11 +51,8 @@ struct AIPromptBuilder {
         Додатковий фокус для цієї сфери:
         \(focus(for: area))
 
-        Контекст для натальної карти (попередньо згенеровані спостереження, адаптуй їх, не копіюй дослівно):
-        1. Перший дім: Водолій 12° — винахідливість та незалежність у самовираженні.
-        2. Десятий дім: Скорпіон 18° — кар'єрні трансформації через глибоку фокусованість.
-        3. Юпітер у трині до Місяця — віра та інтуїція підтримують важливі рішення.
-        4. Венера у секстилі до Сатурна — стабільні стосунки через дисципліну й відданість.
+        Контекст для натальної карти (реальні розрахунки, використовуй для точного аналізу):
+        \(formatNatalChartData(natalChart))
 
         \(knowledgeSection)
 
@@ -77,6 +79,46 @@ struct AIPromptBuilder {
         let suffix = value >= 0 ? positiveSuffix : negativeSuffix
         let absolute = abs(value)
         return String(format: "%.2f°%@", absolute, suffix)
+    }
+
+    private func formatNatalChartData(_ chart: NatalChart) -> String {
+        var lines: [String] = []
+
+        // Ascendant and Midheaven
+        let ascSign = ZodiacSign.from(degree: chart.ascendant)
+        let mcSign = ZodiacSign.from(degree: chart.midheaven)
+        lines.append("Асцендент (ASC): \(format(degree: chart.ascendant)) у \(ascSign.rawValue)")
+        lines.append("Середина неба (MC): \(format(degree: chart.midheaven)) у \(mcSign.rawValue)")
+
+        // Planets
+        lines.append("\nПланети:")
+        for planet in chart.planets {
+            let retro = planet.isRetrograde ? " (ретроградна)" : ""
+            lines.append("- \(planet.name.rawValue): \(format(degree: planet.longitude)) у \(planet.sign.rawValue), \(planet.house) дім\(retro)")
+        }
+
+        // Houses
+        lines.append("\nДоми (куспіди):")
+        for house in chart.houses.sorted(by: { $0.number < $1.number }) {
+            lines.append("- Дім \(house.number): \(format(degree: house.cusp)) у \(house.sign.rawValue)")
+        }
+
+        // Major Aspects
+        if !chart.aspects.isEmpty {
+            lines.append("\nОсновні аспекти (орб <\(String(format: "%.1f", chart.aspects.first?.orb ?? 0))°):")
+            for aspect in chart.aspects.prefix(8) {
+                lines.append("- \(aspect.planet1.rawValue) \(aspect.type.rawValue) \(aspect.planet2.rawValue) (орб: \(String(format: "%.2f", aspect.orb))°)")
+            }
+        }
+
+        return lines.joined(separator: "\n")
+    }
+
+    private func format(degree: Double) -> String {
+        let normalized = degree.truncatingRemainder(dividingBy: 360)
+        let degrees = Int(normalized)
+        let minutes = Int((normalized - Double(degrees)) * 60)
+        return "\(degrees)°\(minutes)'"
     }
 
     private func focus(for area: ReportArea) -> String {

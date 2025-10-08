@@ -21,12 +21,22 @@ struct OpenAIService {
         clientProvider.client != nil
     }
 
-    func generateReport(for area: ReportArea, birthDetails: BirthDetails, knowledgeSnippets: [String]) async throws -> GeneratedReport {
+    func generateReport(
+        for area: ReportArea,
+        birthDetails: BirthDetails,
+        natalChart: NatalChart,
+        knowledgeSnippets: [String]
+    ) async throws -> GeneratedReport {
         guard let client = clientProvider.client else {
             throw ReportGenerationError.missingAPIKey
         }
 
-        let prompt = promptBuilder.makePrompt(for: area, birthDetails: birthDetails, knowledgeSnippets: knowledgeSnippets)
+        let prompt = promptBuilder.makePrompt(
+            for: area,
+            birthDetails: birthDetails,
+            natalChart: natalChart,
+            knowledgeSnippets: knowledgeSnippets
+        )
         let query = makeChatQuery(systemPrompt: prompt.system, userPrompt: prompt.user)
 
         let maxAttempts = 3

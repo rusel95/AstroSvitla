@@ -5,7 +5,7 @@ actor AIReportGenerator {
     private let openAIService: OpenAIService
     private let knowledgeProvider: AstrologyKnowledgeProvider
 
-    init(
+    nonisolated init(
         openAIService: OpenAIService = OpenAIService(),
         knowledgeProvider: AstrologyKnowledgeProvider = AstrologyKnowledgeProvider()
     ) {
@@ -13,8 +13,16 @@ actor AIReportGenerator {
         self.knowledgeProvider = knowledgeProvider
     }
 
-    func generateReport(for area: ReportArea, birthDetails: BirthDetails) async throws -> GeneratedReport {
-        let knowledgeSnippets = await knowledgeProvider.loadSnippets(for: area, birthDetails: birthDetails)
+    func generateReport(
+        for area: ReportArea,
+        birthDetails: BirthDetails,
+        natalChart: NatalChart
+    ) async throws -> GeneratedReport {
+        let knowledgeSnippets = await knowledgeProvider.loadSnippets(
+            for: area,
+            birthDetails: birthDetails,
+            natalChart: natalChart
+        )
 
         guard openAIService.isConfigured else {
             throw ReportGenerationError.missingAPIKey
@@ -23,6 +31,7 @@ actor AIReportGenerator {
         return try await openAIService.generateReport(
             for: area,
             birthDetails: birthDetails,
+            natalChart: natalChart,
             knowledgeSnippets: knowledgeSnippets
         )
     }
