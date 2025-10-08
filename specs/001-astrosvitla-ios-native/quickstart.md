@@ -351,9 +351,9 @@ class OnboardingFlowTests: XCTestCase {
 JPLFileManager.setEphemerisPath()
 ```
 
-### Issue: Gemini API Key Not Found
+### Issue: OpenAI API Key Not Found
 
-**Error**: `GEMINI_API_KEY not set in environment`
+**Error**: `OPENAI_API_KEY not set in environment`
 
 **Solution**:
 1. Create `.env` file with API key
@@ -430,7 +430,7 @@ Once setup is complete:
 2. **Check Data Model**: Review `data-model.md` for SwiftData schema
 3. **Review Contracts**: Read API contracts in `contracts/`
 4. **Run Example Chart Calculation**: Test SwissEphemeris integration
-5. **Generate Test Report**: Test Gemini API integration
+5. **Generate Test Report**: Test OpenAI integration
 6. **Create First Chart**: Test full user flow
 
 ---
@@ -444,7 +444,7 @@ Once setup is complete:
 
 **External Resources**:
 - SwissEphemeris: https://github.com/vsmithers1087/SwissEphemeris
-- Gemini AI: https://ai.google.dev/gemini-api/docs
+- OpenAI Swift SDK: https://github.com/openai/openai-swift
 - StoreKit 2: https://developer.apple.com/documentation/storekit
 - SwiftData: https://developer.apple.com/documentation/swiftdata
 

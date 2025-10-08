@@ -276,11 +276,6 @@ As a person interested in astrology, I want to generate personalized predictions
 - **NFR-010**: App MUST support iPhone SE (2020) and newer devices
 - **NFR-011**: App MUST support portrait orientation only
 
-#### Accessibility (NFR-012 to NFR-014)
-- **NFR-012**: App MUST support VoiceOver screen reader
-- **NFR-013**: App MUST support Dynamic Type for text scaling
-- **NFR-014**: App MUST provide sufficient color contrast for readability
-
 ### Key Entities
 
 #### User

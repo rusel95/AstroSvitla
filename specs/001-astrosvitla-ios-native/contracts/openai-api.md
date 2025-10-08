@@ -1,9 +1,9 @@
-# Google Gemini API Contract
+# OpenAI GPT-4o API Contract
 
-**Service**: Google Generative AI (Gemini 2.5 Flash)
+**Service**: OpenAI GPT-4o Mini
 **Purpose**: Generate personalized astrology reports from natal chart data
-**Integration**: REST API via URLSession + Official Swift SDK (GoogleGenerativeAI)
-**Documentation**: https://ai.google.dev/gemini-api/docs
+**Integration**: Official Swift SDK (`openai/openai-swift`) or REST API via `URLSession`
+**Documentation**: https://platform.openai.com/docs/api-reference
 
 ---
 
@@ -13,29 +13,28 @@
 
 | Property | Value |
 |----------|-------|
-| Base URL | `https://generativelanguage.googleapis.com/v1beta` |
-| Authentication | API Key in query parameter |
-| Model | `gemini-2.5-flash` |
-| SDK Package | `google/generative-ai-swift` |
-| Swift Package URL | `https://github.com/google/generative-ai-swift` |
+| Base URL | `https://api.openai.com/v1` |
+| Authentication | Bearer token (`Authorization: Bearer <OPENAI_API_KEY>`) |
+| Model | `gpt-4o-mini` (default) |
+| SDK Package | `openai/openai-swift` |
+| Swift Package URL | `https://github.com/openai/openai-swift` |
 
 ### Environment Configuration
 
 ```swift
 // Configuration.swift
-enum GeminiConfig {
+enum OpenAIConfig {
     static let apiKey: String = {
-        guard let key = ProcessInfo.processInfo.environment["GEMINI_API_KEY"] else {
-            fatalError("GEMINI_API_KEY not set in environment")
+        guard let key = ProcessInfo.processInfo.environment["OPENAI_API_KEY"] else {
+            fatalError("OPENAI_API_KEY not set in environment")
         }
         return key
     }()
 
-    static let model = "gemini-2.5-flash"
+    static let model: Model = .gpt4oMini
     static let maxOutputTokens = 800 // ~500-600 words
-    static let temperature: Float = 0.7 // Creative but focused
-    static let topP: Float = 0.9
-    static let topK = 40
+    static let temperature: Double = 0.7 // Creative but focused
+    static let topP: Double = 0.9
 }
 ```
 
@@ -46,25 +45,17 @@ enum GeminiConfig {
 ### Swift SDK Integration
 
 ```swift
-import GoogleGenerativeAI
+import OpenAI
 
-// Initialize model
-let model = GenerativeModel(
-    name: "gemini-2.5-flash",
-    apiKey: GeminiConfig.apiKey,
-    generationConfig: GenerationConfig(
-        temperature: 0.7,
-        topP: 0.9,
-        topK: 40,
-        maxOutputTokens: 800
-    )
+let client = OpenAI(apiKey: OpenAIConfig.apiKey)
+let prompt = buildPrompt(chart: natalChart, area: lifeArea, language: language)
+
+let response = try await client.responses.generate(
+    model: OpenAIConfig.model,
+    prompt: .init(prompt)
 )
 
-// Generate content
-let prompt = buildPrompt(chart: natalChart, area: lifeArea, language: language)
-let response = try await model.generateContent(prompt)
-
-guard let text = response.text else {
+guard let text = response.outputText else {
     throw ReportGenerationError.noContent
 }
 ```
@@ -72,26 +63,16 @@ guard let text = response.text else {
 ### HTTP Request (Alternative - Direct REST)
 
 ```http
-POST /v1beta/models/gemini-2.5-flash:generateContent?key=YOUR_API_KEY
+POST /v1/responses
 Content-Type: application/json
+Authorization: Bearer YOUR_API_KEY
 
 {
-  "contents": [
-    {
-      "role": "user",
-      "parts": [
-        {
-          "text": "<PROMPT_TEXT>"
-        }
-      ]
-    }
-  ],
-  "generationConfig": {
-    "temperature": 0.7,
-    "topP": 0.9,
-    "topK": 40,
-    "maxOutputTokens": 800
-  }
+  "model": "gpt-4o-mini",
+  "input": "<PROMPT_TEXT>",
+  "max_output_tokens": 800,
+  "temperature": 0.7,
+  "top_p": 0.9
 }
 ```
 
@@ -267,7 +248,7 @@ enum ReportGenerationError: Error, LocalizedError {
         case .noContent:
             return "No content generated from AI service"
         case .apiKeyMissing:
-            return "Gemini API key not configured"
+            return "OpenAI API key not configured"
         case .rateLimitExceeded:
             return "Rate limit exceeded. Please try again in a moment."
         case .invalidResponse:
@@ -373,7 +354,7 @@ struct UsageTracker {
         totalRequests += 1
         totalTokens += tokens
 
-        // Gemini Flash pricing (estimated)
+        // OpenAI GPT-4o Mini pricing (estimated)
         // Input: ~$0.000001 per token
         // Output: ~$0.000002 per token
         // Average ~800 tokens per report
@@ -429,7 +410,7 @@ XCTAssertTrue(report.contains("Sun") || report.contains("Capricorn")) // Chart-s
 ### Mock Response (Unit Tests)
 
 ```swift
-class MockGeminiService: ReportGenerationService {
+class MockOpenAIService: ReportGenerationService {
     func generateReport(chart: NatalChart, area: ReportArea, language: Language) async throws -> String {
         return """
         ## Key Influences
@@ -462,11 +443,11 @@ class MockGeminiService: ReportGenerationService {
 // ❌ NEVER hardcode keys in source code
 
 // ✅ Use environment variables (development)
-let apiKey = ProcessInfo.processInfo.environment["GEMINI_API_KEY"]
+let apiKey = ProcessInfo.processInfo.environment["OPENAI_API_KEY"]
 
 // ✅ Use Xcode configuration files (.xcconfig)
 // Config.xcconfig:
-// GEMINI_API_KEY = your_key_here
+// OPENAI_API_KEY = your_key_here
 
 // ✅ Or fetch from secure backend (production)
 // let apiKey = try await fetchAPIKeyFromBackend()
@@ -474,7 +455,7 @@ let apiKey = ProcessInfo.processInfo.environment["GEMINI_API_KEY"]
 
 ### Data Privacy
 
-**Data Sent to Gemini**:
+**Data Sent to OpenAI**:
 - Birth date, time, location coordinates
 - Calculated planetary positions (numbers only)
 - No user names or personal identifiers
@@ -528,8 +509,8 @@ actor ReportCache {
 
 ## Integration Checklist
 
-- [ ] Add `google/generative-ai-swift` to SPM dependencies
-- [ ] Configure Gemini API key (environment or .xcconfig)
+- [ ] Add `openai/openai-swift` to SPM dependencies
+- [ ] Configure OpenAI API key (environment or .xcconfig)
 - [ ] Implement `ReportGenerationService` protocol
 - [ ] Build prompt templates for all 5 life areas
 - [ ] Implement retry logic with exponential backoff
@@ -544,22 +525,15 @@ actor ReportCache {
 ## Example Implementation
 
 ```swift
-import GoogleGenerativeAI
+import OpenAI
 
-actor GeminiReportGenerator {
-    private let model: GenerativeModel
+actor OpenAIReportGenerator {
+    private let client: OpenAI
+    private let model: Model
 
-    init(apiKey: String) {
-        self.model = GenerativeModel(
-            name: "gemini-2.5-flash",
-            apiKey: apiKey,
-            generationConfig: GenerationConfig(
-                temperature: 0.7,
-                topP: 0.9,
-                topK: 40,
-                maxOutputTokens: 800
-            )
-        )
+    init(apiKey: String, model: Model = .gpt4oMini) {
+        self.client = OpenAI(apiKey: apiKey)
+        self.model = model
     }
 
     func generateReport(
@@ -569,9 +543,15 @@ actor GeminiReportGenerator {
     ) async throws -> String {
         let prompt = buildPrompt(chart: chart, area: area, language: language)
 
-        let response = try await model.generateContent(prompt)
+        let response = try await client.responses.generate(
+            model: model,
+            prompt: .init(prompt),
+            maxOutputTokens: OpenAIConfig.maxOutputTokens,
+            temperature: OpenAIConfig.temperature,
+            topP: OpenAIConfig.topP
+        )
 
-        guard let text = response.text else {
+        guard let text = response.outputText else {
             throw ReportGenerationError.noContent
         }
 
@@ -593,4 +573,4 @@ actor GeminiReportGenerator {
 ---
 
 **Status**: ✅ Contract specification complete
-**Next**: Implement in `AstroSvitla/Core/Services/GeminiReportGenerator.swift`
+**Next**: Implement in `AstroSvitla/Core/Services/OpenAIReportGenerator.swift`

@@ -182,7 +182,7 @@ Follow the implementation plan in sequential order:
 2. **Integration Tests** - API calls, database operations
 3. **UI Tests** - User flows, navigation
 4. **Snapshot Tests** - Visual regression
-5. **Accessibility Tests** - VoiceOver, Dynamic Type, contrast
+5. **UI QA Checks** - Layout validation across devices and themes
 
 ### Performance Benchmarks
 
@@ -298,7 +298,7 @@ Before submitting code:
 - [ ] All tests pass (unit, integration, UI)
 - [ ] Code follows Swift style guide
 - [ ] SwiftUI best practices followed
-- [ ] Accessibility verified (VoiceOver tested)
+- [ ] UI QA sweep completed (layout, dark mode, manual smoke tests)
 - [ ] Localized strings added (English + Ukrainian)
 - [ ] Performance benchmarks met
 - [ ] No API keys in code
@@ -322,7 +322,7 @@ Before submitting code:
 - [ ] Article II: SwiftUI/SwiftData native ✅
 - [ ] Article III: TDD followed ✅
 - [ ] Article IV: Performance targets met ✅
-- [ ] Article V: Accessibility verified ✅
+- [ ] Article V: UI polish complete ✅
 
 ### Screenshots
 [Add before/after screenshots if UI changes]

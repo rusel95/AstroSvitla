@@ -48,8 +48,6 @@ Tech stack specified in PRD:
 - Offline-first architecture (minimal network usage)
 
 ### Article V: Accessible Astronomy for All ✅
-- VoiceOver support mandatory
-- Dynamic Type support
 - High contrast mode support
 - Bilingual: English + Ukrainian
 - Color-safe palettes
@@ -333,7 +331,7 @@ Tech stack specified in PRD:
 - Localization tests (English + Ukrainian)
 - UserDefaults persistence tests
 
-**Acceptance**: VoiceOver reads all content correctly
+**Acceptance**: Onboarding screens display expected content and state persists after completion
 
 ### P3.2: Birth Data Input Form
 
@@ -356,7 +354,6 @@ Tech stack specified in PRD:
 - Unit tests for ViewModel validation logic
 - UI tests for form interaction
 - Edge case tests (midnight times, century-old dates)
-- Accessibility tests (VoiceOver, Dynamic Type)
 
 ### P3.3: Location Search
 
@@ -410,7 +407,7 @@ Tech stack specified in PRD:
 - Size adaptation tests (different iPhone screens)
 - Performance tests (render time <100ms)
 
-**Acceptance**: Chart is recognizable by astrologer; VoiceOver describes planetary positions
+**Acceptance**: Chart rendering matches design references and displays accurate planetary positioning
 
 ### P4.2: Chart Display Screen
 
@@ -567,7 +564,6 @@ Tech stack specified in PRD:
 - Interaction tests
 - Purchased state tests
 - Localization tests
-- Accessibility tests
 
 ### P6.2: StoreKit Integration
 
@@ -640,17 +636,14 @@ Tech stack specified in PRD:
      * Practical Recommendations (bulleted list)
    - Purchase date footer
    - Action buttons (Export PDF, Share)
-2. Support Dynamic Type for text scaling
-3. Add dark mode support
-4. Implement scroll-to-top button for long reports
-5. Add localized strings
+2. Add dark mode support
+3. Implement scroll-to-top button for long reports
+4. Add localized strings
 
 **Testing**:
 - Snapshot tests for report layout
-- Dynamic Type tests (accessibility sizes)
 - Dark mode tests
 - Long content scrolling tests
-- VoiceOver tests
 
 ### P7.2: PDF Export
 
@@ -799,22 +792,7 @@ Tech stack specified in PRD:
 
 **Acceptance**: All UI tests pass on iPhone SE and iPhone 15 Pro Max
 
-### P9.4: Accessibility Testing
-
-**Goal**: Ensure app is accessible to all users
-
-**Tasks**:
-1. Test with VoiceOver enabled (complete app flow)
-2. Test with Dynamic Type at largest size
-3. Test with high contrast mode
-4. Test with Reduce Motion enabled
-5. Verify all images have alt text
-6. Verify all buttons have labels
-7. Test color contrast ratios
-
-**Acceptance**: No accessibility issues found; app is fully navigable with VoiceOver
-
-### P9.5: Performance Testing
+### P9.5: Performance Testing Performance Testing
 
 **Goal**: Verify performance meets requirements
 
@@ -1045,7 +1023,6 @@ Tech stack specified in PRD:
 - Follow Apple Human Interface Guidelines strictly
 - Complete privacy policy and terms
 - No prohibited content in astrology interpretations
-- Accessibility compliance
 - Performance optimization for App Store review devices
 
 ---
@@ -1094,8 +1071,7 @@ Tech stack specified in PRD:
 
 - **Quality**:
   - Unit test coverage: >80% ✅
-  - Accessibility audit: 0 critical issues ✅
-  - App Store review: 4.5+ stars ✅
+    - App Store review: 4.5+ stars ✅
 
 ### Business Metrics (from spec.md)
 
@@ -1316,7 +1292,6 @@ AstroSvitla/
 │   ├── OnboardingFlowTests.swift
 │   ├── ChartInputFlowTests.swift
 │   ├── PurchaseFlowTests.swift
-│   └── AccessibilityTests.swift
 │
 ├── docs/
 │   ├── ARCHITECTURE.md
@@ -1350,7 +1325,6 @@ AstroSvitla/
 - All API keys must be in `Config.swift` (gitignored)
 - Follow TDD: write tests before implementation (Constitutional Article III)
 - Use async/await for all network calls
-- All UI must support VoiceOver and Dynamic Type
 - Localize all user-facing strings (English + Ukrainian)
 - Chart calculations must match professional astrology software accuracy
 - Report generation must complete within 10 seconds

@@ -270,12 +270,7 @@
   - [ ] Add Ukrainian strings to `uk.lproj/Localizable.strings`
   - [ ] **Test**: Localization tests
 
-- [ ] **T3.1.6**: Accessibility implementation
-  - [ ] Add VoiceOver labels
-  - [ ] Test with VoiceOver
-  - [ ] **Test**: Accessibility audit
-
-### P3.2: Birth Data Input Form (→ T3.1.6)
+### P3.2: Birth Data Input Form (→ T3.1.5)
 
 - [ ] **T3.2.1**: Create ChartInputView
   - [ ] Create `Features/ChartInput/Views/ChartInputView.swift`
@@ -301,10 +296,6 @@
   - [ ] Add form labels (Ukrainian)
   - [ ] **Test**: Localization tests
 
-- [ ] **T3.2.5**: Accessibility implementation
-  - [ ] Add VoiceOver labels for form fields
-  - [ ] Support Dynamic Type
-  - [ ] **Test**: Accessibility audit
 
 ### P3.3: Location Search (→ T3.2.2)
 
@@ -369,11 +360,7 @@
   - [ ] Apply adaptive colors
   - [ ] **Test**: Snapshot tests for both modes
 
-- [ ] **T4.1.7**: Accessibility for chart
-  - [ ] Add VoiceOver description of planetary positions
-  - [ ] **Test**: VoiceOver audit
-
-### P4.2: Chart Display Screen (→ T4.1.7)
+### P4.2: Chart Display Screen (→ T4.1.6)
 
 - [ ] **T4.2.1**: Create ChartDisplayView
   - [ ] Create `Features/ChartVisualization/Views/ChartDisplayView.swift`
@@ -539,10 +526,6 @@
   - [ ] Localize area names and descriptions
   - [ ] **Test**: Localization tests
 
-- [ ] **T6.1.7**: Accessibility
-  - [ ] VoiceOver labels
-  - [ ] **Test**: Accessibility audit
-
 ### P6.2: StoreKit Integration (→ T1.1.2)
 
 - [ ] **T6.2.1**: Configure products in App Store Connect
@@ -624,10 +607,6 @@
   - [ ] Bulleted list for recommendations
   - [ ] **Test**: Formatting tests
 
-- [ ] **T7.1.3**: Support Dynamic Type
-  - [ ] Test all accessibility text sizes
-  - [ ] **Test**: Dynamic Type tests
-
 - [ ] **T7.1.4**: Support dark mode
   - [ ] Test dark mode colors
   - [ ] **Test**: Dark mode snapshot tests
@@ -635,10 +614,6 @@
 - [ ] **T7.1.5**: Add scroll-to-top button
   - [ ] Show when scrolled down
   - [ ] **Test**: Interaction test
-
-- [ ] **T7.1.6**: Accessibility
-  - [ ] VoiceOver support
-  - [ ] **Test**: VoiceOver audit
 
 ### P7.2: PDF Export [P] (→ T7.1.1)
 
@@ -806,35 +781,7 @@
 - [ ] **T9.3.5**: Navigation UI test
 - [ ] **T9.3.6**: Error state UI tests
 
-### P9.4: Accessibility Testing (→ T9.3.6)
-
-- [ ] **T9.4.1**: VoiceOver complete flow test
-  - [ ] Navigate entire app with VoiceOver
-  - [ ] **Manual verification**
-
-- [ ] **T9.4.2**: Dynamic Type testing
-  - [ ] Test largest accessibility sizes
-  - [ ] **Manual verification**
-
-- [ ] **T9.4.3**: High contrast mode testing
-  - [ ] Test in high contrast mode
-  - [ ] **Manual verification**
-
-- [ ] **T9.4.4**: Reduce Motion testing
-  - [ ] Test with Reduce Motion enabled
-  - [ ] **Manual verification**
-
-- [ ] **T9.4.5**: Verify image alt text
-  - [ ] All images have descriptions
-
-- [ ] **T9.4.6**: Verify button labels
-  - [ ] All buttons have clear labels
-
-- [ ] **T9.4.7**: Color contrast audit
-  - [ ] Use contrast checker tool
-  - [ ] **Manual verification**
-
-### P9.5: Performance Testing (→ T9.4.7)
+### P9.5: Performance Testing (→ T9.3.6)
 
 - [ ] **T9.5.1**: Measure app launch time
   - [ ] **Target**: <2 seconds
