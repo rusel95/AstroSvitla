@@ -6,8 +6,11 @@ struct ReportAreaTests {
 
     @Test
     func testDisplayNames() {
-        #expect(ReportArea.finances.displayName == "Finances")
-        #expect(ReportArea.general.displayName == "General Overview")
+        let financesName = String(localized: "report.area.finances", table: "Localizable")
+        let generalName = String(localized: "report.area.general", table: "Localizable")
+
+        #expect(ReportArea.finances.displayName == financesName)
+        #expect(ReportArea.general.displayName == generalName)
     }
 
     @Test

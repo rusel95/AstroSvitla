@@ -9,12 +9,12 @@ final class OnboardingViewModel: ObservableObject {
     @Published private(set) var isCompleted: Bool
 
     private let storage: UserDefaults
-    private let completionKey = "com.astrosvitla.onboarding.completed"
+    private static let completionKey = "com.astrosvitla.onboarding.completed"
 
     init(storage: UserDefaults = .standard) {
         self.storage = storage
         self.pages = OnboardingViewModel.makePages()
-        self.isCompleted = storage.bool(forKey: completionKey)
+        self.isCompleted = storage.bool(forKey: Self.completionKey)
     }
 
     func advance() -> Bool {
@@ -35,13 +35,13 @@ final class OnboardingViewModel: ObservableObject {
     func resetForTesting() {
         isCompleted = false
         currentIndex = 0
-        storage.removeObject(forKey: completionKey)
+        storage.removeObject(forKey: Self.completionKey)
     }
 
     private func completeOnboarding() {
         guard isCompleted == false else { return }
         isCompleted = true
-        storage.set(true, forKey: completionKey)
+        storage.set(true, forKey: Self.completionKey)
     }
 
     private static func makePages() -> [OnboardingPage] {
@@ -87,5 +87,9 @@ final class OnboardingViewModel: ObservableObject {
                 ]
             ),
         ]
+    }
+
+    static func resetStoredProgress(storage: UserDefaults = .standard) {
+        storage.removeObject(forKey: completionKey)
     }
 }

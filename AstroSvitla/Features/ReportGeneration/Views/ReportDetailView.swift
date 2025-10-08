@@ -29,7 +29,7 @@ struct ReportDetailView: View {
             }
             .padding()
         }
-        .navigationTitle("Звіт: \(report.area.displayName)")
+        .navigationTitle(Text(localized("report.navigation_title", report.area.displayName)))
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $isPresentingShareSheet) {
             if let url = shareURL {
@@ -41,37 +41,37 @@ struct ReportDetailView: View {
                 }
             }
         }
-        .alert("Не вдалося експортувати", isPresented: $isShowingErrorAlert, actions: {
-            Button("Закрити", role: .cancel) {
+        .alert(localized("alert.pdf_failed.title"), isPresented: $isShowingErrorAlert, actions: {
+            Button(localized("action.close"), role: .cancel) {
                 isShowingErrorAlert = false
             }
         }, message: {
-            Text(exportErrorMessage ?? "Спробуйте ще раз трохи пізніше.")
+            Text(exportErrorMessage ?? localized("alert.pdf_failed.message"))
         })
-        .alert("Збережено", isPresented: $isShowingSuccessAlert, actions: {
-            Button("Гаразд", role: .cancel) {
+        .alert(localized("alert.pdf_saved.title"), isPresented: $isShowingSuccessAlert, actions: {
+            Button(localized("action.ok"), role: .cancel) {
                 isShowingSuccessAlert = false
             }
         }, message: {
-            Text("PDF збережено або надіслано успішно.")
+            Text(localized("alert.pdf_saved.message"))
         })
     }
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(birthDetails.displayName)
-                .font(.title2.bold())
-            Text("\(birthDetails.formattedBirthDate) • \(birthDetails.formattedBirthTime)")
-                .foregroundStyle(.secondary)
-            Text(birthDetails.formattedLocation)
-                .foregroundStyle(.secondary)
-        }
+            VStack(alignment: .leading, spacing: 4) {
+                Text(birthDetails.displayName)
+                    .font(.title2.bold())
+                Text("\(birthDetails.formattedBirthDate) • \(birthDetails.formattedBirthTime)")
+                    .foregroundStyle(.secondary)
+                Text(birthDetails.formattedLocation)
+                    .foregroundStyle(.secondary)
+            }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var chartSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Натальна карта")
+            Text("report.section.chart", tableName: "Localizable")
                 .font(.headline)
             NatalChartWheelView(chart: natalChart)
                 .frame(height: 350)
@@ -83,7 +83,7 @@ struct ReportDetailView: View {
 
     private var summarySection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Короткий огляд")
+            Text("report.section.summary", tableName: "Localizable")
                 .font(.headline)
             Text(report.summary)
         }
@@ -92,7 +92,7 @@ struct ReportDetailView: View {
 
     private var influencesSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Ключові впливи")
+            Text("report.section.influences", tableName: "Localizable")
                 .font(.headline)
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(report.keyInfluences, id: \.self) { influence in
@@ -106,7 +106,7 @@ struct ReportDetailView: View {
 
     private var analysisSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Детальний аналіз")
+            Text("report.section.analysis", tableName: "Localizable")
                 .font(.headline)
             Text(report.detailedAnalysis)
                 .fixedSize(horizontal: false, vertical: true)
@@ -116,7 +116,7 @@ struct ReportDetailView: View {
 
     private var recommendationsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Рекомендації")
+            Text("report.section.recommendations", tableName: "Localizable")
                 .font(.headline)
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(report.recommendations, id: \.self) { recommendation in
@@ -138,7 +138,7 @@ struct ReportDetailView: View {
                         .frame(maxWidth: .infinity)
                         .padding()
                 } else {
-                    Label("Експортувати у PDF", systemImage: "square.and.arrow.up")
+                    Label(localized("report.action.export_pdf"), systemImage: "square.and.arrow.up")
                         .frame(maxWidth: .infinity)
                         .padding()
                 }
@@ -148,7 +148,7 @@ struct ReportDetailView: View {
             .disabled(isExportingPDF)
 
             if let onGenerateAnother {
-                Button("Згенерувати для іншої сфери") {
+                Button(localized("report.action.generate_another")) {
                     onGenerateAnother()
                 }
                 .frame(maxWidth: .infinity)
@@ -158,7 +158,7 @@ struct ReportDetailView: View {
             }
 
             if let onStartOver {
-                Button("Почати спочатку") {
+                Button(localized("report.action.start_over")) {
                     onStartOver()
                 }
                 .frame(maxWidth: .infinity)

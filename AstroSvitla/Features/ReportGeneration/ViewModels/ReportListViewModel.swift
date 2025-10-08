@@ -55,7 +55,7 @@ final class ReportListViewModel: ObservableObject {
             sections = Self.buildSections(from: reports)
             errorMessage = nil
         } catch {
-            errorMessage = "Не вдалося завантажити збережені звіти."
+            errorMessage = String(localized: "reports.error.load_failed", table: "Localizable")
             sections = []
         }
     }
@@ -82,8 +82,8 @@ private extension ReportListViewModel {
 
             let chart = purchases.first?.chart
             let isOrphan = chart == nil
-            let chartName = chart.flatMap { $0.name.isEmpty ? nil : $0.name } ?? "Невідомий профіль"
-            let subtitle = chart.map { chartSubtitle(for: $0) } ?? "Без прив'язки до карти"
+            let chartName = chart.flatMap { $0.name.isEmpty ? nil : $0.name } ?? String(localized: "reports.section.unknown_profile", table: "Localizable")
+            let subtitle = chart.map { chartSubtitle(for: $0) } ?? String(localized: "reports.section.no_chart", table: "Localizable")
 
             let items = purchases.map { purchase in
                 makeItem(from: purchase)
@@ -112,7 +112,7 @@ private extension ReportListViewModel {
         let displayName = area?.displayName ?? report.areaDisplayName
         let iconName = area?.icon ?? "doc.text"
         let purchaseText = purchaseDateFormatter.string(from: report.purchaseDate)
-        let readingTime = "≈\(report.estimatedReadingTime) хв"
+        let readingTime = localized("reports.item.reading_time", report.estimatedReadingTime)
         let languageName = Locale.current.localizedString(forLanguageCode: report.language) ?? report.language.uppercased()
 
         return Item(

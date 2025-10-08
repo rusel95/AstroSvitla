@@ -1,0 +1,114 @@
+"tab.main" = "Головна";
+"tab.reports" = "Звіти";
+"tab.settings" = "Налаштування";
+
+"nav.reports" = "Збережені звіти";
+"nav.settings" = "Налаштування";
+
+"toolbar.saved_reports" = "Збережені звіти";
+
+"alert.generic.title" = "Щось пішло не так";
+"alert.generic.message" = "Сталася невідома помилка.";
+"alert.pdf_failed.title" = "Не вдалося експортувати";
+"alert.pdf_failed.message" = "Спробуйте ще раз трохи пізніше.";
+"alert.pdf_saved.title" = "Збережено";
+"alert.pdf_saved.message" = "PDF збережено або надіслано успішно.";
+
+"action.ok" = "Гаразд";
+"action.close" = "Закрити";
+"action.cancel" = "Скасувати";
+"action.back" = "Назад";
+"action.continue" = "Продовжити";
+"action.done" = "Готово";
+
+"error.chart.missing_coordinate" = "Не вказано координати місця народження";
+"error.chart.calculation_failed" = "Не вдалося розрахувати карту: %@";
+
+"log.report.persist_failed" = "Не вдалося зберегти звіт";
+
+"report.navigation_title" = "Звіт: %@";
+"report.action.export_pdf" = "Експортувати у PDF";
+"report.action.generate_another" = "Згенерувати для іншої сфери";
+"report.action.start_over" = "Почати спочатку";
+
+"report.section.chart" = "Натальна карта";
+"report.section.summary" = "Короткий огляд";
+"report.section.influences" = "Ключові впливи";
+"report.section.analysis" = "Детальний аналіз";
+"report.section.recommendations" = "Рекомендації";
+
+"report.export.key_influences_header" = "Ключові впливи:";
+"report.export.analysis_header" = "Детальний аналіз:";
+"report.export.recommendations_header" = "Рекомендації:";
+
+"calculating.title" = "Розраховуємо вашу натальну карту…";
+"calculating.description" = "Обчислюємо позиції планет, будинки та аспекти на момент вашого народження.";
+"calculating.navigation_title" = "Розрахунок карти";
+
+"generating.title" = "Створюємо ваш звіт для сфери «%1$@»…";
+"generating.description" = "Ми поєднуємо експертні астрологічні правила з вашими даними народження.";
+"generating.navigation_title" = "Створення звіту";
+
+"reports.error.load_failed" = "Не вдалося завантажити збережені звіти.";
+"reports.empty.title" = "Ще немає звітів";
+"reports.empty.description" = "Згенеруйте перший звіт, щоб побачити його в списку.";
+"reports.section.unknown_profile" = "Невідомий профіль";
+"reports.section.no_chart" = "Без прив'язки до карти";
+"reports.section.orphan_notice" = "Звіт не прив'язаний до конкретної карти";
+"reports.item.reading_time" = "≈%1$d хв";
+
+"report.area.finances" = "Фінанси";
+"report.area.career" = "Кар'єра";
+"report.area.relationships" = "Стосунки";
+"report.area.health" = "Здоров'я";
+"report.area.general" = "Загальний огляд";
+
+"settings.title" = "Налаштування";
+"settings.action.reset_preferences" = "Скинути налаштування теми та мови";
+"settings.alert.reset.title" = "Налаштування скинуто";
+"settings.dialog.onboarding.title" = "Повторити онбординг?";
+"settings.dialog.onboarding.confirm" = "Повторити";
+
+"settings.section.theme" = "Тема";
+"settings.picker.theme" = "Режим";
+"settings.theme.system" = "Системна";
+"settings.theme.light" = "Світла";
+"settings.theme.dark" = "Темна";
+
+"settings.section.language" = "Мова інтерфейсу";
+"settings.picker.language" = "Мова";
+"settings.language.system" = "За замовчуванням системи";
+"settings.language.ukrainian" = "Українська";
+"settings.language.english" = "English";
+"settings.language.note" = "Зміна мови впливає на текст інтерфейсу. Звіти генеруються мовою, яку ви обрали.";
+
+"settings.section.onboarding" = "Онбординг";
+"settings.action.replay_onboarding" = "Показати вступний тур знову";
+
+"settings.section.data" = "Дані";
+"settings.action.data_overview" = "Збережені дані";
+"settings.data.reports" = "Звіти";
+"settings.data.charts" = "Профілі";
+"settings.data.count" = "Усього: %1$d";
+"settings.data.title" = "Збережені дані";
+
+"birth.section.person" = "Особа";
+"birth.field.name_optional" = "Ім'я (необов'язково)";
+"birth.section.details" = "Дані народження";
+"birth.field.date" = "Дата";
+"birth.field.time" = "Час";
+"birth.field.location" = "Місце";
+"birth.help.precision" = "Введіть точні дані народження для розрахунку натальної карти. Час має бути максимально точним для коректного визначення будинків.";
+"birth.action.clear_saved" = "Очистити збережені дані";
+"birth.navigation.title" = "Дані народження";
+
+"location.search.loading" = "Пошук…";
+"location.search.hint_short" = "Почніть вводити місто та країну. Мінімум 3 символи.";
+"location.search.no_results" = "Збігів не знайдено. Спробуйте інший варіант написання.";
+"location.search.title" = "Пошук місця";
+
+"area.section.birth_details" = "Дані про народження";
+"area.action.view_details" = "Переглянути деталі карти";
+"area.section.choose" = "Оберіть сферу життя";
+"area.navigation.title" = "Оберіть сферу";
+"area.action.edit_details" = "Змінити дані";

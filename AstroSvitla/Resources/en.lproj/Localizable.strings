@@ -1,0 +1,115 @@
+"tab.main" = "Home";
+"tab.reports" = "Reports";
+"tab.settings" = "Settings";
+
+"nav.reports" = "Saved Reports";
+"nav.settings" = "Settings";
+
+"toolbar.saved_reports" = "Saved Reports";
+
+"alert.generic.title" = "Something went wrong";
+"alert.generic.message" = "Unknown error. Please try again.";
+"alert.pdf_failed.title" = "Couldn't export";
+"alert.pdf_failed.message" = "We'll try again in a moment. Please retry.";
+"alert.pdf_saved.title" = "Saved";
+"alert.pdf_saved.message" = "PDF exported successfully.";
+
+"action.ok" = "OK";
+"action.close" = "Close";
+"action.cancel" = "Cancel";
+"action.back" = "Back";
+"action.continue" = "Continue";
+"action.done" = "Done";
+
+"error.chart.missing_coordinate" = "Birthplace coordinates are missing";
+"error.chart.calculation_failed" = "Couldn't calculate chart: %@";
+
+"log.report.persist_failed" = "Report persistence failed";
+
+"report.navigation_title" = "Report: %@";
+"report.action.export_pdf" = "Export as PDF";
+"report.action.generate_another" = "Generate for another area";
+"report.action.start_over" = "Start over";
+
+"report.section.chart" = "Natal Chart";
+"report.section.summary" = "Summary";
+"report.section.influences" = "Key Influences";
+"report.section.analysis" = "Detailed Analysis";
+"report.section.recommendations" = "Recommendations";
+
+"report.export.key_influences_header" = "Key Influences:";
+"report.export.analysis_header" = "Detailed Analysis:";
+"report.export.recommendations_header" = "Recommendations:";
+
+"calculating.title" = "Calculating your natal chart…";
+"calculating.description" = "We're computing planetary positions, houses, and aspects for your birth moment.";
+"calculating.navigation_title" = "Chart Calculation";
+
+"generating.title" = "Generating your \"%1$@\" report…";
+"generating.description" = "We combine expert astrological rules with your birth data.";
+"generating.navigation_title" = "Creating Report";
+
+"reports.error.load_failed" = "Unable to load saved reports.";
+"reports.empty.title" = "No reports yet";
+"reports.empty.description" = "Generate your first report to see it here.";
+"reports.section.unknown_profile" = "Unnamed profile";
+"reports.section.no_chart" = "Not linked to a birth chart";
+"reports.section.orphan_notice" = "Report isn't linked to a saved chart";
+"reports.item.reading_time" = "≈%1$d min";
+
+"report.area.finances" = "Finances";
+"report.area.career" = "Career";
+"report.area.relationships" = "Relationships";
+"report.area.health" = "Health";
+"report.area.general" = "General Overview";
+
+"settings.title" = "Settings";
+"settings.action.reset_preferences" = "Reset theme and language";
+"settings.alert.reset.title" = "Preferences reset";
+"settings.dialog.onboarding.title" = "Replay onboarding?";
+"settings.dialog.onboarding.confirm" = "Replay";
+
+"settings.section.theme" = "Appearance";
+"settings.picker.theme" = "Theme";
+"settings.theme.system" = "System";
+"settings.theme.light" = "Light";
+"settings.theme.dark" = "Dark";
+
+"settings.section.language" = "Language";
+"settings.picker.language" = "Interface language";
+"settings.language.system" = "Use system default";
+"settings.language.ukrainian" = "Ukrainian";
+"settings.language.english" = "English";
+"settings.language.note" = "Changing the language updates interface text. Reports will be generated in the chosen language.";
+
+"settings.section.onboarding" = "Onboarding";
+"settings.action.replay_onboarding" = "Replay introduction tour";
+
+"settings.section.data" = "Data";
+"settings.action.data_overview" = "Saved data overview";
+"settings.data.reports" = "Reports";
+"settings.data.charts" = "Profiles";
+"settings.data.count" = "Total: %1$d";
+"settings.data.title" = "Saved Data";
+
+"birth.section.person" = "Person";
+"birth.field.name_optional" = "Name (optional)";
+"birth.section.details" = "Birth data";
+"birth.field.date" = "Date";
+"birth.field.time" = "Time";
+"birth.field.location" = "Location";
+"birth.help.precision" = "Enter exact birth details. Precise time ensures accurate house calculation.";
+"birth.action.clear_saved" = "Clear saved data";
+"birth.navigation.title" = "Birth data";
+
+"location.search.loading" = "Searching…";
+"location.search.hint_short" = "Start typing the city and country (minimum 3 characters).";
+"location.search.no_results" = "No matches found. Try a different spelling.";
+"location.search.title" = "Search location";
+
+"area.section.birth_details" = "Birth data";
+"area.action.view_details" = "View chart details";
+"area.section.choose" = "Choose a focus area";
+"area.navigation.title" = "Select area";
+"area.action.edit_details" = "Edit data";
+

@@ -14,19 +14,21 @@ struct BirthDataInputView: View {
 
     var body: some View {
         Form {
-            Section("Особа") {
-                TextField("Ім'я (необов'язково)", text: $viewModel.name)
+            Section {
+                TextField(String(localized: "birth.field.name_optional", table: "Localizable"), text: $viewModel.name)
                     .focused($focusedField, equals: .name)
+            } header: {
+                Text("birth.section.person", tableName: "Localizable")
             }
 
-            Section("Дані народження") {
-                DatePicker("Дата", selection: $viewModel.birthDate, in: viewModel.dateRange, displayedComponents: .date)
-                DatePicker("Час", selection: $viewModel.birthTime, displayedComponents: .hourAndMinute)
+            Section {
+                DatePicker(String(localized: "birth.field.date", table: "Localizable"), selection: $viewModel.birthDate, in: viewModel.dateRange, displayedComponents: .date)
+                DatePicker(String(localized: "birth.field.time", table: "Localizable"), selection: $viewModel.birthTime, displayedComponents: .hourAndMinute)
                 Button {
                     showLocationSearch = true
                 } label: {
                     HStack {
-                        Text("Місце")
+                        Text("birth.field.location", tableName: "Localizable")
                             .foregroundStyle(.primary)
                         Spacer()
                         Text(viewModel.locationDisplay)
@@ -37,10 +39,12 @@ struct BirthDataInputView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+            } header: {
+                Text("birth.section.details", tableName: "Localizable")
             }
 
             Section {
-                Text("Введіть точні дані народження для розрахунку натальної карти. Час має бути максимально точним для коректного визначення будинків.")
+                Text("birth.help.precision", tableName: "Localizable")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -50,23 +54,17 @@ struct BirthDataInputView: View {
                     Button(role: .destructive) {
                         viewModel.clearData()
                     } label: {
-                        Label("Очистити збережені дані", systemImage: "trash")
+                        Label(String(localized: "birth.action.clear_saved", table: "Localizable"), systemImage: "trash")
                     }
                 }
             }
         }
-        .navigationTitle("Дані народження")
+        .navigationTitle(Text("birth.navigation.title", tableName: "Localizable"))
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 if let onCancel {
-                    Button("Назад", action: onCancel)
+                    Button(String(localized: "action.back", table: "Localizable"), action: onCancel)
                 }
-            }
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Продовжити") {
-                    onContinue(viewModel.makeDetails())
-                }
-                .disabled(viewModel.isValid == false)
             }
         }
         .sheet(isPresented: $showLocationSearch) {
@@ -77,12 +75,31 @@ struct BirthDataInputView: View {
                 }
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Закрити") {
+                        Button(String(localized: "action.close", table: "Localizable")) {
                             showLocationSearch = false
                         }
                     }
                 }
             }
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            VStack(spacing: 0) {
+                Divider()
+                Button(action: {
+                    onContinue(viewModel.makeDetails())
+                }) {
+                    Text("action.continue", tableName: "Localizable")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(viewModel.isValid == false)
+                .padding(.horizontal)
+                .padding(.top, 12)
+                .padding(.bottom, 12)
+            }
+            .background(.ultraThinMaterial)
         }
     }
 }

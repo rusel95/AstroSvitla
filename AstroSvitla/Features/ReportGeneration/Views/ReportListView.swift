@@ -7,6 +7,13 @@ struct ReportListView: View {
 
     @StateObject private var viewModel = ReportListViewModel()
     @State private var isShowingErrorAlert = false
+    private let allowsDismiss: Bool
+    private let showsTitle: Bool
+
+    init(allowsDismiss: Bool = false, showsTitle: Bool = false) {
+        self.allowsDismiss = allowsDismiss
+        self.showsTitle = showsTitle
+    }
 
     var body: some View {
         NavigationStack {
@@ -25,21 +32,13 @@ struct ReportListView: View {
                         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                 }
             }
-            .navigationTitle("Збережені звіти")
+            .navigationTitle(showsTitle ? localized("nav.reports") : "")
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Закрити") {
-                        dismiss()
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    if viewModel.sections.isEmpty == false {
-                        Button {
-                            viewModel.refresh()
-                        } label: {
-                            Image(systemName: "arrow.clockwise")
+                if allowsDismiss {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button(localized("action.close")) {
+                            dismiss()
                         }
-                        .disabled(viewModel.isLoading)
                     }
                 }
             }
@@ -49,15 +48,15 @@ struct ReportListView: View {
             .refreshable {
                 viewModel.refresh()
             }
-            .onChange(of: viewModel.errorMessage) { newValue in
+            .onChange(of: viewModel.errorMessage) { _, newValue in
                 isShowingErrorAlert = newValue != nil
             }
-            .alert("Помилка", isPresented: $isShowingErrorAlert, actions: {
-                Button("Закрити", role: .cancel) {
+            .alert(localized("alert.generic.title"), isPresented: $isShowingErrorAlert, actions: {
+                Button(localized("action.close"), role: .cancel) {
                     isShowingErrorAlert = false
                 }
             }, message: {
-                Text(viewModel.errorMessage ?? "Сталася невідома помилка.")
+                Text(viewModel.errorMessage ?? localized("alert.generic.message"))
             })
         }
     }
@@ -83,9 +82,9 @@ struct ReportListView: View {
 
     private var emptyState: some View {
         ContentUnavailableView(
-            "Ще немає звітів",
+            "reports.empty.title",
             systemImage: "doc.text.magnifyingglass",
-            description: Text("Згенеруйте перший звіт, щоб побачити його в списку.")
+            description: Text("reports.empty.description", tableName: "Localizable")
         )
         .padding()
     }
@@ -139,7 +138,7 @@ private struct ReportSectionHeader: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
             if isOrphan {
-                Text("Звіт не прив'язаний до конкретної карти")
+                Text("reports.section.orphan_notice", tableName: "Localizable")
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
             }
@@ -190,7 +189,7 @@ private struct SavedReportDetailView: View {
                 .background(Color(.systemBackground))
             }
         }
-        .navigationTitle(item.areaDisplayName)
+        .navigationTitle(Text(item.areaDisplayName))
         .navigationBarTitleDisplayMode(.inline)
     }
 

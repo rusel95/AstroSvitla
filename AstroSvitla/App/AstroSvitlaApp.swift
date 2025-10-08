@@ -13,6 +13,7 @@ import SwissEphemeris
 struct AstroSvitlaApp: App {
 
     private let sharedModelContainer: ModelContainer
+    @StateObject private var preferences = AppPreferences()
 
     init() {
         // CRITICAL: Initialize SwissEphemeris before any astronomical calculations
@@ -39,6 +40,9 @@ struct AstroSvitlaApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(preferences)
+                .preferredColorScheme(preferences.selectedColorScheme)
+                .environment(\.locale, preferences.selectedLocale)
         }
         .modelContainer(sharedModelContainer)
     }

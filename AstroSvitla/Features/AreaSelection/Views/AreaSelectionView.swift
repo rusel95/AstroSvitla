@@ -10,7 +10,7 @@ struct AreaSelectionView: View {
 
     var body: some View {
         List {
-            Section("Дані про народження") {
+            Section {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(birthDetails.displayName)
                         .font(.headline)
@@ -28,11 +28,13 @@ struct AreaSelectionView: View {
                 Button {
                     showChartDetails = true
                 } label: {
-                    Label("Переглянути деталі карти", systemImage: "chart.bar.doc.horizontal")
+                    Label(String(localized: "area.action.view_details", table: "Localizable"), systemImage: "chart.bar.doc.horizontal")
                 }
+            } header: {
+                Text("area.section.birth_details", tableName: "Localizable")
             }
 
-            Section("Оберіть сферу життя") {
+            Section {
                 ForEach(ReportArea.allCases, id: \.self) { area in
                     Button {
                         onAreaSelected(area)
@@ -40,14 +42,16 @@ struct AreaSelectionView: View {
                         AreaCard(area: area)
                     }
                 }
+            } header: {
+                Text("area.section.choose", tableName: "Localizable")
             }
         }
         .listStyle(.insetGrouped)
-        .navigationTitle("Оберіть сферу")
+        .navigationTitle(Text("area.navigation.title", tableName: "Localizable"))
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 if let onEditDetails {
-                    Button("Змінити дані", action: onEditDetails)
+                    Button(String(localized: "area.action.edit_details", table: "Localizable"), action: onEditDetails)
                 }
             }
         }
@@ -56,7 +60,7 @@ struct AreaSelectionView: View {
                 ChartDetailsView(chart: natalChart, birthDetails: birthDetails)
                     .toolbar {
                         ToolbarItem(placement: .confirmationAction) {
-                            Button("Готово") {
+                            Button(String(localized: "action.done", table: "Localizable")) {
                                 showChartDetails = false
                             }
                         }
