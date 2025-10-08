@@ -132,11 +132,11 @@ The project is already using this library, which is the optimal choice for NASA 
 
 ## 3. AI/LLM Service for Report Generation
 
-### Decision: OpenAI GPT-4o (via Official OpenAI Swift SDK)
+### Decision: OpenAI GPT-4o (via MacPaw OpenAI Swift Client)
 
 **Provider**: OpenAI  
 **Model**: `gpt-4o-mini` (primary) with optional upgrade path to `gpt-4o`  
-**Integration**: Official `openai/openai-swift` SDK (async/await, Swift Package Manager)
+**Integration**: MacPaw’s `OpenAI` Swift package (`https://github.com/MacPaw/OpenAI`) with async/await APIs
 
 ### Rationale
 
@@ -159,21 +159,23 @@ OpenAI’s GPT-4o family provides the strongest mix of mature tooling, multiling
 - ✅ Supports system-level language conditioning for consistent output
 
 **iOS Integration**:
-- ✅ Official Swift package (`https://github.com/openai/openai-swift`)
-- ✅ First-party documentation with iOS samples
-- ✅ Native async/await APIs and Combine publishers
-- ✅ Works seamlessly with Apple’s BackgroundTasks for long-running generations
+- ✅ Mature community Swift package (`https://github.com/MacPaw/OpenAI`)
+- ✅ Async/await API surface closely mirroring REST endpoints
+- ✅ Built-in request/response models, streaming, cancellation support
+- ✅ Compatible with BackgroundTasks and Combine if needed
 
 **Example Integration**:
 ```swift
 import OpenAI
 
 let client = OpenAI(apiKey: OpenAIConfig.apiKey)
-let response = try await client.responses.generate(
+let query = CompletionsQuery(
     model: .gpt4oMini,
-    prompt: promptText
+    prompt: promptText,
+    maxTokens: 800
 )
-guard let text = response.outputText else {
+let result = try await client.completions(query: query)
+guard let text = result.choices.first?.text else {
     throw ReportGenerationError.noContent
 }
 ```
@@ -204,12 +206,19 @@ guard let text = response.outputText else {
 - Cons: Requires iOS 18+, large on-device models, not tuned for long narrative
 - Deferred: Future enhancement once iOS 18 adoption exceeds 50%
 
+### Knowledge Corpus Considerations
+
+- **Corpus size**: ~50 MB of curated astrologer notes (50–60 PDF books, ~15k pages). Impossible to inject directly into a model context window.
+- **Strategy**: Preprocess PDFs into cleaned Ukrainian text, generate embeddings with OpenAI `text-embedding-3-large`, and upload the vectors to an OpenAI-managed vector store (Responses API + Vector Stores). Each snippet carries metadata (planets, houses, aspects, life area).
+- **Retrieval**: Runtime requests reference the hosted vector store (`vector_store_id`) so OpenAI performs relevance search server-side and injects top snippets automatically into the response generation. Client only needs to send chart metadata (name, birth date/time/location, selected life area).
+- **Tooling**: Use MacPaw OpenAI package both for embedding uploads (`openAI.vectorStores`) and response generation (`openAI.responses`). Provide CLI (`scripts/ingest-knowledge.swift`) to chunk PDFs, upload files, and sync vector store revisions. Track embedding costs during ingestion.
+
 ### Cost Comparison Table
 
-| Service | Cost/Report | Margin @$5.99 | Latency | Ukrainian Quality |
-|---------|-------------|---------------|---------|------------------|
-| **OpenAI GPT-4o Mini** | **$0.00045** | **99.99%** | **2-4s** | **Excellent ✅✅** |
-| OpenAI GPT-4o | $0.00700 | 99.88% | 3-5s | Excellent ✅✅ |
+| Service + Client | Cost/Report | Margin @$5.99 | Latency | Ukrainian Quality |
+|------------------|-------------|---------------|---------|------------------|
+| **OpenAI GPT-4o Mini + MacPaw OpenAI** | **$0.00045** | **99.99%** | **2-4s** | **Excellent ✅✅** |
+| OpenAI GPT-4o + MacPaw OpenAI | $0.00700 | 99.88% | 3-5s | Excellent ✅✅ |
 | Google Gemini Flash | $0.00010 | 99.99% | 1-3s | Excellent ✅✅ |
 | Claude Sonnet | $0.01800 | 99.70% | 3-7s | Mixed ⚠️ |
 | Core ML | $0.00 | 100% | 5-15s | Limited ⚠️ |

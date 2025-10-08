@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		85479E082E95466A0055CC08 /* SwissEphemeris in Frameworks */ = {isa = PBXBuildFile; productRef = 85479E072E95466A0055CC08 /* SwissEphemeris */; };
+		85E2C24C2E96896700349727 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 85E2C24B2E96896700349727 /* OpenAI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85E2C24C2E96896700349727 /* OpenAI in Frameworks */,
 				85479E082E95466A0055CC08 /* SwissEphemeris in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -131,6 +133,7 @@
 			name = AstroSvitla;
 			packageProductDependencies = (
 				85479E072E95466A0055CC08 /* SwissEphemeris */,
+				85E2C24B2E96896700349727 /* OpenAI */,
 			);
 			productName = AstroSvitla;
 			productReference = 85F4816D2E805C4B0031646F /* AstroSvitla.app */;
@@ -216,6 +219,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				85479E062E95466A0055CC08 /* XCRemoteSwiftPackageReference "SwissEphemeris" */,
+				85E2C24A2E96896700349727 /* XCRemoteSwiftPackageReference "OpenAI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 85F4816E2E805C4B0031646F /* Products */;
@@ -649,6 +653,14 @@
 				minimumVersion = 0.0.99;
 			};
 		};
+		85E2C24A2E96896700349727 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MacPaw/OpenAI/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.6;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -656,6 +668,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 85479E062E95466A0055CC08 /* XCRemoteSwiftPackageReference "SwissEphemeris" */;
 			productName = SwissEphemeris;
+		};
+		85E2C24B2E96896700349727 /* OpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 85E2C24A2E96896700349727 /* XCRemoteSwiftPackageReference "OpenAI" */;
+			productName = OpenAI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -200,6 +200,7 @@ As a person interested in astrology, I want to generate personalized predictions
   2. Detailed Analysis (400-500 words specific to chosen life area)
   3. Practical Recommendations (3-4 actionable tips)
 - **FR-029**: System MUST use expert astrology interpretation rules as foundation for report content
+- **FR-029a**: System MUST source those rules via an OpenAI-hosted vector store (uploaded embeddings + retrieval API) rather than injecting the entire corpus into a single prompt
 - **FR-030**: System MUST generate report in same language as app UI (English or Ukrainian)
 - **FR-031**: System MUST complete report generation within 10 seconds
 - **FR-032**: Report MUST be personalized and specific to user's unique chart (not generic)

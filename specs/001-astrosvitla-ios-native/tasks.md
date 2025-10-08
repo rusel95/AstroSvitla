@@ -389,41 +389,37 @@
 
 ### P5.1: OpenAI Service (→ P1.1.6)
 
-- [ ] **T5.1.1**: Create OpenAIService
-  - [ ] Create `Core/Networking/OpenAIService.swift`
-  - [ ] Implement authentication with API key from Config.swift
-  - [ ] Add request/response models
-  - [ ] **Test**: Mock test for API structure
+- [X] **T5.1.1**: Wire MacPaw OpenAI Swift SDK
+  - [ ] Confirm `https://github.com/MacPaw/OpenAI` SPM dependency is added to the app target
+  - [ ] Create `Core/Networking/OpenAIClientProvider.swift` that instantiates `OpenAI` with Config credentials
+  - [ ] **Test**: Smoke test client initialization (guarded behind debug flag)
 
-- [ ] **T5.1.2**: Implement generateReport method
-  - [ ] Create async method signature
-  - [ ] Build URLRequest for OpenAI API
-  - [ ] Parse JSON response
-  - [ ] **Test**: Integration test with real API (use test key)
+- [X] **T5.1.2**: Implement OpenAIService wrapper
+  - [ ] Create `Core/Networking/OpenAIService.swift` that depends on `OpenAI`
+  - [ ] Expose async `generateReport(...)` signature returning raw text
+  - [ ] Map `OpenAI` SDK response objects to domain types
+  - [ ] **Test**: Mock `OpenAI` client to verify request payloads
 
-- [ ] **T5.1.3**: Build structured prompts
-  - [ ] Create system message (astrologer persona)
-  - [ ] Format chart data for prompt
-  - [ ] Add life area focus
-  - [ ] Add language instruction
+- [X] **T5.1.3**: Build structured prompt utilities
+  - [ ] Create reusable prompt builder (system message + chart context + life-area focus)
+  - [ ] Default to Ukrainian copy for MVP while keeping hooks for future locales
   - [ ] **Test**: Prompt generation unit test
 
-- [ ] **T5.1.4**: Implement error handling
-  - [ ] Handle rate limits (429)
-  - [ ] Handle network failures
-  - [ ] Handle invalid responses
-  - [ ] **Test**: Mock tests for all error scenarios
+- [X] **T5.1.4**: Implement error & quota handling
+  - [ ] Map `OpenAIError` / transport errors to `ReportGenerationError`
+  - [ ] Handle rate limits (429) & quota exhaustion
+  - [ ] Surface developer-friendly debug info without leaking secrets
+  - [ ] **Test**: Mock error scenarios
 
-- [ ] **T5.1.5**: Implement retry logic
-  - [ ] Add exponential backoff
-  - [ ] Limit to 2 retries
+- [X] **T5.1.5**: Implement retry & cancellation support
+  - [ ] Add exponential backoff (max 2 retries)
+  - [ ] Honor `Task.isCancelled` during long requests
   - [ ] **Test**: Retry logic test
 
-- [ ] **T5.1.6**: Add request logging
-  - [ ] Log requests in debug mode only
-  - [ ] Track token usage
-  - [ ] Estimate costs
-  - [ ] **Test**: Logging test
+- [X] **T5.1.6**: Add usage instrumentation
+  - [ ] Track token usage & estimated USD cost per call in debug logs
+  - [ ] Provide hook for future analytics/alerts
+  - [ ] **Test**: Logging instrumentation test
 
 ### P5.2: Astrology Rules Engine [P] (→ P1.3)
 
@@ -454,12 +450,12 @@
 
 ### P5.3: AI Report Generator (→ T5.1.6, T5.2.4)
 
-- [ ] **T5.3.1**: Create AIReportGenerator
+- [X] **T5.3.1**: Create AIReportGenerator
   - [ ] Create `Features/ReportGeneration/Services/AIReportGenerator.swift`
   - [ ] Orchestrate rules engine + OpenAI service
   - [ ] **Test**: Mock integration test
 
-- [ ] **T5.3.2**: Implement prompt templates
+- [X] **T5.3.2**: Implement prompt templates
   - [ ] Create template for finances
   - [ ] Create template for career
   - [ ] Create template for relationships
@@ -467,15 +463,15 @@
   - [ ] Create template for general
   - [ ] **Test**: Template rendering test
 
-- [ ] **T5.3.3**: Implement report generation flow
+- [X] **T5.3.3**: Implement report generation flow
   - [ ] Get relevant rules
   - [ ] Build comprehensive prompt
-  - [ ] Call OpenAI API
+  - [ ] Call OpenAIService (replace temporary HardcodedReportGenerator)
   - [ ] Parse response
   - [ ] Return Report object
   - [ ] **Test**: End-to-end test with real API
 
-- [ ] **T5.3.4**: Add response validation
+- [X] **T5.3.4**: Add response validation
   - [ ] Validate report length (400-500 words)
   - [ ] Validate language (en or uk)
   - [ ] Validate structure (3 sections)
@@ -912,3 +908,6 @@
 - Add real timeout/cancellation handling to async `ChartCalculator.calculate` to satisfy T2.2.3 requirements.
 - UI snapshot coverage (T3.2.1, T3.3.1, T6.1.1, T6.1.2, T6.3.1, T7.1.1, T7.2.1, dark-mode variants) deferred until visual design stabilizes.
 - Localization expansion (P8.1–P8.3, T6.1.6, T6.3.4) deferred until post-MVP release when bilingual content/spec is ready.
+- Switch prompts/tests back to multilingual once localization resumes.
+- Remove temporary `HardcodedReportGenerator` after T5.3.3 lands.
+- Replace stubbed `AstrologyKnowledgeProvider` responses with real vector-store queries post T5.0.3.

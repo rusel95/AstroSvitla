@@ -433,12 +433,31 @@ Tech stack specified in PRD:
 
 ## Phase 5: AI Report Generation
 
-### P5.1: OpenAI Service
+### P5.0: Astrology Knowledge Vector Store
 
-**Goal**: Integrate OpenAI GPT-4 API for report generation
+**Goal**: Ingest the proprietary 50MB knowledge corpus, generate embeddings, and expose retrieval APIs via an OpenAI-hosted vector store for report prompts.
 
 **Tasks**:
-1. Create `OpenAIService.swift`:
+1. Build ingestion pipeline (`scripts/ingest-knowledge.swift`):
+   - Extract Ukrainian text from PDF books (Swift + pdfminer/SwiftDocC pipeline).
+   - Chunk rules into 400–600 character snippets with metadata (planet, aspect, life area).
+   - Upload chunks to OpenAI Files API and attach them to a vector store (`vector_store_id`).
+2. Let OpenAI manage embeddings (files attached to the vector store automatically generate embeddings via `text-embedding-3-large`); capture upload IDs for refresh workflows.
+3. Create `AstrologyKnowledgeProvider` that queries the vector store (top-K) using chart metadata filters and returns Ukrainian bullet points for prompts.
+4. Add CLI/automated job to refresh the vector store when rules change; log token spend and clean up obsolete files.
+5. Fallback strategy: if vector store unavailable, return curated sample rules so prompt still succeeds (already wired in app).
+
+**Testing**:
+- Unit tests for chunking + metadata tagging.
+- Retrieval smoke test ensuring relevant snippets returned for sample charts.
+- Bench embedding pipeline time/cost.
+
+### P5.1: OpenAI Service
+
+**Goal**: Integrate OpenAI GPT-4 API via MacPaw’s OpenAI Swift client
+
+**Tasks**:
+1. Add `https://github.com/MacPaw/OpenAI` SPM dependency and create `OpenAIService.swift`:
    ```swift
    class OpenAIService {
        func generateReport(
@@ -448,13 +467,13 @@ Tech stack specified in PRD:
        ) async throws -> String
    }
    ```
-2. Implement authentication with API key from Config.swift
+2. Implement authentication with API key from Config.swift using MacPaw client
 3. Build structured prompts with:
    - System message (astrologer persona)
    - Chart data (planets, houses, aspects)
    - Life area focus
+   - Vector-retrieved rule snippets (Ukrainian)
    - Language instruction (en/uk)
-   - Expert rules context
 4. Handle API errors (rate limits, network failures, invalid responses)
 5. Implement retry logic (exponential backoff, max 2 retries)
 6. Add request/response logging (debug mode only)

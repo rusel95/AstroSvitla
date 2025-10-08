@@ -4,7 +4,7 @@ struct ContentView: View {
     @State private var flowState: FlowState = .birthInput(existing: nil)
     @State private var errorMessage: String?
 
-    private let reportGenerator = HardcodedReportGenerator()
+    private let reportGenerator = AIReportGenerator()
 
     var body: some View {
         NavigationStack {
