@@ -17,7 +17,10 @@ actor AIReportGenerator {
     func generateReport(
         for area: ReportArea,
         birthDetails: BirthDetails,
-        natalChart: NatalChart
+        natalChart: NatalChart,
+        languageCode: String,
+        languageDisplayName: String,
+        repositoryContext: String
     ) async throws -> GeneratedReport {
         let knowledgeSnippets = await knowledgeProvider.loadSnippets(
             for: area,
@@ -29,7 +32,10 @@ actor AIReportGenerator {
             for: area,
             birthDetails: birthDetails,
             natalChart: natalChart,
-            knowledgeSnippets: knowledgeSnippets
+            knowledgeSnippets: knowledgeSnippets,
+            languageCode: languageCode,
+            languageDisplayName: languageDisplayName,
+            repositoryContext: repositoryContext
         )
     }
 }

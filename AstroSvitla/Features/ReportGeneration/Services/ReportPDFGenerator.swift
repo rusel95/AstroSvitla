@@ -70,13 +70,14 @@ private struct ReportPDFContentView: View {
             influencesSection
             analysisSection
             recommendationsSection
+            knowledgeUsageSection
             footer
         }
     }
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("Персональний натальний звіт")
+            Text(localized("pdf.title"))
                 .font(.title.bold())
             Text("\(birthDetails.displayName) • \(birthDetails.formattedBirthDate) • \(birthDetails.formattedBirthTime)")
                 .font(.subheadline)
@@ -89,7 +90,7 @@ private struct ReportPDFContentView: View {
 
     private var chartSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Натальна карта")
+            Text("report.section.chart", tableName: "Localizable")
                 .font(.headline)
             NatalChartWheelView(chart: natalChart)
                 .frame(height: 320)
@@ -99,7 +100,7 @@ private struct ReportPDFContentView: View {
 
     private var summarySection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Короткий огляд")
+            Text("report.section.summary", tableName: "Localizable")
                 .font(.headline)
             Text(report.summary)
                 .font(.body)
@@ -108,7 +109,7 @@ private struct ReportPDFContentView: View {
 
     private var influencesSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Ключові впливи")
+            Text("report.section.influences", tableName: "Localizable")
                 .font(.headline)
             VStack(alignment: .leading, spacing: 6) {
                 ForEach(report.keyInfluences, id: \.self) { influence in
@@ -121,7 +122,7 @@ private struct ReportPDFContentView: View {
 
     private var analysisSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Детальний аналіз")
+            Text("report.section.analysis", tableName: "Localizable")
                 .font(.headline)
             Text(report.detailedAnalysis)
                 .font(.body)
@@ -130,7 +131,7 @@ private struct ReportPDFContentView: View {
 
     private var recommendationsSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Рекомендації")
+            Text("report.section.recommendations", tableName: "Localizable")
                 .font(.headline)
             VStack(alignment: .leading, spacing: 6) {
                 ForEach(report.recommendations, id: \.self) { recommendation in
@@ -141,10 +142,24 @@ private struct ReportPDFContentView: View {
         }
     }
 
+    private var knowledgeUsageSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("report.section.knowledge_usage", tableName: "Localizable")
+                .font(.headline)
+            Text(report.knowledgeUsage.vectorSourceUsed ? localized("report.knowledge.used") : localized("report.knowledge.not_used"))
+                .font(.body)
+            if let notes = report.knowledgeUsage.notes, notes.isEmpty == false {
+                Text(notes)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
     private var footer: some View {
         VStack(alignment: .leading, spacing: 4) {
             Divider()
-            Text("Згенеровано \(Date().formatted(date: .abbreviated, time: .shortened))")
+            Text(localized("pdf.generated_on", Date().formatted(date: .abbreviated, time: .shortened)))
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }

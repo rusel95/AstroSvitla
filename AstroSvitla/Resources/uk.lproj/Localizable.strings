@@ -36,6 +36,15 @@
 "report.section.influences" = "Ключові впливи";
 "report.section.analysis" = "Детальний аналіз";
 "report.section.recommendations" = "Рекомендації";
+"report.section.knowledge_usage" = "Використання знань";
+"report.knowledge.used" = "Векторна база використана";
+"report.knowledge.not_used" = "Векторна база не використовувалась";
+"report.knowledge.no_snippets" = "Векторні уривки не були надані.";
+"report.export.vector_usage_true" = "Використання знань з векторної бази: так";
+"report.export.vector_usage_false" = "Використання знань з векторної бази: ні";
+"report.export.vector_note_prefix" = "Примітка";
+"pdf.title" = "Персональний натальний звіт";
+"pdf.generated_on" = "Згенеровано %@";
 
 "report.export.key_influences_header" = "Ключові впливи:";
 "report.export.analysis_header" = "Детальний аналіз:";

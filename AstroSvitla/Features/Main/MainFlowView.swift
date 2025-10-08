@@ -14,6 +14,7 @@ enum ChartCalculationError: LocalizedError {
 }
 
 struct MainFlowView: View {
+    @EnvironmentObject private var preferences: AppPreferences
     @Environment(\.modelContext) private var modelContext
     @StateObject private var onboardingViewModel: OnboardingViewModel
     @State private var flowState: FlowState
@@ -181,7 +182,10 @@ struct MainFlowView: View {
                 let report = try await reportGenerator.generateReport(
                     for: area,
                     birthDetails: details,
-                    natalChart: chart
+                    natalChart: chart,
+                    languageCode: preferences.selectedLanguageCode,
+                    languageDisplayName: preferences.selectedLanguageDisplayName,
+                    repositoryContext: RepositoryContext.shared.summary
                 )
                 do {
                     try await persistGeneratedReport(
@@ -267,7 +271,7 @@ private extension MainFlowView {
         let chartEntity = try upsertBirthChart(details: details, natalChart: natalChart)
 
         let reportText = renderReportText(from: generatedReport)
-        let languageCode = Locale.current.language.languageCode?.identifier ?? Locale.current.languageCode ?? "uk"
+        let languageCode = preferences.selectedLanguageCode
 
         let purchase = ReportPurchase(
             area: generatedReport.area.rawValue,
@@ -277,6 +281,8 @@ private extension MainFlowView {
             detailedAnalysis: generatedReport.detailedAnalysis,
             recommendations: generatedReport.recommendations,
             language: languageCode,
+            knowledgeVectorUsed: generatedReport.knowledgeUsage.vectorSourceUsed,
+            knowledgeNotes: generatedReport.knowledgeUsage.notes,
             price: generatedReport.area.price,
             transactionId: UUID().uuidString
         )
@@ -356,6 +362,12 @@ private extension MainFlowView {
             lines.append("")
             lines.append(String(localized: "report.export.recommendations_header", table: "Localizable"))
             report.recommendations.forEach { lines.append("• \($0)") }
+        }
+
+        lines.append("")
+        lines.append(report.knowledgeUsage.vectorSourceUsed ? localized("report.export.vector_usage_true") : localized("report.export.vector_usage_false"))
+        if let notes = report.knowledgeUsage.notes, notes.isEmpty == false {
+            lines.append("\(localized("report.export.vector_note_prefix")): \(notes)")
         }
 
         return lines.joined(separator: "\n")

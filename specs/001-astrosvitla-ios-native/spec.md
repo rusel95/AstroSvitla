@@ -2,8 +2,9 @@
 
 **Feature Branch**: `001-astrosvitla-ios-native`
 **Created**: 2025-10-07
+**Updated**: 2025-10-08
 **Status**: Draft
-**Input**: User description: "iOS native astrology app with personalized natal chart calculations and AI-powered life area predictions using pay-per-report model"
+**Input**: User description: "iOS native astrology app with personalized natal chart calculations and AI-powered life area predictions using pay-per-report model + Multi-user support with ability to select previous users or input new user data"
 
 ## Execution Flow (main)
 ```
@@ -29,7 +30,7 @@
 ## User Scenarios & Testing
 
 ### Primary User Story
-As a person interested in astrology, I want to generate personalized predictions for specific areas of my life based on my accurate natal chart, so I can gain insights without paying for features I don't need.
+As a person interested in astrology, I want to generate personalized predictions for specific areas of my life and for my loved ones based on accurate natal charts, so I can gain insights for multiple people without paying for features I don't need. I want to easily switch between different people's charts and see their reports organized separately.
 
 ### Core User Journeys
 
@@ -53,12 +54,15 @@ As a person interested in astrology, I want to generate personalized predictions
 5. User receives new personalized report
 6. User compares insights across different life areas
 
-#### Journey 3: Multiple Charts Management
+#### Journey 3: Multiple Users Management
 1. User wants to generate chart for family member/partner
-2. User creates new chart with different birth data
-3. User switches between multiple saved charts
-4. User generates reports for specific person's chart
-5. User organizes and manages multiple people's charts and reports
+2. User taps "Add New User" or selects from list of previous users
+3. If new user: enters name and birth data
+4. If existing user: selects from saved user list
+5. System loads or creates natal chart for selected user
+6. User generates reports for specific user's chart
+7. User switches between different users via main tab
+8. System shows reports grouped by user on reports tab
 
 ### Acceptance Scenarios
 
@@ -116,6 +120,38 @@ As a person interested in astrology, I want to generate personalized predictions
 - **Then** all UI elements display in English
 - **And** generated reports are in English
 
+#### Scenario 7: User Selection from Main Tab
+- **Given** user has 3 saved users: "Me", "Partner", "Mom"
+- **When** user opens Main tab
+- **Then** system displays current user's name and chart
+- **And** system shows user selection dropdown/list
+- **When** user taps user selector
+- **Then** system displays list of all saved users
+- **And** system highlights currently selected user
+- **When** user selects "Partner"
+- **Then** system switches to Partner's chart
+- **And** system updates all views to show Partner's data
+
+#### Scenario 8: Adding New User
+- **Given** user is on Main tab
+- **When** user taps "Add New User" button
+- **Then** system shows new user form
+- **And** form requests: user name, birth date, birth time, birth location
+- **When** user enters all required data
+- **And** user taps "Create User"
+- **Then** system creates new user profile
+- **And** system calculates natal chart for new user
+- **And** system switches to newly created user as active user
+
+#### Scenario 9: Reports Grouped by User
+- **Given** user has 2 users: "Me" (3 reports) and "Partner" (2 reports)
+- **When** user opens Reports tab
+- **Then** system displays reports organized in sections by user
+- **And** each section shows user name as header
+- **And** under "Me" section: 3 reports are listed
+- **And** under "Partner" section: 2 reports are listed
+- **And** each report shows: life area, purchase date, chart snapshot
+
 ### Edge Cases
 
 #### Data Input Edge Cases
@@ -123,7 +159,7 @@ As a person interested in astrology, I want to generate personalized predictions
 - **What happens when** user enters date from 1900s? → System accepts dates from 1900-2100
 - **What happens when** location search returns multiple results? → System shows autocomplete list; user selects specific location
 - **What happens when** user enters location without internet connection? → System shows error: "Internet required for location search"
-- **What happens when** user doesn't know exact birth time? → [NEEDS CLARIFICATION: Should app support "unknown time" mode with rectification options?]
+- **What happens when** user doesn't know exact birth time? → "unknown time" mode with less specific report generation - we just have to mention this report is more clear with specific time
 
 #### Chart Calculation Edge Cases
 - **What happens when** user is born during daylight saving time transition? → System correctly converts to UTC accounting for DST
@@ -132,21 +168,25 @@ As a person interested in astrology, I want to generate personalized predictions
 
 #### Purchase & Payment Edge Cases
 - **What happens when** user's payment is declined? → System shows payment error; no report generated; user can retry
-- **What happens when** payment succeeds but report generation fails? → [NEEDS CLARIFICATION: Refund policy? Retry mechanism? Grace period?]
-- **What happens when** user tries to purchase same area report twice for same chart? → [NEEDS CLARIFICATION: Should system prevent duplicate purchases or allow regeneration with updated AI?]
-- **What happens when** user loses internet during report generation? → [NEEDS CLARIFICATION: Retry mechanism? Cached partial results?]
+- **What happens when** payment succeeds but report generation fails? → payments should be stored WITH REVENUECAT and retry should be handled
+- **What happens when** user tries to purchase same area report twice for same chart? → prevent
+- **What happens when** user loses internet during report generation? → retry
 
-#### Multi-Chart Edge Cases
-- **What happens when** user has 10+ saved charts? → System allows unlimited charts with scrollable list
-- **What happens when** user deletes chart with purchased reports? → [NEEDS CLARIFICATION: Cascade delete reports? Warn user? Keep reports orphaned?]
+#### Multi-User Edge Cases
+- **What happens when** user has 10+ saved user profiles? → System allows unlimited users with scrollable list
+- **What happens when** user deletes a user profile with purchased reports? → just extra alert before deletion
+- **What happens when** user tries to create user with duplicate name? → force unique
+- **What happens when** no user is selected on first app launch? → HAS TO BE
+- **What happens when** user switches between users while viewing report? → System should exit report view and show main tab for newly selected user
+- **What happens when** active user is deleted while being viewed? → Just alert
 
 #### Localization Edge Cases
 - **What happens when** user switches language mid-session? → UI updates immediately; previously generated reports remain in original language
-- **What happens when** user's device language is neither English nor Ukrainian? → [NEEDS CLARIFICATION: Default to English? Show language picker?]
+- **What happens when** user's device language is neither English nor Ukrainian? → default to eng
 
 #### Storage & Data Edge Cases
 - **What happens when** device storage is full? → System shows error before attempting to save
-- **What happens when** user reinstalls app? → [NEEDS CLARIFICATION: Cloud backup? Local data lost? Restore purchase receipts?]
+- **What happens when** user reinstalls app? → restore receipts
 
 ---
 
@@ -214,7 +254,7 @@ As a person interested in astrology, I want to generate personalized predictions
 - **FR-038**: System MUST validate payment success before generating report
 - **FR-039**: System MUST store transaction receipt for each purchase
 - **FR-040**: System MUST prevent report generation if payment fails
-- **FR-041**: System MUST restore previous purchases if user reinstalls app [NEEDS CLARIFICATION: What specific purchases are restorable?]
+- **FR-041**: System MUST restore previous purchases if user reinstalls app -> all of them, but let it be in leftovers
 - **FR-042**: Pricing MUST be:
   - General Overview: $9.99
   - Finances: $6.99
@@ -222,41 +262,47 @@ As a person interested in astrology, I want to generate personalized predictions
   - Relationships: $5.99
   - Health: $5.99
 
-#### Report Storage & Access (FR-043 to FR-048)
+#### Report Storage & Access (FR-043 to FR-049)
 - **FR-043**: System MUST save purchased reports to device local storage
 - **FR-044**: System MUST allow users to access purchased reports offline
-- **FR-045**: System MUST display list of all purchased reports organized by chart and area
-- **FR-046**: System MUST show purchase date and timestamp for each report
-- **FR-047**: System MUST allow users to export any purchased report as PDF
-- **FR-048**: System MUST allow users to share report text via system share sheet
+- **FR-045**: System MUST display list of all purchased reports organized by user profile on Reports tab
+- **FR-046**: System MUST group reports by user with user name as section header
+- **FR-047**: System MUST show purchase date, life area, and user name for each report
+- **FR-048**: System MUST allow users to export any purchased report as PDF
+- **FR-049**: System MUST allow users to share report text via system share sheet
 
-#### Multi-Chart Management (FR-049 to FR-054)
-- **FR-049**: System MUST allow users to create multiple natal charts
-- **FR-050**: System MUST require user to name each chart (e.g., "My Chart", "Partner's Chart")
-- **FR-051**: System MUST display list of all saved charts with name and birth date
-- **FR-052**: System MUST allow user to switch between charts
-- **FR-053**: System MUST associate purchased reports with specific chart
-- **FR-054**: System MUST allow users to delete charts [NEEDS CLARIFICATION: What happens to associated reports?]
+#### Multi-User Management (FR-050 to FR-060)
+- **FR-050**: System MUST allow users to create multiple user profiles (each with own natal chart)
+- **FR-051**: System MUST require unique name for each user profile (e.g., "Me", "Partner", "Mom")
+- **FR-052**: System MUST display list of all saved users with name and birth date
+- **FR-053**: System MUST allow user to switch between user profiles from Main tab
+- **FR-054**: System MUST associate purchased reports with specific user profile
+- **FR-055**: System MUST maintain "active user" context throughout app session
+- **FR-056**: System MUST show active user's name prominently on Main tab
+- **FR-057**: System MUST provide "Add New User" action button on Main tab
+- **FR-058**: System MUST show user selector (dropdown/list) on Main tab
+- **FR-059**: System MUST persist active user selection across app launches
+- **FR-060**: System MUST allow users to delete user profiles -> deleted as well, but alert about that should be shown
 
-#### Localization (FR-055 to FR-059)
-- **FR-055**: System MUST support English language (primary)
-- **FR-056**: System MUST support Ukrainian language (secondary)
-- **FR-057**: System MUST automatically detect device language and display appropriate language
-- **FR-058**: System MUST localize all UI text, labels, and buttons
-- **FR-059**: System MUST generate reports in same language as UI
+#### Localization (FR-061 to FR-065)
+- **FR-061**: System MUST support English language (primary)
+- **FR-062**: System MUST support Ukrainian language (secondary)
+- **FR-063**: System MUST automatically detect device language and display appropriate language
+- **FR-064**: System MUST localize all UI text, labels, and buttons
+- **FR-065**: System MUST generate reports in same language as UI
 
-#### Onboarding (FR-060 to FR-063)
-- **FR-060**: System MUST show 3-screen onboarding flow on first app launch
-- **FR-061**: Onboarding MUST explain: personalized predictions, pay-per-report model, expert knowledge + AI interpretation
-- **FR-062**: User MUST be able to skip or navigate through onboarding screens
-- **FR-063**: System MUST not show onboarding again after completion
+#### Onboarding (FR-066 to FR-069)
+- **FR-066**: System MUST show 3-screen onboarding flow on first app launch
+- **FR-067**: Onboarding MUST explain: personalized predictions, pay-per-report model, expert knowledge + AI interpretation
+- **FR-068**: User MUST be able to skip or navigate through onboarding screens
+- **FR-069**: System MUST not show onboarding again after completion
 
-#### Data & Privacy (FR-064 to FR-068)
-- **FR-064**: System MUST store all user data locally on device only (no cloud sync in MVP)
-- **FR-065**: System MUST NOT require user account or registration
-- **FR-066**: System MUST NOT collect analytics or tracking data
-- **FR-067**: System MUST NOT share birth data with third parties
-- **FR-068**: System MUST handle user data in compliance with iOS privacy requirements
+#### Data & Privacy (FR-070 to FR-074)
+- **FR-070**: System MUST store all user data locally on device only (no cloud sync in MVP)
+- **FR-071**: System MUST NOT require user account or registration
+- **FR-072**: System MUST NOT collect analytics or tracking data
+- **FR-073**: System MUST NOT share birth data with third parties
+- **FR-074**: System MUST handle user data in compliance with iOS privacy requirements
 
 ### Non-Functional Requirements
 
@@ -279,22 +325,29 @@ As a person interested in astrology, I want to generate personalized predictions
 
 ### Key Entities
 
-#### User
+#### App User (Device Owner)
 - Represents: Anonymous app user (no account/registration)
-- Attributes: Unique device identifier, app installation date
-- Relationships: Has many Birth Charts, Has many Report Purchases
+- Attributes: Unique device identifier, app installation date, active user profile ID
+- Relationships: Has many User Profiles, Has many Report Purchases
+- Business Rules: No authentication required; one app installation per device; maintains single "active user profile" context
+
+#### User Profile
+- Represents: Individual person with their own natal chart and birth data
+- Attributes: Unique name (within device), birth date, birth time, birth location (city name, latitude, longitude), creation date, is_active flag
+- Relationships: Belongs to App User, Has one Birth Chart, Has many Report Purchases
+- Business Rules: Name must be unique within device; one user profile can only have one natal chart; represents real person (self or others)
 
 #### Birth Chart
-- Represents: Complete natal chart for specific person at specific birth moment
-- Attributes: Name/label, birth date, birth time, birth location (city name, latitude, longitude), calculation results (planetary positions, houses, aspects)
-- Relationships: Belongs to User, Has many Report Purchases
-- Business Rules: Requires exact birth time for accuracy; location must be geocoded; calculations are immutable once generated
+- Represents: Complete natal chart for specific User Profile at specific birth moment
+- Attributes: Calculation results (planetary positions, houses, aspects), calculation date
+- Relationships: Belongs to User Profile
+- Business Rules: Requires exact birth time for accuracy; location must be geocoded; calculations are immutable once generated; one-to-one with User Profile
 
 #### Report Purchase
-- Represents: Single purchased report for specific life area
-- Attributes: Life area type (finances/career/relationships/health/general), generated report text, purchase date, price paid, transaction receipt ID
-- Relationships: Belongs to Birth Chart, Belongs to User
-- Business Rules: Each purchase is for one life area only; report content is fixed after generation; user owns report permanently; reports are associated with specific chart
+- Represents: Single purchased report for specific life area for specific User Profile
+- Attributes: Life area type (finances/career/relationships/health/general), generated report text, purchase date, price paid, transaction receipt ID, user profile ID
+- Relationships: Belongs to User Profile, Belongs to Birth Chart, Belongs to App User
+- Business Rules: Each purchase is for one life area only; report content is fixed after generation; user owns report permanently; reports are associated with specific User Profile and their chart
 
 #### Life Area
 - Represents: Category of astrological prediction
@@ -318,7 +371,7 @@ As a person interested in astrology, I want to generate personalized predictions
 - [x] All mandatory sections completed
 
 ### Requirement Completeness
-- [ ] No [NEEDS CLARIFICATION] markers remain (6 clarifications needed - see edge cases and FR-041)
+- [x] No markers remain (10 clarifications needed - see edge cases and FR-060)
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
 - [x] Scope is clearly bounded
@@ -327,11 +380,14 @@ As a person interested in astrology, I want to generate personalized predictions
 ### Open Questions Requiring Clarification
 1. Should app support "unknown birth time" mode? How to handle incomplete data?
 2. What is refund/retry policy if payment succeeds but report generation fails?
-3. Should system prevent duplicate purchases of same area report for same chart?
+3. Should system prevent duplicate purchases of same area report for same user profile?
 4. What is retry mechanism if user loses internet during report generation?
-5. What happens to purchased reports when user deletes associated chart?
+5. What happens to purchased reports when user deletes associated User Profile?
 6. What is default language behavior if device language is neither English nor Ukrainian?
 7. What specific purchases are restorable after app reinstall?
+8. What happens when user tries to create User Profile with duplicate name?
+9. What happens on first app launch when no User Profile exists yet?
+10. What happens when active User Profile is deleted while being viewed?
 
 ---
 

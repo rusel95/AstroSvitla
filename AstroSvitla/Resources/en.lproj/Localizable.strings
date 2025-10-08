@@ -36,6 +36,15 @@
 "report.section.influences" = "Key Influences";
 "report.section.analysis" = "Detailed Analysis";
 "report.section.recommendations" = "Recommendations";
+"report.section.knowledge_usage" = "Knowledge Usage";
+"report.knowledge.used" = "Vector knowledge base used";
+"report.knowledge.not_used" = "Vector knowledge base not used";
+"report.knowledge.no_snippets" = "No vector snippets were provided.";
+"report.export.vector_usage_true" = "Vector knowledge base used: yes";
+"report.export.vector_usage_false" = "Vector knowledge base used: no";
+"report.export.vector_note_prefix" = "Note";
+"pdf.title" = "Personal Natal Report";
+"pdf.generated_on" = "Generated on %@";
 
 "report.export.key_influences_header" = "Key Influences:";
 "report.export.analysis_header" = "Detailed Analysis:";
@@ -112,4 +121,3 @@
 "area.section.choose" = "Choose a focus area";
 "area.navigation.title" = "Select area";
 "area.action.edit_details" = "Edit data";
-

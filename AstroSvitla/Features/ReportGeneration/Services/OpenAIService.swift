@@ -25,7 +25,10 @@ struct OpenAIService {
         for area: ReportArea,
         birthDetails: BirthDetails,
         natalChart: NatalChart,
-        knowledgeSnippets: [String]
+        knowledgeSnippets: [String],
+        languageCode: String,
+        languageDisplayName: String,
+        repositoryContext: String
     ) async throws -> GeneratedReport {
         guard let client = clientProvider.client else {
             throw ReportGenerationError.missingAPIKey
@@ -35,7 +38,10 @@ struct OpenAIService {
             for: area,
             birthDetails: birthDetails,
             natalChart: natalChart,
-            knowledgeSnippets: knowledgeSnippets
+            knowledgeSnippets: knowledgeSnippets,
+            languageCode: languageCode,
+            languageDisplayName: languageDisplayName,
+            repositoryContext: repositoryContext
         )
         let query = makeChatQuery(systemPrompt: prompt.system, userPrompt: prompt.user)
 
@@ -46,12 +52,16 @@ struct OpenAIService {
             do {
                 let (payload, usage) = try await performRequest(client: client, query: query)
                 logUsage(usage)
+                let fallbackNotes = knowledgeSnippets.isEmpty ? localized("report.knowledge.no_snippets") : nil
+                let usagePayload = payload.knowledgeUsage ?? OpenAIReportPayload.KnowledgeUsagePayload(vectorSourceUsed: knowledgeSnippets.isEmpty == false, notes: fallbackNotes)
+
                 return GeneratedReport(
                     area: area,
                     summary: payload.summary,
                     keyInfluences: payload.keyInfluences,
                     detailedAnalysis: payload.detailedAnalysis,
-                    recommendations: payload.recommendations
+                    recommendations: payload.recommendations,
+                    knowledgeUsage: KnowledgeUsage(vectorSourceUsed: usagePayload.vectorSourceUsed, notes: usagePayload.notes)
                 )
             } catch let error as ReportGenerationError {
                 lastError = error
@@ -225,11 +235,23 @@ private struct OpenAIReportPayload: Decodable {
     let keyInfluences: [String]
     let detailedAnalysis: String
     let recommendations: [String]
+    let knowledgeUsage: KnowledgeUsagePayload?
 
     private enum CodingKeys: String, CodingKey {
         case summary
         case keyInfluences = "key_influences"
         case detailedAnalysis = "detailed_analysis"
         case recommendations
+        case knowledgeUsage = "knowledge_usage"
+    }
+
+    struct KnowledgeUsagePayload: Decodable {
+        let vectorSourceUsed: Bool
+        let notes: String?
+
+        private enum CodingKeys: String, CodingKey {
+            case vectorSourceUsed = "vector_source_used"
+            case notes
+        }
     }
 }

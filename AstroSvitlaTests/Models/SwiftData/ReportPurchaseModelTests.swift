@@ -15,6 +15,8 @@ struct ReportPurchaseModelTests {
             detailedAnalysis: "Detailed analysis",
             recommendations: ["Recommendation"],
             language: "en",
+            knowledgeVectorUsed: true,
+            knowledgeNotes: "Used snippet #1",
             price: Decimal(string: "6.99")!,
             currency: "USD",
             transactionId: "txn_123"
@@ -28,6 +30,8 @@ struct ReportPurchaseModelTests {
         #expect(report.areaDisplayName == "Finances")
         #expect(report.estimatedReadingTime == 1)
         #expect(report.generatedReport?.summary == "Summary")
+        #expect(report.knowledgeVectorUsed)
+        #expect(report.knowledgeNotes == "Used snippet #1")
     }
 
     @Test
@@ -40,6 +44,7 @@ struct ReportPurchaseModelTests {
             detailedAnalysis: "Detailed analysis",
             recommendations: [],
             language: "en",
+            knowledgeVectorUsed: false,
             price: Decimal(string: "5.99")!,
             transactionId: "txn_456"
         )

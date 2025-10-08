@@ -278,6 +278,206 @@ actor ChartService {
 
 ---
 
+## Multi-User Profile Management
+
+### Overview
+
+AstroSvitla supports multiple user profiles, allowing users to create and manage natal charts for different people (self, partner, family members) within a single app installation.
+
+### Key Concepts
+
+- **Device Owner (User)**: Represents the app installation (one per device)
+- **User Profile**: Represents an individual person with birth data and charts
+- **Active Profile**: Currently selected user profile (maintained across sessions)
+- **Profile Switching**: Users can switch between profiles from the Main tab
+
+### Creating a New User Profile
+
+**From UI**:
+1. Open Main tab
+2. Tap "Add New User" button
+3. Enter profile name (must be unique)
+4. Enter birth date, time, and location
+5. System validates and creates profile
+6. Profile becomes active automatically
+
+**Programmatically**:
+```swift
+class UserProfileService {
+    let context: ModelContext
+
+    func createProfile(
+        name: String,
+        birthDate: Date,
+        birthTime: Date,
+        locationName: String,
+        latitude: Double,
+        longitude: Double,
+        timezone: String
+    ) async throws -> UserProfile {
+        // Validate name uniqueness
+        guard isProfileNameUnique(name, context: context) else {
+            throw UserProfileError.duplicateName
+        }
+
+        // Create profile
+        let profile = UserProfile(
+            name: name,
+            birthDate: birthDate,
+            birthTime: birthTime,
+            locationName: locationName,
+            latitude: latitude,
+            longitude: longitude,
+            timezone: timezone
+        )
+
+        // Insert into context
+        context.insert(profile)
+
+        // Calculate natal chart
+        let chartService = ChartCalculator()
+        let natalChart = try await chartService.calculate(
+            birthDate: birthDate,
+            birthTime: birthTime,
+            latitude: latitude,
+            longitude: longitude
+        )
+
+        // Create and link birth chart
+        let chartData = try JSONEncoder().encode(natalChart)
+        let birthChart = BirthChart(
+            chartDataJSON: String(data: chartData, encoding: .utf8) ?? ""
+        )
+        birthChart.profile = profile
+        context.insert(birthChart)
+
+        // Save
+        try context.save()
+
+        return profile
+    }
+}
+```
+
+### Switching Active User Profile
+
+**From UI**:
+1. Open Main tab
+2. Tap user selector dropdown
+3. Select different user profile
+4. System updates active profile reference
+5. All views update to show new user's data
+
+**Programmatically**:
+```swift
+class RepositoryContext: ObservableObject {
+    @Published var activeProfile: UserProfile?
+    private let context: ModelContext
+
+    func setActiveProfile(_ profile: UserProfile) {
+        // Update User.activeProfileId
+        if let user = fetchDeviceOwner() {
+            user.setActiveProfile(profile)
+            try? context.save()
+        }
+
+        // Update published property
+        self.activeProfile = profile
+    }
+
+    func loadActiveProfile() {
+        guard let user = fetchDeviceOwner(),
+              let activeId = user.activeProfileId else {
+            return
+        }
+
+        let descriptor = FetchDescriptor<UserProfile>(
+            predicate: #Predicate { $0.id == activeId }
+        )
+        self.activeProfile = try? context.fetch(descriptor).first
+    }
+}
+```
+
+### Viewing Reports Grouped by User
+
+**ReportListView with Grouping**:
+```swift
+struct ReportListView: View {
+    @Query(sort: \UserProfile.name) var profiles: [UserProfile]
+    @Environment(\.modelContext) private var context
+
+    var body: some View {
+        List {
+            ForEach(profiles) { profile in
+                Section(header: Text(profile.name)) {
+                    ForEach(profile.reports) { report in
+                        ReportRow(report: report)
+                    }
+                }
+            }
+        }
+        .navigationTitle("My Reports")
+    }
+}
+```
+
+### Deleting a User Profile
+
+**With Cascade Delete Warning**:
+```swift
+func deleteProfile(_ profile: UserProfile) {
+    // Check for associated data
+    let reportCount = profile.reports.count
+    let hasChart = profile.chart != nil
+
+    // Show warning alert to user
+    let message = """
+    This will delete:
+    • Profile: \(profile.name)
+    • Birth Chart: \(hasChart ? "Yes" : "None")
+    • Reports: \(reportCount)
+
+    This action cannot be undone.
+    """
+
+    // If confirmed, delete (cascade deletes chart and reports)
+    context.delete(profile)
+    try? context.save()
+
+    // If this was active profile, select another or set to nil
+    updateActiveProfileAfterDeletion()
+}
+```
+
+### Validation Rules
+
+**Profile Name Uniqueness**:
+```swift
+func isProfileNameUnique(_ name: String, excluding profileId: UUID? = nil) -> Bool {
+    let descriptor = FetchDescriptor<UserProfile>(
+        predicate: #Predicate { profile in
+            profile.name == name && (profileId == nil || profile.id != profileId!)
+        }
+    )
+    let results = try? context.fetch(descriptor)
+    return results?.isEmpty ?? true
+}
+```
+
+### Best Practices
+
+1. **Always validate profile name uniqueness** before creating/updating
+2. **Maintain active profile context** across app sessions (persist in User.activeProfileId)
+3. **Show confirmation dialog** before deleting profiles with reports
+4. **Update UI reactively** when active profile changes (use @Published in RepositoryContext)
+5. **Handle edge cases**:
+   - No profiles exist (first launch)
+   - Active profile is deleted
+   - Multiple profiles with same birth data
+
+---
+
 ## Testing
 
 ### Unit Tests

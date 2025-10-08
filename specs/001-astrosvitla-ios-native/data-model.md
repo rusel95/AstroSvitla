@@ -22,29 +22,45 @@ AstroSvitla uses **SwiftData** (iOS 17+) for local persistence with offline-firs
 ## Entity Relationship Diagram
 
 ```
-┌──────────────┐
-│     User     │
-│  (anonymous) │
-└───┬──────────┘
-    │
-    │ 1:N
-    │
-    ▼
-┌──────────────┐         ┌──────────────────┐
-│  BirthChart  │◄────┬──►│  ReportPurchase  │
-│              │     │   │                  │
-│ • chartData  │  1:N│   │ • reportText     │
-│ • birthInfo  │     │   │ • purchaseInfo   │
-└──────────────┘     │   └──────────────────┘
-                     │
-                  belongs to
+┌──────────────────┐
+│       User       │
+│ (device owner)   │
+│ • activeProfileID│
+└────────┬─────────┘
+         │
+         │ 1:N
+         │
+         ▼
+┌──────────────────┐         ┌──────────────────┐
+│   UserProfile    │◄────┬──►│  ReportPurchase  │
+│                  │     │   │                  │
+│ • name (unique)  │  1:N│   │ • reportText     │
+│ • birthData      │     │   │ • purchaseInfo   │
+└────────┬─────────┘     │   └──────────────────┘
+         │               │
+         │ 1:1           │
+         │            belongs to
+         ▼
+┌──────────────────┐
+│   BirthChart     │
+│                  │
+│ • chartData      │
+│ • calculations   │
+└──────────────────┘
 ```
+
+**Key Changes from Original Model**:
+- `User` now represents device owner (app installation)
+- `UserProfile` introduced to represent individual persons
+- `BirthChart` belongs to `UserProfile` (1:1)
+- `ReportPurchase` belongs to `UserProfile` (1:N)
+- `User` maintains reference to active `UserProfile`
 
 ---
 
 ## SwiftData Models
 
-### 1. User Model
+### 1. User Model (Device Owner)
 
 ```swift
 import SwiftData
@@ -60,60 +76,67 @@ final class User {
     var createdAt: Date
     var lastActiveAt: Date
 
+    // Active user profile (for session management)
+    var activeProfileId: UUID?
+
     // Relationships
     @Relationship(deleteRule: .cascade)
-    var charts: [BirthChart] = []
-
-    @Relationship(deleteRule: .cascade)
-    var purchases: [ReportPurchase] = []
+    var profiles: [UserProfile] = []
 
     // Initializer
     init(id: UUID = UUID()) {
         self.id = id
         self.createdAt = Date()
         self.lastActiveAt = Date()
+        self.activeProfileId = nil
     }
 
     // Helper methods
     func updateLastActive() {
         self.lastActiveAt = Date()
     }
+
+    func setActiveProfile(_ profile: UserProfile) {
+        self.activeProfileId = profile.id
+        updateLastActive()
+    }
 }
 ```
 
-**Purpose**: Anonymous device user (no authentication)
+**Purpose**: Anonymous device owner (no authentication) - represents app installation
 
 **Attributes**:
 - `id`: Unique identifier (UUID)
 - `createdAt`: App first launch timestamp
 - `lastActiveAt`: Last interaction timestamp
+- `activeProfileId`: Currently selected user profile (optional)
 
 **Relationships**:
-- `charts`: Collection of user's birth charts (cascade delete)
-- `purchases`: Collection of report purchases (cascade delete)
+- `profiles`: Collection of user profiles (cascade delete)
 
 **Business Rules**:
 - One user per device installation
 - Created automatically on first app launch
+- Maintains reference to active profile for session management
 - Persists across app sessions
 - Deleted if user deletes app (device uninstall)
 
 ---
 
-### 2. BirthChart Model
+### 2. UserProfile Model
 
 ```swift
 import SwiftData
 import Foundation
 
 @Model
-final class BirthChart {
+final class UserProfile {
     // Primary identifier
     @Attribute(.unique)
     var id: UUID
 
     // User-facing info
-    var name: String // "My Chart", "Partner's Chart", etc.
+    var name: String // "Me", "Partner", "Mom", etc. - MUST be unique per device
 
     // Birth data
     var birthDate: Date
@@ -123,16 +146,16 @@ final class BirthChart {
     var longitude: Double
     var timezone: String // "Europe/Kyiv"
 
-    // Calculated chart data (serialized JSON)
-    var chartDataJSON: String
-
     // Metadata
     var createdAt: Date
     var updatedAt: Date
 
     // Relationships
-    @Relationship(inverse: \User.charts)
+    @Relationship(inverse: \User.profiles)
     var user: User?
+
+    @Relationship(deleteRule: .cascade)
+    var chart: BirthChart? // 1:1 relationship
 
     @Relationship(deleteRule: .cascade)
     var reports: [ReportPurchase] = []
@@ -146,8 +169,7 @@ final class BirthChart {
         locationName: String,
         latitude: Double,
         longitude: Double,
-        timezone: String,
-        chartDataJSON: String = ""
+        timezone: String
     ) {
         self.id = id
         self.name = name
@@ -157,7 +179,6 @@ final class BirthChart {
         self.latitude = latitude
         self.longitude = longitude
         self.timezone = timezone
-        self.chartDataJSON = chartDataJSON
         self.createdAt = Date()
         self.updatedAt = Date()
     }
@@ -169,6 +190,77 @@ final class BirthChart {
         formatter.timeStyle = .short
         return formatter.string(from: birthDate) + " " + formatter.string(from: birthTime)
     }
+}
+```
+
+**Purpose**: Represents an individual person with their own natal chart
+
+**Attributes**:
+- `id`: Unique identifier
+- `name`: User-defined label (MUST be unique within device)
+- `birthDate`: Date of birth
+- `birthTime`: Time of birth (minute precision)
+- `locationName`: Human-readable location
+- `latitude`: Geographic coordinate (decimal degrees)
+- `longitude`: Geographic coordinate (decimal degrees)
+- `timezone`: IANA timezone identifier
+- `createdAt`: Profile creation timestamp
+- `updatedAt`: Last modification timestamp
+
+**Relationships**:
+- `user`: Belongs to one User (device owner)
+- `chart`: Has one BirthChart (1:1, cascade delete)
+- `reports`: Has many ReportPurchases (cascade delete)
+
+**Business Rules**:
+- Name must be unique within device installation (enforced by ViewModel)
+- Requires all birth data fields (validation in ViewModel)
+- Location must be geocoded before saving
+- Can be deleted by user (cascade deletes chart and reports with warning)
+- One profile = one person = one natal chart
+
+**Validation**:
+- Birth date: 1900-01-01 to 2100-12-31
+- Birth time: Valid 24-hour time with minute precision
+- Latitude: -90 to +90
+- Longitude: -180 to +180
+- Name: 1-50 characters, unique per device
+
+---
+
+### 3. BirthChart Model
+
+```swift
+import SwiftData
+import Foundation
+
+@Model
+final class BirthChart {
+    // Primary identifier
+    @Attribute(.unique)
+    var id: UUID
+
+    // Calculated chart data (serialized JSON)
+    var chartDataJSON: String
+
+    // Metadata
+    var createdAt: Date
+    var updatedAt: Date
+
+    // Relationships
+    @Relationship(inverse: \UserProfile.chart)
+    var profile: UserProfile? // 1:1 relationship
+
+    // Initializer
+    init(
+        id: UUID = UUID(),
+        chartDataJSON: String = ""
+    ) {
+        self.id = id
+        self.chartDataJSON = chartDataJSON
+        self.createdAt = Date()
+        self.updatedAt = Date()
+    }
 
     // Helper methods
     func updateChartData(_ jsonString: String) {
@@ -178,42 +270,28 @@ final class BirthChart {
 }
 ```
 
-**Purpose**: Store complete natal chart information
+**Purpose**: Store calculated natal chart data for a UserProfile
 
 **Attributes**:
 - `id`: Unique identifier
-- `name`: User-defined label for chart
-- `birthDate`: Date of birth
-- `birthTime`: Time of birth (minute precision)
-- `locationName`: Human-readable location
-- `latitude`: Geographic coordinate (decimal degrees)
-- `longitude`: Geographic coordinate (decimal degrees)
-- `timezone`: IANA timezone identifier
-- `chartDataJSON`: Serialized NatalChart domain model
-- `createdAt`: Chart creation timestamp
-- `updatedAt`: Last modification timestamp
+- `chartDataJSON`: Serialized NatalChart domain model (planets, houses, aspects)
+- `createdAt`: Chart calculation timestamp
+- `updatedAt`: Last recalculation timestamp
 
 **Relationships**:
-- `user`: Belongs to one User
-- `reports`: Has many ReportPurchases (cascade delete)
+- `profile`: Belongs to one UserProfile (1:1)
 
 **Business Rules**:
-- Requires all birth data fields (validation in ViewModel)
-- Location must be geocoded before saving
-- Chart data calculated once and cached (immutable)
-- Can be deleted by user (cascade deletes associated reports)
-- Multiple charts allowed per user
+- One chart per user profile (1:1 relationship)
+- Chart data calculated once and cached (immutable unless recalculated)
+- Birth data stored in UserProfile, not duplicated here
+- Deleted automatically when UserProfile is deleted (cascade)
 
-**Validation**:
-- Birth date: 1900-01-01 to 2100-12-31
-- Birth time: Valid 24-hour time with minute precision
-- Latitude: -90 to +90
-- Longitude: -180 to +180
-- Name: 1-50 characters
+**Note**: Birth data (date, time, location) moved to UserProfile model to avoid duplication
 
 ---
 
-### 3. ReportPurchase Model
+### 4. ReportPurchase Model
 
 ```swift
 import SwiftData
@@ -241,8 +319,8 @@ final class ReportPurchase {
     var wordCount: Int
 
     // Relationships
-    @Relationship(inverse: \BirthChart.reports)
-    var chart: BirthChart?
+    @Relationship(inverse: \UserProfile.reports)
+    var profile: UserProfile?
 
     // Initializer
     init(
@@ -290,7 +368,7 @@ final class ReportPurchase {
 }
 ```
 
-**Purpose**: Store purchased report with payment receipt
+**Purpose**: Store purchased report with payment receipt for a specific UserProfile
 
 **Attributes**:
 - `id`: Unique identifier
@@ -305,14 +383,15 @@ final class ReportPurchase {
 - `wordCount`: Number of words in report
 
 **Relationships**:
-- `chart`: Belongs to one BirthChart
+- `profile`: Belongs to one UserProfile
 
 **Business Rules**:
-- One purchase = one report for one life area
+- One purchase = one report for one life area for one user profile
 - Report content is immutable after generation
 - User owns report permanently (offline access)
 - Transaction ID must be unique (StoreKit validation)
-- Cannot purchase same area twice for same chart (UI prevention)
+- Cannot purchase same area twice for same profile (UI prevention)
+- Reports grouped by profile in UI
 
 **Pricing** (from spec):
 - General Overview: $9.99
@@ -547,7 +626,12 @@ struct AstroSvitlaApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .modelContainer(for: [User.self, BirthChart.self, ReportPurchase.self])
+                .modelContainer(for: [
+                    User.self,
+                    UserProfile.self,
+                    BirthChart.self,
+                    ReportPurchase.self
+                ])
         }
     }
 }
@@ -558,6 +642,7 @@ extension ModelContainer {
     static var shared: ModelContainer = {
         let schema = Schema([
             User.self,
+            UserProfile.self,
             BirthChart.self,
             ReportPurchase.self
         ])
@@ -611,27 +696,57 @@ extension ModelContainer {
 ```swift
 import SwiftData
 
-// Fetch all birth charts for current user
-@Query(sort: \BirthChart.createdAt, order: .reverse)
-var charts: [BirthChart]
+// Fetch all user profiles for device owner
+@Query(sort: \UserProfile.createdAt, order: .forward)
+var profiles: [UserProfile]
 
-// Fetch all purchased reports for specific chart
-@Query(filter: #Predicate<ReportPurchase> { $0.chart?.id == chartId })
+// Fetch active user profile
+func getActiveProfile(for user: User, context: ModelContext) -> UserProfile? {
+    guard let activeId = user.activeProfileId else { return nil }
+    let descriptor = FetchDescriptor<UserProfile>(
+        predicate: #Predicate { $0.id == activeId }
+    )
+    return try? context.fetch(descriptor).first
+}
+
+// Fetch all reports for specific user profile
+@Query(filter: #Predicate<ReportPurchase> { $0.profile?.id == profileId })
 var reports: [ReportPurchase]
 
-// Fetch specific report by area
-@Query(
-    filter: #Predicate<ReportPurchase> {
-        $0.area == "finances" && $0.chart?.id == chartId
+// Group reports by user profile
+func getReportsGroupedByProfile(context: ModelContext) -> [UserProfile: [ReportPurchase]] {
+    let profileDescriptor = FetchDescriptor<UserProfile>()
+    guard let profiles = try? context.fetch(profileDescriptor) else { return [:] }
+
+    var grouped: [UserProfile: [ReportPurchase]] = [:]
+    for profile in profiles {
+        let reportDescriptor = FetchDescriptor<ReportPurchase>(
+            predicate: #Predicate { $0.profile?.id == profile.id },
+            sortBy: [SortDescriptor(\.purchaseDate, order: .reverse)]
+        )
+        if let reports = try? context.fetch(reportDescriptor) {
+            grouped[profile] = reports
+        }
     }
-)
-var financeReport: [ReportPurchase]
+    return grouped
+}
+
+// Check if profile name is unique
+func isProfileNameUnique(_ name: String, excluding profileId: UUID? = nil, context: ModelContext) -> Bool {
+    let descriptor = FetchDescriptor<UserProfile>(
+        predicate: #Predicate { profile in
+            profile.name == name && (profileId == nil || profile.id != profileId!)
+        }
+    )
+    let results = try? context.fetch(descriptor)
+    return results?.isEmpty ?? true
+}
 
 // Check if user already purchased report for area
-func hasPurchased(area: ReportArea, for chart: BirthChart) -> Bool {
+func hasPurchased(area: ReportArea, for profile: UserProfile) -> Bool {
     let descriptor = FetchDescriptor<ReportPurchase>(
         predicate: #Predicate {
-            $0.area == area.rawValue && $0.chart?.id == chart.id
+            $0.area == area.rawValue && $0.profile?.id == profile.id
         }
     )
     let results = try? context.fetch(descriptor)

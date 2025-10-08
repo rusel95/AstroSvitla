@@ -13,6 +13,8 @@ final class ReportPurchase {
     var detailedAnalysis: String
     var recommendations: [String]
     var language: String
+    var knowledgeVectorUsed: Bool = false
+    var knowledgeNotes: String?
 
     var price: Decimal
     var currency: String
@@ -34,6 +36,8 @@ final class ReportPurchase {
         detailedAnalysis: String,
         recommendations: [String] = [],
         language: String,
+        knowledgeVectorUsed: Bool = false,
+        knowledgeNotes: String? = nil,
         price: Decimal,
         currency: String = "USD",
         transactionId: String
@@ -46,6 +50,8 @@ final class ReportPurchase {
         self.detailedAnalysis = detailedAnalysis
         self.recommendations = recommendations
         self.language = language
+        self.knowledgeVectorUsed = knowledgeVectorUsed
+        self.knowledgeNotes = knowledgeNotes
         self.price = price
         self.currency = currency
         self.transactionId = transactionId
@@ -87,7 +93,8 @@ final class ReportPurchase {
             summary: summary,
             keyInfluences: keyInfluences,
             detailedAnalysis: detailedAnalysis,
-            recommendations: recommendations
+            recommendations: recommendations,
+            knowledgeUsage: KnowledgeUsage(vectorSourceUsed: knowledgeVectorUsed, notes: knowledgeNotes)
         )
     }
 }

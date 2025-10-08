@@ -49,6 +49,30 @@ final class AppPreferences: ObservableObject {
 
     var selectedColorScheme: ColorScheme? { theme.colorScheme }
     var selectedLocale: Locale { language.locale }
+    var selectedLanguageCode: String {
+        switch language {
+        case .system:
+            if let code = Locale.current.language.languageCode?.identifier {
+                return code
+            }
+            return Locale.current.languageCode ?? "uk"
+        case .english:
+            return "en"
+        case .ukrainian:
+            return "uk"
+        }
+    }
+
+    var selectedLanguageDisplayName: String {
+        switch language {
+        case .system:
+            return Locale.current.localizedString(forLanguageCode: selectedLanguageCode) ?? "System"
+        case .english:
+            return "English"
+        case .ukrainian:
+            return "Українська"
+        }
+    }
 
     init() {
         if let raw = UserDefaults.standard.string(forKey: Keys.theme),

@@ -12,10 +12,16 @@ struct AIPromptBuilder {
         for area: ReportArea,
         birthDetails: BirthDetails,
         natalChart: NatalChart,
-        knowledgeSnippets: [String]
+        knowledgeSnippets: [String],
+        languageCode: String,
+        languageDisplayName: String,
+        repositoryContext: String
     ) -> Prompt {
         let systemMessage = """
-        Ти — професійний астролог з понад 20 роками досвіду. Твоя задача — писати теплі, практичні та мотиваційні інтерпретації натальних карт українською мовою. Відповіді мають бути без згадок про гороскопи «на кожен день» та без шаблонних фраз. Пиши чітко, сучасно, з повагою до особистого шляху людини.
+        You are a professional astrologer with 20+ years of experience. Always respond with warm, practical, motivating interpretations tailored to the user's natal chart. Avoid daily horoscope clichés.
+        Always answer in language: \(languageDisplayName) (language code: \(languageCode)).
+        Project repository context:
+        \(repositoryContext)
         """
 
         let knowledgeSection: String = {
@@ -28,6 +34,13 @@ struct AIPromptBuilder {
             return "НАЙДЕАКТИВНІШІ ПРАВИЛА З ВЕКТОРНОЇ БАЗИ ЗНАНЬ:\n\(formatted)"
         }()
 
+        let vectorInstruction: String
+        if knowledgeSnippets.isEmpty {
+            vectorInstruction = "Vector knowledge snippets were NOT provided. Set knowledge_usage.vector_source_used to false and explain why in notes."
+        } else {
+            vectorInstruction = "Vector knowledge snippets WERE provided. Reference them naturally in the analysis and set knowledge_usage.vector_source_used to true with a short note."
+        }
+
         let userMessage = """
         СФОРМУЙ ВІДПОВІДЬ У ФОРМАТІ JSON БЕЗ ЖОДНОГО ДОДАТКОВОГО ТЕКСТУ. Використай наступну структуру:
 
@@ -35,7 +48,11 @@ struct AIPromptBuilder {
           "summary": "1-2 речення короткого підсумку українською.",
           "key_influences": ["4 марковані пункти з ключовими впливами"],
           "detailed_analysis": "Розгорнутий аналіз 4-5 абзаців українською, з посиланням на планети/аспекти/домівки.",
-          "recommendations": ["3-4 практичні поради українською, починай з дієслова."]
+          "recommendations": ["3-4 практичні поради українською, починай з дієслова."],
+          "knowledge_usage": {
+            "vector_source_used": true або false,
+            "notes": "Коротке пояснення українською"
+          }
         }
 
         Вихідні дані:
@@ -56,8 +73,9 @@ struct AIPromptBuilder {
 
         \(knowledgeSection)
 
+        \(vectorInstruction)
         Вимоги:
-        • Використовуй тільки українську мову.
+        • Поверни відповідь мовою \(languageDisplayName) (код \(languageCode)).
         • Поверни лише валідний JSON без додаткових пояснень.
         • Тримайся заданої структури та довжини.
         • Підлаштуй змісти пунктів під сферу \(area.displayName.lowercased()).
