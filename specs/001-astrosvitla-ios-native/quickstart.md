@@ -48,9 +48,9 @@
    - Free account OK for development
    - Paid account ($99/year) required for distribution
 
-2. **Google AI API Key** (for Gemini integration)
-   - Sign up at: https://ai.google.dev/
-   - Free tier: 15 RPM, 1M requests/day
+2. **OpenAI API Key**
+   - Create at: https://platform.openai.com/api-keys
+   - Developer tier includes free credit for new accounts; production scales with usage
 
 3. **SwissEphemeris Commercial License** (for production)
    - Cost: CHF 750 (~$850 USD)
@@ -95,10 +95,10 @@ The project uses SPM for all dependencies. Xcode will automatically fetch them o
    - Version: 0.0.99
    - License: GPL-2.0+ (commercial license required for production)
 
-2. **GoogleGenerativeAI** (AI Report Generation)
-   - Repository: `https://github.com/google/generative-ai-swift`
+2. **OpenAI Swift SDK** (AI Report Generation)
+   - Repository: `https://github.com/openai/openai-swift`
    - Version: Latest
-   - License: Apache 2.0
+   - License: MIT
 
 ### Manual Dependency Installation (if needed)
 
@@ -119,12 +119,12 @@ Create a `.env` file in project root (gitignored):
 
 ```bash
 # .env
-GEMINI_API_KEY=your_gemini_api_key_here
+OPENAI_API_KEY=your_openai_api_key_here
 ```
 
-**Get Gemini API Key**:
-1. Visit https://makersuite.google.com/app/apikey
-2. Click "Create API Key"
+**Get OpenAI API Key**:
+1. Visit https://platform.openai.com/api-keys
+2. Click "Create new secret key"
 3. Copy key and paste into `.env`
 
 ### 2. Xcode Configuration
@@ -133,7 +133,7 @@ Create `Config.xcconfig` in project root:
 
 ```bash
 # Config.xcconfig
-GEMINI_API_KEY = $(GEMINI_API_KEY)
+OPENAI_API_KEY = $(OPENAI_API_KEY)
 PRODUCT_BUNDLE_IDENTIFIER = com.astrosvitla.astroinsight
 DEVELOPMENT_TEAM = YOUR_TEAM_ID
 ```

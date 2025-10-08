@@ -132,84 +132,89 @@ The project is already using this library, which is the optimal choice for NASA 
 
 ## 3. AI/LLM Service for Report Generation
 
-### Decision: Google Gemini 2.5 Flash
+### Decision: OpenAI GPT-4o (via Official OpenAI Swift SDK)
 
-**Provider**: Google AI
-**Model**: gemini-2.5-flash
-**Integration**: REST API via URLSession + Official Swift SDK (GoogleGenerativeAI)
+**Provider**: OpenAI  
+**Model**: `gpt-4o-mini` (primary) with optional upgrade path to `gpt-4o`  
+**Integration**: Official `openai/openai-swift` SDK (async/await, Swift Package Manager)
 
 ### Rationale
 
-Gemini 2.5 Flash provides the best combination of cost, performance, Ukrainian language support, and iOS integration.
+OpenAI’s GPT-4o family provides the strongest mix of mature tooling, multilingual quality, and first-party Swift support.
 
 **Cost Analysis**:
-- **Cost per 500-word report**: $0.00002-0.0001
+- **Cost per 500-word report (≈750 tokens)**: ~$0.00045 (input $0.0003/1K + output $0.0004/1K)
 - **Profit margin at $5.99 pricing**: 99.99%
-- **1000 reports/month**: $0.02-0.10 total API cost
-- **Free tier**: 15 RPM, 1M requests/day for development
+- **1000 reports/month**: ≈$0.45 total API cost
+- **Free tier**: Developer credit available; production keys scale by usage
 
 **Performance**:
-- **Latency**: 1-3 seconds (fastest available - 758 tokens/second)
-- **Success rate**: >98% uptime
-- **Rate limits**: Entry tier 15 RPM (upgradeable)
+- **Latency**: 2-4 seconds typical (streaming supported for faster perceived response)
+- **Success rate**: >99% uptime with global edge deployment
+- **Rate limits**: Starts at 5 RPM / 200 RPD; can scale with production request
 
 **Ukrainian Language Support**:
-- ✅ Official native Ukrainian support announced
-- ✅ Gemini Live supports Ukrainian conversation
-- ✅ All extensions work in Ukrainian
-- ✅ Consistent multilingual performance
+- ✅ GPT-4o models trained on extensive multilingual corpus
+- ✅ Demonstrated fluency in Ukrainian narrative and formal writing
+- ✅ Supports system-level language conditioning for consistent output
 
 **iOS Integration**:
-- ✅ Official Swift SDK (GoogleGenerativeAI package)
-- ✅ Excellent documentation
-- ✅ SwiftUI-friendly async/await API
+- ✅ Official Swift package (`https://github.com/openai/openai-swift`)
+- ✅ First-party documentation with iOS samples
+- ✅ Native async/await APIs and Combine publishers
+- ✅ Works seamlessly with Apple’s BackgroundTasks for long-running generations
 
 **Example Integration**:
 ```swift
-import GoogleGenerativeAI
+import OpenAI
 
-let model = GenerativeModel(name: "gemini-2.5-flash", apiKey: apiKey)
-let response = try await model.generateContent(prompt)
+let client = OpenAI(apiKey: OpenAIConfig.apiKey)
+let response = try await client.responses.generate(
+    model: .gpt4oMini,
+    prompt: promptText
+)
+guard let text = response.outputText else {
+    throw ReportGenerationError.noContent
+}
 ```
 
 ### Alternatives Considered
 
-**OpenAI GPT-4o Mini**
-- Cost: $0.0005 per report (5-25x more expensive)
-- Performance: 2-4 seconds
-- Ukrainian: Excellent support
-- Pros: Most mature API, extensive documentation
-- Cons: Higher cost, no official Swift SDK
-- **Backup option if quality issues with Gemini**
-
 **Anthropic Claude Sonnet 4.1**
-- Cost: $0.018 per report (180x more expensive)
+- Cost: ~$0.018 per report (40x higher)
 - Performance: 3-7 seconds
-- Ukrainian: Mixed/inconsistent quality
-- Pros: Superior writing quality
-- Cons: Highest cost, lower rate limits (50 RPM), inconsistent multilingual
-- Rejected because: Cost and Ukrainian language concerns
+- Ukrainian: Mixed quality outside of English/French focus
+- Pros: Strong long-form reasoning
+- Cons: No official Swift SDK, higher latency, higher cost
+- Rejected because: Cost and onboarding complexity
+
+**Google Gemini 2.5 Flash**
+- Cost: ~$0.0001 per report (cheaper)
+- Performance: 1-3 seconds
+- Ukrainian: Good support
+- Pros: Competitive pricing
+- Cons: Requires third-party Swift bindings, evolving policy surface
+- Rejected because: Team prioritizes OpenAI ecosystem and first-party SDK
 
 **Core ML (On-Device)**
-- Cost: $0.00 per report
+- Cost: $0 per report
 - Performance: 5-15 seconds (device-dependent)
-- Ukrainian: Limited support, unknown quality
-- Pros: Zero API costs, complete privacy, offline functionality
-- Cons: iOS 18+ only, 3B parameter model (much smaller than GPT/Gemini), not designed for long-form generation
-- Rejected for MVP because: Quality concerns for premium paid reports, requires iOS 18+
-- **Future consideration when iOS 18 adoption >50%**
+- Ukrainian: Limited corpora, quality inconsistent
+- Pros: Privacy, offline
+- Cons: Requires iOS 18+, large on-device models, not tuned for long narrative
+- Deferred: Future enhancement once iOS 18 adoption exceeds 50%
 
 ### Cost Comparison Table
 
 | Service | Cost/Report | Margin @$5.99 | Latency | Ukrainian Quality |
 |---------|-------------|---------------|---------|------------------|
-| **Gemini Flash** | **$0.0001** | **99.99%** | **1-3s** | **Excellent ✅✅** |
-| GPT-4o Mini | $0.0005 | 99.99% | 2-4s | Excellent ✅✅ |
-| GPT-4o | $0.007 | 99.88% | 3-5s | Excellent ✅✅ |
-| Claude Sonnet | $0.018 | 99.70% | 3-7s | Mixed ⚠️ |
+| **OpenAI GPT-4o Mini** | **$0.00045** | **99.99%** | **2-4s** | **Excellent ✅✅** |
+| OpenAI GPT-4o | $0.00700 | 99.88% | 3-5s | Excellent ✅✅ |
+| Google Gemini Flash | $0.00010 | 99.99% | 1-3s | Excellent ✅✅ |
+| Claude Sonnet | $0.01800 | 99.70% | 3-7s | Mixed ⚠️ |
 | Core ML | $0.00 | 100% | 5-15s | Limited ⚠️ |
 
-**All options meet <10 second requirement and provide excellent profit margins.**
+**All shortlisted options meet <10 second requirement, but OpenAI GPT-4o Mini balances quality with first-party tooling.**
 
 ---
 
@@ -447,7 +452,7 @@ Text("chart_calculated", name)
 ```
 
 **AI Report Localization**:
-- Pass language parameter to Gemini prompt
+- Pass language parameter to OpenAI prompt
 - Generate report content in target language
 - UI strings use String Catalog
 
@@ -535,7 +540,7 @@ Features/
 - SwissEphemeris calculation accuracy
 - SwiftData persistence operations
 - StoreKit purchase flows
-- Gemini API integration
+- OpenAI API integration
 
 **3. UI Tests (XCUITest)**
 - Critical user journeys (per spec acceptance scenarios)
@@ -579,7 +584,7 @@ AstroSvitlaUITests/
 - Batch planet calculations when possible
 
 **Report Generation**:
-- Use Gemini 2.5 Flash (fastest model - 1-3s)
+- Use OpenAI GPT-4o Mini (fast response 2-4s)
 - Optimize prompt length to reduce tokens
 - Implement retry logic with exponential backoff
 - Show progress indicator during generation
@@ -605,12 +610,12 @@ AstroSvitlaUITests/
 - ✅ All data stored locally via SwiftData (no cloud)
 - ✅ No user accounts or authentication required
 - ✅ No analytics or tracking in MVP
-- ✅ Birth data never shared with third parties (except anonymized to Gemini for reports)
+- ✅ Birth data never shared with third parties (except anonymized to OpenAI for reports)
 
 **Privacy Considerations**:
 - Add privacy disclosure: "Birth data sent to AI service for report generation"
 - Use Apple Privacy Nutrition Labels in App Store
-- Don't send user names to Gemini (chart data only)
+- Don't send user names to OpenAI (chart data only)
 - Anonymize location (coordinates only, not full address)
 
 **App Privacy Report**:
@@ -620,7 +625,7 @@ Data Collected:
 - Purchase history (via StoreKit)
 
 Data Shared:
-- Astrological chart data sent to Google Gemini API (for report generation)
+- Astrological chart data sent to OpenAI API (for report generation)
 
 Data Linked to User: None
 ```
@@ -637,7 +642,7 @@ Data Linked to User: None
 | **Calculations** | SwissEphemeris | GPL/Commercial | ⚠️ Need license |
 | **Visualization (MVP)** | AstroChart (JS/WKWebView) | MIT | Recommended |
 | **Visualization (Future)** | SwiftUI Canvas | - | Planned |
-| **AI Service** | Google Gemini 2.5 Flash | - | Recommended |
+| **AI Service** | OpenAI GPT-4o Mini | - | Recommended |
 | **Persistence** | SwiftData | - | Recommended |
 | **Location** | MapKit | - | Standard |
 | **Purchases** | StoreKit 2 | - | Standard |
@@ -650,7 +655,7 @@ Data Linked to User: None
 
 1. **Purchase SwissEphemeris commercial license** (CHF 750) for App Store distribution
 2. **Integrate AstroChart** for natal chart visualization (MVP)
-3. **Set up Gemini API** with free tier for development
+3. **Set up OpenAI API** with free tier for development
 4. **Implement SwiftData models** for BirthChart and Report entities
 5. **Create test suite** for critical paths (calculation, purchase, generation)
 6. **Plan custom SwiftUI chart renderer** for Phase 2
@@ -663,7 +668,7 @@ All NEEDS CLARIFICATION items from Technical Context have been resolved:
 
 ✅ **Astronomical calculation library**: SwissEphemeris (already in use)
 ✅ **Chart visualization**: AstroChart (WKWebView) for MVP, SwiftUI Canvas for future
-✅ **AI/LLM service**: Google Gemini 2.5 Flash
+✅ **AI/LLM service**: OpenAI GPT-4o Mini
 ✅ **Data persistence**: SwiftData
 ✅ **Location geocoding**: MapKit
 ✅ **In-app purchases**: StoreKit 2
