@@ -1,10 +1,8 @@
 //
-//  Config.swift.example
+//  Config.swift
 //  AstroSvitla
 //
-//  Copy this file to Config.swift and fill in the required secrets
-//  before building the app locally. The real Config.swift file is
-//  gitignored and must never be committed.
+//  Created by Ruslan Popesku on 09.10.2025.
 //
 
 import Foundation
@@ -26,10 +24,10 @@ enum Config {
 
     /// AstrologyAPI User ID for Basic Authentication
     /// Get credentials from https://astrologyapi.com (Free tier: 5,000 credits/month)
-    static let astrologyAPIUserID = "YOUR_USER_ID_HERE"
+    static let astrologyAPIUserID = "20b1efa7-2ebc-4b06-b4b4-ef776c0b9aff"
 
     /// AstrologyAPI Key for Basic Authentication
-    static let astrologyAPIKey = "YOUR_API_KEY_HERE"
+    static let astrologyAPIKey = "Lujc0u8mKE3lohy8SU10OWrIW5vx7ruR9o1BWTiV"
 
     /// Base URL for AstrologyAPI endpoints
     static let astrologyAPIBaseURL = "https://json.astrologyapi.com/v1"

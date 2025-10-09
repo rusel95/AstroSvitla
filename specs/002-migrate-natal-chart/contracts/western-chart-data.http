@@ -1,0 +1,319 @@
+# Prokerala Western Chart Data API Contract
+# Endpoint: Get natal chart calculation data (planets, houses, aspects)
+
+### Request: Natal Chart Data
+POST https://json.astrologyapi.com/v1/western_chart_data
+Authorization: Basic {{base64(USER_ID:API_KEY)}}
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "day": 15,
+  "month": 3,
+  "year": 1990,
+  "hour": 14,
+  "min": 30,
+  "lat": 40.7128,
+  "lon": -74.0060,
+  "tzone": -5.0,
+  "house_type": "placidus"
+}
+
+### Expected Response: Success (200 OK)
+# Response Time: < 3 seconds (per SC-001)
+# Success Rate: 95%+ (per SC-002)
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "planets": [
+    {
+      "name": "Sun",
+      "sign": "Pisces",
+      "full_degree": 354.25,
+      "is_retro": "false"
+    },
+    {
+      "name": "Moon",
+      "sign": "Cancer",
+      "full_degree": 105.83,
+      "is_retro": "false"
+    },
+    {
+      "name": "Mercury",
+      "sign": "Aquarius",
+      "full_degree": 320.45,
+      "is_retro": "true"
+    },
+    {
+      "name": "Venus",
+      "sign": "Aries",
+      "full_degree": 15.67,
+      "is_retro": "false"
+    },
+    {
+      "name": "Mars",
+      "sign": "Capricorn",
+      "full_degree": 285.12,
+      "is_retro": "false"
+    },
+    {
+      "name": "Jupiter",
+      "sign": "Cancer",
+      "full_degree": 112.89,
+      "is_retro": "false"
+    },
+    {
+      "name": "Saturn",
+      "sign": "Capricorn",
+      "full_degree": 290.34,
+      "is_retro": "false"
+    },
+    {
+      "name": "Uranus",
+      "sign": "Capricorn",
+      "full_degree": 275.56,
+      "is_retro": "false"
+    },
+    {
+      "name": "Neptune",
+      "sign": "Capricorn",
+      "full_degree": 282.78,
+      "is_retro": "false"
+    },
+    {
+      "name": "Pluto",
+      "sign": "Scorpio",
+      "full_degree": 225.91,
+      "is_retro": "false"
+    }
+  ],
+  "houses": [
+    {
+      "house_id": 1,
+      "sign": "Leo",
+      "start_degree": 135.28,
+      "end_degree": 165.58,
+      "planets": ["Moon", "Jupiter"]
+    },
+    {
+      "house_id": 2,
+      "sign": "Virgo",
+      "start_degree": 165.58,
+      "end_degree": 195.88,
+      "planets": []
+    },
+    {
+      "house_id": 3,
+      "sign": "Libra",
+      "start_degree": 195.88,
+      "end_degree": 226.18,
+      "planets": ["Pluto"]
+    },
+    {
+      "house_id": 4,
+      "sign": "Scorpio",
+      "start_degree": 226.18,
+      "end_degree": 256.48,
+      "planets": []
+    },
+    {
+      "house_id": 5,
+      "sign": "Sagittarius",
+      "start_degree": 256.48,
+      "end_degree": 286.78,
+      "planets": ["Uranus", "Neptune", "Mars", "Saturn"]
+    },
+    {
+      "house_id": 6,
+      "sign": "Capricorn",
+      "start_degree": 286.78,
+      "end_degree": 317.08,
+      "planets": ["Mercury"]
+    },
+    {
+      "house_id": 7,
+      "sign": "Aquarius",
+      "start_degree": 317.08,
+      "end_degree": 347.38,
+      "planets": ["Sun"]
+    },
+    {
+      "house_id": 8,
+      "sign": "Pisces",
+      "start_degree": 347.38,
+      "end_degree": 17.68,
+      "planets": ["Venus"]
+    },
+    {
+      "house_id": 9,
+      "sign": "Aries",
+      "start_degree": 17.68,
+      "end_degree": 47.98,
+      "planets": []
+    },
+    {
+      "house_id": 10,
+      "sign": "Taurus",
+      "start_degree": 47.98,
+      "end_degree": 78.28,
+      "planets": []
+    },
+    {
+      "house_id": 11,
+      "sign": "Gemini",
+      "start_degree": 78.28,
+      "end_degree": 108.58,
+      "planets": []
+    },
+    {
+      "house_id": 12,
+      "sign": "Cancer",
+      "start_degree": 108.58,
+      "end_degree": 135.28,
+      "planets": []
+    }
+  ],
+  "aspects": [
+    {
+      "aspecting_planet": "Sun",
+      "aspected_planet": "Moon",
+      "type": "Trine",
+      "orb": 1.42,
+      "diff": 118.58
+    },
+    {
+      "aspecting_planet": "Sun",
+      "aspected_planet": "Jupiter",
+      "type": "Trine",
+      "orb": 1.36,
+      "diff": 121.36
+    },
+    {
+      "aspecting_planet": "Mars",
+      "aspected_planet": "Saturn",
+      "type": "Conjunction",
+      "orb": 5.22,
+      "diff": 5.22
+    },
+    {
+      "aspecting_planet": "Moon",
+      "aspected_planet": "Jupiter",
+      "type": "Conjunction",
+      "orb": 7.06,
+      "diff": 7.06
+    },
+    {
+      "aspecting_planet": "Venus",
+      "aspected_planet": "Pluto",
+      "type": "Quincunx",
+      "orb": 0.24,
+      "diff": 149.76
+    },
+    {
+      "aspecting_planet": "Uranus",
+      "aspected_planet": "Neptune",
+      "type": "Conjunction",
+      "orb": 7.22,
+      "diff": 7.22
+    }
+  ],
+  "ascendant": {
+    "sign": "Leo",
+    "full_degree": 135.28
+  },
+  "midheaven": {
+    "sign": "Taurus",
+    "full_degree": 47.98
+  }
+}
+
+### Error Response: Invalid Birth Data (400 Bad Request)
+
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "error": "Invalid date",
+  "message": "The birth date provided is not valid"
+}
+
+### Error Response: Authentication Failed (401 Unauthorized)
+
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+
+{
+  "error": "Authentication failed",
+  "message": "Invalid user ID or API key"
+}
+
+### Error Response: Rate Limit Exceeded (429 Too Many Requests)
+# Trigger: > 5 requests per minute (per free tier limit)
+# Handling: Display user-friendly message per FR-012
+
+HTTP/1.1 429 Too Many Requests
+Content-Type: application/json
+Retry-After: 45
+
+{
+  "error": "Rate limit exceeded",
+  "message": "You have exceeded the request limit. Please try again in 45 seconds."
+}
+
+### Error Response: Server Error (500 Internal Server Error)
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  "error": "Internal server error",
+  "message": "An error occurred while processing your request"
+}
+
+### Validation Rules (Client-Side)
+
+# Request Body Validation:
+# - day: 1-31 (month-dependent)
+# - month: 1-12
+# - year: 1900-2100 (reasonable range)
+# - hour: 0-23
+# - min: 0-59
+# - lat: -90.0 to 90.0
+# - lon: -180.0 to 180.0
+# - tzone: -12.0 to 14.0 (valid timezone offsets)
+# - house_type: "placidus" | "koch" | "equal_house" | "whole_sign"
+
+### Contract Assertions (for Testing)
+
+# Response Validation:
+# - planets: Array of exactly 10 elements
+# - Each planet has: name (string), sign (string), full_degree (0-360), is_retro ("true"/"false")
+# - houses: Array of exactly 12 elements
+# - Each house has: house_id (1-12), sign (string), start_degree (0-360), end_degree (0-360)
+# - aspects: Array of 0+ elements
+# - Each aspect has: aspecting_planet, aspected_planet, type, orb (≥0), diff (0-180)
+# - ascendant: Object with sign and full_degree (0-360)
+# - midheaven: Object with sign and full_degree (0-360)
+
+### Performance Requirements (from Spec)
+
+# SC-001: Complete chart generation < 5 seconds
+# - Network latency: ~500ms-2s
+# - This endpoint: Target < 3 seconds
+# - Chart image endpoint: Target < 2 seconds
+# - Total: ~3-5 seconds including image download
+
+# SC-002: 95% success rate
+# - Monitor and log failures
+# - Retry transient errors (5xx, timeouts)
+# - Cache successful responses for offline access
+
+### Rate Limiting (from Spec)
+
+# Free Tier Constraints:
+# - 5,000 credits/month (~2,500 chart generations if 2 endpoints/chart)
+# - 5 requests/minute
+# - Client-side enforcement to prevent 429 errors
+# - Display friendly message: "Please wait {N} seconds before generating another chart"

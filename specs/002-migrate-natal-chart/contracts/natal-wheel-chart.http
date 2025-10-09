@@ -1,0 +1,308 @@
+# Prokerala Natal Wheel Chart API Contract
+# Endpoint: Generate chart wheel visualization (SVG/PNG)
+
+### Request: Natal Chart Wheel Image (SVG)
+POST https://json.astrologyapi.com/v1/natal_wheel_chart
+Authorization: Basic {{base64(USER_ID:API_KEY)}}
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "day": 15,
+  "month": 3,
+  "year": 1990,
+  "hour": 14,
+  "min": 30,
+  "lat": 40.7128,
+  "lon": -74.0060,
+  "tzone": -5.0,
+  "house_type": "placidus",
+  "image_type": "svg",
+  "chart_size": 600
+}
+
+### Expected Response: Success (200 OK) - SVG
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "status": true,
+  "chart_url": "https://s3.ap-south-1.amazonaws.com/western-chart/natal_chart_abc123def456.svg",
+  "msg": "Chart created successfully!"
+}
+
+### Request: Natal Chart Wheel Image (PNG)
+POST https://json.astrologyapi.com/v1/natal_wheel_chart
+Authorization: Basic {{base64(USER_ID:API_KEY)}}
+Content-Type: application/json
+Accept-Language: en
+
+{
+  "day": 15,
+  "month": 3,
+  "year": 1990,
+  "hour": 14,
+  "min": 30,
+  "lat": 40.7128,
+  "lon": -74.0060,
+  "tzone": -5.0,
+  "house_type": "placidus",
+  "image_type": "png",
+  "chart_size": 800,
+  "planet_icon_color": "#4A90E2",
+  "inner_circle_background": "#FFFFFF",
+  "sign_icon_color": "#2C3E50",
+  "sign_background": "#ECF0F1"
+}
+
+### Expected Response: Success (200 OK) - PNG
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "status": true,
+  "chart_url": "https://s3.ap-south-1.amazonaws.com/western-chart/natal_chart_xyz789ghi012.png",
+  "msg": "Chart created successfully!"
+}
+
+### Error Response: Invalid Birth Data (400 Bad Request)
+
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "status": false,
+  "chart_url": "",
+  "msg": "Invalid birth date provided"
+}
+
+### Error Response: Authentication Failed (401 Unauthorized)
+
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+
+{
+  "error": "Authentication failed",
+  "message": "Invalid credentials"
+}
+
+### Error Response: Rate Limit Exceeded (429 Too Many Requests)
+
+HTTP/1.1 429 Too Many Requests
+Content-Type: application/json
+Retry-After: 30
+
+{
+  "error": "Rate limit exceeded",
+  "message": "Too many requests. Please wait 30 seconds."
+}
+
+### Error Response: Chart Generation Failed (500 Internal Server Error)
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: application/json
+
+{
+  "status": false,
+  "chart_url": "",
+  "msg": "Failed to generate chart. Please try again."
+}
+
+### Optional Customization Parameters
+
+# Image Type:
+# - "svg": Scalable vector graphics (smaller file, better quality at any zoom)
+# - "png": Raster image (fixed resolution)
+
+# Chart Size (pixels):
+# - Recommended: 600-800 for mobile displays
+# - Range: 300-1200 (larger = more detail, bigger file size)
+
+# Color Customization:
+# - planet_icon_color: Hex color for planet symbols (default: API default)
+# - inner_circle_background: Background color inside chart (default: white)
+# - sign_icon_color: Color for zodiac sign symbols (default: API default)
+# - sign_background: Background color for sign ring (default: API default)
+
+# Example Custom Colors (iOS App Theme):
+{
+  "planet_icon_color": "#007AFF",      // iOS blue
+  "inner_circle_background": "#FFFFFF", // White
+  "sign_icon_color": "#1C1C1E",        // iOS dark gray
+  "sign_background": "#F2F2F7"         // iOS light gray
+}
+
+### Image Download Flow
+
+# 1. POST request to /natal_wheel_chart
+# 2. Receive response with chart_url
+# 3. Validate chart_url is valid S3 URL
+# 4. Download image data from chart_url
+# 5. Save to local FileManager cache
+# 6. Display in app UI
+
+### Swift Implementation Example
+
+```swift
+// Step 1: Generate chart image via API
+let imageResponse = try await apiService.generateChartImage(request)
+
+guard imageResponse.status else {
+    throw APIError.imageGenerationFailed(imageResponse.msg)
+}
+
+guard let imageURL = URL(string: imageResponse.chart_url) else {
+    throw APIError.invalidImageURL
+}
+
+// Step 2: Download image data
+let (imageData, _) = try await URLSession.shared.data(from: imageURL)
+
+// Step 3: Cache locally
+let fileID = UUID().uuidString
+try imageCacheService.saveImage(data: imageData, fileID: fileID, format: "svg")
+
+// Step 4: Create visualization metadata
+let visualization = ChartVisualization(
+    id: UUID(),
+    chartID: natalChart.id,
+    imageFormat: .svg,
+    imageURL: imageURL,
+    localFileID: fileID,
+    size: 600,
+    generatedAt: Date()
+)
+```
+
+### Validation Rules (Client-Side)
+
+# Request Body Validation:
+# - All birth data parameters same as western_chart_data endpoint
+# - image_type: "svg" or "png" (default: "png")
+# - chart_size: 300-1200 (default: 600)
+# - Color parameters: Valid hex color strings (e.g., "#RRGGBB")
+# - house_type: "placidus" | "koch" | "equal_house" | "whole_sign"
+
+### Contract Assertions (for Testing)
+
+# Response Validation:
+# - status: Boolean (must be true for success)
+# - chart_url: Non-empty string, valid URL format
+# - chart_url domain: s3.ap-south-1.amazonaws.com/western-chart/
+# - chart_url file extension: .svg or .png (matches image_type)
+# - msg: Non-empty string describing result
+
+# Image Download Validation:
+# - HTTP GET to chart_url returns 200 OK
+# - Content-Type: image/svg+xml (for SVG) or image/png (for PNG)
+# - Content-Length: > 0 (non-empty image)
+# - Image data is valid SVG/PNG format
+
+### Performance Requirements
+
+# FR-005: Generate visual chart wheel
+# FR-006: Support SVG and PNG formats
+# SC-001: Chart visualization appears within 5 seconds
+# - API response: ~1-2 seconds
+# - Image download: ~500ms-1s (depending on size)
+# - Total: ~2-3 seconds for complete visualization
+
+### Error Handling Strategy
+
+# Graceful Degradation (from research.md):
+# - If image generation fails, still display chart data
+# - Show placeholder: "Chart visualization unavailable"
+# - Offer retry button
+# - Log error for debugging
+
+# Partial Failure Scenarios:
+# 1. Chart data succeeds, image fails → Show data with error message
+# 2. Image API succeeds, download fails → Retry download, cache URL for later
+# 3. Image download times out → Use cached image if available, show error
+
+### Caching Strategy
+
+# Image Cache (from data-model.md):
+# - Store downloaded image in Documents/ChartImages/
+# - Filename: <UUID>.<format> (e.g., abc123.svg)
+# - Reference in CachedNatalChart.imageFileID
+# - Serve from cache on subsequent views (no re-download)
+
+# Cache Invalidation:
+# - Images don't expire (natal charts are static)
+# - Manual deletion if user deletes chart
+# - LRU eviction if cache exceeds storage limit (100MB or 50 charts)
+
+### Testing Scenarios
+
+# 1. Success Path:
+#    - Valid request → status=true, valid chart_url
+#    - Download image → valid SVG/PNG data
+#    - Cache image → file saved successfully
+#    - Display image → renders correctly in UI
+
+# 2. Error Path - Invalid Data:
+#    - Invalid date → 400 Bad Request, status=false
+#    - Display error message (FR-012)
+
+# 3. Error Path - Network Failure:
+#    - Timeout downloading image → Retry with exponential backoff
+#    - Max retries exceeded → Show cached image or error
+
+# 4. Error Path - Rate Limit:
+#    - 429 response → Parse Retry-After header
+#    - Display message: "Please wait {N} seconds"
+#    - Queue request for retry after delay
+
+# 5. Offline Mode:
+#    - No network → Load from cache if available
+#    - No cache → Show "Internet required" message
+
+### Integration with western_chart_data
+
+# Typical Flow (2 API calls):
+# 1. POST /western_chart_data → Get planets, houses, aspects
+# 2. POST /natal_wheel_chart → Get chart wheel image
+# 3. Combine data + image → Complete NatalChart
+# 4. Cache both to SwiftData + FileManager
+# 5. Display in UI
+
+# Optimization:
+# - Run both API calls concurrently (async/await parallel tasks)
+# - Total time: Max(call1, call2) instead of call1 + call2
+# - Example: Both complete in ~3 seconds vs ~6 seconds sequential
+
+```swift
+async let chartData = apiService.fetchChartData(request)
+async let chartImage = apiService.generateChartImage(request)
+
+let (data, image) = try await (chartData, chartImage)
+// Both requests complete in parallel
+```
+
+### Rate Limiting Coordination
+
+# Important: Each chart generation = 2 API calls
+# - Monthly credits: 5,000 total
+# - Effective charts: ~2,500 charts/month (5000 / 2)
+# - Requests per minute: 5 total
+# - Effective charts/minute: 2.5 (5 / 2)
+
+# Client-side rate limiter must account for:
+# - 2 requests per chart generation
+# - Track both endpoints in same counter
+# - Prevent exceeding 5 req/min combined limit
+
+### Accessibility & Localization
+
+# Accept-Language header:
+# - "en": English (default)
+# - "uk": Ukrainian (if supported by API)
+# - Chart image text may or may not localize (depends on API)
+
+# Alternative: Generate localized overlays client-side
+# - Use API image as background
+# - Overlay localized labels using SwiftUI/Canvas
+# - More control, but more complexity
