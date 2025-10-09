@@ -656,3 +656,199 @@ Once setup is complete:
 
 **Status**: ✅ QuickStart guide complete
 **Last Updated**: 2025-10-08
+
+---
+
+## Multi-User Profile Workflows (Inline UX)
+
+**Updated**: 2025-10-09 - Redesigned for inline dropdown pattern (no modals)
+
+### Overview
+
+All profile management happens **inline on the Home tab** using a dropdown selector. No navigation, no modal sheets, no separate screens.
+
+### Creating Your First Profile
+
+```
+1. Launch app → Complete onboarding
+2. Land on Home tab:
+   ┌────────────────────────┐
+   │ [New Profile ▼]        │  ← Dropdown selector
+   ├────────────────────────┤
+   │ Name: [_________]      │  ← Form fields (empty)
+   │ Birth Date: [______]   │
+   │ Birth Time: [______]   │
+   │ Location: [________]   │
+   │ [Continue] (disabled)  │
+   └────────────────────────┘
+
+3. Fill in all fields:
+   - Name: "Me"
+   - Birth Date: Pick date
+   - Birth Time: Pick time
+   - Location: Search city
+
+4. Tap "Continue"
+   → System calculates chart
+   → Profile saved
+   → Dropdown updates to show "Me"
+   → Form stays populated with "Me" data
+```
+
+### Switching to Different Profile
+
+```
+1. On Home tab with "Me" selected:
+   ┌────────────────────────┐
+   │ [Me ▼]                 │
+   └────────────────────────┘
+
+2. Tap dropdown → Menu opens:
+   ┌────────────────────────┐
+   │ ✓ Me                   │
+   │   Mom                  │
+   │   Partner              │
+   │ ─────────────────      │
+   │ + Create New Profile   │
+   └────────────────────────┘
+
+3. Tap "Mom"
+   → Menu closes
+   → Dropdown shows "Mom"
+   → Form fields update instantly:
+     - Name: "Mom"
+     - Birth Date: [Mom's date]
+     - Birth Time: [Mom's time]
+     - Location: [Mom's location]
+   → All actions now apply to Mom
+```
+
+### Creating Additional Profile
+
+```
+1. On Home tab with any profile selected
+2. Tap dropdown → Menu opens
+3. Tap "+ Create New Profile" at bottom
+
+   → Menu closes
+   → Dropdown shows "New Profile"
+   → Form fields clear to empty state:
+     - Name: [_______]
+     - Birth Date: [Today]
+     - Birth Time: [Now]
+     - Location: [_______]
+
+4. Fill in new profile data:
+   - Name: "Partner"
+   - Birth Date: Pick date
+   - Birth Time: Pick time
+   - Location: Search city
+
+5. Tap "Continue"
+   → Profile saved
+   → Dropdown shows "Partner"
+   → Form shows Partner's data
+```
+
+### Discarding Unsaved Profile
+
+```
+Scenario: User starts creating new profile but switches away
+
+1. Tap dropdown → "Create New Profile"
+   → Form clears
+
+2. Start filling form:
+   - Name: "Friend"
+   - Birth Date: [pick date]
+   - (Location not filled yet)
+
+3. Tap dropdown → Select "Mom"
+
+Result:
+   → Unsaved "Friend" data discarded (no confirmation)
+   → Form populates with Mom's data
+   → Dropdown shows "Mom"
+
+Rationale: Spec FR-065 - keep UX simple, no confirmation dialogs
+```
+
+### Managing Profiles (Settings)
+
+```
+Profile deletion is NOT on Home tab (keeps inline UX simple)
+
+To delete profiles:
+1. Go to Settings tab
+2. Tap "Manage Profiles"
+3. See list of all profiles with delete buttons
+4. Delete with confirmation dialog
+
+This keeps Home tab focused on creation/selection only.
+```
+
+### UI States Reference
+
+| State | Dropdown Shows | Form Fields | Continue Button |
+|-------|---------------|-------------|-----------------|
+| **No profiles** | "New Profile" | Empty | Disabled |
+| **Viewing "Me"** | "Me" | Populated with Me's data | Hidden/Not applicable |
+| **Creating new** | "New Profile" | Empty | Disabled until valid |
+| **Creating (valid)** | "New Profile" | Filled | Enabled |
+| **After save** | "[New Name]" | Populated | Hidden/Not applicable |
+
+### Error Handling
+
+**Duplicate Name**:
+```
+1. Fill form with name "John"
+2. Tap Continue
+3. Validation fails: "John" already exists
+4. Error message shows below Continue button
+5. Continue button stays disabled
+6. User must change name to proceed
+```
+
+**Missing Fields**:
+```
+1. Fill only Name field
+2. Continue button remains disabled
+3. No error shown (implicit validation)
+4. User must fill all fields
+```
+
+**Chart Calculation Failure**:
+```
+1. Fill all fields correctly
+2. Tap Continue
+3. Loading indicator appears
+4. Chart calculation fails (network/API error)
+5. Error message: "Failed to calculate chart: [reason]"
+6. Form data preserved
+7. User can retry Continue
+```
+
+### Developer Notes
+
+**Where to Find Code**:
+- Dropdown UI: `AstroSvitla/Features/Main/MainFlowView.swift` (Menu component)
+- Form state: `MainFlowView` (@State vars)
+- Selection logic: `handleProfileSelection()` / `handleCreateNewProfile()`
+- Validation: `UserProfileViewModel.validateProfileName()`
+- Persistence: `UserProfileService.createProfile()`
+
+**Testing Approach**:
+- Unit tests: Form state transitions (see research.md)
+- UI tests: End-to-end flows (see research.md)
+- Manual testing: Verify instant feedback, no flicker
+
+**Performance Targets**:
+- Dropdown render: <16ms
+- Profile switch: <100ms
+- Form population: <50ms
+
+All targets easily met with SwiftUI bindings + in-memory data.
+
+---
+
+**Updated**: 2025-10-09 (Added inline profile UX workflows)

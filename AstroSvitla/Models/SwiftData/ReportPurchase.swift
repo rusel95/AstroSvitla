@@ -24,8 +24,8 @@ final class ReportPurchase {
     var generatedAt: Date
     var wordCount: Int
 
-    @Relationship(inverse: \BirthChart.reports)
-    var chart: BirthChart?
+    @Relationship(inverse: \UserProfile.reports)
+    var profile: UserProfile?
 
     init(
         id: UUID = UUID(),

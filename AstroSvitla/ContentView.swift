@@ -1,6 +1,9 @@
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
+
     enum Tab: Hashable {
         case main
         case reports
@@ -11,7 +14,7 @@ struct ContentView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            MainFlowView()
+            MainFlowView(modelContext: modelContext)
                 .tabItem {
                     Label {
                         Text("tab.main", tableName: "Localizable")

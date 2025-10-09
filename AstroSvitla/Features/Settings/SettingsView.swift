@@ -3,10 +3,19 @@ import SwiftData
 
 struct SettingsView: View {
     @EnvironmentObject private var preferences: AppPreferences
+    @EnvironmentObject private var repositoryContext: RepositoryContext
     @Environment(\.modelContext) private var modelContext
     @State private var isResetOnboardingConfirmationPresented = false
+    @State private var showingProfileManager = false
+
+    private var profileViewModel: UserProfileViewModel {
+        let service = UserProfileService(context: modelContext)
+        return UserProfileViewModel(service: service, repositoryContext: repositoryContext)
+    }
+
     var body: some View {
         Form {
+            profileSection
             appearanceSection
             languageSection
             onboardingSection
@@ -22,6 +31,21 @@ struct SettingsView: View {
                 OnboardingViewModel.resetStoredProgress()
             }
             Button(String(localized: "action.cancel", table: "Localizable"), role: .cancel) { }
+        }
+        .sheet(isPresented: $showingProfileManager) {
+            UserProfileListView(viewModel: profileViewModel)
+        }
+    }
+
+    private var profileSection: some View {
+        Section {
+            Button {
+                showingProfileManager = true
+            } label: {
+                Label("Manage Profiles", systemImage: "person.2")
+            }
+        } header: {
+            Text("Profiles")
         }
     }
 

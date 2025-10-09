@@ -1,17 +1,51 @@
 import Foundation
+import SwiftData
+import SwiftUI
+import Combine
 
-struct RepositoryContext {
-    static let shared = RepositoryContext()
+@MainActor
+class RepositoryContext: ObservableObject {
+    @Published var activeProfile: UserProfile?
 
-    let summary: String = {
-        """
-        AstroSvitla iOS application (SwiftUI, SwiftData, StoreKit-ready). Core modules:
-        - Features/Main – tab navigation, onboarding flow, chart/report pipeline.
-        - Features/ChartInput – birth data form, location search, chart calculation.
-        - Features/ReportGeneration – AI prompt builder, OpenAI service, report views, PDF export.
-        - Models/SwiftData – persistent birth charts and purchased reports.
-        - Shared utilities – AppPreferences, localization helper.
-        Knowledge snippets are fetched from AstrologyKnowledgeProvider (stubbed vector store).
-        """
-    }()
+    private let context: ModelContext
+
+    init(context: ModelContext) {
+        self.context = context
+    }
+
+    func setActiveProfile(_ profile: UserProfile) {
+        // Update User.activeProfileId
+        if let user = fetchDeviceOwner() {
+            user.setActiveProfile(profile)
+            try? context.save()
+        }
+
+        // Update published property
+        self.activeProfile = profile
+    }
+
+    func loadActiveProfile() {
+        guard let user = fetchDeviceOwner(),
+              let activeId = user.activeProfileId else {
+            return
+        }
+
+        let descriptor = FetchDescriptor<UserProfile>(
+            predicate: #Predicate { $0.id == activeId }
+        )
+        self.activeProfile = try? context.fetch(descriptor).first
+    }
+
+    func fetchDeviceOwner() -> User? {
+        let descriptor = FetchDescriptor<User>()
+        return try? context.fetch(descriptor).first
+    }
+
+    func createDefaultUserIfNeeded() {
+        guard fetchDeviceOwner() == nil else { return }
+
+        let newUser = User()
+        context.insert(newUser)
+        try? context.save()
+    }
 }

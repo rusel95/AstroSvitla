@@ -7,55 +7,22 @@ final class BirthChart {
     @Attribute(.unique)
     var id: UUID
 
-    var name: String
-
-    var birthDate: Date
-    var birthTime: Date
-    var locationName: String
-    var latitude: Double
-    var longitude: Double
-    var timezone: String
-
     var chartDataJSON: String
 
     var createdAt: Date
     var updatedAt: Date
 
-    @Relationship(inverse: \User.charts)
-    var user: User?
-
-    @Relationship(deleteRule: .cascade)
-    var reports: [ReportPurchase]
+    @Relationship(inverse: \UserProfile.chart)
+    var profile: UserProfile?
 
     init(
         id: UUID = UUID(),
-        name: String,
-        birthDate: Date,
-        birthTime: Date,
-        locationName: String,
-        latitude: Double,
-        longitude: Double,
-        timezone: String,
         chartDataJSON: String = ""
     ) {
         self.id = id
-        self.name = name
-        self.birthDate = birthDate
-        self.birthTime = birthTime
-        self.locationName = locationName
-        self.latitude = latitude
-        self.longitude = longitude
-        self.timezone = timezone
         self.chartDataJSON = chartDataJSON
         self.createdAt = Date()
         self.updatedAt = Date()
-        self.reports = []
-    }
-
-    var birthDateTime: String {
-        let date = BirthChart.dateFormatter.string(from: birthDate)
-        let time = BirthChart.timeFormatter.string(from: birthTime)
-        return "\(date) \(time)"
     }
 
     func updateChartData(_ jsonString: String) {
@@ -69,14 +36,15 @@ final class BirthChart {
         return try? BirthChart.chartDecoder.decode(NatalChart.self, from: data)
     }
 
-    func makeBirthDetails() -> BirthDetails {
-        let tz = TimeZone(identifier: timezone) ?? .current
-        let coordinate = latitude == 0 && longitude == 0 ? nil : CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    func makeBirthDetails() -> BirthDetails? {
+        guard let profile = profile else { return nil }
+        let tz = TimeZone(identifier: profile.timezone) ?? .current
+        let coordinate = profile.latitude == 0 && profile.longitude == 0 ? nil : CLLocationCoordinate2D(latitude: profile.latitude, longitude: profile.longitude)
         return BirthDetails(
-            name: name,
-            birthDate: birthDate,
-            birthTime: birthTime,
-            location: locationName,
+            name: profile.name,
+            birthDate: profile.birthDate,
+            birthTime: profile.birthTime,
+            location: profile.locationName,
             timeZone: tz,
             coordinate: coordinate
         )

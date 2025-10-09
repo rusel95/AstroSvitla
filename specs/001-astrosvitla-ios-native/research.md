@@ -1,782 +1,344 @@
-# Research Report: AstroSvitla iOS Implementation
+# Technical Research: Inline Profile Dropdown UX
 
-**Feature**: AstroSvitla - iOS Natal Chart & AI Predictions App
-**Branch**: `001-astrosvitla-ios-native`
-**Date**: 2025-10-08
+**Feature**: Simplified Multi-Profile Management
+**Research Phase**: Phase 0
+**Date**: 2025-10-09
 
----
+## Executive Summary
 
-## Overview
+This research explores refactoring the current modal-based multi-profile UI to an inline dropdown pattern on the Home tab. The goal is to eliminate navigation overhead and provide instant profile switching with visual feedback directly in the birth data form.
 
-This research document addresses all NEEDS CLARIFICATION items identified in the Technical Context and provides technology recommendations for implementing the AstroSvitla iOS app.
+**Key Finding**: SwiftUI's `Menu` component with `Picker` style provides the exact inline dropdown behavior needed, avoiding custom UI complexity while maintaining native iOS patterns.
 
----
+## Current Implementation Analysis
 
-## 1. Astronomical Calculation Library
-
-### Decision: SwissEphemeris by vsmithers1087
-
-**Repository**: https://github.com/vsmithers1087/SwissEphemeris
-
-### Rationale
-
-The project is already using this library, which is the optimal choice for NASA ephemeris precision natal chart calculations.
-
-**Key Features**:
-- JPL DE430/431 ephemeris data (0.001 arcseconds precision)
-- All required planets: Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto
-- Placidus house system support
-- Aspect calculations
-- Retrograde detection via speed calculation
-- Swift Package Manager integration
-- Performance: <200ms for complete chart calculation
-
-**License Consideration**:
-- GPL-2.0+ requires commercial license for proprietary App Store apps
-- Cost: CHF 750 (~$850 USD) for first license
-- Purchase from: https://www.astro.com/swisseph/swephprice_e.htm
-- Alternative: Open-source app under GPL v2
-
-**Bundle Size**:
-- ~97 MB for complete ephemeris files (1800-2399 AD)
-- Can be optimized by limiting date range or on-demand downloads
-
-### Alternatives Considered
-
-**SwiftAA** (https://github.com/onekiloparsec/SwiftAA)
-- Pros: MIT license, actively maintained, smaller bundle size
-- Cons: Lower precision (0.1-3 arcseconds vs 0.001), no built-in natal chart features, requires custom house/aspect implementation
-- Rejected because: Lower precision and significant additional development required
-
-**EKAstrologyCalc** (https://github.com/emvakar/EKAstrologyCalc)
-- Pros: Swift 6.0 support, MIT license, recent updates
-- Cons: Moon-only calculations, no planetary positions, no houses, no aspects
-- Rejected because: Insufficient functionality for natal charts
-
----
-
-## 2. Natal Chart Visualization
-
-### Decision: Hybrid Approach - AstroChart (JavaScript) via WKWebView for MVP, Custom SwiftUI for Future
-
-### Phase 1: MVP Implementation - AstroChart
-
-**Repository**: https://github.com/AstroDraw/AstroChart
-**License**: MIT
-**Language**: TypeScript
-
-**Rationale**:
-- Most feature-complete open-source chart drawing library available
-- MIT license (commercial-friendly)
-- Professional appearance matches App Store astrology apps
-- Minimal integration effort with existing ChartCalculator
-- SVG-based rendering (high quality)
-- 324 GitHub stars, actively maintained
-
-**Features**:
-- Circular natal chart layout
-- 12 zodiac signs around outer circle
-- Planet positions with standard astrological symbols
-- Ascendant and Midheaven markers
-- House divisions
-- Aspect lines
-- Zero dependencies
-
-**Integration Approach**:
-```swift
-// 1. Add AstroChart HTML/JS to Bundle
-// 2. Create WKWebView wrapper in SwiftUI
-// 3. Convert NatalChart model to AstroChart JSON format
-// 4. Render via JavaScript bridge
-```
-
-**Estimated Effort**: 2-3 days
-
-**Bundle Size Impact**: ~500KB (HTML + JS + CSS)
-
-### Phase 2: Future Enhancement - Custom SwiftUI
-
-**Rationale**: Native SwiftUI implementation provides:
-- Better performance (no WebKit overhead)
-- Fully native iOS feel
-- Complete customization control
-- Animations and interactions
-- Smaller bundle size
-
-**Implementation Strategy**:
-- Use SwiftUI `Canvas` API for drawing
-- Unicode astrological symbols (U+2609-U+2653)
-- Custom Path and Shape for circular segments
-- Core Graphics for complex layouts
-
-**Estimated Effort**: 40-80 hours
-
-**Reference Resources**:
-- SwiftUI Canvas: https://swiftwithmajid.com/2023/04/11/mastering-canvas-in-swiftui/
-- Circular Charts: https://www.appcoda.com/swiftui-pie-chart/
-- Astrological Symbols: https://www.blueseal.eu/uc/unicodelistastrology.html
-
-### Alternatives Considered
-
-**HoroscopeDrawer** (https://github.com/slissner/HoroscopeDrawer)
-- Pros: MIT license, SVG format
-- Cons: Not maintained since 2017, older codebase, requires Gulp
-- Rejected because: Outdated, AstroChart is superior
-
-**Custom SwiftUI from scratch (MVP)**
-- Pros: Fully native, best long-term solution
-- Cons: 40-80 hour development time
-- Rejected for MVP because: Time constraints, can be Phase 2 enhancement
-
-### Update 2025-10-08: Native SwiftUI Implementation Completed
-
-**Status**: ✅ Implemented
-**Location**: `AstroSvitla/Features/ChartCalculation/Views/NatalChartWheelView.swift`
-
-**Decision**: Implemented native SwiftUI chart visualization instead of WebView-based solution.
-
-**Rationale for Change**:
-- Native SwiftUI provides better performance and integration
-- No external dependencies or WebView overhead
-- Full control over appearance and customization
-- Smaller bundle size (pure Swift code vs HTML/JS/CSS)
-- Better dark mode support
-- More maintainable codebase
-
-**Implementation Details**:
-- Pure SwiftUI using Path, Shape, and Canvas
-- Unicode astrological symbols for planets and signs
-- Color-coded planet markers
-- Accurate positioning based on calculated degrees
-- House divisions with Placidus system
-- ASC/MC angle markers
-- Retrograde indicators
-
-**Features Implemented**:
-- ✅ Circular zodiac wheel (12 signs)
-- ✅ House cusps and divisions
-- ✅ Planet positions at exact longitudes
-- ✅ Ascendant and Midheaven markers
-- ✅ Color-coded planets
-- ✅ Retrograde indicators (℞)
-- ✅ Responsive sizing
-- ✅ Dark/Light mode support
-
-**Estimated Actual Effort**: 4 hours (significantly less than 40-80 hour estimate due to scoped MVP approach)
-
-### Alternative: API-Based Chart Visualization Services
-
-**Research Date**: 2025-10-08
-
-Investigated external API services for natal chart drawing as an alternative to native implementation:
-
-#### 1. AstrologyAPI.com
-- **Website**: https://www.astrologyapi.com/
-- **Pros**: Commercial-grade API, comprehensive features
-- **Cons**: Pricing not transparent, requires account/subscription, no clear chart drawing API documented
-- **Verdict**: ❌ Not recommended - Unclear pricing, overkill for just chart visualization
-
-#### 2. Free Astrology API
-- **Website**: http://freeastrologyapi.com/
-- **Features**: Claims to support Western astrology, SVG chart generation
-- **Pros**: Advertised as 100% free
-- **Cons**: Poor documentation, Postman collection link broken/unhelpful, reliability unclear
-- **Verdict**: ❌ Not recommended - Documentation issues, uncertain reliability
-
-#### 3. Astro.com Chart Generation
-- **URL**: https://www.astro.com/cgi/genchart.cgi
-- **Type**: Web form interface, not formal API
-- **Pros**: Most trusted astrology source, high-quality charts
-- **Cons**: Not designed for programmatic access, no API documentation, would require screen scraping
-- **Verdict**: ❌ Not recommended - Not an API, against terms of service
-
-#### 4. Prokerala Astrology API
-- **Website**: https://api.prokerala.com/
-- **Features**: Astrology API services
-- **Cons**: Primarily focused on Vedic/Indian astrology, pricing unclear for Western astrology features
-- **Verdict**: ❌ Not recommended - Wrong focus (Vedic), unclear Western support
-
-### Conclusion: Native Implementation is Optimal
-
-After researching external APIs, **native SwiftUI implementation remains the best choice**:
-
-**Advantages Over API Services**:
-1. ✅ **No ongoing costs** - One-time development vs recurring API fees
-2. ✅ **No network dependency** - Works offline
-3. ✅ **Instant rendering** - No API latency
-4. ✅ **Privacy** - No birth data sent to third parties
-5. ✅ **Full control** - Customizable appearance and features
-6. ✅ **No rate limits** - Unlimited chart generations
-7. ✅ **No vendor lock-in** - Complete ownership
-
-**Disadvantages of API Services**:
-1. ❌ Recurring monthly/yearly costs
-2. ❌ Network dependency (fails offline)
-3. ❌ Latency (200-1000ms per request)
-4. ❌ Rate limits
-5. ❌ Privacy concerns (sending user birth data externally)
-6. ❌ Limited customization
-7. ❌ Vendor dependency
-
-**Final Recommendation**: Continue with native SwiftUI implementation. Current implementation is production-ready and superior to any API-based solution for this use case.
-
----
-
-## 3. AI/LLM Service for Report Generation
-
-### Decision: OpenAI GPT-4o (via MacPaw OpenAI Swift Client)
-
-**Provider**: OpenAI  
-**Model**: `gpt-4o-mini` (primary) with optional upgrade path to `gpt-4o`  
-**Integration**: MacPaw’s `OpenAI` Swift package (`https://github.com/MacPaw/OpenAI`) with async/await APIs
-
-### Rationale
-
-OpenAI’s GPT-4o family provides the strongest mix of mature tooling, multilingual quality, and first-party Swift support.
-
-**Cost Analysis**:
-- **Cost per 500-word report (≈750 tokens)**: ~$0.00045 (input $0.0003/1K + output $0.0004/1K)
-- **Profit margin at $5.99 pricing**: 99.99%
-- **1000 reports/month**: ≈$0.45 total API cost
-- **Free tier**: Developer credit available; production keys scale by usage
-
-**Performance**:
-- **Latency**: 2-4 seconds typical (streaming supported for faster perceived response)
-- **Success rate**: >99% uptime with global edge deployment
-- **Rate limits**: Starts at 5 RPM / 200 RPD; can scale with production request
-
-**Ukrainian Language Support**:
-- ✅ GPT-4o models trained on extensive multilingual corpus
-- ✅ Demonstrated fluency in Ukrainian narrative and formal writing
-- ✅ Supports system-level language conditioning for consistent output
-
-**iOS Integration**:
-- ✅ Mature community Swift package (`https://github.com/MacPaw/OpenAI`)
-- ✅ Async/await API surface closely mirroring REST endpoints
-- ✅ Built-in request/response models, streaming, cancellation support
-- ✅ Compatible with BackgroundTasks and Combine if needed
-
-**Example Integration**:
-```swift
-import OpenAI
-
-let client = OpenAI(apiKey: OpenAIConfig.apiKey)
-let query = CompletionsQuery(
-    model: .gpt4oMini,
-    prompt: promptText,
-    maxTokens: 800
-)
-let result = try await client.completions(query: query)
-guard let text = result.choices.first?.text else {
-    throw ReportGenerationError.noContent
-}
-```
-
-### Alternatives Considered
-
-**Anthropic Claude Sonnet 4.1**
-- Cost: ~$0.018 per report (40x higher)
-- Performance: 3-7 seconds
-- Ukrainian: Mixed quality outside of English/French focus
-- Pros: Strong long-form reasoning
-- Cons: No official Swift SDK, higher latency, higher cost
-- Rejected because: Cost and onboarding complexity
-
-**Google Gemini 2.5 Flash**
-- Cost: ~$0.0001 per report (cheaper)
-- Performance: 1-3 seconds
-- Ukrainian: Good support
-- Pros: Competitive pricing
-- Cons: Requires third-party Swift bindings, evolving policy surface
-- Rejected because: Team prioritizes OpenAI ecosystem and first-party SDK
-
-**Core ML (On-Device)**
-- Cost: $0 per report
-- Performance: 5-15 seconds (device-dependent)
-- Ukrainian: Limited corpora, quality inconsistent
-- Pros: Privacy, offline
-- Cons: Requires iOS 18+, large on-device models, not tuned for long narrative
-- Deferred: Future enhancement once iOS 18 adoption exceeds 50%
-
-### Knowledge Corpus Considerations
-
-- **Corpus size**: ~50 MB of curated astrologer notes (50–60 PDF books, ~15k pages). Impossible to inject directly into a model context window.
-- **Strategy**: Preprocess PDFs into cleaned Ukrainian text, generate embeddings with OpenAI `text-embedding-3-large`, and upload the vectors to an OpenAI-managed vector store (Responses API + Vector Stores). Each snippet carries metadata (planets, houses, aspects, life area).
-- **Retrieval**: Runtime requests reference the hosted vector store (`vector_store_id`) so OpenAI performs relevance search server-side and injects top snippets automatically into the response generation. Client only needs to send chart metadata (name, birth date/time/location, selected life area).
-- **Tooling**: Use MacPaw OpenAI package both for embedding uploads (`openAI.vectorStores`) and response generation (`openAI.responses`). Provide CLI (`scripts/ingest-knowledge.swift`) to chunk PDFs, upload files, and sync vector store revisions. Track embedding costs during ingestion.
-
-### Cost Comparison Table
-
-| Service + Client | Cost/Report | Margin @$5.99 | Latency | Ukrainian Quality |
-|------------------|-------------|---------------|---------|------------------|
-| **OpenAI GPT-4o Mini + MacPaw OpenAI** | **$0.00045** | **99.99%** | **2-4s** | **Excellent ✅✅** |
-| OpenAI GPT-4o + MacPaw OpenAI | $0.00700 | 99.88% | 3-5s | Excellent ✅✅ |
-| Google Gemini Flash | $0.00010 | 99.99% | 1-3s | Excellent ✅✅ |
-| Claude Sonnet | $0.01800 | 99.70% | 3-7s | Mixed ⚠️ |
-| Core ML | $0.00 | 100% | 5-15s | Limited ⚠️ |
-
-**All shortlisted options meet <10 second requirement, but OpenAI GPT-4o Mini balances quality with first-party tooling.**
-
----
-
-## 4. Data Persistence Strategy
-
-### Decision: SwiftData (Primary) with CoreData Fallback
-
-### Rationale
-
-**SwiftData** is Apple's modern data persistence framework for SwiftUI apps:
-- Native SwiftUI integration
-- Declarative syntax with `@Model` macro
-- Automatic CloudKit sync capability (for future enhancement)
-- Type-safe queries
-- iOS 17+ compatible (matches target platform)
-- Migration path from CoreData if needed
-
-**CoreData Fallback**:
-- If SwiftData proves immature or buggy in production
-- More established, battle-tested framework
-- Slightly more boilerplate but proven reliability
-
-### Implementation Approach
+### Existing Architecture (From Prior Implementation)
 
 ```swift
-import SwiftData
-
-@Model
-class BirthChart {
-    @Attribute(.unique) var id: UUID
-    var name: String
-    var birthDate: Date
-    var birthTime: Date
-    var locationName: String
-    var latitude: Double
-    var longitude: Double
-    var calculationData: ChartCalculationData
-
-    @Relationship(deleteRule: .cascade)
-    var reports: [Report]
-}
-
-@Model
-class Report {
-    @Attribute(.unique) var id: UUID
-    var lifeArea: LifeArea
-    var content: String
-    var purchaseDate: Date
-    var priceUSD: Decimal
-    var transactionID: String
-
-    var chart: BirthChart?
-}
+// Current modal-based flow
+MainFlowView (Home Tab)
+  → Toolbar button shows active profile
+  → Taps button → shows .sheet(UserSelectorView)
+    → UserSelectorView: List of profiles
+      → Tap profile → dismiss + update RepositoryContext
+      → Tap "Create New" → shows .sheet(UserProfileFormView)
+        → UserProfileFormView: Full-screen form with birth data
+          → Tap "Create" → saves + dismisses both modals
 ```
 
-**Storage Location**: Local device only (no cloud sync in MVP per FR-064)
+**Problems**:
+1. Two levels of modal navigation (selector, then form)
+2. Birth data form hidden until "Create New" tapped
+3. Context switching: user loses sight of main screen
+4. Extra taps to create new profile (open selector → tap create → fill form → save)
 
-### Alternatives Considered
+### Proposed Inline Pattern
 
-**CoreData Only**
-- Pros: More mature, extensive documentation
-- Cons: More verbose, less SwiftUI-native
-- Decision: Use as fallback if SwiftData issues arise
-
-**Plain JSON Files**
-- Pros: Simplest implementation
-- Cons: No relational queries, manual persistence management, no migration support
-- Rejected because: Inadequate for production app with relationships
-
----
-
-## 5. Location Geocoding Service
-
-### Decision: Apple MapKit (MKLocalSearchCompleter + CLGeocoder)
-
-### Rationale
-
-Apple's native MapKit provides all required geocoding functionality without external API costs or dependencies.
-
-**Features**:
-- `MKLocalSearchCompleter`: Autocomplete search as user types
-- `CLGeocoder`: Convert location name to coordinates
-- No API key required
-- No usage costs
-- Privacy-friendly (on-device when possible)
-- Excellent worldwide coverage including Ukraine
-
-**Implementation**:
 ```swift
-import MapKit
+// New inline dropdown flow
+MainFlowView (Home Tab)
+  ┌──────────────────────────┐
+  │ [John ▼]  Profile Dropdown│
+  ├──────────────────────────┤
+  │ Name: [_______________]  │  ← Always visible
+  │ Date: [_______________]  │
+  │ Time: [_______________]  │
+  │ Location: [___________]  │
+  │ [Continue]               │
+  └──────────────────────────┘
 
-class LocationGeocoder: NSObject, ObservableObject {
-    @Published var searchResults: [MKLocalSearchCompletion] = []
-    private let searchCompleter = MKLocalSearchCompleter()
-
-    func search(query: String) {
-        searchCompleter.queryFragment = query
-    }
-
-    func geocode(completion: MKLocalSearchCompletion) async throws -> CLLocationCoordinate2D {
-        let searchRequest = MKLocalSearch.Request(completion: completion)
-        let search = MKLocalSearch(request: searchRequest)
-        let response = try await search.start()
-        return response.mapItems.first!.placemark.coordinate
-    }
-}
-```
-
-**Meets Requirements**:
-- ✅ FR-004: Location search with autocomplete
-- ✅ FR-005: Geocode to latitude/longitude
-- ✅ Handle multiple results (autocomplete list)
-- ✅ Works offline with cached data when available
-
-### Alternatives Considered
-
-**Google Places API**
-- Pros: Potentially more accurate autocomplete
-- Cons: Requires API key, usage costs, privacy implications, dependency
-- Rejected because: MapKit is sufficient and free
-
-**OpenStreetMap Nominatim**
-- Pros: Open-source, no API key
-- Cons: Rate limits, requires attribution, less reliable
-- Rejected because: MapKit is superior
-
----
-
-## 6. In-App Purchase Implementation
-
-### Decision: StoreKit 2
-
-### Rationale
-
-StoreKit 2 is Apple's modern in-app purchase framework for iOS 15+:
-- Modern async/await API
-- Built-in transaction validation
-- Automatic receipt handling
-- Purchase restoration support
-- Simplified compared to original StoreKit
-
-**Product Types**:
-- Non-consumable in-app purchases (one-time purchase per chart per life area)
-- Each life area report is a separate product ID
-
-**Product IDs**:
-```
-com.astrosvitla.astroinsight.report.general
-com.astrosvitla.astroinsight.report.finances
-com.astrosvitla.astroinsight.report.career
-com.astrosvitla.astroinsight.report.relationships
-com.astrosvitla.astroinsight.report.health
-```
-
-**Pricing Tiers** (FR-042):
-- General Overview: $9.99 (Tier 10)
-- Finances: $6.99 (Tier 7)
-- Career: $6.99 (Tier 7)
-- Relationships: $5.99 (Tier 6)
-- Health: $5.99 (Tier 6)
-
-**Implementation**:
-```swift
-import StoreKit
-
-class PurchaseManager: ObservableObject {
-    @Published var products: [Product] = []
-
-    func loadProducts() async throws {
-        products = try await Product.products(for: productIDs)
-    }
-
-    func purchase(_ product: Product) async throws -> Transaction? {
-        let result = try await product.purchase()
-
-        switch result {
-        case .success(let verification):
-            let transaction = try checkVerified(verification)
-            await transaction.finish()
-            return transaction
-        case .userCancelled, .pending:
-            return nil
-        @unknown default:
-            return nil
-        }
-    }
-}
-```
-
-**Purchase Restoration** (FR-041):
-- StoreKit 2 automatically syncs purchases across devices with same Apple ID
-- Use `Transaction.currentEntitlements` to restore previous purchases
-- Non-consumable products are permanently owned
-
-### Alternatives Considered
-
-**StoreKit 1**
-- Pros: More examples available
-- Cons: Older callback-based API, more complex receipt validation
-- Rejected because: StoreKit 2 is modern standard for iOS 15+
-
-**Third-party purchase libraries (RevenueCat, etc.)**
-- Pros: Analytics, A/B testing, subscription management
-- Cons: Additional dependency, monthly costs, overkill for simple pay-per-report
-- Rejected because: StoreKit 2 is sufficient for MVP
-
----
-
-## 7. Localization Strategy
-
-### Decision: String Catalogs (.xcstrings)
-
-### Rationale
-
-String Catalogs are Xcode's modern localization system (Xcode 15+):
-- Single JSON file per localized resource
-- Built-in editor in Xcode
-- Automatic extraction from code
-- Plural rules support
-- Supports 2 languages (English, Ukrainian)
-
-**File Structure**:
-```
-Resources/
-└── Localizable.xcstrings    # Contains all EN/UK strings
-```
-
-**Usage**:
-```swift
-// Automatic localization
-Text("onboarding_title")
-
-// With arguments
-Text("chart_calculated", name)
-```
-
-**AI Report Localization**:
-- Pass language parameter to OpenAI prompt
-- Generate report content in target language
-- UI strings use String Catalog
-
-### Alternatives Considered
-
-**Separate .strings files**
-- Pros: Traditional approach
-- Cons: Multiple files to manage, harder to sync
-- Rejected because: String Catalogs are modern standard
-
-**Third-party localization services**
-- Pros: Professional translation
-- Cons: Cost, overkill for 2 languages
-- Rejected because: Can translate manually or use AI assistance
-
----
-
-## 8. Architecture Pattern
-
-### Decision: MVVM (Model-View-ViewModel) with Feature Modules
-
-### Rationale
-
-MVVM is the standard pattern for SwiftUI applications:
-- Clear separation of concerns
-- Testable business logic
-- SwiftUI-native with `@ObservableObject` and `@Published`
-- Feature modules prevent code coupling
-
-**Structure**:
-```
-Features/
-├── Onboarding/
-│   ├── Views/
-│   │   └── OnboardingView.swift
-│   └── ViewModels/
-│       └── OnboardingViewModel.swift
-├── ChartCalculation/
-│   ├── Views/
-│   ├── ViewModels/
-│   ├── Models/
-│   └── Services/
-│       ├── ChartCalculator.swift
-│       └── SwissEphemerisService.swift
+Tap dropdown → Shows Menu/Picker inline
+  → Select "Mom" → form fields populate instantly
+  → Select "Create New" → form fields clear instantly
 ```
 
 **Benefits**:
-- Each feature is self-contained
-- Easy to test ViewModels in isolation
-- Shared services in Core/Services
-- Matches existing project structure
+1. Zero navigation - everything happens in-place
+2. Birth data form always visible for context
+3. Profile switching is 1 tap + instant visual feedback
+4. Creating new profile: tap dropdown → "Create New" → fill → Continue (streamlined)
 
-### Alternatives Considered
+## SwiftUI Component Research
 
-**MVC (Model-View-Controller)**
-- Pros: Simple for small apps
-- Cons: Massive view controllers, not SwiftUI-native
-- Rejected because: SwiftUI encourages MVVM
+### Option 1: Menu with Buttons (✅ RECOMMENDED)
 
-**VIPER / Clean Architecture**
-- Pros: Maximum separation, very testable
-- Cons: Over-engineered for MVP, too much boilerplate
-- Rejected because: MVVM provides good balance
+```swift
+Menu {
+    ForEach(profiles) { profile in
+        Button {
+            selectProfile(profile)
+        } label: {
+            HStack {
+                Text(profile.name)
+                if profile.id == activeProfile?.id {
+                    Image(systemName: "checkmark")
+                }
+            }
+        }
+    }
 
-**TCA (The Composable Architecture)**
-- Pros: Predictable state management, excellent testing
-- Cons: Steep learning curve, adds dependency, overkill for this app
-- Rejected because: MVVM is sufficient and simpler
+    Divider()
 
----
-
-## 9. Testing Strategy
-
-### Decision: Three-Layer Testing (Unit + Integration + UI)
-
-### Test Categories
-
-**1. Unit Tests (XCTest)**
-- Services: `ChartCalculator`, `LocationGeocoder`, `PurchaseManager`
-- ViewModels: Business logic, state management
-- Models: Validation, transformations
-- Target coverage: >70%
-
-**2. Integration Tests (XCTest)**
-- SwissEphemeris calculation accuracy
-- SwiftData persistence operations
-- StoreKit purchase flows
-- OpenAI API integration
-
-**3. UI Tests (XCUITest)**
-- Critical user journeys (per spec acceptance scenarios)
-- Onboarding flow
-- Chart creation flow
-- Purchase flow
-- Localization verification (EN/UK)
-
-**Test Files**:
-```
-AstroSvitlaTests/
-├── Services/
-│   ├── ChartCalculatorTests.swift
-│   ├── LocationGeocoderTests.swift
-│   └── ReportGeneratorTests.swift
-├── ViewModels/
-└── Models/
-
-AstroSvitlaUITests/
-├── OnboardingFlowTests.swift
-├── ChartCreationFlowTests.swift
-└── PurchaseFlowTests.swift
+    Button {
+        createNewProfile()
+    } label: {
+        Label("Create New Profile", systemImage: "plus.circle")
+    }
+} label: {
+    HStack {
+        Text(activeProfile?.name ?? "New Profile")
+        Image(systemName: "chevron.down")
+    }
+}
 ```
 
-### Quality Gates
+**Pros**:
+- Native iOS dropdown appearance
+- Built-in dismiss on selection
+- Supports icons, dividers, custom styling
+- No custom state management needed
 
-- All unit tests must pass before commit
-- UI tests must pass before release
-- Critical paths (chart calculation, purchase) require 90%+ coverage
+**Cons**:
+- None for this use case
 
----
+### Option 2: Picker with .menu Style (Alternative)
 
-## 10. Performance Optimization
-
-### Strategies
-
-**Chart Calculation**:
-- ✅ Already implemented async/await (non-blocking)
-- Run calculations off main thread
-- Cache frequently requested charts
-- Batch planet calculations when possible
-
-**Report Generation**:
-- Use OpenAI GPT-4o Mini (fast response 2-4s)
-- Optimize prompt length to reduce tokens
-- Implement retry logic with exponential backoff
-- Show progress indicator during generation
-
-**Chart Visualization**:
-- Phase 1 (WKWebView): Pre-load HTML template, inject data only
-- Phase 2 (SwiftUI): Use Canvas for GPU-accelerated rendering
-- Lazy loading for chart list
-
-**Bundle Size**:
-- Ephemeris files: Include only 1900-2100 date range
-- Enable App Thinning in Xcode
-- Compress assets (images, JSON)
-- Target: <50MB (NFR-005)
-
----
-
-## 11. Privacy & Data Handling
-
-### Implementation
-
-**Data Storage** (FR-064 to FR-068):
-- ✅ All data stored locally via SwiftData (no cloud)
-- ✅ No user accounts or authentication required
-- ✅ No analytics or tracking in MVP
-- ✅ Birth data never shared with third parties (except anonymized to OpenAI for reports)
-
-**Privacy Considerations**:
-- Add privacy disclosure: "Birth data sent to AI service for report generation"
-- Use Apple Privacy Nutrition Labels in App Store
-- Don't send user names to OpenAI (chart data only)
-- Anonymize location (coordinates only, not full address)
-
-**App Privacy Report**:
-```
-Data Collected:
-- Birth date, time, location (for chart calculations)
-- Purchase history (via StoreKit)
-
-Data Shared:
-- Astrological chart data sent to OpenAI API (for report generation)
-
-Data Linked to User: None
+```swift
+Picker("Profile", selection: $selectedProfileId) {
+    ForEach(profiles) { profile in
+        Text(profile.name).tag(profile.id)
+    }
+    Text("Create New Profile").tag(UUID?.none)
+}
+.pickerStyle(.menu)
 ```
 
----
+**Pros**:
+- Even more native (system picker)
+- Automatic selection binding
 
-## Summary of Technology Stack
+**Cons**:
+- Harder to customize (can't easily add "Create New" as special item)
+- Less control over appearance
 
-| Component | Technology | License | Status |
-|-----------|-----------|---------|---------|
-| **Language** | Swift 6.0 | - | Standard |
-| **UI Framework** | SwiftUI | - | Standard |
-| **Architecture** | MVVM + Feature Modules | - | Recommended |
-| **Calculations** | SwissEphemeris | GPL/Commercial | ⚠️ Need license |
-| **Visualization (MVP)** | AstroChart (JS/WKWebView) | MIT | Recommended |
-| **Visualization (Future)** | SwiftUI Canvas | - | Planned |
-| **AI Service** | OpenAI GPT-4o Mini | - | Recommended |
-| **Persistence** | SwiftData | - | Recommended |
-| **Location** | MapKit | - | Standard |
-| **Purchases** | StoreKit 2 | - | Standard |
-| **Localization** | String Catalogs | - | Standard |
-| **Testing** | XCTest + XCUITest | - | Standard |
+**Decision**: Use **Menu** for full control and clarity.
 
----
+## State Management Strategy
 
-## Next Steps
+### Form State Modes
 
-1. **Purchase SwissEphemeris commercial license** (CHF 750) for App Store distribution
-2. **Integrate AstroChart** for natal chart visualization (MVP)
-3. **Set up OpenAI API** with free tier for development
-4. **Implement SwiftData models** for BirthChart and Report entities
-5. **Create test suite** for critical paths (calculation, purchase, generation)
-6. **Plan custom SwiftUI chart renderer** for Phase 2
+```swift
+enum ProfileFormMode {
+    case viewing(UserProfile)    // Existing profile selected
+    case creating                // "Create New" selected
+    case empty                   // No profiles exist yet
+}
+```
 
----
+### State Transitions
 
-## Open Questions Resolved
+```
+empty → creating (user fills first profile)
+viewing(John) → viewing(Mom) (user switches profiles)
+viewing(John) → creating (user taps "Create New")
+creating → viewing(Partner) (user saves new profile)
+creating → viewing(John) (user switches away, discards unsaved)
+```
 
-All NEEDS CLARIFICATION items from Technical Context have been resolved:
+### Implementation in MainFlowView
 
-✅ **Astronomical calculation library**: SwissEphemeris (already in use)
-✅ **Chart visualization**: AstroChart (WKWebView) for MVP, SwiftUI Canvas for future
-✅ **AI/LLM service**: OpenAI GPT-4o Mini
-✅ **Data persistence**: SwiftData
-✅ **Location geocoding**: MapKit
-✅ **In-app purchases**: StoreKit 2
-✅ **Localization**: String Catalogs
+```swift
+@State private var formMode: ProfileFormMode = .empty
+@State private var editedName: String = ""
+@State private var editedBirthDate: Date = Date()
+@State private var editedBirthTime: Date = Date()
+@State private var editedLocation: String = ""
+@State private var editedCoordinate: CLLocationCoordinate2D? = nil
 
----
+func selectProfile(_ profile: UserProfile) {
+    formMode = .viewing(profile)
+    editedName = profile.name
+    editedBirthDate = profile.birthDate
+    editedBirthTime = profile.birthTime
+    editedLocation = profile.locationName
+    editedCoordinate = CLLocationCoordinate2D(
+        latitude: profile.latitude,
+        longitude: profile.longitude
+    )
+    repositoryContext.setActiveProfile(profile)
+}
 
-**Document Status**: Complete ✅
-**Phase 0 Completion**: All research tasks resolved
-**Ready for**: Phase 1 - Design & Contracts
+func createNewProfile() {
+    formMode = .creating
+    editedName = ""
+    editedBirthDate = Date()
+    editedBirthTime = Date()
+    editedLocation = ""
+    editedCoordinate = nil
+}
+```
+
+## Performance Considerations
+
+### Dropdown Rendering
+
+- **Menu**: Lazy-loaded, renders only visible items
+- **Expected profiles**: 5-10 typical, 50 max
+- **Render time**: <16ms for 60fps even at 50 items
+
+### Profile Switch Performance
+
+```
+Tap profile → updateState (1-2ms) → form field updates (SwiftUI binding, ~5ms)
+Total: <10ms perceived as instant
+```
+
+### Form Population
+
+- Text fields: SwiftUI bindings update synchronously
+- DatePickers: Native components, no custom rendering
+- Location field: String display, coordinates hidden until needed
+
+**Verdict**: No performance concerns. All operations well under 100ms constraint.
+
+## Edge Case Handling
+
+### 1. Duplicate Profile Names
+
+**Scenario**: User tries to save "John" when "John" already exists
+**Solution**: Validation in UserProfileViewModel.validateProfileName()
+**UI**: Show error message below Continue button, disable button
+
+### 2. Switching While Editing
+
+**Scenario**: User starts filling "New Profile" data, then switches to existing profile
+**Solution**: Discard unsaved data immediately (no confirmation)
+**Rationale**: Spec FR-065 requires this for simplicity
+
+### 3. No Profiles Exist (First Time)
+
+**Scenario**: User completes onboarding, lands on Home tab
+**Solution**: formMode = .empty, dropdown shows "New Profile", form fields empty
+**UI**: Continue button disabled until all fields filled
+
+### 4. Deleting Active Profile
+
+**Scenario**: User deletes currently active profile from Settings
+**Solution**: UserProfileListView handles this (existing code)
+**Fallback**: Switch to next available profile or .empty state
+
+## Testing Strategy
+
+### Unit Tests (MainFlowInlineProfileTests.swift)
+
+```swift
+// Test 1: Profile selection populates form
+func testSelectingProfilePopulatesFormFields()
+
+// Test 2: Create New clears form
+func testCreateNewProfileClearsFormFields()
+
+// Test 3: Switching discards unsaved data
+func testSwitchingProfileDiscardsUnsavedData()
+
+// Test 4: Empty state shows correct UI
+func testEmptyStateShowsNewProfileLabel()
+
+// Test 5: Continue button validation
+func testContinueButtonDisabledWhenFieldsEmpty()
+```
+
+### UI Tests (ProfileSwitchingUITests.swift)
+
+```swift
+// Test 1: End-to-end profile creation
+func testCreateProfileInlineFlow()
+
+// Test 2: End-to-end profile switching
+func testSwitchBetweenExistingProfiles()
+
+// Test 3: Dropdown shows all profiles
+func testDropdownDisplaysAllSavedProfiles()
+
+// Test 4: Duplicate name validation
+func testDuplicateNameShowsError()
+```
+
+## Migration Path
+
+### Phase 1: Add Inline Dropdown (Keep Modals)
+
+1. Add dropdown Menu to MainFlowView
+2. Add form state management (@State vars)
+3. Wire dropdown selections to state updates
+4. Test dropdown + form interaction
+5. **Keep existing modal sheets as fallback**
+
+### Phase 2: Remove Modals
+
+1. Remove `.sheet(UserSelectorView)` from MainFlowView
+2. Remove `.sheet(UserProfileFormView)` from MainFlowView
+3. Delete UserSelectorView.swift
+4. Delete UserProfileFormView.swift
+5. Update tests
+
+### Rollback Plan
+
+If inline UX causes issues:
+1. Re-enable modal sheets in MainFlowView
+2. Hide inline dropdown (don't delete code)
+3. File bugs for inline issues
+4. Fix and re-enable in next sprint
+
+## Dependencies
+
+### Existing Components (No Changes)
+
+- ✅ UserProfile model
+- ✅ UserProfileService
+- ✅ UserProfileViewModel (minor usage changes only)
+- ✅ RepositoryContext
+- ✅ UserProfileListView (Settings screen)
+
+### New Components
+
+- ➕ Inline profile dropdown Menu in MainFlowView
+- ➕ Form state management in MainFlowView
+- ➕ Unit tests for inline behavior
+- ➕ UI tests for end-to-end flows
+
+### External Dependencies
+
+- SwiftUI (iOS 17+) - Menu, Picker, bindings
+- SwiftData - UserProfile queries (existing)
+- Combine - ObservableObject (existing)
+
+## Open Questions
+
+**Q1**: Should "Create New Profile" show a special icon?
+**A**: Yes, use `plus.circle` systemImage for visual distinction
+
+**Q2**: What happens if user taps dropdown while form is invalid?
+**A**: Allow it - switching profiles discards invalid data per FR-065
+
+**Q3**: Should dropdown show birth date next to name?
+**A**: Not in dropdown (too much text). Show only name. Birth data visible in form below.
+
+**Q4**: Animate form field changes?
+**A**: No - instant updates feel more responsive. SwiftUI default transitions are fine.
+
+## Conclusion
+
+**Recommendation**: ✅ Proceed with inline dropdown implementation using SwiftUI Menu.
+
+**Justification**:
+- Simpler UX (fewer taps, no navigation)
+- Native iOS patterns (Menu component)
+- Minimal code changes (modify MainFlowView, delete 2 views)
+- Better user context (always see form + dropdown)
+- Meets all spec requirements (FR-050 to FR-065)
+
+**Next Steps**:
+1. Generate data-model.md (no changes to models, document state management)
+2. Generate quickstart.md (document new inline UX patterns)
+3. Generate tasks.md with TDD approach

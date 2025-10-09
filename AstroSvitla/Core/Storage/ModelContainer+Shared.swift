@@ -4,6 +4,7 @@ extension ModelContainer {
     static func astroSvitlaShared(inMemory: Bool = false) throws -> ModelContainer {
         let schema = Schema([
             User.self,
+            UserProfile.self,
             BirthChart.self,
             ReportPurchase.self,
         ])

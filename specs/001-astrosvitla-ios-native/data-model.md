@@ -1045,3 +1045,193 @@ class BirthChartModelTests: XCTestCase {
 ✅ **Testing**: In-memory container for unit tests
 
 **Next**: Implement SwiftData models in Phase 1.2 of implementation plan
+
+---
+
+## UI State Management (Inline Profile Dropdown)
+
+**Context**: This section documents the ephemeral UI state for the inline profile dropdown on Home tab. This is NOT persisted to SwiftData - it's transient View state in MainFlowView.
+
+### Profile Form Mode Enum
+
+```swift
+enum ProfileFormMode: Equatable {
+    case empty                    // No profiles exist yet (first-time user)
+    case viewing(UserProfile)     // Viewing/editing existing profile
+    case creating                 // Creating new profile (fields cleared)
+}
+```
+
+**State Transitions**:
+```
+empty → creating (user starts filling first profile)
+viewing(John) → viewing(Mom) (user switches to different profile)
+viewing(John) → creating (user taps "Create New Profile")
+creating → viewing(Partner) (user saves new profile successfully)
+creating → viewing(John) (user switches away - unsaved data discarded)
+```
+
+### Form State Properties (MainFlowView @State)
+
+```swift
+// Current mode
+@State private var formMode: ProfileFormMode = .empty
+
+// Edited form fields (bound to TextFields/DatePickers)
+@State private var editedName: String = ""
+@State private var editedBirthDate: Date = Date()
+@State private var editedBirthTime: Date = Date()
+@State private var editedLocation: String = ""
+@State private var editedCoordinate: CLLocationCoordinate2D? = nil
+@State private var editedTimezone: String = TimeZone.current.identifier
+
+// UI state
+@State private var isCalculating: Bool = false
+@State private var validationError: String? = nil
+```
+
+### Dropdown Selection Logic
+
+```swift
+func handleProfileSelection(_ profile: UserProfile) {
+    // Update mode
+    formMode = .viewing(profile)
+
+    // Populate form fields from selected profile
+    editedName = profile.name
+    editedBirthDate = profile.birthDate
+    editedBirthTime = profile.birthTime
+    editedLocation = profile.locationName
+    editedCoordinate = CLLocationCoordinate2D(
+        latitude: profile.latitude,
+        longitude: profile.longitude
+    )
+    editedTimezone = profile.timezone
+
+    // Update global active profile
+    repositoryContext.setActiveProfile(profile)
+
+    // Clear any errors
+    validationError = nil
+}
+
+func handleCreateNewProfile() {
+    // Update mode
+    formMode = .creating
+
+    // Clear all form fields
+    editedName = ""
+    editedBirthDate = Date()
+    editedBirthTime = Date()
+    editedLocation = ""
+    editedCoordinate = nil
+    editedTimezone = TimeZone.current.identifier
+
+    // Clear errors
+    validationError = nil
+}
+```
+
+### Continue Button Logic
+
+```swift
+func handleContinue() async {
+    guard formMode == .creating else { return } // Only for new profiles
+
+    // Validate fields
+    guard !editedName.isEmpty,
+          !editedLocation.isEmpty,
+          editedCoordinate != nil else {
+        validationError = "All fields required"
+        return
+    }
+
+    // Validate unique name
+    guard profileViewModel.validateProfileName(editedName) else {
+        validationError = "Profile '\(editedName)' already exists"
+        return
+    }
+
+    isCalculating = true
+
+    // Calculate natal chart and save
+    let success = await profileViewModel.createProfile(
+        name: editedName,
+        birthDate: editedBirthDate,
+        birthTime: editedBirthTime,
+        locationName: editedLocation,
+        latitude: editedCoordinate!.latitude,
+        longitude: editedCoordinate!.longitude,
+        timezone: editedTimezone,
+        natalChart: calculatedChart
+    )
+
+    isCalculating = false
+
+    if success {
+        // Mode automatically updates to .viewing(newProfile)
+        // via profileViewModel.selectedProfile observation
+    } else {
+        validationError = profileViewModel.errorMessage
+    }
+}
+```
+
+### Data Flow Diagram
+
+```
+User Tap Dropdown
+        │
+        ▼
+    Menu Opens
+        │
+        ├─► Select "John" ──► handleProfileSelection(John)
+        │                            │
+        │                            ├─► formMode = .viewing(John)
+        │                            ├─► editedName = "John"
+        │                            ├─► editedBirthDate = John.birthDate
+        │                            └─► repositoryContext.setActiveProfile(John)
+        │
+        └─► Select "Create New" ──► handleCreateNewProfile()
+                                           │
+                                           ├─► formMode = .creating
+                                           ├─► editedName = ""
+                                           └─► All fields cleared
+
+User Fills Form
+        │
+        ▼
+User Taps Continue
+        │
+        ▼
+handleContinue() async
+        │
+        ├─► Validate fields
+        ├─► Check unique name
+        ├─► Calculate chart
+        ├─► Save profile
+        └─► Switch to .viewing(newProfile)
+```
+
+### Persistence Interaction
+
+**What persists**:
+- UserProfile entities (via UserProfileService)
+- BirthChart entities (created during profile save)
+- RepositoryContext.activeProfile (via User.activeProfileId)
+
+**What doesn't persist**:
+- formMode (resets to .empty or .viewing on app launch)
+- edited* state vars (cleared on profile switch or app restart)
+- validationError (ephemeral UI feedback)
+- isCalculating (transient loading state)
+
+**On app launch**:
+1. RepositoryContext loads activeProfile from User.activeProfileId
+2. If activeProfile exists → formMode = .viewing(activeProfile)
+3. If no activeProfile → formMode = .empty
+4. Form fields populate from activeProfile or stay empty
+
+---
+
+**Updated**: 2025-10-09 (Added UI state management section for inline dropdown refactor)

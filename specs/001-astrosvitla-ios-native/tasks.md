@@ -1,886 +1,1317 @@
-# Implementation Tasks: AstroSvitla
+# Tasks: Simplified Multi-Profile UX (Inline Dropdown)
 
-**Feature**: 001-astrosvitla-ios-native
-**Spec**: [spec.md](./spec.md)
-**Plan**: [plan.md](./plan.md)
-**Data Model**: [data-model.md](./data-model.md)
-
----
-
-## Task Execution Guide
-
-- **[P]**: Tasks that can be executed in parallel
-- **Dependencies**: Tasks marked with → must wait for previous task completion
-- **Test-First**: All implementation tasks follow TDD (write tests first)
+**Feature**: Inline Profile Selector on Home Tab
+**Branch**: `001-astrosvitla-ios-native`
+**Date**: 2025-10-09
+**Prerequisites**: plan.md, research.md, data-model.md, quickstart.md
 
 ---
 
-## Phase 0: Research & Validation (Week 1, Days 1-2)
+## Execution Summary
 
-### Research Tasks [P]
+This task breakdown implements the simplified inline dropdown UX for multi-profile management, replacing the modal-based architecture. All profile selection and creation happens directly on the Home tab using a native SwiftUI Menu component.
 
-- [ ] **R1**: Research SwissEphemeris library integration
-  - [ ] Review vsmithers1087/SwissEphemeris SPM documentation
-  - [ ] Document planet position calculation API
-  - [ ] Document house calculation (Placidus) API
-  - [ ] Document aspect calculation methods
-  - [ ] Test basic calculation with sample date
-  - [ ] **Output**: Document findings in `research.md`
+**Approach**: Test-Driven Development (TDD)
+- Phase 3: Write ALL tests FIRST (must FAIL)
+- Phase 4-6: Implement code to make tests PASS
+- Phase 8: Verify all tests pass
 
-- [ ] **R2**: Research OpenAI GPT-4 API integration
-  - [ ] Review OpenAI Swift API documentation
-  - [ ] Document authentication and rate limiting
-  - [ ] Draft prompt templates for each life area
-  - [ ] Calculate token cost estimates (target <1500 tokens)
-  - [ ] Test sample API call with mock data
-  - [ ] **Output**: Document findings and prompts in `research.md`
-
-- [ ] **R3**: Research StoreKit 2 non-consumable IAP
-  - [ ] Review StoreKit 2 documentation for iOS 17+
-  - [ ] Document product configuration requirements
-  - [ ] Document transaction verification flow
-  - [ ] Document restore purchases mechanism
-  - [ ] Document sandbox testing workflow
-  - [ ] **Output**: Document findings in `research.md`
-
-- [ ] **R4**: Research SwiftData schema design best practices
-  - [ ] Review SwiftData @Model macro usage
-  - [ ] Document relationship configuration
-  - [ ] Document cascade delete rules
-  - [ ] Test JSON serialization for complex types
-  - [ ] **Output**: Finalize schema in `data-model.md`
+**Total Tasks**: 34 (3 cleanup + 2 state setup + 10 tests + 13 implementation + 6 verification)
 
 ---
 
-## Phase 1: Core Foundation (Week 1, Days 3-5)
+## Format: `[ID] [P?] Description`
 
-### P1.1: Project Setup
-
-- [ ] **T1.1.1**: Create Xcode iOS App project
-  - [ ] Product Name: AstroSvitla
-  - [ ] Organization: com.astrosvitla
-  - [ ] Interface: SwiftUI
-  - [ ] iOS Deployment Target: 17.0
-  - [ ] Portrait orientation only
-
-- [ ] **T1.1.2**: Configure project settings
-  - [ ] Set bundle identifier: com.astrosvitla.astroinsight
-  - [ ] Enable Dark Mode support
-  - [ ] Disable landscape orientations
-  - [ ] Configure signing & capabilities
-
-- [ ] **T1.1.3**: Add Swift Package Dependencies
-  - [ ] Add SwissEphemeris: `https://github.com/vsmithers1087/SwissEphemeris`
-  - [ ] Verify package builds successfully
-
-- [X] **T1.1.4**: Create folder structure
-  - [X] Create `App/` folder
-  - [X] Create `Core/` with subfolders (Navigation, Networking, Storage, Extensions)
-  - [X] Create `Models/` with subfolders (SwiftData, Domain)
-  - [X] Create `Features/` with subfolders for each feature
-  - [X] Create `Resources/` with subfolders (Assets, AstrologyRules, Localizations)
-  - [X] Create `Shared/` with subfolders (Components, Utilities)
-
-- [X] **T1.1.5**: Setup .gitignore
-  - [X] Add `**/Config.swift` to gitignore
-  - [X] Add standard iOS/Xcode ignores
-  - [X] Add SwiftData database files ignore
-
-- [X] **T1.1.6**: Create Config.swift template
-  - [X] Create `Config.swift.example` with placeholder API key
-  - [X] Document setup instructions in comments
-  - [X] Verify file is gitignored
-
-### P1.2: SwiftData Models (→ T1.1.6)
-
-- [X] **T1.2.1**: Implement User model
-  - [X] Create `Models/SwiftData/User.swift`
-  - [X] Add @Model macro
-  - [X] Add id (@Attribute(.unique))
-  - [X] Add createdAt, lastActiveAt
-  - [X] Add relationships to charts and purchases
-  - [X] **Test**: Unit test for User creation
-
-- [X] **T1.2.2**: Implement BirthChart model
-  - [X] Create `Models/SwiftData/BirthChart.swift`
-  - [X] Add all birth data fields
-  - [X] Add chartDataJSON field
-  - [X] Add relationship to User and ReportPurchases
-  - [X] Add computed properties
-  - [X] **Test**: Unit test for BirthChart CRUD operations
-
-- [X] **T1.2.3**: Implement ReportPurchase model
-  - [X] Create `Models/SwiftData/ReportPurchase.swift`
-  - [X] Add report content fields
-  - [X] Add purchase info fields
-  - [X] Add relationship to BirthChart
-  - [X] Add computed properties
-  - [X] **Test**: Unit test for ReportPurchase creation
-
-- [X] **T1.2.4**: Setup ModelContainer
-  - [X] Create `Core/Storage/ModelContainer+Shared.swift`
-  - [X] Configure schema with all models
-  - [X] Implement default user initialization
-  - [X] Integrate into AstroSvitlaApp.swift
-  - [X] **Test**: Integration test for container setup
-
-### P1.3: Domain Models [P] (→ T1.2.4)
-
-- [X] **T1.3.1**: Implement NatalChart domain model
-  - [X] Create `Models/Domain/NatalChart.swift`
-  - [X] Add Codable conformance
-  - [X] Add all required fields
-  - [X] **Test**: Unit test for JSON serialization
-
-- [X] **T1.3.2**: Implement Planet domain model
-  - [X] Create `Models/Domain/Planet.swift`
-  - [X] Create PlanetType enum
-  - [X] Add all required fields
-  - [X] **Test**: Unit test for Planet initialization
-
-- [X] **T1.3.3**: Implement House domain model
-  - [X] Create `Models/Domain/House.swift`
-  - [X] Add all required fields
-  - [X] **Test**: Unit test for House initialization
-
-- [X] **T1.3.4**: Implement Aspect domain model
-  - [X] Create `Models/Domain/Aspect.swift`
-  - [X] Create AspectType enum with angle calculations
-  - [X] Add orb validation
-  - [X] **Test**: Unit test for Aspect logic
-
-- [X] **T1.3.5**: Implement ZodiacSign enum
-  - [X] Create `Models/Domain/ZodiacSign.swift`
-  - [X] Add Element and Modality enums
-  - [X] Add computed properties (element, modality, degree range)
-  - [X] **Test**: Unit test for zodiac calculations
-
-- [X] **T1.3.6**: Implement ReportArea enum
-  - [X] Create `Models/Domain/ReportArea.swift`
-  - [X] Add display names, prices, icons
-  - [X] Add StoreKit product ID mapping
-  - [X] **Test**: Unit test for ReportArea properties
+- **[P]**: Can run in parallel (different files, no dependencies)
+- Includes exact file paths for each task
+- **⚠️ TDD Gate**: Phase 3 must complete and FAIL before Phase 4 begins
 
 ---
 
-## Phase 2: Chart Calculation Engine (Week 2)
+## Phase 1: Cleanup (Delete Modal Views)
 
-### P2.1: SwissEphemeris Wrapper (→ P1.3)
+### T001 [P]: ✅ Delete UserSelectorView
+**File**: `AstroSvitla/Features/UserManagement/Views/UserSelectorView.swift`
+**Action**: DELETE
+**Description**: Remove the modal user selector view - replaced by inline dropdown.
 
-- [X] **T2.1.1**: Create SwissEphemerisService
-  - [X] Create `Features/ChartCalculation/Services/SwissEphemerisService.swift`
-  - [X] Initialize ephemeris data path
-  - [X] Implement timezone conversion helpers
-  - [X] **Test**: Unit test for timezone conversions
+**Steps**:
+1. Delete file `UserSelectorView.swift`
+2. Verify no compiler errors (if references exist, they'll be fixed in T003)
 
-- [X] **T2.1.2**: Implement planet position calculations
-  - [X] Add method for calculating single planet position
-  - [X] Add method for calculating all planets
-  - [X] Handle coordinate conversions
-  - [X] **Test**: Unit test against known reference data
-
-- [X] **T2.1.3**: Implement house calculations
-  - [X] Add method for calculating house cusps (Placidus)
-  - [X] Determine zodiac sign for each house
-  - [X] **Test**: Unit test against known reference data
-
-- [X] **T2.1.4**: Implement aspect calculations
-  - [X] Add method for calculating aspects between planets
-  - [X] Implement orb tolerance checking
-  - [X] Filter to major aspects only (MVP)
-  - [X] **Test**: Unit test for aspect detection
-
-- [X] **T2.1.5**: Implement retrograde detection
-  - [X] Add method to check planet speed
-  - [X] Determine retrograde status
-  - [X] **Test**: Unit test for retrograde calculation
-
-### P2.2: Chart Calculator (→ T2.1.5)
-
-- [X] **T2.2.1**: Create ChartCalculator service
-  - [X] Create `Features/ChartCalculation/Services/ChartCalculator.swift`
-  - [X] Implement calculate() method
-  - [X] Orchestrate SwissEphemeris calls
-  - [X] **Test**: Unit test for orchestration logic
-
-- [X] **T2.2.2**: Implement complete chart calculation
-  - [X] Calculate all 10 planets
-  - [X] Calculate 12 houses
-  - [X] Calculate major aspects
-  - [X] Determine zodiac signs
-  - [X] Identify retrogrades
-  - [X] **Test**: Integration test with complete flow
-
-- [X] **T2.2.3**: Add async/await support
-  - [X] Make calculate() async
-  - [X] Add error handling
-  - [X] Add timeout handling
-  - [X] **Test**: Test async behavior
-
-- [X] **T2.2.4**: Optimize performance
-  - [X] Add result caching if needed
-  - [X] Ensure <3 second calculation time
-  - [X] **Test**: Performance benchmark test
-
-### P2.3: Chart Serialization (→ T2.2.4)
-
-- [X] **T2.3.1**: Implement NatalChart JSON encoding
-  - [X] Create `Models/Domain/NatalChart+JSON.swift`
-  - [X] Implement Codable conformance
-  - [X] Handle nested structures
-  - [X] **Test**: Round-trip serialization test
-
-- [X] **T2.3.2**: Implement deserialization helpers
-  - [X] Add safe decoding with error handling
-  - [X] Add validation on decode
-  - [X] **Test**: Test with corrupted data
+**Status**: ✅ COMPLETE
 
 ---
 
-## Phase 3: User Interface - Data Input (Week 3, Days 1-3)
+### T002 [P]: ✅ Delete UserProfileFormView
+**File**: `AstroSvitla/Features/UserManagement/Views/UserProfileFormView.swift`
+**Action**: DELETE
+**Description**: Remove the modal profile creation form - replaced by inline form on Home tab.
 
-### P3.1: Onboarding Flow (→ P1.3)
+**Steps**:
+1. Delete file `UserProfileFormView.swift`
+2. Verify no compiler errors (if references exist, they'll be fixed in T003)
 
-- [X] **T3.1.1**: Create OnboardingView
-  - [X] Create `Features/Onboarding/Views/OnboardingView.swift`
-  - [X] Implement PageTabViewStyle
-  - [X] Add navigation dots
-  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)* for layout
-
-- [X] **T3.1.2**: Create OnboardingPageView component
-  - [X] Create page template with image + text
-  - [X] Implement Skip and Next buttons
-  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)* for each page
-
-- [ ] **T3.1.3**: Add onboarding content
-  - [X] Page 1: "Discover Your Destiny"
-  - [X] Page 2: "Pay Only for What You Need"
-  - [X] Page 3: "Expert Knowledge + AI Power"
-  - [X] Add placeholder visuals *(SF Symbols used for all pages)*
-  - [ ] **Test**: Content rendering tests
-
-- [X] **T3.1.4**: Implement onboarding state
-  - [X] Create OnboardingViewModel
-  - [X] Save completion to UserDefaults
-  - [X] Add logic to show only once
-  - [ ] **Test**: Unit test for state persistence
-
-- [ ] **T3.1.5**: Add localization
-  - [ ] Add English strings to `en.lproj/Localizable.strings`
-  - [ ] Add Ukrainian strings to `uk.lproj/Localizable.strings`
-  - [ ] **Test**: Localization tests
-
-### P3.2: Birth Data Input Form (→ T3.1.5)
-
-- [X] **T3.2.1**: Create ChartInputView
-  - [X] Create `Features/ChartInput/Views/ChartInputView.swift`
-  - [X] Add Form with DatePickers
-  - [X] Add location search field
-  - [X] Add "Calculate Chart" button
-  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
-
-- [X] **T3.2.2**: Create ChartInputViewModel
-  - [X] Create validation logic
-  - [X] Add published properties for form fields
-  - [X] Add computed isValid property
-  - [ ] **Test**: Unit test for validation
-
-- [X] **T3.2.3**: Implement form validation
-  - [X] Validate date range (1900-2100)
-  - [X] Validate all fields filled
-  - [X] Show inline error messages
-  - [ ] **Test**: UI test for validation
-
-- [ ] **T3.2.4**: Add localization
-  - [ ] Add form labels (English)
-  - [ ] Add form labels (Ukrainian)
-  - [ ] **Test**: Localization tests
-
-
-### P3.3: Location Search (→ T3.2.2)
-
-- [X] **T3.3.1**: Create LocationSearchView
-  - [X] Create `Features/ChartInput/Views/LocationSearchView.swift`
-  - [X] Add searchable text field
-  - [X] Add results list
-  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
-
-- [X] **T3.3.2**: Create LocationService
-  - [X] Create `Features/ChartInput/Services/LocationService.swift`
-  - [X] Implement CLGeocoder integration
-  - [X] Add debounced search (300ms)
-  - [X] Format results (City, Country)
-  - [ ] **Test**: Integration test with CLGeocoder
-
-- [X] **T3.3.3**: Handle search errors
-  - [X] No internet connection error
-  - [X] No results found error
-  - [ ] **Test**: Mock tests for error scenarios
-
-- [X] **T3.3.4**: Implement result selection
-  - [X] Extract coordinates on selection
-  - [X] Update form with location
-  - [ ] **Test**: UI test for selection flow
+**Status**: ✅ COMPLETE
 
 ---
 
-## Phase 4: Chart Visualization (Week 3, Days 4-5)
+### T003: ✅ Remove Modal Sheets from MainFlowView
+**File**: `AstroSvitla/Features/Main/MainFlowView.swift`
+**Action**: MODIFY
+**Description**: Remove `.sheet()` modifiers for UserSelectorView and UserProfileFormView.
 
-### P4.1: Chart Rendering Engine (→ P2.3)
+**Steps**:
+1. Find and remove `.sheet(isPresented: ...) { UserSelectorView() }`
+2. Find and remove `.sheet(isPresented: ...) { UserProfileFormView() }`
+3. Remove associated @State properties for sheet presentation
+4. Remove toolbar buttons that opened modals
+5. Verify app builds successfully
+6. Run app - Main tab should show only existing content (no profile UI yet)
 
-- [ ] **T4.1.1**: Create ChartView with Canvas
-  - [ ] Create `Features/ChartVisualization/Views/ChartView.swift`
-  - [ ] Setup Canvas drawing context
-  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)* for empty canvas
-
-- [ ] **T4.1.2**: Implement ChartRenderer
-  - [ ] Create `Features/ChartVisualization/Renderers/ChartRenderer.swift`
-  - [ ] Add coordinate conversion methods
-  - [ ] Add degree-to-canvas helpers
-  - [ ] **Test**: Unit test for coordinate math
-
-- [ ] **T4.1.3**: Draw zodiac wheel
-  - [ ] Draw outer circle with 12 segments
-  - [ ] Add zodiac sign glyphs/labels
-  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
-
-- [ ] **T4.1.4**: Draw house lines
-  - [ ] Draw house cusps
-  - [ ] Draw inner house divisions
-  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
-
-- [ ] **T4.1.5**: Draw planet positions
-  - [ ] Add planet glyphs at correct degrees
-  - [ ] Use SF Symbols or custom icons
-  - [ ] Add ascendant marker
-  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)* for various charts
-
-- [ ] **T4.1.6**: Support light/dark mode
-  - [ ] Define color schemes
-  - [ ] Apply adaptive colors
-  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*s for both modes
-
-### P4.2: Chart Display Screen (→ T4.1.6)
-
-- [ ] **T4.2.1**: Create ChartDisplayView
-  - [ ] Create `Features/ChartVisualization/Views/ChartDisplayView.swift`
-  - [ ] Add ChartView (300x300)
-  - [ ] Add birth info display
-  - [ ] Add "Select Life Area" button
-  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
-
-- [ ] **T4.2.2**: Add navigation integration
-  - [ ] Navigate from ChartInputView on successful calculation
-  - [ ] Pass calculated chart data
-  - [ ] **Test**: Navigation flow test
-
-- [ ] **T4.2.3**: Add loading state
-  - [ ] Show progress during calculation
-  - [ ] **Test**: Loading state test
-
-- [ ] **T4.2.4**: Add error state
-  - [ ] Show error message if calculation fails
-  - [ ] Add retry button
-  - [ ] **Test**: Error handling test
+**Status**: ✅ COMPLETE - Build succeeded
 
 ---
 
-## Phase 5: AI Report Generation (Week 4)
+## Phase 2: State Management Foundation
 
-### P5.1: OpenAI Service (→ P1.1.6)
+### T004: ✅ Add ProfileFormMode Enum
+**File**: `AstroSvitla/Features/Main/MainFlowView.swift`
+**Action**: MODIFY
+**Description**: Add ProfileFormMode enum to manage form state transitions.
 
-- [X] **T5.1.1**: Wire MacPaw OpenAI Swift SDK
-  - [ ] Confirm `https://github.com/MacPaw/OpenAI` SPM dependency is added to the app target
-  - [ ] Create `Core/Networking/OpenAIClientProvider.swift` that instantiates `OpenAI` with Config credentials
-  - [ ] **Test**: Smoke test client initialization (guarded behind debug flag)
+**Implementation**:
+```swift
+enum ProfileFormMode: Equatable {
+    case empty                    // No profiles exist yet
+    case viewing(UserProfile)     // Existing profile selected
+    case creating                 // "Create New" selected
 
-- [X] **T5.1.2**: Implement OpenAIService wrapper
-  - [ ] Create `Core/Networking/OpenAIService.swift` that depends on `OpenAI`
-  - [ ] Expose async `generateReport(...)` signature returning raw text
-  - [ ] Map `OpenAI` SDK response objects to domain types
-  - [ ] **Test**: Mock `OpenAI` client to verify request payloads
+    var isCreating: Bool {
+        if case .creating = self { return true }
+        return false
+    }
 
-- [X] **T5.1.3**: Build structured prompt utilities
-  - [ ] Create reusable prompt builder (system message + chart context + life-area focus)
-  - [ ] Default to Ukrainian copy for MVP while keeping hooks for future locales
-  - [ ] **Test**: Prompt generation unit test
+    var currentProfile: UserProfile? {
+        if case .viewing(let profile) = self { return profile }
+        return nil
+    }
+}
+```
 
-- [X] **T5.1.4**: Implement error & quota handling
-  - [ ] Map `OpenAIError` / transport errors to `ReportGenerationError`
-  - [ ] Handle rate limits (429) & quota exhaustion
-  - [ ] Surface developer-friendly debug info without leaking secrets
-  - [ ] **Test**: Mock error scenarios
+**Location**: Add inside MainFlowView struct (before body property)
 
-- [X] **T5.1.5**: Implement retry & cancellation support
-  - [ ] Add exponential backoff (max 2 retries)
-  - [ ] Honor `Task.isCancelled` during long requests
-  - [ ] **Test**: Retry logic test
-
-- [X] **T5.1.6**: Add usage instrumentation
-  - [ ] Track token usage & estimated USD cost per call in debug logs
-  - [ ] Provide hook for future analytics/alerts
-  - [ ] **Test**: Logging instrumentation test
-
-### P5.3: AI Report Generator (→ T5.1.6)
-
-- [X] **T5.3.1**: Create AIReportGenerator
-  - [ ] Create `Features/ReportGeneration/Services/AIReportGenerator.swift`
-  - [ ] Orchestrate rules engine + OpenAI service
-  - [ ] **Test**: Mock integration test
-
-- [X] **T5.3.2**: Implement prompt templates
-  - [ ] Create template for finances
-  - [ ] Create template for career
-  - [ ] Create template for relationships
-  - [ ] Create template for health
-  - [ ] Create template for general
-  - [ ] **Test**: Template rendering test
-
-- [X] **T5.3.3**: Implement report generation flow
-  - [ ] Get relevant rules
-  - [ ] Build comprehensive prompt
-  - [ ] Call OpenAIService (surface errors instead of fallback)
-  - [ ] Parse response
-  - [ ] Return Report object
-  - [ ] **Test**: End-to-end test with real API
-
-- [X] **T5.3.4**: Add response validation
-  - [ ] Validate report length (400-500 words)
-  - [ ] Validate language (en or uk)
-  - [ ] Validate structure (3 sections)
-  - [ ] **Test**: Validation tests
-
-- [ ] **T5.3.5**: Add progress callbacks
-  - [ ] Emit progress for UI loading states
-  - [ ] **Test**: Progress callback test
-
-- [ ] **T5.3.6**: Performance testing
-  - [ ] Ensure <10 second generation
-  - [ ] **Test**: Performance benchmark
+**Status**: ✅ COMPLETE
 
 ---
 
-## Phase 6: Life Area Selection & Purchase (Week 5)
+### T005: ✅ Add Form State Properties
+**File**: `AstroSvitla/Features/Main/MainFlowView.swift`
+**Action**: MODIFY
+**Description**: Add @State properties for form fields and mode management.
 
-### P6.1: Area Selection Screen (→ P4.2.4)
+**Implementation**:
+```swift
+// Form mode
+@State private var formMode: ProfileFormMode = .empty
 
-- [X] **T6.1.1**: Create AreaSelectionView
-  - [X] Create `Features/AreaSelection/Views/AreaSelectionView.swift`
-  - [X] Display 5 area cards in grid/list
-  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
+// Form field state
+@State private var editedName: String = ""
+@State private var editedBirthDate: Date = Date()
+@State private var editedBirthTime: Date = Date()
+@State private var editedLocation: String = ""
+@State private var editedCoordinate: CLLocationCoordinate2D? = nil
+@State private var editedTimezone: String = TimeZone.current.identifier
 
-- [X] **T6.1.2**: Create AreaCard component
-  - [X] Create `Features/AreaSelection/Views/AreaCard.swift`
-  - [X] Show icon, title, description, price
-  - [X] Add tap gesture
-  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
+// UI state
+@State private var isCalculating: Bool = false
+@State private var validationError: String? = nil
+@State private var showingDeleteConfirmation: Bool = false
+```
 
-- [ ] **T6.1.3**: Create AreaSelectionViewModel
-  - [ ] Fetch purchased reports for chart
-  - [ ] Determine which areas are already purchased
-  - [ ] Handle area selection
-  - [ ] **Test**: Unit test for state management
+**Location**: Add at top of MainFlowView struct (after existing @State/@EnvironmentObject)
 
-- [ ] **T6.1.4**: Implement purchased state
-  - [ ] Show "View Report" badge for purchased areas
-  - [ ] Navigate to existing report instead of purchase
-  - [ ] **Test**: Purchased state UI test
-
-- [ ] **T6.1.5**: Add animations
-  - [ ] Card press animation
-  - [ ] Selection highlight
-  - [ ] **Test**: Animation tests
-
-- [ ] **T6.1.6**: Add localization
-  - [ ] Localize area names and descriptions *(Deferred - see Leftovers)*
-  - [ ] **Test**: Localization tests
-
-### P6.2: StoreKit Integration (→ T1.1.2)
-
-- [ ] **T6.2.1**: Configure products in App Store Connect
-  - [ ] Create 5 non-consumable IAP products
-  - [ ] Set product IDs and prices
-  - [ ] Configure for sandbox testing
-  - [ ] **Manual verification**
-
-- [ ] **T6.2.2**: Create StoreKitService
-  - [ ] Create `Features/Purchase/Services/StoreKitService.swift`
-  - [ ] Load products on app launch
-  - [ ] Request product info from App Store
-  - [ ] **Test**: Mock test for product loading
-
-- [ ] **T6.2.3**: Implement purchase transaction handling
-  - [ ] Handle purchase request
-  - [ ] Verify transaction
-  - [ ] Return transaction result
-  - [ ] **Test**: Mock test for purchase flow
-
-- [ ] **T6.2.4**: Implement restore purchases
-  - [ ] Add restore purchases method
-  - [ ] Verify restored transactions
-  - [ ] **Test**: Restore flow test
-
-- [ ] **T6.2.5**: Create PurchaseManager
-  - [ ] Create `Features/Purchase/Services/PurchaseManager.swift`
-  - [ ] Coordinate purchase → report generation → storage
-  - [ ] Handle all purchase states
-  - [ ] **Test**: Integration test for full flow
-
-- [ ] **T6.2.6**: Sandbox testing
-  - [ ] Test all 5 product purchases in sandbox
-  - [ ] Test declined payments
-  - [ ] Test restore purchases
-  - [ ] **Manual verification**
-
-### P6.3: Purchase Flow UI (→ T6.2.5)
-
-- [X] **T6.3.1**: Create PurchaseSheet
-  - [X] Create `Features/Purchase/Views/PurchaseConfirmationView.swift`
-  - [X] Show area name and price
-  - [X] Add "Confirm Purchase" button
-  - [ ] Show loading state
-  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
-
-- [ ] **T6.3.2**: Create PurchaseViewModel
-  - [ ] Initiate StoreKit purchase
-  - [ ] Handle progress states
-  - [ ] Handle errors
-  - [ ] Trigger report generation on success
-  - [ ] **Test**: Unit test for state machine
-
-- [ ] **T6.3.3**: Add haptic feedback
-  - [ ] Success haptic
-  - [ ] Error haptic
-  - [ ] **Test**: Haptic feedback test
-
-- [ ] **T6.3.4**: Add error messages
-  - [ ] Localize all error messages *(Deferred - see Leftovers)*
-  - [ ] **Test**: Error message display test
+**Status**: ✅ COMPLETE
 
 ---
 
-## Phase 7: Report Display & Export (Week 6)
+## Phase 3: Tests First ⚠️ TDD - MUST COMPLETE BEFORE PHASE 4
 
-### P7.1: Report Display Screen (→ T6.3.2)
+**CRITICAL**: These tests MUST be written and MUST FAIL before ANY implementation code is written.
 
-- [X] **T7.1.1**: Create ReportView
-  - [X] Create `Features/ReportGeneration/Views/ReportDetailView.swift`
-  - [ ] Add ScrollView with chart at top
-  - [X] Display report sections
-  - [X] Add action buttons
-  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
+### T006: Unit Test - ProfileFormMode State Transitions
+**File**: `AstroSvitlaTests/Features/Main/MainFlowInlineProfileTests.swift` (NEW)
+**Description**: Write failing test for ProfileFormMode enum and state transitions.
 
-- [X] **T7.1.2**: Implement report formatting
-  - [X] Bold "Key Influences" section
-  - [X] Good line spacing for analysis
-  - [X] Bulleted list for recommendations
-  - [ ] **Test**: Formatting tests
+**Test Cases**:
+```swift
+@Test func testProfileFormMode_EmptyState() {
+    // Test .empty case exists
+    // Test isCreating returns false
+    // Test currentProfile returns nil
+}
 
-- [ ] **T7.1.4**: Support dark mode
-  - [ ] Test dark mode colors
-  - [ ] **Test**: Dark mode snapshot tests *(Deferred - see Leftovers)*
+@Test func testProfileFormMode_ViewingState() {
+    // Test .viewing(profile) stores profile
+    // Test isCreating returns false
+    // Test currentProfile returns the profile
+}
 
-- [ ] **T7.1.5**: Add scroll-to-top button
-  - [ ] Show when scrolled down
-  - [ ] **Test**: Interaction test
+@Test func testProfileFormMode_CreatingState() {
+    // Test .creating case exists
+    // Test isCreating returns true
+    // Test currentProfile returns nil
+}
 
-### P7.2: PDF Export [P] (→ T7.1.1)
+@Test func testProfileFormMode_Equatable() {
+    // Test .empty == .empty
+    // Test .viewing(profile1) != .viewing(profile2)
+    // Test .creating == .creating
+}
+```
 
-- [X] **T7.2.1**: Create PDFGenerator
-  - [X] Create `Features/ReportGeneration/Services/PDFGenerator.swift`
-  - [X] Render report text to PDF
-  - [X] Include chart image
-  - [X] Add footer with date
-  - [ ] **Test**: PDF generation test
-
-- [X] **T7.2.2**: Integrate with UIActivityViewController
-  - [X] Add "Export PDF" button
-  - [X] Show share sheet
-  - [ ] **Test**: Share flow test
-
-- [X] **T7.2.3**: Handle errors
-  - [X] Show error if PDF generation fails
-  - [ ] **Test**: Error handling test
-
-- [X] **T7.2.4**: Add confirmation feedback
-  - [X] Show "Saved" message
-  - [ ] **Test**: Feedback test
-
-### P7.3: Report List Screen [P] (→ T1.2.3)
-
-- [X] **T7.3.1**: Create ReportListView
-  - [X] Create `Features/ReportGeneration/Views/ReportListView.swift`
-  - [X] Group reports by chart
-  - [X] Show chart name, birth date
-  - [X] List reports with icons and dates
-  - [ ] **Test**: Snapshot test *(Deferred - see Leftovers)*
-
-- [X] **T7.3.2**: Create ReportListViewModel
-  - [X] Fetch all reports from SwiftData
-  - [X] Group by chart
-  - [X] Sort by purchase date
-  - [ ] **Test**: Unit test for grouping logic
-
-- [X] **T7.3.3**: Add navigation
-  - [X] Tap report to view full report
-  - [ ] **Test**: Navigation test
-
-- [X] **T7.3.4**: Handle empty state
-  - [X] Show "No reports yet" message
-  - [ ] **Test**: Empty state test
+**Expected**: All tests FAIL (MainFlowView doesn't have ProfileFormMode yet)
 
 ---
 
-## Phase 8: Localization (Week 7)
+### T007: Unit Test - Profile Selection Handler
+**File**: `AstroSvitlaTests/Features/Main/MainFlowInlineProfileTests.swift`
+**Description**: Write failing test for handleProfileSelection() function.
 
-### P8.1: English Localization *(Deferred - see Leftovers)*
+**Test Cases**:
+```swift
+@Test func testHandleProfileSelection_PopulatesFormFields() {
+    // Given: A UserProfile with specific data
+    // When: handleProfileSelection(profile) called
+    // Then: editedName, editedBirthDate, etc. match profile
+    // Then: formMode == .viewing(profile)
+    // Then: validationError == nil
+    // Then: repositoryContext.activeProfile == profile
+}
 
-- [ ] **T8.1.1**: Create English strings file *(Deferred - see Leftovers)*
-  - [ ] Create `Resources/Localizations/en.lproj/Localizable.strings` *(Deferred - see Leftovers)*
-  - [ ] Add all UI labels, buttons, messages
-  - [ ] Add error messages
-  - [ ] Add onboarding content
-  - [ ] Add life area names and descriptions
-  - [ ] **Test**: String extraction test
+@Test func testHandleProfileSelection_ClearsValidationError() {
+    // Given: validationError is set to some error
+    // When: handleProfileSelection(profile) called
+    // Then: validationError == nil
+}
+```
 
-- [ ] **T8.1.2**: Apply LocalizedStringKey in views *(Deferred - see Leftovers)*
-  - [ ] Update all Text() views
-  - [ ] Update all button labels
-  - [ ] **Test**: Localization loading test
-
-- [ ] **T8.1.3**: Format dates and numbers
-  - [ ] Use locale-specific formatters
-  - [ ] **Test**: Formatting tests
-
-- [ ] **T8.1.4**: Manual review
-  - [ ] Test all screens in English *(Deferred - see Leftovers)*
-  - [ ] **Manual verification**
-
-### P8.2: Ukrainian Localization *(Deferred - see Leftovers)* (→ T8.1.4)
-
-- [ ] **T8.2.1**: Create Ukrainian strings file
-  - [ ] Create `Resources/Localizations/uk.lproj/Localizable.strings`
-  - [ ] Translate all English strings
-  - [ ] Use proper grammar and declensions
-  - [ ] **Professional translation review required**
-
-- [ ] **T8.2.2**: Test Ukrainian reports
-  - [ ] Verify OpenAI generates Ukrainian correctly
-  - [ ] **Test**: Ukrainian report generation test
-
-- [ ] **T8.2.3**: Format dates and numbers for Ukrainian
-  - [ ] Use Ukrainian locale formatters
-  - [ ] **Test**: Ukrainian formatting tests
-
-- [ ] **T8.2.4**: Manual review
-  - [ ] Test all screens in Ukrainian *(Deferred - see Leftovers)*
-  - [ ] Check for text overflow issues
-  - [ ] **Native speaker review required**
-
-### P8.3: Language Detection *(Deferred - see Leftovers)* (→ T8.2.4)
-
-- [ ] **T8.3.1**: Implement language detection
-  - [ ] Read Locale.current.language
-  - [ ] Default to English if not supported
-  - [ ] **Test**: Language detection test
-
-- [ ] **T8.3.2**: Pass language to OpenAI
-  - [ ] Include language in report generation request
-  - [ ] **Test**: Language parameter test
-
-- [ ] **T8.3.3**: Test language switching
-  - [ ] Change device language and retest
-  - [ ] **Manual verification**
+**Expected**: All tests FAIL (handleProfileSelection doesn't exist yet)
 
 ---
 
-## Phase 9: Testing & Quality Assurance (Week 8)
+### T008: Unit Test - Create New Profile Handler
+**File**: `AstroSvitlaTests/Features/Main/MainFlowInlineProfileTests.swift`
+**Description**: Write failing test for handleCreateNewProfile() function.
 
-### P9.1: Unit Tests
+**Test Cases**:
+```swift
+@Test func testHandleCreateNewProfile_ClearsFormFields() {
+    // Given: Form fields populated with data
+    // When: handleCreateNewProfile() called
+    // Then: editedName == ""
+    // Then: editedBirthDate == Date()
+    // Then: editedLocation == ""
+    // Then: editedCoordinate == nil
+    // Then: formMode == .creating
+    // Then: validationError == nil
+}
 
-- [ ] **T9.1.1**: Write ViewModel unit tests
-  - [ ] ChartInputViewModel tests
-  - [ ] AreaSelectionViewModel tests
-  - [ ] ReportViewModel tests
-  - [ ] PurchaseViewModel tests
-  - [ ] **Target**: 80%+ coverage
+@Test func testHandleCreateNewProfile_FromViewingMode() {
+    // Given: formMode == .viewing(someProfile)
+    // When: handleCreateNewProfile() called
+    // Then: formMode == .creating
+    // Then: All form fields cleared
+}
+```
 
-- [ ] **T9.1.2**: Write Service unit tests
-  - [ ] SwissEphemerisService tests
-  - [ ] ChartCalculator tests
-  - [ ] OpenAIService tests (mocked)
-  - [ ] LocationService tests
-  - [ ] StoreKitService tests (mocked)
-  - [ ] **Target**: 85%+ coverage
-
-- [ ] **T9.1.3**: Write Model unit tests
-  - [ ] Domain model tests
-  - [ ] SwiftData model tests
-  - [ ] **Target**: 85%+ coverage
-
-- [ ] **T9.1.4**: Create mock objects
-  - [ ] Mock chart data
-  - [ ] Mock OpenAI responses
-  - [ ] Mock StoreKit products
-
-### P9.2: Integration Tests (→ T9.1.4)
-
-- [ ] **T9.2.1**: Test chart calculation → storage
-  - [ ] End-to-end flow test
-
-- [ ] **T9.2.2**: Test purchase → report → storage
-  - [ ] End-to-end flow test
-
-- [ ] **T9.2.3**: Test OpenAI API integration
-  - [ ] Use test API key
-  - [ ] Verify actual API calls work
-
-- [ ] **T9.2.4**: Test StoreKit sandbox
-  - [ ] Test all purchase flows in sandbox
-
-- [ ] **T9.2.5**: Test location geocoding
-  - [ ] Integration test with CLGeocoder
-
-### P9.3: UI Tests (→ T9.2.5)
-
-- [ ] **T9.3.1**: Onboarding flow UI test
-- [ ] **T9.3.2**: Chart input and calculation UI test
-- [ ] **T9.3.3**: Area selection and purchase UI test
-- [ ] **T9.3.4**: Report viewing and export UI test
-- [ ] **T9.3.5**: Navigation UI test
-- [ ] **T9.3.6**: Error state UI tests
-
-### P9.5: Performance Testing (→ T9.3.6)
-
-- [ ] **T9.5.1**: Measure app launch time
-  - [ ] **Target**: <2 seconds
-
-- [ ] **T9.5.2**: Measure chart calculation time
-  - [ ] **Target**: <3 seconds
-
-- [ ] **T9.5.3**: Measure report generation time
-  - [ ] **Target**: <10 seconds
-
-- [ ] **T9.5.4**: Measure UI frame rate
-  - [ ] **Target**: 60 FPS
-
-- [ ] **T9.5.5**: Measure memory usage
-  - [ ] Check for memory leaks
-
-- [ ] **T9.5.6**: Measure battery drain
-  - [ ] Typical 10-minute session
-
-- [ ] **T9.5.7**: Test on iPhone SE (oldest device)
-  - [ ] All performance targets must pass on SE
+**Expected**: All tests FAIL (handleCreateNewProfile doesn't exist yet)
 
 ---
 
-## Phase 10: App Store Preparation (Week 9)
+### T009: Unit Test - Form Validation Logic
+**File**: `AstroSvitlaTests/Features/Main/MainFlowInlineProfileTests.swift`
+**Description**: Write failing test for form validation before saving.
 
-### P10.1: App Store Assets [P]
+**Test Cases**:
+```swift
+@Test func testValidateForm_EmptyName() {
+    // Given: editedName == ""
+    // When: validateForm() called
+    // Then: returns false
+    // Then: validationError contains "name required"
+}
 
-- [ ] **T10.1.1**: Create app icon (1024x1024)
-- [ ] **T10.1.2**: Create screenshots (6.7", 6.5", 5.5")
-  - [ ] Screenshot 1: Onboarding
-  - [ ] Screenshot 2: Input form
-  - [ ] Screenshot 3: Chart visualization
-  - [ ] Screenshot 4: Area selection
-  - [ ] Screenshot 5: Report preview
-  - [ ] Screenshot 6: Bilingual support
-- [ ] **T10.1.3**: Write App Store description (English)
-- [ ] **T10.1.4**: Write App Store description (Ukrainian)
-- [ ] **T10.1.5**: Create promotional text
-- [ ] **T10.1.6**: Choose ASO keywords
-- [ ] **T10.1.7**: Create privacy policy document
-- [ ] **T10.1.8**: Create terms of service document
-- [ ] **T10.1.9**: Implement app rating prompt
+@Test func testValidateForm_DuplicateName() async {
+    // Given: editedName == existing profile name
+    // When: validateForm() called
+    // Then: returns false
+    // Then: validationError contains "name already exists"
+}
 
-### P10.2: Privacy & Compliance [P] (→ T10.1.7)
+@Test func testValidateForm_EmptyLocation() {
+    // Given: editedLocation == ""
+    // When: validateForm() called
+    // Then: returns false
+    // Then: validationError contains "location required"
+}
 
-- [ ] **T10.2.1**: Fill out Privacy Nutrition Labels in App Store Connect
-- [ ] **T10.2.2**: Implement ATT if needed
-- [ ] **T10.2.3**: Add privacy policy URL
-- [ ] **T10.2.4**: Review GDPR compliance
+@Test func testValidateForm_ValidData() {
+    // Given: All fields filled correctly
+    // When: validateForm() called
+    // Then: returns true
+    // Then: validationError == nil
+}
+```
 
-### P10.3: TestFlight Beta (→ T10.1.9, T10.2.4)
-
-- [ ] **T10.3.1**: Upload build to App Store Connect
-- [ ] **T10.3.2**: Configure TestFlight groups
-- [ ] **T10.3.3**: Invite 5-10 internal testers
-- [ ] **T10.3.4**: Collect feedback
-  - [ ] Bugs and crashes
-  - [ ] Report quality
-  - [ ] UX issues
-  - [ ] Performance
-- [ ] **T10.3.5**: Iterate based on feedback
-- [ ] **T10.3.6**: Second beta round if needed
-- [ ] **Target**: >4.5 star rating, >99% crash-free
-
-### P10.4: App Store Submission (→ T10.3.6)
-
-- [ ] **T10.4.1**: Complete all App Store Connect fields
-- [ ] **T10.4.2**: Set pricing and availability
-- [ ] **T10.4.3**: Configure all 5 in-app purchases
-- [ ] **T10.4.4**: Add age rating
-- [ ] **T10.4.5**: Submit for review
-- [ ] **T10.4.6**: Monitor review status
-- [ ] **T10.4.7**: Respond to rejection feedback if needed
-- [ ] **Goal**: App approved and live
+**Expected**: All tests FAIL (validateForm doesn't exist yet)
 
 ---
 
-## Phase 11: Post-Launch (Week 10+)
+### T010: Unit Test - Continue Button Handler
+**File**: `AstroSvitlaTests/Features/Main/MainFlowInlineProfileTests.swift`
+**Description**: Write failing test for handleContinue() async function.
 
-### P11.1: Monitoring
+**Test Cases**:
+```swift
+@Test func testHandleContinue_CreatesNewProfile() async {
+    // Given: formMode == .creating, all fields valid
+    // When: handleContinue() called
+    // Then: UserProfileService.createProfile() called
+    // Then: New profile saved to SwiftData
+    // Then: formMode == .viewing(newProfile)
+    // Then: repositoryContext.activeProfile == newProfile
+}
 
-- [ ] **T11.1.1**: Monitor crash reports in Xcode Organizer
-- [ ] **T11.1.2**: Track App Store reviews and ratings
-- [ ] **T11.1.3**: Monitor StoreKit purchase analytics
-- [ ] **T11.1.4**: Track OpenAI API usage and costs
-- [ ] **T11.1.5**: Collect user feedback
-- [ ] **T11.1.6**: Identify top bugs for hotfix
+@Test func testHandleContinue_UpdatesExistingProfile() async {
+    // Given: formMode == .viewing(profile), fields modified
+    // When: handleContinue() called
+    // Then: UserProfileService.updateProfile() called
+    // Then: Profile updated in SwiftData
+    // Then: formMode remains .viewing(updatedProfile)
+}
 
-### P11.2: Iteration Planning
+@Test func testHandleContinue_ValidationFailure() async {
+    // Given: editedName == "" (invalid)
+    // When: handleContinue() called
+    // Then: No profile saved
+    // Then: validationError set
+    // Then: isCalculating == false
+}
 
-- [ ] **T11.2.1**: Analyze user feedback
-- [ ] **T11.2.2**: Plan next features from "Out of Scope" list
-  - [ ] Transits
-  - [ ] Synastry
-  - [ ] Progressions
-  - [ ] Social features
-  - [ ] Premium subscription
-  - [ ] Cloud sync
+@Test func testHandleContinue_LoadingState() async {
+    // Given: Valid form data
+    // When: handleContinue() called
+    // Then: isCalculating == true during execution
+    // Then: isCalculating == false when complete
+}
+```
+
+**Expected**: All tests FAIL (handleContinue doesn't exist yet)
+
+---
+
+### T011: Unit Test - Switching Profiles Discards Unsaved Data
+**File**: `AstroSvitlaTests/Features/Main/MainFlowInlineProfileTests.swift`
+**Description**: Write failing test for FR-065 requirement (discard unsaved data).
+
+**Test Cases**:
+```swift
+@Test func testSwitchingProfiles_DiscardsUnsavedData() {
+    // Given: formMode == .creating, editedName == "Unsaved Name"
+    // When: handleProfileSelection(existingProfile) called
+    // Then: editedName == existingProfile.name (not "Unsaved Name")
+    // Then: formMode == .viewing(existingProfile)
+}
+
+@Test func testCreateNew_DiscardsViewingData() {
+    // Given: formMode == .viewing(profile), editedName modified
+    // When: handleCreateNewProfile() called
+    // Then: editedName == "" (cleared, not modified value)
+    // Then: formMode == .creating
+}
+```
+
+**Expected**: All tests FAIL (handlers don't enforce this behavior yet)
+
+---
+
+### T012: UI Test - Dropdown Menu Displays Profiles
+**File**: `AstroSvitlaUITests/ProfileSwitchingUITests.swift` (NEW)
+**Description**: Write failing UI test for dropdown menu rendering.
+
+**Test Cases**:
+```swift
+func testDropdownMenu_DisplaysAllProfiles() {
+    // Given: 3 profiles exist ("Alice", "Bob", "Charlie")
+    // When: Tap profile dropdown button
+    // Then: Menu appears with 3 profile items
+    // Then: Menu contains "Create New Profile" item
+}
+
+func testDropdownMenu_ShowsActiveProfile() {
+    // Given: Active profile is "Alice"
+    // When: View Home tab
+    // Then: Dropdown label shows "Alice"
+    // Then: Dropdown has chevron.down icon
+}
+
+func testDropdownMenu_HighlightsActiveProfile() {
+    // Given: Active profile is "Bob"
+    // When: Open dropdown menu
+    // Then: "Bob" item has checkmark icon
+    // Then: Other items don't have checkmark
+}
+```
+
+**Expected**: All tests FAIL (dropdown UI doesn't exist yet)
+
+---
+
+### T013: UI Test - Profile Selection Flow
+**File**: `AstroSvitlaUITests/ProfileSwitchingUITests.swift`
+**Description**: Write failing UI test for end-to-end profile selection.
+
+**Test Cases**:
+```swift
+func testProfileSelection_UpdatesFormFields() {
+    // Given: Active profile is "Alice"
+    // When: Open dropdown, tap "Bob"
+    // Then: Dropdown closes
+    // Then: Dropdown label shows "Bob"
+    // Then: Name field shows "Bob"
+    // Then: Birth date field shows Bob's date
+    // Then: Location field shows Bob's location
+}
+
+func testProfileSelection_UpdatesChartDisplay() {
+    // Given: Active profile is "Alice"
+    // When: Switch to "Bob"
+    // Then: Chart widget updates to Bob's chart data
+}
+```
+
+**Expected**: All tests FAIL (profile selection not wired yet)
+
+---
+
+### T014: UI Test - Create New Profile Flow
+**File**: `AstroSvitlaUITests/ProfileSwitchingUITests.swift`
+**Description**: Write failing UI test for inline profile creation.
+
+**Test Cases**:
+```swift
+func testCreateNewProfile_InlineFlow() {
+    // Given: 1 existing profile
+    // When: Open dropdown, tap "Create New Profile"
+    // Then: Dropdown label shows "New Profile"
+    // Then: All form fields clear
+    // When: Fill name, date, time, location
+    // When: Tap "Continue" button
+    // Then: Loading indicator appears
+    // Then: Profile saved
+    // Then: Dropdown label shows new profile name
+    // Then: Chart calculated and displayed
+}
+
+func testCreateNewProfile_ValidationError() {
+    // Given: Dropdown shows "Create New Profile"
+    // When: Fill name with existing profile name
+    // When: Tap "Continue"
+    // Then: Error message appears (duplicate name)
+    // Then: Continue button disabled or error shown
+    // Then: Profile NOT saved
+}
+```
+
+**Expected**: All tests FAIL (create flow not implemented yet)
+
+---
+
+### T015: UI Test - Empty State (No Profiles)
+**File**: `AstroSvitlaUITests/ProfileSwitchingUITests.swift`
+**Description**: Write failing UI test for first-time user experience.
+
+**Test Cases**:
+```swift
+func testEmptyState_ShowsNewProfile() {
+    // Given: No profiles exist (fresh install)
+    // When: Land on Home tab
+    // Then: Dropdown label shows "New Profile"
+    // Then: All form fields are empty
+    // Then: Continue button disabled until fields filled
+}
+
+func testEmptyState_FirstProfileCreation() {
+    // Given: No profiles exist
+    // When: Fill form fields with valid data
+    // When: Tap "Continue"
+    // Then: First profile created
+    // Then: Dropdown label shows profile name
+    // Then: Dropdown menu now has 1 item + "Create New"
+}
+```
+
+**Expected**: All tests FAIL (empty state handling not implemented yet)
+
+---
+
+## Phase 4: Implement Dropdown Selection Logic
+
+### T016: Implement handleProfileSelection()
+**File**: `AstroSvitla/Features/Main/MainFlowView.swift`
+**Action**: MODIFY
+**Description**: Implement function to handle profile selection from dropdown.
+
+**Implementation**:
+```swift
+private func handleProfileSelection(_ profile: UserProfile) {
+    formMode = .viewing(profile)
+    editedName = profile.name
+    editedBirthDate = profile.birthDate
+    editedBirthTime = profile.birthTime
+    editedLocation = profile.locationName
+    editedCoordinate = CLLocationCoordinate2D(
+        latitude: profile.latitude,
+        longitude: profile.longitude
+    )
+    editedTimezone = profile.timezone
+    repositoryContext.setActiveProfile(profile)
+    validationError = nil
+}
+```
+
+**Location**: Add as private method inside MainFlowView
+
+**Verify**: T007 tests now PASS
+
+---
+
+### T017: Implement handleCreateNewProfile()
+**File**: `AstroSvitla/Features/Main/MainFlowView.swift`
+**Action**: MODIFY
+**Description**: Implement function to handle "Create New Profile" selection.
+
+**Implementation**:
+```swift
+private func handleCreateNewProfile() {
+    formMode = .creating
+    editedName = ""
+    editedBirthDate = Date()
+    editedBirthTime = Date()
+    editedLocation = ""
+    editedCoordinate = nil
+    editedTimezone = TimeZone.current.identifier
+    validationError = nil
+}
+```
+
+**Location**: Add as private method inside MainFlowView
+
+**Verify**: T008 tests now PASS
+
+---
+
+### T018: Add Inline Profile Dropdown Menu
+**File**: `AstroSvitla/Features/Main/MainFlowView.swift`
+**Action**: MODIFY
+**Description**: Add SwiftUI Menu component for profile selection at top of Home tab.
+
+**Implementation**:
+```swift
+// Add this view component at top of body
+VStack(alignment: .leading, spacing: 16) {
+    // Profile Dropdown
+    Menu {
+        // Existing profiles
+        ForEach(viewModel.profiles) { profile in
+            Button {
+                handleProfileSelection(profile)
+            } label: {
+                HStack {
+                    Text(profile.name)
+                    if profile.id == repositoryContext.activeProfile?.id {
+                        Image(systemName: "checkmark")
+                    }
+                }
+            }
+        }
+
+        Divider()
+
+        // Create New option
+        Button {
+            handleCreateNewProfile()
+        } label: {
+            Label("Create New Profile", systemImage: "plus.circle")
+        }
+    } label: {
+        HStack {
+            Text(formMode.currentProfile?.name ?? "New Profile")
+                .font(.headline)
+            Image(systemName: "chevron.down")
+                .font(.caption)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(Color.secondary.opacity(0.1))
+        .cornerRadius(8)
+    }
+
+    // Rest of form fields go here...
+}
+```
+
+**Location**: Replace or integrate with existing Home tab content in body
+
+**Verify**: T012 tests now PASS (dropdown renders)
+
+---
+
+### T019: Initialize Form Mode on Appear
+**File**: `AstroSvitla/Features/Main/MainFlowView.swift`
+**Action**: MODIFY
+**Description**: Set initial formMode when view appears based on active profile.
+
+**Implementation**:
+```swift
+.onAppear {
+    if let activeProfile = repositoryContext.activeProfile {
+        handleProfileSelection(activeProfile)
+    } else if let firstProfile = viewModel.profiles.first {
+        handleProfileSelection(firstProfile)
+    } else {
+        formMode = .empty
+        handleCreateNewProfile()
+    }
+}
+```
+
+**Location**: Add .onAppear modifier to outermost VStack in body
+
+**Verify**: T015 tests now PASS (empty state handled correctly)
+
+---
+
+## Phase 5: Wire Form Fields to State
+
+### T020: Bind Form Fields to @State Properties
+**File**: `AstroSvitla/Features/Main/MainFlowView.swift`
+**Action**: MODIFY
+**Description**: Update existing form fields to bind to new @State properties.
+
+**Changes**:
+```swift
+// Name field
+TextField("Name", text: $editedName)
+
+// Birth date picker
+DatePicker("Birth Date", selection: $editedBirthDate, displayedComponents: .date)
+
+// Birth time picker
+DatePicker("Birth Time", selection: $editedBirthTime, displayedComponents: .hourAndMinute)
+
+// Location field (existing LocationSearchView or TextField)
+LocationSearchView(
+    locationName: $editedLocation,
+    coordinate: $editedCoordinate,
+    timezone: $editedTimezone
+)
+```
+
+**Note**: Replace any existing bindings to viewModel properties with these @State bindings
+
+**Verify**: Manual test - changing dropdown updates form fields instantly
+
+---
+
+### T021: Add Continue Button
+**File**: `AstroSvitla/Features/Main/MainFlowView.swift`
+**Action**: MODIFY
+**Description**: Add Continue button at bottom of form with validation state.
+
+**Implementation**:
+```swift
+// At bottom of form VStack
+Button {
+    Task {
+        await handleContinue()
+    }
+} label: {
+    if isCalculating {
+        ProgressView()
+            .progressViewStyle(.circular)
+    } else {
+        Text("Continue")
+            .font(.headline)
+    }
+}
+.frame(maxWidth: .infinity)
+.padding()
+.background(isContinueButtonEnabled ? Color.blue : Color.gray)
+.foregroundColor(.white)
+.cornerRadius(12)
+.disabled(!isContinueButtonEnabled || isCalculating)
+```
+
+**Add computed property**:
+```swift
+private var isContinueButtonEnabled: Bool {
+    !editedName.isEmpty &&
+    !editedLocation.isEmpty &&
+    editedCoordinate != nil &&
+    validationError == nil
+}
+```
+
+**Location**: Add button at end of form, add computed property with other properties
+
+---
+
+### T022: Display Validation Errors
+**File**: `AstroSvitla/Features/Main/MainFlowView.swift`
+**Action**: MODIFY
+**Description**: Show validation error messages below form fields.
+
+**Implementation**:
+```swift
+// Add after form fields, before Continue button
+if let error = validationError {
+    Text(error)
+        .font(.caption)
+        .foregroundColor(.red)
+        .padding(.horizontal)
+}
+```
+
+**Location**: Add inside form VStack, before Continue button
+
+---
+
+## Phase 6: Implement Profile Creation/Update Logic
+
+### T023: Implement Form Validation
+**File**: `AstroSvitla/Features/Main/MainFlowView.swift`
+**Action**: MODIFY
+**Description**: Add validateForm() function with duplicate name check.
+
+**Implementation**:
+```swift
+private func validateForm() async -> Bool {
+    // Reset error
+    validationError = nil
+
+    // Check name not empty
+    guard !editedName.trimmingCharacters(in: .whitespaces).isEmpty else {
+        validationError = "Profile name is required"
+        return false
+    }
+
+    // Check duplicate name
+    let isDuplicate = viewModel.profiles.contains { profile in
+        profile.name.lowercased() == editedName.lowercased() &&
+        profile.id != formMode.currentProfile?.id
+    }
+
+    if isDuplicate {
+        validationError = "A profile with this name already exists"
+        return false
+    }
+
+    // Check location
+    guard !editedLocation.isEmpty, editedCoordinate != nil else {
+        validationError = "Birth location is required"
+        return false
+    }
+
+    return true
+}
+```
+
+**Location**: Add as private method inside MainFlowView
+
+**Verify**: T009 tests now PASS
+
+---
+
+### T024: Implement handleContinue()
+**File**: `AstroSvitla/Features/Main/MainFlowView.swift`
+**Action**: MODIFY
+**Description**: Implement async function to save profile and calculate chart.
+
+**Implementation**:
+```swift
+private func handleContinue() async {
+    // Validate
+    guard await validateForm() else { return }
+
+    // Show loading
+    isCalculating = true
+    defer { isCalculating = false }
+
+    do {
+        switch formMode {
+        case .creating, .empty:
+            // Create new profile
+            let newProfile = try await userProfileService.createProfile(
+                name: editedName,
+                birthDate: editedBirthDate,
+                birthTime: editedBirthTime,
+                locationName: editedLocation,
+                latitude: editedCoordinate!.latitude,
+                longitude: editedCoordinate!.longitude,
+                timezone: editedTimezone
+            )
+
+            // Switch to viewing new profile
+            handleProfileSelection(newProfile)
+
+            // Navigate to chart or next step
+            // (implementation depends on your navigation structure)
+
+        case .viewing(let profile):
+            // Update existing profile
+            try await userProfileService.updateProfile(
+                profile,
+                name: editedName,
+                birthDate: editedBirthDate,
+                birthTime: editedBirthTime,
+                locationName: editedLocation,
+                latitude: editedCoordinate!.latitude,
+                longitude: editedCoordinate!.longitude,
+                timezone: editedTimezone
+            )
+
+            // Refresh form with updated data
+            handleProfileSelection(profile)
+        }
+    } catch {
+        validationError = error.localizedDescription
+    }
+}
+```
+
+**Dependencies**: Requires UserProfileService with createProfile() and updateProfile() methods
+
+**Location**: Add as private method inside MainFlowView
+
+**Verify**: T010 tests now PASS
+
+---
+
+## Phase 7: Integration & Edge Cases
+
+### T025: Handle Active Profile Deletion
+**File**: `AstroSvitla/Features/Main/MainFlowView.swift`
+**Action**: MODIFY
+**Description**: Handle case where active profile is deleted from Settings.
+
+**Implementation**:
+```swift
+.onChange(of: repositoryContext.activeProfile) { oldValue, newValue in
+    // If active profile becomes nil and profiles exist, select first
+    if newValue == nil {
+        if let firstProfile = viewModel.profiles.first {
+            handleProfileSelection(firstProfile)
+        } else {
+            // No profiles left
+            handleCreateNewProfile()
+        }
+    }
+}
+```
+
+**Location**: Add .onChange modifier to outermost VStack in body
+
+**Verify**: Manual test - delete active profile from Settings, verify Home tab updates
+
+---
+
+### T026: Update UserProfileService (if needed)
+**File**: `AstroSvitla/Features/UserManagement/Services/UserProfileService.swift`
+**Action**: MODIFY (if service doesn't exist, CREATE)
+**Description**: Ensure UserProfileService has createProfile() and updateProfile() methods.
+
+**Required Methods**:
+```swift
+func createProfile(
+    name: String,
+    birthDate: Date,
+    birthTime: Date,
+    locationName: String,
+    latitude: Double,
+    longitude: Double,
+    timezone: String
+) async throws -> UserProfile
+
+func updateProfile(
+    _ profile: UserProfile,
+    name: String,
+    birthDate: Date,
+    birthTime: Date,
+    locationName: String,
+    latitude: Double,
+    longitude: Double,
+    timezone: String
+) async throws
+```
+
+**Note**: Implementation should:
+- Create/update UserProfile in SwiftData
+- Calculate BirthChart via ChartCalculator
+- Link chart to profile
+- Save to ModelContext
+
+**Skip if service already exists with these methods**
+
+---
+
+### T027: Verify Settings Profile List Still Works
+**File**: `AstroSvitla/Features/UserManagement/Views/UserProfileListView.swift`
+**Action**: VERIFY (no changes)
+**Description**: Manual test that existing Settings profile management screen still works.
+
+**Test Scenarios**:
+1. Navigate to Settings → User Profiles
+2. Verify profile list displays all profiles
+3. Test delete profile from Settings
+4. Verify deletion works and updates Home tab
+5. Verify cascade delete (chart + reports) still works
+
+**Expected**: All existing Settings functionality still works
+
+**Fix if needed**: Update UserProfileListView to use new data model if broken
+
+---
+
+## Phase 8: Testing & Verification
+
+### T028: Run All Unit Tests
+**Command**: `xcodebuild test -scheme AstroSvitla -destination 'platform=iOS Simulator,name=iPhone 15'`
+**Description**: Execute full test suite and verify all tests pass.
+
+**Expected Results**:
+- ✅ T006-T011 tests now PASS (all implementation complete)
+- ✅ Existing tests still PASS (no regressions)
+- ❌ If any tests fail, debug and fix before proceeding
+
+**Verify**: Test output shows 0 failures
+
+---
+
+### T029: Run All UI Tests
+**Command**: `xcodebuild test -scheme AstroSvitla -destination 'platform=iOS Simulator,name=iPhone 15' -only-testing:AstroSvitlaUITests/ProfileSwitchingUITests`
+**Description**: Execute UI tests for profile switching flows.
+
+**Expected Results**:
+- ✅ T012-T015 tests now PASS (all UI implementation complete)
+- ❌ If any tests fail, debug and fix before proceeding
+
+**Verify**: UI test output shows 0 failures
+
+---
+
+### T030: Manual Testing Checklist
+**Description**: Perform manual testing of complete inline profile flow.
+
+**Test Scenarios**:
+
+**Scenario 1: First Time User (Empty State)**
+- [ ] Launch app on fresh install
+- [ ] Home tab shows "New Profile" dropdown
+- [ ] Form fields are empty
+- [ ] Continue button disabled until all fields filled
+- [ ] Fill form with valid data
+- [ ] Tap Continue → loading indicator appears
+- [ ] Profile saved, dropdown shows profile name
+- [ ] Chart displayed
+
+**Scenario 2: Create Second Profile**
+- [ ] Open dropdown, tap "Create New Profile"
+- [ ] Dropdown shows "New Profile"
+- [ ] Form fields clear instantly
+- [ ] Fill form with different data
+- [ ] Tap Continue → new profile created
+- [ ] Dropdown now has 2 items + "Create New"
+
+**Scenario 3: Switch Between Profiles**
+- [ ] Open dropdown showing "Alice"
+- [ ] See "Alice" (checkmark), "Bob", "Create New"
+- [ ] Tap "Bob"
+- [ ] Dropdown closes, shows "Bob"
+- [ ] Form fields update instantly to Bob's data
+- [ ] Chart updates to Bob's chart
+
+**Scenario 4: Duplicate Name Validation**
+- [ ] Open dropdown, tap "Create New"
+- [ ] Enter existing profile name
+- [ ] Tap Continue
+- [ ] Error appears: "A profile with this name already exists"
+- [ ] Continue button disabled or error shown
+- [ ] Profile NOT saved
+
+**Scenario 5: Discard Unsaved Data (FR-065)**
+- [ ] Open dropdown, tap "Create New"
+- [ ] Start filling form (name "Test")
+- [ ] Without tapping Continue, switch to existing profile
+- [ ] Form instantly shows existing profile data
+- [ ] "Test" data discarded (no confirmation dialog)
+
+**Scenario 6: Delete Active Profile from Settings**
+- [ ] Home tab shows "Alice"
+- [ ] Go to Settings → User Profiles
+- [ ] Delete "Alice"
+- [ ] Return to Home tab
+- [ ] Dropdown switches to next available profile or "New Profile"
+- [ ] Form fields update accordingly
+
+**Scenario 7: Performance**
+- [ ] Create 10 profiles
+- [ ] Open dropdown → menu renders instantly (<100ms)
+- [ ] Switch between profiles → form updates instantly (<100ms)
+- [ ] No lag or jank
+
+**Scenario 8: Localization**
+- [ ] Test in English → all strings display correctly
+- [ ] Test in Ukrainian → all strings translated
+- [ ] Dropdown, form labels, buttons, errors all localized
+
+**Pass Criteria**: All scenarios work as expected
+
+---
+
+### T031: Performance Profiling
+**Tool**: Xcode Instruments (Time Profiler)
+**Description**: Verify inline dropdown meets performance goals from plan.md.
+
+**Measurements**:
+1. **Dropdown render time**: Tap dropdown button
+   - Goal: <16ms (60fps)
+   - Measure: Time from tap to menu fully rendered
+
+2. **Profile switch time**: Select different profile from dropdown
+   - Goal: <100ms
+   - Measure: Time from selection to form fields updated
+
+3. **Form field population**: Time to populate all form fields
+   - Goal: <50ms
+   - Measure: Time from handleProfileSelection() call to UI update
+
+**Tool Usage**:
+- Launch app in Xcode
+- Product → Profile (Cmd+I)
+- Choose Time Profiler
+- Record while performing dropdown operations
+- Verify all operations meet goals
+
+**Pass Criteria**: All operations within performance goals
+
+---
+
+## Phase 9: Documentation & Polish
+
+### T032: Take Screenshots for PR
+**Description**: Capture screenshots showing new inline profile UX.
+
+**Required Screenshots**:
+1. Empty state ("New Profile" dropdown, empty form)
+2. Dropdown menu open (multiple profiles + "Create New")
+3. Form filled with profile data
+4. Active profile selected (checkmark visible)
+5. Validation error displayed
+6. Loading state (Continue button with spinner)
+
+**Location**: Save to `screenshots/inline-profile-ux/` for PR description
+
+---
+
+### T033: Update Changelog
+**File**: `CHANGELOG.md` or similar
+**Description**: Document changes for this feature.
+
+**Entry**:
+```markdown
+## [Unreleased]
+
+### Changed
+- **BREAKING**: Replaced modal-based multi-profile UI with inline dropdown on Home tab
+- Profile selector now appears directly on Home tab (no separate screens)
+- Birth data form always visible with instant profile switching
+- Simplified profile creation flow (no navigation required)
+
+### Removed
+- UserSelectorView.swift (replaced by inline Menu)
+- UserProfileFormView.swift (form now inline on MainFlowView)
+
+### Fixed
+- Profile selection no longer requires multiple taps
+- Unsaved profile data now properly discarded on profile switch (FR-065)
+```
+
+---
+
+### T034: Add Code Comments
+**Files**: `AstroSvitla/Features/Main/MainFlowView.swift`
+**Description**: Add explanatory comments for ProfileFormMode and state management.
+
+**Comments to Add**:
+```swift
+// MARK: - Profile Form State Management
+/// Manages the three states of the inline profile form:
+/// - empty: No profiles exist (first-time user)
+/// - viewing: Displaying an existing profile's data
+/// - creating: User selected "Create New Profile"
+enum ProfileFormMode: Equatable { ... }
+
+// MARK: - Profile Selection Handlers
+/// Updates form fields when user selects a profile from dropdown.
+/// Discards any unsaved changes per FR-065 (no confirmation dialog).
+private func handleProfileSelection(_ profile: UserProfile) { ... }
+
+/// Clears form fields when user selects "Create New Profile".
+/// Discards any unsaved changes per FR-065 (no confirmation dialog).
+private func handleCreateNewProfile() { ... }
+
+// MARK: - Profile Persistence
+/// Saves profile (create or update) after validation.
+/// Shows loading indicator during chart calculation.
+private func handleContinue() async { ... }
+```
+
+---
+
+## Dependencies Summary
+
+### Phase Dependencies
+```
+Phase 1 (Cleanup)
+    ↓
+Phase 2 (State Setup)
+    ↓
+Phase 3 (Tests - MUST FAIL) ⚠️ TDD GATE
+    ↓
+Phase 4 (Dropdown Logic)
+    ↓
+Phase 5 (Form Wiring)
+    ↓
+Phase 6 (Save Logic)
+    ↓
+Phase 7 (Integration)
+    ↓
+Phase 8 (Verification)
+    ↓
+Phase 9 (Documentation)
+```
+
+### Task Dependencies
+- **T003** depends on T001, T002 (delete files first, then remove references)
+- **T006-T015** (all tests) depend on T004, T005 (enum/state must exist to test)
+- **T016-T017** depend on T004, T005 (implement handlers for state/enum)
+- **T018** depends on T016, T017 (dropdown calls handlers)
+- **T019** depends on T018 (initialize form after dropdown exists)
+- **T020-T022** depend on T005 (bind to @State properties)
+- **T023-T024** depend on T020-T022 (validation/save need form bindings)
+- **T025** depends on T016, T019 (handle profile changes)
+- **T028-T031** depend on ALL previous tasks (full implementation complete)
+- **T032-T034** depend on T028-T031 (document working feature)
+
+### Visual Flow
+```
+T001-T003 (Cleanup) → T004-T005 (State) → T006-T015 (Tests ⚠️)
+                                              ↓
+                            T016-T017 (Handlers) ← Must make tests pass
+                                              ↓
+                            T018-T019 (Dropdown UI)
+                                              ↓
+                            T020-T022 (Form Binding)
+                                              ↓
+                            T023-T024 (Save Logic)
+                                              ↓
+                            T025-T027 (Integration)
+                                              ↓
+                            T028-T031 (Verify ALL PASS ✅)
+                                              ↓
+                            T032-T034 (Document)
+```
+
+---
+
+## Parallel Execution Opportunities
+
+### Phase 1: All Parallel
+```bash
+# Delete both files simultaneously
+Task T001: "Delete UserSelectorView.swift"
+Task T002: "Delete UserProfileFormView.swift"
+# Then run T003 sequentially (depends on T001, T002)
+```
+
+### Phase 3: All Parallel (Different Test Files)
+```bash
+# Write all test files simultaneously
+Task T006: "Write ProfileFormMode tests in MainFlowInlineProfileTests.swift"
+Task T007: "Write handleProfileSelection tests in MainFlowInlineProfileTests.swift"
+Task T008: "Write handleCreateNewProfile tests in MainFlowInlineProfileTests.swift"
+Task T009: "Write form validation tests in MainFlowInlineProfileTests.swift"
+Task T010: "Write handleContinue tests in MainFlowInlineProfileTests.swift"
+Task T011: "Write discarding unsaved data tests in MainFlowInlineProfileTests.swift"
+Task T012: "Write dropdown menu UI tests in ProfileSwitchingUITests.swift"
+Task T013: "Write profile selection UI tests in ProfileSwitchingUITests.swift"
+Task T014: "Write create new profile UI tests in ProfileSwitchingUITests.swift"
+Task T015: "Write empty state UI tests in ProfileSwitchingUITests.swift"
+```
+
+### Phase 4-6: Sequential (Same File)
+All tasks T004-T024 modify MainFlowView.swift → MUST be sequential
+
+### Phase 7: Mixed
+- T025 (MainFlowView) → sequential with Phase 4-6
+- T026 (UserProfileService) → can be parallel if separate developer
+- T027 (Settings verification) → can be parallel (different file)
+
+### Phase 8: Sequential (Build on Each Other)
+T028 (unit tests) → T029 (UI tests) → T030 (manual) → T031 (profiling)
+
+### Phase 9: All Parallel
+```bash
+Task T032: "Take screenshots"
+Task T033: "Update changelog"
+Task T034: "Add code comments to MainFlowView.swift"
+```
+
+---
+
+## Success Criteria
+
+**Definition of Done**: Feature complete when ALL criteria met
+
+- [ ] **Cleanup**
+  - [ ] UserSelectorView.swift deleted
+  - [ ] UserProfileFormView.swift deleted
+  - [ ] Modal sheet references removed from MainFlowView
+
+- [ ] **State Management**
+  - [ ] ProfileFormMode enum implemented
+  - [ ] All @State properties added
+  - [ ] Handlers implemented (handleProfileSelection, handleCreateNewProfile, handleContinue)
+
+- [ ] **UI Implementation**
+  - [ ] Inline dropdown Menu component visible on Home tab
+  - [ ] Menu shows all profiles + "Create New"
+  - [ ] Active profile has checkmark
+  - [ ] Form fields bind to @State properties
+  - [ ] Continue button shows loading state
+  - [ ] Validation errors display inline
+
+- [ ] **TDD**
+  - [ ] All unit tests (T006-T011) PASS
+  - [ ] All UI tests (T012-T015) PASS
+  - [ ] No existing tests broken
+
+- [ ] **Functionality**
+  - [ ] Profile selection updates form instantly (<100ms)
+  - [ ] Profile creation saves to SwiftData
+  - [ ] Chart calculation triggered on save
+  - [ ] Duplicate name validation works
+  - [ ] Unsaved data discarded on switch (no confirmation)
+  - [ ] Empty state handled (first-time user)
+  - [ ] Settings profile list still works
+
+- [ ] **Performance**
+  - [ ] Dropdown renders in <16ms (60fps)
+  - [ ] Profile switch completes in <100ms
+  - [ ] Form field population in <50ms
+
+- [ ] **Localization**
+  - [ ] All strings localized (EN, UK)
+  - [ ] No hardcoded English strings
+
+- [ ] **Documentation**
+  - [ ] Screenshots captured
+  - [ ] Changelog updated
+  - [ ] Code comments added
+  - [ ] PR description complete
+
+- [ ] **Build Quality**
+  - [ ] `xcodebuild test` passes with 0 failures
+  - [ ] No compiler warnings
+  - [ ] No SwiftLint violations
+  - [ ] Manual testing checklist complete
+
+---
+
+## Notes
+
+### TDD Critical Path
+**⚠️ DO NOT skip Phase 3 (Tests)!** Constitution Article III requires test-first development.
+
+**Correct Order**:
+1. Write T006-T015 (ALL tests)
+2. Run tests → ALL FAIL ✅ Expected
+3. Implement T016-T024 (code)
+4. Run tests → ALL PASS ✅ Feature works
+
+**Incorrect Order (DO NOT DO THIS)**:
+1. ~~Implement T016-T024 first~~
+2. ~~Then write tests~~
+3. ~~Tests pass immediately~~ ← No confidence that tests work
+
+### Commit Strategy
+**Recommended commits**:
+- Commit 1: T001-T003 (Cleanup)
+- Commit 2: T004-T005 (State setup)
+- Commit 3: T006-T015 (All tests - failing)
+- Commit 4: T016-T019 (Dropdown logic)
+- Commit 5: T020-T024 (Form + save logic)
+- Commit 6: T025-T027 (Integration)
+- Commit 7: T028-T031 (Verification passing)
+- Commit 8: T032-T034 (Documentation)
+
+### Rollback Plan
+If issues arise during implementation:
+1. Keep commits small (one phase per commit)
+2. Git tag before each phase: `git tag phase-N-complete`
+3. Rollback with: `git reset --hard phase-N-complete`
+4. Re-enable old modal sheets temporarily if needed (don't delete until Phase 8 passes)
+
+### Edge Cases to Watch
+- **No profiles + no active profile**: T019 handles this with empty state
+- **Active profile deleted elsewhere**: T025 handles this with onChange
+- **Rapid profile switching**: SwiftUI bindings should handle this, but test in T030
+- **Very long profile names**: Test UI doesn't break (consider maxWidth or lineLimit)
 
 ---
 
 ## Summary
 
-**Total Estimated Tasks**: 200+
-**Timeline**: 10 weeks
-**Critical Path**: Phase 0 → P1 → P2 → P3 → P4 → P5 → P6 → P7 → P8 → P9 → P10
-**Parallel Opportunities**: Research tasks, localization, some UI components
+**Total Tasks**: 34
+- **Cleanup**: 3 tasks (T001-T003)
+- **State Setup**: 2 tasks (T004-T005)
+- **Tests (TDD)**: 10 tasks (T006-T015) ⚠️ MUST FAIL BEFORE PHASE 4
+- **Implementation**: 13 tasks (T016-T027)
+- **Verification**: 4 tasks (T028-T031)
+- **Documentation**: 3 tasks (T032-T034)
 
-**Key Milestones**:
-- ✅ Week 1: Foundation complete (models, structure)
-- ✅ Week 2: Chart calculation working
-- ✅ Week 3: Basic UI complete
-- ✅ Week 4: AI integration complete
-- ✅ Week 5: Purchase flow complete
-- ✅ Week 6: Reports complete
-- ✅ Week 7: Localization complete
-- ✅ Week 8: Testing complete
-- ✅ Week 9: App Store ready
-- ✅ Week 10: Launch!
+**Parallel Opportunities**: 13 tasks can run in parallel (Phase 1: 2, Phase 3: 10, Phase 9: 3)
 
-**Next Step**: Begin Phase 0 research tasks once dependencies (OpenAI API key, expert rules content) are obtained.
+**Critical Path**: T003 → T004 → T005 → T006-T015 → T016 → T017 → T018 → T019 → T020 → T023 → T024 → T028 → T029 → T030
 
-## Leftovers
+**Estimated Effort**: 2-3 days for experienced SwiftUI developer
 
-- Re-enable `testAspectOrbOverrideFiltersResults` once SwissEphemeris no longer crashes the simulator under tight orb overrides.
-- Investigate simulator crashes triggered by `testCalculatePlanetsCoversAllBodies` when running the full `AstroSvitlaTests` suite in parallel.
-- Add real timeout/cancellation handling to async `ChartCalculator.calculate` to satisfy T2.2.3 requirements.
-- UI snapshot coverage (T3.2.1, T3.3.1, T6.1.1, T6.1.2, T6.3.1, T7.1.1, T7.2.1, dark-mode variants) deferred until visual design stabilizes.
-- Localization expansion (P8.1–P8.3, T6.1.6, T6.3.4) deferred until post-MVP release when bilingual content/spec is ready.
-- Switch prompts/tests back to multilingual once localization resumes.
-- Remove temporary `HardcodedReportGenerator` after vector store integration replaces stub data.
-- Replace stubbed `AstrologyKnowledgeProvider` responses with real vector-store queries post T5.0.3.
+**Complexity**: Low-Medium
+- State management is straightforward (ProfileFormMode enum)
+- UI changes confined to MainFlowView
+- No data model changes (UserProfile already exists)
+- Minimal service changes (UserProfileService may already exist)
+
+**Risk Areas**:
+- Binding form fields correctly (T020)
+- Async handleContinue() with loading state (T024)
+- Performance of dropdown with many profiles (T031)
+
+**Ready to Implement**: ✅ Start with T001!
+
+---
+
+**Plan Status**: ✅ Tasks Generated | Ready for Implementation
+**Updated**: 2025-10-09

@@ -2,9 +2,9 @@
 
 **Feature Branch**: `001-astrosvitla-ios-native`
 **Created**: 2025-10-07
-**Updated**: 2025-10-08
-**Status**: Draft
-**Input**: User description: "iOS native astrology app with personalized natal chart calculations and AI-powered life area predictions using pay-per-report model + Multi-user support with ability to select previous users or input new user data"
+**Updated**: 2025-10-09
+**Status**: Revised - Simplified Multi-Profile UX
+**Input**: User description: "iOS native astrology app with personalized natal chart calculations and AI-powered life area predictions using pay-per-report model + Simplified multi-profile management: all profile selection and creation happens inline on Home tab with dropdown selector, no separate screens or modals"
 
 ## Execution Flow (main)
 ```
@@ -54,15 +54,26 @@ As a person interested in astrology, I want to generate personalized predictions
 5. User receives new personalized report
 6. User compares insights across different life areas
 
-#### Journey 3: Multiple Users Management
-1. User wants to generate chart for family member/partner
-2. User taps "Add New User" or selects from list of previous users
-3. If new user: enters name and birth data
-4. If existing user: selects from saved user list
-5. System loads or creates natal chart for selected user
-6. User generates reports for specific user's chart
-7. User switches between different users via main tab
-8. System shows reports grouped by user on reports tab
+#### Journey 3: Simplified Multi-Profile Flow (Home Tab Only)
+1. User opens app and lands on Home tab
+2. User sees profile selector at top showing current profile (default: last used or "New Profile")
+3. User taps profile selector dropdown
+4. User chooses either:
+   - **Option A**: Select existing profile from list
+   - **Option B**: Tap "Create New Profile" button
+5. If creating new profile:
+   - User enters name (e.g., "Mom", "Partner", "John")
+   - User enters birth date, time, and location directly below
+   - User taps "Continue" button
+   - System saves profile with calculated natal chart
+   - Profile selector updates to show new profile name
+6. If selecting existing profile:
+   - System loads saved profile data
+   - Birth data fields populate automatically
+   - Profile selector shows selected profile name
+7. User can now generate reports for currently selected profile
+8. All actions (view chart, generate report) apply to active profile
+9. Reports tab shows all reports grouped by profile
 
 ### Acceptance Scenarios
 
@@ -120,37 +131,180 @@ As a person interested in astrology, I want to generate personalized predictions
 - **Then** all UI elements display in English
 - **And** generated reports are in English
 
-#### Scenario 7: User Selection from Main Tab
-- **Given** user has 3 saved users: "Me", "Partner", "Mom"
-- **When** user opens Main tab
-- **Then** system displays current user's name and chart
-- **And** system shows user selection dropdown/list
-- **When** user taps user selector
-- **Then** system displays list of all saved users
-- **And** system highlights currently selected user
-- **When** user selects "Partner"
-- **Then** system switches to Partner's chart
-- **And** system updates all views to show Partner's data
+#### Scenario 7: Profile Switcher - Select Existing Profile (Home Tab Only)
+- **Given** user is on Home tab with "John" profile active
+- **When** user taps profile selector dropdown at top of screen
+- **Then** system shows inline dropdown list of all saved profiles
+- **And** list shows: "John ✓", "Mom", "Partner", "Create New Profile"
+- **When** user taps "Mom" from list
+- **Then** dropdown closes automatically
+- **And** profile selector button updates to show "Mom"
+- **And** birth data fields below populate with Mom's saved data
+- **And** user can now view chart or generate reports for Mom
 
-#### Scenario 8: Adding New User
-- **Given** user is on Main tab
-- **When** user taps "Add New User" button
-- **Then** system shows new user form
-- **And** form requests: user name, birth date, birth time, birth location
-- **When** user enters all required data
-- **And** user taps "Create User"
-- **Then** system creates new user profile
-- **And** system calculates natal chart for new user
-- **And** system switches to newly created user as active user
+#### Scenario 8: Profile Switcher - Create New Profile Inline (Home Tab Only)
+- **Given** user is on Home tab viewing "John" profile
+- **When** user taps profile selector dropdown
+- **And** user taps "Create New Profile" from dropdown
+- **Then** dropdown closes
+- **And** profile selector shows "New Profile" label
+- **And** all birth data fields clear to empty state
+- **When** user enters name "Partner" in name field
+- **And** user enters birth date, time, location in form below
+- **And** user taps "Continue" button at bottom
+- **Then** system validates name is unique and all fields filled
+- **And** system calculates natal chart (shows loading indicator)
+- **And** system saves new profile "Partner" to database
+- **And** profile selector updates to show "Partner"
+- **And** form fields remain populated with Partner's data
+- **And** user can now proceed to generate reports
 
-#### Scenario 9: Reports Grouped by User
-- **Given** user has 2 users: "Me" (3 reports) and "Partner" (2 reports)
-- **When** user opens Reports tab
-- **Then** system displays reports organized in sections by user
-- **And** each section shows user name as header
-- **And** under "Me" section: 3 reports are listed
-- **And** under "Partner" section: 2 reports are listed
-- **And** each report shows: life area, purchase date, chart snapshot
+#### Scenario 9: First-Time User - No Profiles Exist
+- **Given** user completes onboarding (no profiles created yet)
+- **When** user lands on Home tab for first time
+- **Then** profile selector shows "New Profile" as default
+- **And** all birth data fields are empty (placeholder text visible)
+- **And** "Continue" button is disabled (no data entered yet)
+- **When** user enters name and complete birth data
+- **And** user taps "Continue"
+- **Then** system creates first profile
+- **And** profile selector updates to show entered name
+- **And** this profile becomes default for future app launches
+
+#### Scenario 10: Profile Switcher - Edge Cases
+- **What happens when** user selects same profile already active?
+  - **Then** dropdown closes, no data reloads, no API calls
+- **What happens when** user starts entering data for "New Profile" but switches to existing profile before saving?
+  - **Then** system discards unsaved data, loads selected profile data
+- **What happens when** user tries to create profile with duplicate name?
+  - **Then** system shows error: "A profile with name 'John' already exists"
+- **What happens when** user taps "Continue" with empty name field?
+  - **Then** button remains disabled OR shows validation error
+
+### Visual Flow Diagram: Simplified Profile Management (Home Tab Only)
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                        HOME TAB (Main Screen)                        │
+└─────────────────────────────────────────────────────────────────────┘
+                                   │
+                                   ▼
+              ┌────────────────────────────────────┐
+              │   Profile Selector Dropdown        │
+              │   [ John ▼ ]                       │
+              └────────────────────────────────────┘
+                                   │
+                    ┌──────────────┴──────────────┐
+                    │   User taps dropdown        │
+                    └──────────────┬──────────────┘
+                                   │
+                                   ▼
+              ┌────────────────────────────────────┐
+              │   Dropdown Menu Shows:             │
+              │   ✓ John (current)                 │
+              │   • Mom                            │
+              │   • Partner                        │
+              │   ─────────────────                │
+              │   + Create New Profile             │
+              └────────────────────────────────────┘
+                                   │
+                    ┌──────────────┴──────────────┐
+                    │                             │
+                    ▼                             ▼
+        ┌───────────────────┐         ┌──────────────────────┐
+        │ SELECT EXISTING   │         │ CREATE NEW PROFILE   │
+        │ (e.g., "Mom")     │         │                      │
+        └───────────────────┘         └──────────────────────┘
+                    │                             │
+                    ▼                             ▼
+        ┌───────────────────┐         ┌──────────────────────┐
+        │ Dropdown closes   │         │ Dropdown closes      │
+        │ Selector → "Mom"  │         │ Selector → "New..."  │
+        │ Fields populate   │         │ Fields clear         │
+        │ with Mom's data   │         │ (empty state)        │
+        └───────────────────┘         └──────────────────────┘
+                    │                             │
+                    │                             ▼
+                    │              ┌──────────────────────────┐
+                    │              │ User fills form:         │
+                    │              │ • Name: "Partner"        │
+                    │              │ • Birth Date             │
+                    │              │ • Birth Time             │
+                    │              │ • Location               │
+                    │              └──────────────────────────┘
+                    │                             │
+                    │                             ▼
+                    │              ┌──────────────────────────┐
+                    │              │ User taps "Continue"     │
+                    │              └──────────────────────────┘
+                    │                             │
+                    │                             ▼
+                    │              ┌──────────────────────────┐
+                    │              │ System validates:        │
+                    │              │ ✓ Name is unique         │
+                    │              │ ✓ All fields filled      │
+                    │              └──────────────────────────┘
+                    │                             │
+                    │                             ▼
+                    │              ┌──────────────────────────┐
+                    │              │ System:                  │
+                    │              │ 1. Calculates chart      │
+                    │              │ 2. Saves profile         │
+                    │              │ 3. Sets as active        │
+                    │              └──────────────────────────┘
+                    │                             │
+                    └─────────────┬───────────────┘
+                                  │
+                                  ▼
+              ┌────────────────────────────────────┐
+              │   Profile Active & Ready           │
+              │   Selector shows: "Partner"        │
+              │   Fields populated with data       │
+              │   ─────────────────────────────    │
+              │   User can now:                    │
+              │   • View natal chart               │
+              │   • Generate reports               │
+              │   • Switch to another profile      │
+              └────────────────────────────────────┘
+```
+
+### State Machine: Profile Selector
+
+```
+States:
+  ┌─────────────────┐
+  │ NO_PROFILE      │ → First-time user, no profiles exist
+  └─────────────────┘
+           │
+           ▼
+  ┌─────────────────┐
+  │ PROFILE_ACTIVE  │ → Existing profile selected, data loaded
+  └─────────────────┘
+           │
+           ▼
+  ┌─────────────────┐
+  │ NEW_PROFILE     │ → "Create New" selected, fields empty
+  └─────────────────┘
+           │
+           ▼
+  ┌─────────────────┐
+  │ SAVING_PROFILE  │ → Validating & calculating chart
+  └─────────────────┘
+           │
+           ▼
+  ┌─────────────────┐
+  │ PROFILE_ACTIVE  │ → New profile saved, now active
+  └─────────────────┘
+
+Transitions:
+  NO_PROFILE → PROFILE_ACTIVE (user creates first profile)
+  PROFILE_ACTIVE → PROFILE_ACTIVE (user switches to another saved profile)
+  PROFILE_ACTIVE → NEW_PROFILE (user taps "Create New Profile")
+  NEW_PROFILE → SAVING_PROFILE (user taps "Continue")
+  NEW_PROFILE → PROFILE_ACTIVE (user switches to existing profile, discards new)
+  SAVING_PROFILE → PROFILE_ACTIVE (validation + save succeeds)
+  SAVING_PROFILE → NEW_PROFILE (validation fails, show error)
+```
 
 ### Edge Cases
 
@@ -271,38 +425,60 @@ As a person interested in astrology, I want to generate personalized predictions
 - **FR-048**: System MUST allow users to export any purchased report as PDF
 - **FR-049**: System MUST allow users to share report text via system share sheet
 
-#### Multi-User Management (FR-050 to FR-060)
+#### Multi-Profile Management - Simplified Flow (FR-050 to FR-065)
+**Core Principle**: All profile management happens inline on Home tab, no separate screens or modals
+
 - **FR-050**: System MUST allow users to create multiple user profiles (each with own natal chart)
 - **FR-051**: System MUST require unique name for each user profile (e.g., "Me", "Partner", "Mom")
-- **FR-052**: System MUST display list of all saved users with name and birth date
-- **FR-053**: System MUST allow user to switch between user profiles from Main tab
-- **FR-054**: System MUST associate purchased reports with specific user profile
-- **FR-055**: System MUST maintain "active user" context throughout app session
-- **FR-056**: System MUST show active user's name prominently on Main tab
-- **FR-057**: System MUST provide "Add New User" action button on Main tab
-- **FR-058**: System MUST show user selector (dropdown/list) on Main tab
-- **FR-059**: System MUST persist active user selection across app launches
-- **FR-060**: System MUST allow users to delete user profiles -> deleted as well, but alert about that should be shown
+- **FR-052**: System MUST display profile selector dropdown at top of Home tab showing active profile name
+- **FR-053**: Profile selector dropdown MUST show:
+  - List of all saved profiles with checkmark on active profile
+  - "Create New Profile" option at bottom of list
+- **FR-054**: When user selects existing profile from dropdown:
+  - System MUST close dropdown automatically
+  - System MUST load selected profile's birth data into form fields below
+  - System MUST update profile selector to show selected profile name
+  - System MUST NOT navigate to another screen
+- **FR-055**: When user selects "Create New Profile" from dropdown:
+  - System MUST close dropdown automatically
+  - System MUST clear all birth data fields to empty state
+  - System MUST update profile selector to show "New Profile" label
+  - System MUST NOT navigate to another screen
+- **FR-056**: System MUST show birth data input form directly below profile selector on Home tab at all times
+- **FR-057**: Birth data form MUST include: Name field, Birth Date, Birth Time, Birth Location, Continue button
+- **FR-058**: When creating new profile, "Continue" button MUST:
+  - Validate all fields are filled and name is unique
+  - Calculate natal chart in background
+  - Save new profile to local storage
+  - Update profile selector to show new profile name
+  - Keep user on same Home tab screen
+- **FR-059**: System MUST maintain "active profile" context throughout app session
+- **FR-060**: System MUST persist active profile selection across app launches
+- **FR-061**: System MUST associate all purchased reports with active profile
+- **FR-062**: System MUST NOT allow profile deletion from Home tab (keep it simple - deletion only in Settings)
+- **FR-063**: Reports tab MUST show reports grouped by profile with profile name as section header
+- **FR-064**: When no profiles exist (first-time user), system MUST show "New Profile" as default in selector
+- **FR-065**: When user switches profiles while editing unsaved "New Profile" data, system MUST discard unsaved data without confirmation
 
-#### Localization (FR-061 to FR-065)
-- **FR-061**: System MUST support English language (primary)
-- **FR-062**: System MUST support Ukrainian language (secondary)
-- **FR-063**: System MUST automatically detect device language and display appropriate language
-- **FR-064**: System MUST localize all UI text, labels, and buttons
-- **FR-065**: System MUST generate reports in same language as UI
+#### Localization (FR-066 to FR-070)
+- **FR-066**: System MUST support English language (primary)
+- **FR-067**: System MUST support Ukrainian language (secondary)
+- **FR-068**: System MUST automatically detect device language and display appropriate language
+- **FR-069**: System MUST localize all UI text, labels, and buttons
+- **FR-070**: System MUST generate reports in same language as UI
 
-#### Onboarding (FR-066 to FR-069)
-- **FR-066**: System MUST show 3-screen onboarding flow on first app launch
-- **FR-067**: Onboarding MUST explain: personalized predictions, pay-per-report model, expert knowledge + AI interpretation
-- **FR-068**: User MUST be able to skip or navigate through onboarding screens
-- **FR-069**: System MUST not show onboarding again after completion
+#### Onboarding (FR-071 to FR-074)
+- **FR-071**: System MUST show 3-screen onboarding flow on first app launch
+- **FR-072**: Onboarding MUST explain: personalized predictions, pay-per-report model, expert knowledge + AI interpretation
+- **FR-073**: User MUST be able to skip or navigate through onboarding screens
+- **FR-074**: System MUST not show onboarding again after completion
 
-#### Data & Privacy (FR-070 to FR-074)
-- **FR-070**: System MUST store all user data locally on device only (no cloud sync in MVP)
-- **FR-071**: System MUST NOT require user account or registration
-- **FR-072**: System MUST NOT collect analytics or tracking data
-- **FR-073**: System MUST NOT share birth data with third parties
-- **FR-074**: System MUST handle user data in compliance with iOS privacy requirements
+#### Data & Privacy (FR-075 to FR-079)
+- **FR-075**: System MUST store all user data locally on device only (no cloud sync in MVP)
+- **FR-076**: System MUST NOT require user account or registration
+- **FR-077**: System MUST NOT collect analytics or tracking data
+- **FR-078**: System MUST NOT share birth data with third parties
+- **FR-079**: System MUST handle user data in compliance with iOS privacy requirements
 
 ### Non-Functional Requirements
 

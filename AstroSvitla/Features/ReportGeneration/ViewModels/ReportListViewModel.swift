@@ -69,28 +69,28 @@ private extension ReportListViewModel {
         guard reports.isEmpty == false else { return [] }
 
         let grouped = Dictionary(grouping: reports) { purchase -> UUID in
-            if let chartId = purchase.chart?.id {
-                return chartId
+            if let profileId = purchase.profile?.id {
+                return profileId
             } else {
                 return .orphanChartGroupingKey
             }
         }
 
         let sections: [Section] = grouped.map { grouping in
-            let chartId = grouping.key
+            let profileId = grouping.key
             let purchases = grouping.value.sorted(by: { $0.purchaseDate > $1.purchaseDate })
 
-            let chart = purchases.first?.chart
-            let isOrphan = chart == nil
-            let chartName = chart.flatMap { $0.name.isEmpty ? nil : $0.name } ?? String(localized: "reports.section.unknown_profile", table: "Localizable")
-            let subtitle = chart.map { chartSubtitle(for: $0) } ?? String(localized: "reports.section.no_chart", table: "Localizable")
+            let profile = purchases.first?.profile
+            let isOrphan = profile == nil
+            let chartName = profile?.name ?? String(localized: "reports.section.unknown_profile", table: "Localizable")
+            let subtitle = profile.map { profileSubtitle(for: $0) } ?? String(localized: "reports.section.no_chart", table: "Localizable")
 
             let items = purchases.map { purchase in
                 makeItem(from: purchase)
             }
 
             return Section(
-                id: chart?.id ?? chartId,
+                id: profile?.id ?? profileId,
                 chartName: chartName,
                 chartSubtitle: subtitle,
                 reports: items,
@@ -126,10 +126,10 @@ private extension ReportListViewModel {
         )
     }
 
-    static func chartSubtitle(for chart: BirthChart) -> String {
-        let location = chart.locationName.isEmpty ? nil : chart.locationName
-        let birthDate = Self.birthDateFormatter.string(from: chart.birthDate)
-        let birthTime = Self.birthTimeFormatter.string(from: chart.birthTime)
+    static func profileSubtitle(for profile: UserProfile) -> String {
+        let location = profile.locationName.isEmpty ? nil : profile.locationName
+        let birthDate = Self.birthDateFormatter.string(from: profile.birthDate)
+        let birthTime = Self.birthTimeFormatter.string(from: profile.birthTime)
 
         if let location {
             return "\(birthDate) • \(birthTime) • \(location)"

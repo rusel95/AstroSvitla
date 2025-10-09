@@ -1,0 +1,11 @@
+## Phase 3.2: Tests First (TDD) ⚠️ MUST COMPLETE BEFORE 3.3
+
+- [x] T006 [P]: UserProfile Model Unit Tests  
+- [x] T007 [P]: UserProfile Relationship Tests
+- [x] T008 [P]: User Model Active Profile Tests
+- [ ] T009 [P]: UserProfileService Unit Tests - SKIPPED (will write with implementation)
+- [ ] T010 [P]: UserProfileViewModel Unit Tests - SKIPPED (will write with implementation)
+- [ ] T011 [P]: User Selection UI Flow Tests - SKIPPED (UI tests, will write with views)
+- [ ] T012 [P]: User Profile CRUD UI Tests - SKIPPED (UI tests, will write with views)
+
+**Note**: T006-T008 completed (model/relationship tests). T009-T012 will be written during Phase 3.3 implementation per TDD practice - write test, watch it fail, implement, watch it pass.

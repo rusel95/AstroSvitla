@@ -9,21 +9,26 @@ final class User {
     var createdAt: Date
     var lastActiveAt: Date
 
-    @Relationship(deleteRule: .cascade)
-    var charts: [BirthChart]
+    // Active user profile (for session management)
+    var activeProfileId: UUID?
 
     @Relationship(deleteRule: .cascade)
-    var purchases: [ReportPurchase]
+    var profiles: [UserProfile]
 
     init(id: UUID = UUID(), createdAt: Date = Date(), lastActiveAt: Date = Date()) {
         self.id = id
         self.createdAt = createdAt
         self.lastActiveAt = lastActiveAt
-        self.charts = []
-        self.purchases = []
+        self.activeProfileId = nil
+        self.profiles = []
     }
 
     func updateLastActive() {
         lastActiveAt = Date()
+    }
+
+    func setActiveProfile(_ profile: UserProfile) {
+        self.activeProfileId = profile.id
+        updateLastActive()
     }
 }

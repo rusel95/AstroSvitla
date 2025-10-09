@@ -14,6 +14,7 @@ struct AstroSvitlaApp: App {
 
     private let sharedModelContainer: ModelContainer
     @StateObject private var preferences = AppPreferences()
+    @StateObject private var repositoryContext: RepositoryContext
 
     init() {
         // CRITICAL: Initialize SwissEphemeris before any astronomical calculations
@@ -35,14 +36,23 @@ struct AstroSvitlaApp: App {
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
+
+        let repoContext = RepositoryContext(context: sharedModelContainer.mainContext)
+        repoContext.loadActiveProfile()
+        _repositoryContext = StateObject(wrappedValue: repoContext)
     }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(preferences)
+                .environmentObject(repositoryContext)
                 .preferredColorScheme(preferences.selectedColorScheme)
                 .environment(\.locale, preferences.selectedLocale)
+                .task {
+                    // Ensure active profile is loaded when app starts
+                    repositoryContext.loadActiveProfile()
+                }
         }
         .modelContainer(sharedModelContainer)
     }

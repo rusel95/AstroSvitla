@@ -133,7 +133,7 @@ struct ReportDetailView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("report.section.knowledge_usage", tableName: "Localizable")
                 .font(.headline)
-            Label(report.knowledgeUsage.vectorSourceUsed ? "report.knowledge.used" : "report.knowledge.not_used", tableName: "Localizable", systemImage: report.knowledgeUsage.vectorSourceUsed ? "checkmark.circle.fill" : "xmark.circle")
+            Label(report.knowledgeUsage.vectorSourceUsed ? "report.knowledge.used" : "report.knowledge.not_used", systemImage: report.knowledgeUsage.vectorSourceUsed ? "checkmark.circle.fill" : "xmark.circle")
                 .foregroundStyle(report.knowledgeUsage.vectorSourceUsed ? .green : .secondary)
             if let notes = report.knowledgeUsage.notes, notes.isEmpty == false {
                 Text(notes)

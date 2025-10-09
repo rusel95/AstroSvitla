@@ -13,20 +13,65 @@ enum ChartCalculationError: LocalizedError {
     }
 }
 
+// MARK: - Profile Form State Management
+/// Manages the three states of the inline profile form:
+/// - empty: No profiles exist (first-time user)
+/// - viewing: Displaying an existing profile's data
+/// - creating: User selected "Create New Profile"
+enum ProfileFormMode: Equatable {
+    case empty                    // No profiles exist yet
+    case viewing(UserProfile)     // Existing profile selected
+    case creating                 // "Create New" selected
+
+    var isCreating: Bool {
+        if case .creating = self { return true }
+        return false
+    }
+
+    var currentProfile: UserProfile? {
+        if case .viewing(let profile) = self { return profile }
+        return nil
+    }
+}
+
 struct MainFlowView: View {
     @EnvironmentObject private var preferences: AppPreferences
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var repositoryContext: RepositoryContext
     @StateObject private var onboardingViewModel: OnboardingViewModel
+    @StateObject private var profileViewModel: UserProfileViewModel
     @State private var flowState: FlowState
     @State private var isShowingReportList = false
     @State private var errorMessage: String?
 
+    // MARK: - Profile Form State
+    // Form mode
+    @State private var formMode: ProfileFormMode = .empty
+
+    // Form field state
+    @State private var editedName: String = ""
+    @State private var editedBirthDate: Date = Date()
+    @State private var editedBirthTime: Date = Date()
+    @State private var editedLocation: String = ""
+    @State private var editedCoordinate: CLLocationCoordinate2D? = nil
+    @State private var editedTimezone: String = TimeZone.current.identifier
+
+    // UI state
+    @State private var isCalculating: Bool = false
+    @State private var validationError: String? = nil
+
     private let chartCalculator = ChartCalculator()
     private let reportGenerator = AIReportGenerator()
 
-    init() {
+    init(modelContext: ModelContext) {
         let onboardingViewModel = OnboardingViewModel()
         _onboardingViewModel = StateObject(wrappedValue: onboardingViewModel)
+
+        let service = UserProfileService(context: modelContext)
+        let repoContext = RepositoryContext(context: modelContext)
+        let profileVM = UserProfileViewModel(service: service, repositoryContext: repoContext)
+        _profileViewModel = StateObject(wrappedValue: profileVM)
+
         let initialFlow: FlowState = onboardingViewModel.isCompleted ? .birthInput(existing: nil) : .onboarding
         _flowState = State(initialValue: initialFlow)
     }
@@ -64,6 +109,20 @@ struct MainFlowView: View {
         .sheet(isPresented: $isShowingReportList) {
             ReportListView(allowsDismiss: true, showsTitle: true)
         }
+        .onAppear {
+            profileViewModel.loadProfiles()
+            repositoryContext.loadActiveProfile()
+
+            // Initialize form mode based on active profile
+            if let activeProfile = repositoryContext.activeProfile {
+                handleProfileSelection(activeProfile)
+            } else if let firstProfile = profileViewModel.profiles.first {
+                handleProfileSelection(firstProfile)
+            } else {
+                formMode = .empty
+                handleCreateNewProfile()
+            }
+        }
     }
 
     @ViewBuilder
@@ -80,13 +139,52 @@ struct MainFlowView: View {
             )
 
         case .birthInput(let existing):
-            BirthDataInputView(
-                viewModel: BirthDataInputViewModel(initialDetails: existing),
-                onContinue: { details in
-                    calculateChart(for: details)
-                },
-                onCancel: nil
-            )
+            VStack(alignment: .leading, spacing: 0) {
+                // Profile Dropdown (inline selector)
+                Menu {
+                    // Existing profiles
+                    ForEach(profileViewModel.profiles) { profile in
+                        Button {
+                            handleProfileSelection(profile)
+                        } label: {
+                            HStack {
+                                Text(profile.name)
+                                if profile.id == repositoryContext.activeProfile?.id {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
+                        }
+                    }
+
+                    Divider()
+
+                    // Create New option
+                    Button {
+                        handleCreateNewProfile()
+                    } label: {
+                        Label("Create New Profile", systemImage: "plus.circle")
+                    }
+                } label: {
+                    HStack {
+                        Text(formMode.currentProfile?.name ?? "New Profile")
+                            .font(.headline)
+                        Image(systemName: "chevron.down")
+                            .font(.caption)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(.systemGroupedBackground))
+                }
+
+                BirthDataInputView(
+                    viewModel: BirthDataInputViewModel(initialDetails: existing),
+                    onContinue: { details in
+                        calculateChart(for: details)
+                    },
+                    onCancel: nil
+                )
+            }
 
         case .calculating(let details):
             CalculatingChartView(
@@ -141,6 +239,38 @@ struct MainFlowView: View {
         }
     }
 
+    // MARK: - Profile Selection Handlers
+
+    /// Updates form fields when user selects a profile from dropdown.
+    /// Discards any unsaved changes per FR-065 (no confirmation dialog).
+    private func handleProfileSelection(_ profile: UserProfile) {
+        formMode = .viewing(profile)
+        editedName = profile.name
+        editedBirthDate = profile.birthDate
+        editedBirthTime = profile.birthTime
+        editedLocation = profile.locationName
+        editedCoordinate = CLLocationCoordinate2D(
+            latitude: profile.latitude,
+            longitude: profile.longitude
+        )
+        editedTimezone = profile.timezone
+        repositoryContext.setActiveProfile(profile)
+        validationError = nil
+    }
+
+    /// Clears form fields when user selects "Create New Profile".
+    /// Discards any unsaved changes per FR-065 (no confirmation dialog).
+    private func handleCreateNewProfile() {
+        formMode = .creating
+        editedName = ""
+        editedBirthDate = Date()
+        editedBirthTime = Date()
+        editedLocation = ""
+        editedCoordinate = nil
+        editedTimezone = TimeZone.current.identifier
+        validationError = nil
+    }
+
     private func calculateChart(for details: BirthDetails) {
         flowState = .calculating(details)
 
@@ -185,7 +315,7 @@ struct MainFlowView: View {
                     natalChart: chart,
                     languageCode: preferences.selectedLanguageCode,
                     languageDisplayName: preferences.selectedLanguageDisplayName,
-                    repositoryContext: RepositoryContext.shared.summary
+                    repositoryContext: "AstroSvitla iOS app context"
                 )
                 do {
                     try await persistGeneratedReport(
@@ -287,7 +417,8 @@ private extension MainFlowView {
             transactionId: UUID().uuidString
         )
 
-        purchase.chart = chartEntity
+        // TODO: Update to link to UserProfile instead of BirthChart
+        // purchase.profile = activeUserProfile
         modelContext.insert(purchase)
         try modelContext.save()
     }
@@ -299,46 +430,10 @@ private extension MainFlowView {
         let birthTime = details.birthTime
         let timezoneID = details.timeZone.identifier
 
-        let descriptor = FetchDescriptor<BirthChart>(
-            predicate: #Predicate { chart in
-                chart.name == name &&
-                chart.birthDate == birthDate &&
-                chart.birthTime == birthTime &&
-                chart.timezone == timezoneID
-            },
-            sortBy: [SortDescriptor(\.updatedAt, order: .reverse)]
-        )
-
-        let matches = try modelContext.fetch(descriptor)
-
+        // TODO: This logic needs complete rewrite for UserProfile architecture
+        // For now, just create a new chart each time
         let chartJSON = BirthChart.encodedChartJSON(from: natalChart) ?? ""
-        let coordinate = details.coordinate
-
-        if let existing = matches.first {
-            existing.name = details.name
-            existing.birthDate = details.birthDate
-            existing.birthTime = details.birthTime
-            existing.locationName = details.location
-            existing.latitude = coordinate?.latitude ?? existing.latitude
-            existing.longitude = coordinate?.longitude ?? existing.longitude
-            existing.timezone = details.timeZone.identifier
-            if chartJSON.isEmpty == false {
-                existing.updateChartData(chartJSON)
-            }
-            existing.updatedAt = Date()
-            return existing
-        }
-
-        let newChart = BirthChart(
-            name: details.name,
-            birthDate: details.birthDate,
-            birthTime: details.birthTime,
-            locationName: details.location,
-            latitude: coordinate?.latitude ?? 0,
-            longitude: coordinate?.longitude ?? 0,
-            timezone: details.timeZone.identifier,
-            chartDataJSON: chartJSON
-        )
+        let newChart = BirthChart(chartDataJSON: chartJSON)
 
         modelContext.insert(newChart)
         return newChart
@@ -457,5 +552,8 @@ private struct GeneratingReportView: View {
 }
 
 #Preview {
-    MainFlowView()
+    let container = try! ModelContainer.astroSvitlaShared(inMemory: true)
+    MainFlowView(modelContext: container.mainContext)
+        .environmentObject(AppPreferences())
+        .environmentObject(RepositoryContext(context: container.mainContext))
 }

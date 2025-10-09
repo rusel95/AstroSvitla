@@ -196,13 +196,13 @@ private struct SavedReportDetailView: View {
     private var preparedViewData: PreparedViewData? {
         guard
             let generatedReport = item.report.generatedReport,
-            let chartEntity = item.report.chart,
-            let natalChart = chartEntity.decodedNatalChart()
+            let profile = item.report.profile,
+            let chartEntity = profile.chart,
+            let natalChart = chartEntity.decodedNatalChart(),
+            let birthDetails = chartEntity.makeBirthDetails()
         else {
             return nil
         }
-
-        let birthDetails = chartEntity.makeBirthDetails()
 
         return PreparedViewData(
             birthDetails: birthDetails,
