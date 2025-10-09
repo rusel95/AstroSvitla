@@ -11,8 +11,9 @@ enum Config {
 
     // MARK: - OpenAI Configuration
 
+    static let openAIProjectID = "proj_0Okcswia9PZrXTqsS4JkfsnN"
     /// Replace with your project-specific OpenAI API key
-    static let openAIAPIKey = "YOUR_OPENAI_API_KEY_HERE"
+    static let openAIAPIKey = "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"
 
     /// OpenAI model to use for report generation
     static let openAIModel = "gpt-4o"

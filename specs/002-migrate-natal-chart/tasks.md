@@ -155,7 +155,7 @@
 
 ### Rate Limiter (Test-First)
 
-- [ ] **T019** [P] Write unit tests for rate limiter
+- [x] **T019** [P] Write unit tests for rate limiter
   - File: `AstroSvitlaTests/Services/RateLimiterTests.swift`
   - Test request tracking
   - Test sliding window enforcement (5 req/60sec)
@@ -163,7 +163,7 @@
   - Test monthly credit tracking
   - **VERIFY TESTS FAIL** before implementation
 
-- [ ] **T020** Implement `RateLimiter` service
+- [x] **T020** Implement `RateLimiter` service
   - File: `AstroSvitla/Services/RateLimiter.swift`
   - Track request timestamps in UserDefaults
   - `canMakeRequest() -> (allowed: Bool, retryAfter: TimeInterval?)` method
@@ -174,7 +174,7 @@
 
 ### Network Monitor
 
-- [ ] **T021** [P] Implement `NetworkMonitor` for connectivity detection
+- [x] **T021** [P] Implement `NetworkMonitor` for connectivity detection
   - File: `AstroSvitla/Utils/NetworkMonitor.swift`
   - Use `Network.NWPathMonitor`
   - `@Published var isConnected: Bool`

@@ -45,9 +45,9 @@ final class OpenAIClientProvider: OpenAIClientProviding {
     }
 
     private func makeCustomHeaders() -> [String: String] {
-        guard let projectID = Config.openAIProjectID, projectID.isEmpty == false else {
+        guard Config.openAIProjectID.isEmpty == false else {
             return [:]
         }
-        return ["OpenAI-Project": projectID]
+        return ["OpenAI-Project": Config.openAIProjectID]
     }
 }
