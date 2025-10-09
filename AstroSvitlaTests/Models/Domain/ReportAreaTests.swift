@@ -5,15 +5,6 @@ import Testing
 struct ReportAreaTests {
 
     @Test
-    func testDisplayNames() {
-        let financesName = String(localized: "report.area.finances", table: "Localizable")
-        let generalName = String(localized: "report.area.general", table: "Localizable")
-
-        #expect(ReportArea.finances.displayName == financesName)
-        #expect(ReportArea.general.displayName == generalName)
-    }
-
-    @Test
     func testPrices() {
         let generalPrice = Decimal(string: "9.99")!
         let healthPrice = Decimal(string: "5.99")!

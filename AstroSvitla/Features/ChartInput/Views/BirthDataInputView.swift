@@ -15,15 +15,15 @@ struct BirthDataInputView: View {
     var body: some View {
         Form {
             Section {
-                TextField(String(localized: "birth.field.name_optional", table: "Localizable"), text: $viewModel.name)
+                TextField("birth.field.name_optional", text: $viewModel.name)
                     .focused($focusedField, equals: .name)
             } header: {
                 Text("birth.section.person", tableName: "Localizable")
             }
 
             Section {
-                DatePicker(String(localized: "birth.field.date", table: "Localizable"), selection: $viewModel.birthDate, in: viewModel.dateRange, displayedComponents: .date)
-                DatePicker(String(localized: "birth.field.time", table: "Localizable"), selection: $viewModel.birthTime, displayedComponents: .hourAndMinute)
+                DatePicker("birth.field.date", selection: $viewModel.birthDate, in: viewModel.dateRange, displayedComponents: .date)
+                DatePicker("birth.field.time", selection: $viewModel.birthTime, displayedComponents: .hourAndMinute)
                 Button {
                     showLocationSearch = true
                 } label: {

@@ -68,13 +68,15 @@ class UserProfileViewModel: ObservableObject {
 
         defer { isLoading = false }
 
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+
         // Validate
-        guard validateProfileName(name) else {
+        guard validateProfileName(trimmedName) else {
             return false
         }
 
         guard service.validateProfileData(
-            name: name,
+            name: trimmedName,
             birthDate: birthDate,
             latitude: latitude,
             longitude: longitude
@@ -85,7 +87,7 @@ class UserProfileViewModel: ObservableObject {
 
         do {
             let profile = try await service.createProfile(
-                name: name,
+                name: trimmedName,
                 birthDate: birthDate,
                 birthTime: birthTime,
                 locationName: locationName,
@@ -98,6 +100,67 @@ class UserProfileViewModel: ObservableObject {
             // Reload and set as active
             loadProfiles()
             selectProfile(profile)
+
+            return true
+        } catch {
+            errorMessage = error.localizedDescription
+            return false
+        }
+    }
+
+    // MARK: - Update Profile
+
+    func updateProfile(
+        _ profile: UserProfile,
+        name: String,
+        birthDate: Date,
+        birthTime: Date,
+        locationName: String,
+        latitude: Double,
+        longitude: Double,
+        timezone: String,
+        natalChart: NatalChart?
+    ) async -> Bool {
+        isLoading = true
+        errorMessage = nil
+
+        defer { isLoading = false }
+
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard validateProfileName(trimmedName, excluding: profile.id) else {
+            return false
+        }
+
+        guard service.validateProfileData(
+            name: trimmedName,
+            birthDate: birthDate,
+            latitude: latitude,
+            longitude: longitude
+        ) else {
+            errorMessage = "Invalid profile data"
+            return false
+        }
+
+        do {
+            try service.updateProfile(
+                profile,
+                name: trimmedName,
+                birthDate: birthDate,
+                birthTime: birthTime,
+                locationName: locationName,
+                latitude: latitude,
+                longitude: longitude,
+                timezone: timezone,
+                natalChart: natalChart
+            )
+
+            loadProfiles()
+            if let refreshed = profiles.first(where: { $0.id == profile.id }) {
+                selectProfile(refreshed)
+            } else {
+                selectProfile(profile)
+            }
 
             return true
         } catch {

@@ -56,10 +56,16 @@ final class UserProfileModelTests: XCTestCase {
         let profiles = try context.fetch(fetchDescriptor)
 
         XCTAssertEqual(profiles.count, 1, "Should have exactly one profile")
-        XCTAssertEqual(profiles.first?.name, "Test User")
-        XCTAssertEqual(profiles.first?.locationName, "Kyiv, Ukraine")
-        XCTAssertEqual(profiles.first?.latitude, 50.4501, accuracy: 0.0001)
-        XCTAssertEqual(profiles.first?.longitude, 30.5234, accuracy: 0.0001)
+
+        guard let storedProfile = profiles.first else {
+            XCTFail("Profile should be persisted")
+            return
+        }
+
+        XCTAssertEqual(storedProfile.name, "Test User")
+        XCTAssertEqual(storedProfile.locationName, "Kyiv, Ukraine")
+        XCTAssertEqual(storedProfile.latitude, 50.4501, accuracy: 0.0001)
+        XCTAssertEqual(storedProfile.longitude, 30.5234, accuracy: 0.0001)
     }
 
     func testUserProfileWithInvalidDatesBefor1900() throws {

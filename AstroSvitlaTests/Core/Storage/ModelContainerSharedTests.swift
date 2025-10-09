@@ -15,8 +15,7 @@ struct ModelContainerSharedTests {
         let users = try context.fetch(descriptor)
 
         #expect(users.count == 1)
-        #expect(users.first?.charts.isEmpty == true)
-        #expect(users.first?.purchases.isEmpty == true)
+        #expect(users.first?.profiles.isEmpty == true)
     }
 
     @MainActor
@@ -25,7 +24,7 @@ struct ModelContainerSharedTests {
         let container = try ModelContainer.astroSvitlaShared(inMemory: true)
         let context = container.mainContext
 
-        let chart = BirthChart(
+        let profile = UserProfile(
             name: "Sample",
             birthDate: Date(),
             birthTime: Date(),
@@ -35,6 +34,10 @@ struct ModelContainerSharedTests {
             timezone: "Europe/Kyiv"
         )
 
+        let chart = BirthChart(chartDataJSON: "{}")
+        chart.profile = profile
+
+        context.insert(profile)
         context.insert(chart)
         try context.save()
 

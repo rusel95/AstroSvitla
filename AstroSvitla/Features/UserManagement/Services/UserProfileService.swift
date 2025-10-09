@@ -86,7 +86,8 @@ class UserProfileService {
         locationName: String,
         latitude: Double,
         longitude: Double,
-        timezone: String
+        timezone: String,
+        natalChart: NatalChart?
     ) throws {
         // Validate name uniqueness (excluding current profile)
         if profile.name != name {
@@ -103,6 +104,17 @@ class UserProfileService {
         profile.longitude = longitude
         profile.timezone = timezone
         profile.updatedAt = Date()
+
+        if let natalChart {
+            let chartJSON = BirthChart.encodedChartJSON(from: natalChart) ?? ""
+            if let existingChart = profile.chart {
+                existingChart.updateChartData(chartJSON)
+            } else {
+                let newChart = BirthChart(chartDataJSON: chartJSON)
+                newChart.profile = profile
+                context.insert(newChart)
+            }
+        }
 
         try context.save()
     }

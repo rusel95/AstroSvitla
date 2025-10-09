@@ -41,8 +41,8 @@ struct MainFlowView: View {
     @StateObject private var onboardingViewModel: OnboardingViewModel
     @StateObject private var profileViewModel: UserProfileViewModel
     @State private var flowState: FlowState
-    @State private var isShowingReportList = false
     @State private var errorMessage: String?
+    @State private var isShowingLocationSearch = false
 
     // MARK: - Profile Form State
     // Form mode
@@ -59,9 +59,14 @@ struct MainFlowView: View {
     // UI state
     @State private var isCalculating: Bool = false
     @State private var validationError: String? = nil
+    @FocusState private var focusedField: ProfileField?
 
     private let chartCalculator = ChartCalculator()
     private let reportGenerator = AIReportGenerator()
+
+    private enum ProfileField: Hashable {
+        case name
+    }
 
     init(modelContext: ModelContext) {
         let onboardingViewModel = OnboardingViewModel()
@@ -80,23 +85,6 @@ struct MainFlowView: View {
         NavigationStack {
             content
                 .animation(.default, value: flowState.animationID)
-                .toolbar {
-                    if shouldShowReportListButton {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button {
-                                isShowingReportList = true
-                            } label: {
-                                Label {
-                                    Text("toolbar.saved_reports", tableName: "Localizable")
-                                } icon: {
-                                    Image(systemName: "doc.text")
-                                }
-                                .labelStyle(.iconOnly)
-                            }
-                            .accessibilityLabel(Text("toolbar.saved_reports", tableName: "Localizable"))
-                        }
-                    }
-                }
         }
         .alert(String(localized: "alert.generic.title", table: "Localizable"), isPresented: Binding(
             get: { errorMessage != nil },
@@ -105,9 +93,6 @@ struct MainFlowView: View {
             Button(String(localized: "action.ok", table: "Localizable"), role: .cancel) { errorMessage = nil }
         } message: {
             Text(errorMessage ?? String(localized: "alert.generic.message", table: "Localizable"))
-        }
-        .sheet(isPresented: $isShowingReportList) {
-            ReportListView(allowsDismiss: true, showsTitle: true)
         }
         .onAppear {
             profileViewModel.loadProfiles()
@@ -123,6 +108,19 @@ struct MainFlowView: View {
                 handleCreateNewProfile()
             }
         }
+        .onChange(of: repositoryContext.activeProfile) { _, newValue in
+            if newValue?.id == formMode.currentProfile?.id {
+                return
+            }
+
+            if let profile = newValue {
+                handleProfileSelection(profile)
+            } else if let firstProfile = profileViewModel.profiles.first {
+                handleProfileSelection(firstProfile)
+            } else {
+                handleCreateNewProfile()
+            }
+        }
     }
 
     @ViewBuilder
@@ -133,57 +131,140 @@ struct MainFlowView: View {
                 viewModel: onboardingViewModel,
                 onFinish: {
                     withAnimation {
-                        flowState = .birthInput(existing: nil)
+                        presentBirthInput(with: nil)
                     }
                 }
             )
 
-        case .birthInput(let existing):
-            VStack(alignment: .leading, spacing: 0) {
-                // Profile Dropdown (inline selector)
-                Menu {
-                    // Existing profiles
-                    ForEach(profileViewModel.profiles) { profile in
-                        Button {
-                            handleProfileSelection(profile)
-                        } label: {
-                            HStack {
-                                Text(profile.name)
-                                if profile.id == repositoryContext.activeProfile?.id {
-                                    Image(systemName: "checkmark")
+        case .birthInput(_):
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    Menu {
+                        ForEach(profileViewModel.profiles) { profile in
+                            Button {
+                                handleProfileSelection(profile)
+                            } label: {
+                                HStack {
+                                    Text(profile.name)
+                                    if profile.id == repositoryContext.activeProfile?.id {
+                                        Image(systemName: "checkmark")
+                                    }
                                 }
+                            }
+                        }
+
+                        Divider()
+
+                        Button {
+                            handleCreateNewProfile()
+                        } label: {
+                            Label(
+                                String(localized: "profile.selector.create_new", table: "Localizable"),
+                                systemImage: "plus.circle"
+                            )
+                        }
+                    } label: {
+                        HStack {
+                            Text(formMode.currentProfile?.name ?? String(localized: "profile.selector.new_profile", table: "Localizable"))
+                                .font(.headline)
+                            Spacer()
+                            Image(systemName: "chevron.down")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(.ultraThinMaterial)
+                        .cornerRadius(12)
+                    }
+
+                    VStack(alignment: .leading, spacing: 16) {
+                        TextField("profile.form.field.name", text: $editedName)
+                        .textInputAutocapitalization(.words)
+                        .autocorrectionDisabled()
+                        .focused($focusedField, equals: .name)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 10)
+                        .background(Color(.secondarySystemBackground))
+                        .cornerRadius(10)
+
+                        VStack(alignment: .leading, spacing: 12) {
+                            DatePicker("birth.field.date", selection: $editedBirthDate, in: birthDateRange, displayedComponents: .date)
+
+                            DatePicker("birth.field.time", selection: $editedBirthTime, displayedComponents: .hourAndMinute)
+
+                            Button {
+                                isShowingLocationSearch = true
+                            } label: {
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("birth.field.location", tableName: "Localizable")
+                                            .font(.subheadline)
+                                            .foregroundStyle(.secondary)
+                                        Text(locationDisplayText)
+                                            .foregroundStyle(locationDisplayColor)
+                                            .lineLimit(2)
+                                    }
+                                    Spacer()
+                                    Image(systemName: "mappin.and.ellipse")
+                                        .foregroundStyle(.secondary)
+                                }
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 12)
+                                .background(Color(.secondarySystemBackground))
+                                .cornerRadius(10)
                             }
                         }
                     }
 
-                    Divider()
+                    if let error = validationError {
+                        Text(error)
+                            .font(.footnote)
+                            .foregroundStyle(Color.red)
+                            .padding(.horizontal, 4)
+                    }
 
-                    // Create New option
                     Button {
-                        handleCreateNewProfile()
+                        Task {
+                            await handleContinue()
+                        }
                     } label: {
-                        Label("Create New Profile", systemImage: "plus.circle")
+                        HStack {
+                            if isCalculating {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
+                            } else {
+                                Text("action.continue", tableName: "Localizable")
+                                    .font(.headline)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
                     }
-                } label: {
-                    HStack {
-                        Text(formMode.currentProfile?.name ?? "New Profile")
-                            .font(.headline)
-                        Image(systemName: "chevron.down")
-                            .font(.caption)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(.systemGroupedBackground))
+                    .buttonStyle(.borderedProminent)
+                    .disabled(!isContinueButtonEnabled || isCalculating)
                 }
-
-                BirthDataInputView(
-                    viewModel: BirthDataInputViewModel(initialDetails: existing),
-                    onContinue: { details in
-                        calculateChart(for: details)
-                    },
-                    onCancel: nil
-                )
+                .padding(.horizontal, 20)
+                .padding(.vertical, 24)
+            }
+            .background(Color(.systemGroupedBackground))
+            .scrollDismissesKeyboard(.interactively)
+            .navigationTitle(Text("birth.navigation.title", tableName: "Localizable"))
+            .sheet(isPresented: $isShowingLocationSearch) {
+                NavigationStack {
+                    LocationSearchView(initialQuery: editedLocation) { suggestion in
+                        applyLocationSuggestion(suggestion)
+                        isShowingLocationSearch = false
+                    }
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button(String(localized: "action.close", table: "Localizable")) {
+                                isShowingLocationSearch = false
+                            }
+                        }
+                    }
+                }
             }
 
         case .calculating(let details):
@@ -199,7 +280,7 @@ struct MainFlowView: View {
                     flowState = .purchase(details, chart, area)
                 },
                 onEditDetails: {
-                    flowState = .birthInput(existing: details)
+                    presentBirthInput(with: details)
                 }
             )
 
@@ -233,7 +314,7 @@ struct MainFlowView: View {
                     flowState = .areaSelection(details, chart)
                 },
                 onStartOver: {
-                    flowState = .birthInput(existing: nil)
+                    presentBirthInput(with: nil)
                 }
             )
         }
@@ -254,54 +335,251 @@ struct MainFlowView: View {
             longitude: profile.longitude
         )
         editedTimezone = profile.timezone
-        repositoryContext.setActiveProfile(profile)
+        if repositoryContext.activeProfile?.id != profile.id {
+            repositoryContext.setActiveProfile(profile)
+        }
         validationError = nil
     }
 
     /// Clears form fields when user selects "Create New Profile".
     /// Discards any unsaved changes per FR-065 (no confirmation dialog).
     private func handleCreateNewProfile() {
-        formMode = .creating
+        if profileViewModel.profiles.isEmpty {
+            formMode = .empty
+        } else {
+            formMode = .creating
+        }
         editedName = ""
-        editedBirthDate = Date()
-        editedBirthTime = Date()
+        editedBirthDate = defaultBirthDate()
+        editedBirthTime = defaultBirthTime()
         editedLocation = ""
         editedCoordinate = nil
         editedTimezone = TimeZone.current.identifier
         validationError = nil
     }
 
-    private func calculateChart(for details: BirthDetails) {
-        flowState = .calculating(details)
+    private var isContinueButtonEnabled: Bool {
+        let trimmedName = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedLocation = editedLocation.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmedName.isEmpty == false && trimmedLocation.isEmpty == false && editedCoordinate != nil
+    }
 
-        Task {
-            do {
-                guard let coordinate = details.coordinate else {
-                    throw ChartCalculationError.missingCoordinate
-                }
+    private var birthDateRange: ClosedRange<Date> {
+        let calendar = Calendar.current
+        let minDate = calendar.date(from: DateComponents(year: 1900)) ?? Date(timeIntervalSince1970: 0)
+        let maxDate = calendar.date(from: DateComponents(year: 2100)) ?? Date.distantFuture
+        return minDate...maxDate
+    }
 
-                let chart = try await chartCalculator.calculate(
+    private var locationDisplayText: String {
+        if editedLocation.isEmpty {
+            return String(localized: "profile.inline.location.placeholder", table: "Localizable")
+        }
+        return editedLocation
+    }
+
+    private var locationDisplayColor: Color {
+        editedLocation.isEmpty ? .secondary : .primary
+    }
+
+    private func validateForm() async -> Bool {
+        validationError = nil
+
+        let trimmedName = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedLocation = editedLocation.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard trimmedName.isEmpty == false else {
+            validationError = String(localized: "profile.form.error.name_required", table: "Localizable")
+            return false
+        }
+
+        guard trimmedName.count <= 50 else {
+            validationError = String(localized: "profile.form.error.name_length", table: "Localizable")
+            return false
+        }
+
+        let isDuplicate = profileViewModel.profiles.contains { profile in
+            profile.name.compare(trimmedName, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame &&
+            profile.id != formMode.currentProfile?.id
+        }
+
+        if isDuplicate {
+            validationError = String(localized: "profile.form.error.name_duplicate", table: "Localizable")
+            return false
+        }
+
+        guard trimmedLocation.isEmpty == false else {
+            validationError = String(localized: "profile.form.error.location_required", table: "Localizable")
+            return false
+        }
+
+        guard editedCoordinate != nil else {
+            validationError = String(localized: "profile.form.error.missing_coordinate", table: "Localizable")
+            return false
+        }
+
+        return true
+    }
+
+    private func makeBirthDetails() -> BirthDetails {
+        let timeZone = TimeZone(identifier: editedTimezone) ?? .current
+        return BirthDetails(
+            name: editedName,
+            birthDate: editedBirthDate,
+            birthTime: editedBirthTime,
+            location: editedLocation,
+            timeZone: timeZone,
+            coordinate: editedCoordinate
+        )
+    }
+
+    private func applyLocationSuggestion(_ suggestion: LocationSuggestion) {
+        editedLocation = suggestion.displayName
+        editedCoordinate = suggestion.coordinate
+        if let timeZone = suggestion.timeZone {
+            editedTimezone = timeZone.identifier
+        }
+        validationError = nil
+    }
+
+    private func applyBirthDetails(_ details: BirthDetails) {
+        editedName = details.name
+        editedBirthDate = details.birthDate
+        editedBirthTime = details.birthTime
+        editedLocation = details.location
+        editedCoordinate = details.coordinate
+        editedTimezone = details.timeZone.identifier
+        validationError = nil
+    }
+
+    private func defaultBirthDate() -> Date {
+        Calendar.current.date(byAdding: .year, value: -25, to: Date()) ?? Date()
+    }
+
+    private func defaultBirthTime() -> Date {
+        Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: Date()) ?? Date()
+    }
+
+    private func presentBirthInput(with details: BirthDetails?) {
+        if let details {
+            applyBirthDetails(details)
+        } else {
+            handleCreateNewProfile()
+        }
+        flowState = .birthInput(existing: details)
+    }
+
+    private func handleContinue() async {
+        validationError = nil
+
+        guard await validateForm() else { return }
+
+        let details = makeBirthDetails()
+
+        guard let coordinate = details.coordinate else {
+            validationError = String(localized: "profile.form.error.missing_coordinate", table: "Localizable")
+            return
+        }
+
+        await MainActor.run {
+            isCalculating = true
+            flowState = .calculating(details)
+        }
+
+        do {
+            let chart = try await calculateChart(for: details)
+
+            switch formMode {
+            case .creating, .empty:
+                let created = await profileViewModel.createProfile(
+                    name: details.name,
                     birthDate: details.birthDate,
                     birthTime: details.birthTime,
-                    timeZoneIdentifier: details.timeZone.identifier,
+                    locationName: details.location,
                     latitude: coordinate.latitude,
                     longitude: coordinate.longitude,
-                    locationName: details.location
+                    timezone: details.timeZone.identifier,
+                    natalChart: chart
                 )
 
-                // Print chart data to console
-                printChartData(chart)
+                guard created, let selected = profileViewModel.selectedProfile else {
+                    await MainActor.run {
+                        isCalculating = false
+                        presentBirthInput(with: details)
+                        validationError = profileViewModel.errorMessage ?? String(localized: "profile.form.error.unknown", table: "Localizable")
+                    }
+                    return
+                }
 
                 await MainActor.run {
-                    flowState = .areaSelection(details, chart)
+                    handleProfileSelection(selected)
                 }
-            } catch {
+
+            case .viewing(let profile):
+                let updated = await profileViewModel.updateProfile(
+                    profile,
+                    name: details.name,
+                    birthDate: details.birthDate,
+                    birthTime: details.birthTime,
+                    locationName: details.location,
+                    latitude: coordinate.latitude,
+                    longitude: coordinate.longitude,
+                    timezone: details.timeZone.identifier,
+                    natalChart: chart
+                )
+
+                guard updated else {
+                    await MainActor.run {
+                        isCalculating = false
+                        presentBirthInput(with: details)
+                        validationError = profileViewModel.errorMessage ?? String(localized: "profile.form.error.unknown", table: "Localizable")
+                    }
+                    return
+                }
+
+                let refreshedProfile = profileViewModel.selectedProfile ?? profile
                 await MainActor.run {
-                    errorMessage = localized("error.chart.calculation_failed", error.localizedDescription)
-                    flowState = .birthInput(existing: details)
+                    handleProfileSelection(refreshedProfile)
                 }
             }
+
+            await MainActor.run {
+                isCalculating = false
+                validationError = nil
+                flowState = .areaSelection(details, chart)
+            }
+        } catch {
+            await MainActor.run {
+                isCalculating = false
+                let description: String
+                if let localizedError = error as? LocalizedError, let value = localizedError.errorDescription {
+                    description = value
+                } else {
+                    description = localized("error.chart.calculation_failed", error.localizedDescription)
+                }
+                presentBirthInput(with: details)
+                validationError = description
+            }
         }
+    }
+
+    private func calculateChart(for details: BirthDetails) async throws -> NatalChart {
+        guard let coordinate = details.coordinate else {
+            throw ChartCalculationError.missingCoordinate
+        }
+
+        let chart = try await chartCalculator.calculate(
+            birthDate: details.birthDate,
+            birthTime: details.birthTime,
+            timeZoneIdentifier: details.timeZone.identifier,
+            latitude: coordinate.latitude,
+            longitude: coordinate.longitude,
+            locationName: details.location
+        )
+
+        printChartData(chart)
+
+        return chart
     }
 
     private func generateReport(details: BirthDetails, chart: NatalChart, area: ReportArea) {
@@ -389,13 +667,6 @@ struct MainFlowView: View {
 }
 
 private extension MainFlowView {
-    var shouldShowReportListButton: Bool {
-        if case .onboarding = flowState {
-            return false
-        }
-        return true
-    }
-
     @MainActor
     func persistGeneratedReport(details: BirthDetails, natalChart: NatalChart, generatedReport: GeneratedReport) throws {
         let chartEntity = try upsertBirthChart(details: details, natalChart: natalChart)

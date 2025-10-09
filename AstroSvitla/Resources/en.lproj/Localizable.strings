@@ -84,6 +84,9 @@
 "settings.theme.light" = "Light";
 "settings.theme.dark" = "Dark";
 
+"settings.section.profiles" = "Profiles";
+"settings.action.manage_profiles" = "Manage profiles";
+
 "settings.section.language" = "Language";
 "settings.picker.language" = "Interface language";
 "settings.language.system" = "Use system default";
@@ -115,6 +118,17 @@
 "location.search.hint_short" = "Start typing the city and country (minimum 3 characters).";
 "location.search.no_results" = "No matches found. Try a different spelling.";
 "location.search.title" = "Search location";
+
+"profile.selector.new_profile" = "New Profile";
+"profile.selector.create_new" = "Create New Profile";
+"profile.form.field.name" = "Profile name";
+"profile.inline.location.placeholder" = "Select birthplace";
+"profile.form.error.name_required" = "Profile name is required";
+"profile.form.error.name_length" = "Profile name must be 1-50 characters";
+"profile.form.error.name_duplicate" = "A profile with this name already exists";
+"profile.form.error.location_required" = "Birth location is required";
+"profile.form.error.missing_coordinate" = "Birthplace coordinates are required";
+"profile.form.error.unknown" = "Unable to save profile. Try again.";
 
 "area.section.birth_details" = "Birth data";
 "area.action.view_details" = "View chart details";

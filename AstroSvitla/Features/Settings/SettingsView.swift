@@ -19,7 +19,6 @@ struct SettingsView: View {
             appearanceSection
             languageSection
             onboardingSection
-            dataSection
         }
         .navigationTitle(Text("settings.title", tableName: "Localizable"))
         .confirmationDialog(
@@ -42,10 +41,14 @@ struct SettingsView: View {
             Button {
                 showingProfileManager = true
             } label: {
-                Label("Manage Profiles", systemImage: "person.2")
+                Label {
+                    Text("settings.action.manage_profiles", tableName: "Localizable")
+                } icon: {
+                    Image(systemName: "person.2")
+                }
             }
         } header: {
-            Text("Profiles")
+            Text("settings.section.profiles", tableName: "Localizable")
         }
     }
 
@@ -85,45 +88,15 @@ struct SettingsView: View {
             Button {
                 isResetOnboardingConfirmationPresented = true
             } label: {
-                Label(localized("settings.action.replay_onboarding"), systemImage: "sparkles")
+                Label {
+                    Text("settings.action.replay_onboarding", tableName: "Localizable")
+                } icon: {
+                    Image(systemName: "sparkles")
+                }
             }
         } header: {
             Text("settings.section.onboarding", tableName: "Localizable")
         }
-    }
-
-    private var dataSection: some View {
-        Section {
-            NavigationLink {
-                SavedDataInformationView()
-            } label: {
-                Label(localized("settings.action.data_overview"), systemImage: "internaldrive")
-            }
-        } header: {
-            Text("settings.section.data", tableName: "Localizable")
-        }
-    }
-}
-
-private struct SavedDataInformationView: View {
-    @Query(sort: \ReportPurchase.purchaseDate, order: .reverse) private var reports: [ReportPurchase]
-    @Query(sort: \BirthChart.createdAt, order: .reverse) private var charts: [BirthChart]
-
-    var body: some View {
-        List {
-            Section {
-                Text(localized("settings.data.count", reports.count))
-            } header: {
-                Text("settings.data.reports", tableName: "Localizable")
-            }
-
-            Section {
-                Text(localized("settings.data.count", charts.count))
-            } header: {
-                Text("settings.data.charts", tableName: "Localizable")
-            }
-        }
-        .navigationTitle(Text("settings.data.title", tableName: "Localizable"))
     }
 }
 

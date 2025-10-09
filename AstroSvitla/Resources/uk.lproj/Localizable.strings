@@ -84,6 +84,9 @@
 "settings.theme.light" = "Світла";
 "settings.theme.dark" = "Темна";
 
+"settings.section.profiles" = "Профілі";
+"settings.action.manage_profiles" = "Керувати профілями";
+
 "settings.section.language" = "Мова інтерфейсу";
 "settings.picker.language" = "Мова";
 "settings.language.system" = "За замовчуванням системи";
@@ -115,6 +118,17 @@
 "location.search.hint_short" = "Почніть вводити місто та країну. Мінімум 3 символи.";
 "location.search.no_results" = "Збігів не знайдено. Спробуйте інший варіант написання.";
 "location.search.title" = "Пошук місця";
+
+"profile.selector.new_profile" = "Новий профіль";
+"profile.selector.create_new" = "Створити новий профіль";
+"profile.form.field.name" = "Назва профілю";
+"profile.inline.location.placeholder" = "Виберіть місце народження";
+"profile.form.error.name_required" = "Потрібно вказати назву профілю";
+"profile.form.error.name_length" = "Назва профілю має містити від 1 до 50 символів";
+"profile.form.error.name_duplicate" = "Профіль із такою назвою вже існує";
+"profile.form.error.location_required" = "Потрібно вказати місце народження";
+"profile.form.error.missing_coordinate" = "Потрібні координати місця народження";
+"profile.form.error.unknown" = "Не вдалося зберегти профіль. Спробуйте ще раз.";
 
 "area.section.birth_details" = "Дані про народження";
 "area.action.view_details" = "Переглянути деталі карти";

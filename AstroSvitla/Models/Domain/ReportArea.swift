@@ -8,7 +8,7 @@ enum ReportArea: String, Codable, CaseIterable, Sendable {
     case general
 
     var displayName: String {
-        String(localized: "report.area.\(rawValue)", table: "Localizable")
+        localized("report.area.\(rawValue)")
     }
 
     var price: Decimal {
