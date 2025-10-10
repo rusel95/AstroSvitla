@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 enum MappingError: LocalizedError {
     case invalidPlanetName(String)
@@ -100,7 +101,7 @@ enum DTOMapper {
     static func toDomain(
         response: ProkralaChartDataResponse,
         birthDetails: BirthDetails
-    ) throws -> (planets: [Planet], houses: [House], aspects: [Aspect]) {
+    ) throws -> NatalChart {
 
         // Create house-to-planet mapping
         var housePlanetMap: [String: Int] = [:]
@@ -122,6 +123,23 @@ enum DTOMapper {
         // Map aspects
         let aspects = try response.aspects.map { try toDomain(aspectDTO: $0) }
 
-        return (planets, houses, aspects)
+        // Extract ascendant and midheaven
+        let ascendant = response.ascendant?.full_degree ?? houses.first?.cusp ?? 0
+        let midheaven = response.midheaven?.full_degree ?? (houses.count >= 10 ? houses[9].cusp : 0)
+
+        // Create NatalChart
+        return NatalChart(
+            birthDate: birthDetails.birthDate,
+            birthTime: birthDetails.birthTime,
+            latitude: birthDetails.coordinate?.latitude ?? 0,
+            longitude: birthDetails.coordinate?.longitude ?? 0,
+            locationName: birthDetails.location,
+            planets: planets,
+            houses: houses,
+            aspects: aspects,
+            ascendant: ascendant,
+            midheaven: midheaven,
+            calculatedAt: Date()
+        )
     }
 }

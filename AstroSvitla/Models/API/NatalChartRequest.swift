@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct NatalChartRequest {
     let birthDetails: BirthDetails

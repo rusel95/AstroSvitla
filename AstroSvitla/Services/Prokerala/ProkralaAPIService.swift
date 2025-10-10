@@ -22,7 +22,7 @@ protocol ProkralaAPIServiceProtocol {
 
 // MARK: - API Errors
 
-enum APIError: LocalizedError {
+enum AstroAPIError: LocalizedError {
     case invalidResponse
     case httpError(statusCode: Int)
     case authenticationFailed
@@ -119,21 +119,21 @@ final class ProkralaAPIService: ProkralaAPIServiceProtocol {
 
     private func validateResponse(_ response: URLResponse) throws {
         guard let httpResponse = response as? HTTPURLResponse else {
-            throw APIError.invalidResponse
+            throw AstroAPIError.invalidResponse
         }
 
         switch httpResponse.statusCode {
         case 200...299:
             return
         case 401:
-            throw APIError.authenticationFailed
+            throw AstroAPIError.authenticationFailed
         case 429:
             let retryAfter = TimeInterval(httpResponse.value(forHTTPHeaderField: "Retry-After") ?? "60") ?? 60
-            throw APIError.rateLimitExceeded(retryAfter: retryAfter)
+            throw AstroAPIError.rateLimitExceeded(retryAfter: retryAfter)
         case 500...599:
-            throw APIError.serverError(statusCode: httpResponse.statusCode)
+            throw AstroAPIError.serverError(statusCode: httpResponse.statusCode)
         default:
-            throw APIError.httpError(statusCode: httpResponse.statusCode)
+            throw AstroAPIError.httpError(statusCode: httpResponse.statusCode)
         }
     }
 
@@ -146,7 +146,7 @@ final class ProkralaAPIService: ProkralaAPIServiceProtocol {
         for attempt in 0..<maxAttempts {
             do {
                 return try await operation()
-            } catch let error as APIError {
+            } catch let error as AstroAPIError {
                 // Don't retry client errors (4xx) except rate limit
                 switch error {
                 case .rateLimitExceeded, .serverError, .networkError:
@@ -159,7 +159,7 @@ final class ProkralaAPIService: ProkralaAPIServiceProtocol {
                     throw error // Don't retry auth failures or invalid responses
                 }
             } catch {
-                lastError = APIError.networkError(error)
+                lastError = AstroAPIError.networkError(error)
                 if attempt < maxAttempts - 1 {
                     let delay = pow(2.0, Double(attempt))
                     try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
@@ -167,6 +167,6 @@ final class ProkralaAPIService: ProkralaAPIServiceProtocol {
             }
         }
 
-        throw lastError ?? APIError.invalidResponse
+        throw lastError ?? AstroAPIError.invalidResponse
     }
 }

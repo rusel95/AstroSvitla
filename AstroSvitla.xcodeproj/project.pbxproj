@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		85479E082E95466A0055CC08 /* SwissEphemeris in Frameworks */ = {isa = PBXBuildFile; productRef = 85479E072E95466A0055CC08 /* SwissEphemeris */; };
+		859E902F2E991629003C4D9C /* TestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 859E902E2E991629003C4D9C /* TestPlan.xctestplan */; };
 		85E2C24C2E96896700349727 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 85E2C24B2E96896700349727 /* OpenAI */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		859E902E2E991629003C4D9C /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 		85F4816D2E805C4B0031646F /* AstroSvitla.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AstroSvitla.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85F4817E2E805C4D0031646F /* AstroSvitlaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AstroSvitlaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		85F481882E805C4D0031646F /* AstroSvitlaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AstroSvitlaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,6 +97,7 @@
 		85F481642E805C4B0031646F = {
 			isa = PBXGroup;
 			children = (
+				859E902E2E991629003C4D9C /* TestPlan.xctestplan */,
 				85F4816F2E805C4B0031646F /* AstroSvitla */,
 				85F481812E805C4D0031646F /* AstroSvitlaTests */,
 				85F4818B2E805C4D0031646F /* AstroSvitlaUITests */,
@@ -239,6 +242,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				859E902F2E991629003C4D9C /* TestPlan.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
