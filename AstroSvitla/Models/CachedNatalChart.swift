@@ -171,7 +171,9 @@ extension CachedNatalChart {
             aspects: aspects,
             ascendant: ascendant,
             midheaven: midheaven,
-            calculatedAt: generatedAt
+            calculatedAt: generatedAt,
+            imageFileID: imageFileID,
+            imageFormat: imageFormat
         )
     }
 }

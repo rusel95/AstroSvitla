@@ -2,7 +2,7 @@
 //  ProkralaAPIService.swift
 //  AstroSvitla
 //
-//  HTTP client for Prokerala Astrology API
+//  HTTP client for Prokerala Astrology API (api.prokerala.com)
 //
 
 import Foundation
@@ -25,10 +25,11 @@ protocol ProkralaAPIServiceProtocol {
 enum AstroAPIError: LocalizedError {
     case invalidResponse
     case httpError(statusCode: Int)
-    case authenticationFailed
+    case authenticationFailed(String)
     case rateLimitExceeded(retryAfter: TimeInterval)
     case serverError(statusCode: Int)
     case networkError(Error)
+    case invalidToken(String)
 
     var errorDescription: String? {
         switch self {
@@ -36,14 +37,16 @@ enum AstroAPIError: LocalizedError {
             return "Received invalid response from server"
         case .httpError(let code):
             return "Server returned error code: \(code)"
-        case .authenticationFailed:
-            return "API authentication failed. Please check your credentials."
+        case .authenticationFailed(let detail):
+            return "API authentication failed: \(detail)"
         case .rateLimitExceeded(let seconds):
             return "Request limit reached. Please wait \(Int(seconds)) seconds."
         case .serverError(let code):
             return "Server error (code \(code)). Please try again later."
         case .networkError:
             return "Unable to connect. Please check your internet connection."
+        case .invalidToken(let detail):
+            return "Invalid API token: \(detail)"
         }
     }
 }
@@ -52,19 +55,16 @@ enum AstroAPIError: LocalizedError {
 
 final class ProkralaAPIService: ProkralaAPIServiceProtocol {
 
-    private let userID: String
-    private let apiKey: String
+    private let token: String
     private let baseURL: String
     private let session: URLSessionProtocol
 
     init(
-        userID: String,
-        apiKey: String,
-        baseURL: String = "https://json.astrologyapi.com/v1",
+        token: String,
+        baseURL: String = Config.prokeralaAPIBaseURL,
         session: URLSessionProtocol = URLSession.shared
     ) {
-        self.userID = userID
-        self.apiKey = apiKey
+        self.token = token
         self.baseURL = baseURL
         self.session = session
     }
@@ -72,52 +72,57 @@ final class ProkralaAPIService: ProkralaAPIServiceProtocol {
     // MARK: - Public Methods
 
     func fetchChartData(_ request: NatalChartRequest) async throws -> ProkralaChartDataResponse {
-        let url = URL(string: "\(baseURL)/western_chart_data")!
-        let urlRequest = try buildRequest(url: url, body: request.toChartDataBody())
+        // Prokerala uses GET requests with query parameters
+        var components = URLComponents(string: "\(baseURL)/astrology/natal-chart")!
+        components.queryItems = request.toQueryParameters()
+
+        guard let url = components.url else {
+            throw AstroAPIError.invalidResponse
+        }
+
+        let urlRequest = try buildRequest(url: url)
 
         return try await fetchWithRetry(maxAttempts: 3) {
             let (data, response) = try await self.session.data(for: urlRequest)
-            try self.validateResponse(response)
-            return try JSONDecoder().decode(ProkralaChartDataResponse.self, from: data)
+            try self.validateResponse(response, data: data)
+
+            // Decode response
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            return try decoder.decode(ProkralaChartDataResponse.self, from: data)
         }
     }
 
     func generateChartImage(_ request: NatalChartRequest) async throws -> ProkralaChartImageResponse {
-        let url = URL(string: "\(baseURL)/natal_wheel_chart")!
-        let urlRequest = try buildRequest(url: url, body: request.toChartImageBody())
-
-        return try await fetchWithRetry(maxAttempts: 3) {
-            let (data, response) = try await self.session.data(for: urlRequest)
-            try self.validateResponse(response)
-            return try JSONDecoder().decode(ProkralaChartImageResponse.self, from: data)
-        }
+        // For now, return empty response as Prokerala API doesn't have separate image endpoint
+        // Chart images are generated client-side or through different service
+        return ProkralaChartImageResponse(
+            status: false,
+            chart_url: "",
+            msg: "Chart visualization not available from Prokerala API"
+        )
     }
 
     // MARK: - Private Helpers
 
-    private func buildRequest(url: URL, body: [String: Any]) throws -> URLRequest {
+    private func buildRequest(url: URL) throws -> URLRequest {
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+        request.httpMethod = "GET"
 
-        // Basic Authentication
-        let credentials = "\(userID):\(apiKey)"
-        let base64Credentials = Data(credentials.utf8).base64EncodedString()
-        request.addValue("Basic \(base64Credentials)", forHTTPHeaderField: "Authorization")
+        // Bearer Token Authentication
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 
         // Headers
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("en", forHTTPHeaderField: "Accept-Language")
 
         // Timeouts
         request.timeoutInterval = 30.0
 
-        // Body
-        request.httpBody = try JSONSerialization.data(withJSONObject: body)
-
         return request
     }
 
-    private func validateResponse(_ response: URLResponse) throws {
+    private func validateResponse(_ response: URLResponse, data: Data) throws {
         guard let httpResponse = response as? HTTPURLResponse else {
             throw AstroAPIError.invalidResponse
         }
@@ -125,8 +130,13 @@ final class ProkralaAPIService: ProkralaAPIServiceProtocol {
         switch httpResponse.statusCode {
         case 200...299:
             return
-        case 401:
-            throw AstroAPIError.authenticationFailed
+        case 401, 403:
+            // Try to parse error details
+            if let errorResponse = try? JSONDecoder().decode(ProkralaErrorResponse.self, from: data),
+               let error = errorResponse.errors.first {
+                throw AstroAPIError.authenticationFailed(error.detail)
+            }
+            throw AstroAPIError.authenticationFailed("Authentication failed")
         case 429:
             let retryAfter = TimeInterval(httpResponse.value(forHTTPHeaderField: "Retry-After") ?? "60") ?? 60
             throw AstroAPIError.rateLimitExceeded(retryAfter: retryAfter)
@@ -169,4 +179,18 @@ final class ProkralaAPIService: ProkralaAPIServiceProtocol {
 
         throw lastError ?? AstroAPIError.invalidResponse
     }
+}
+
+// MARK: - Error Response Model
+
+struct ProkralaErrorResponse: Codable {
+    let id: String
+    let status: String
+    let errors: [ProkralaError]
+}
+
+struct ProkralaError: Codable {
+    let title: String
+    let detail: String
+    let code: String
 }

@@ -61,7 +61,9 @@ struct MainFlowView: View {
     @State private var validationError: String? = nil
     @FocusState private var focusedField: ProfileField?
 
-    private let chartCalculator = ChartCalculator()
+    private var chartCalculator: ChartCalculator {
+        ChartCalculator(modelContext: modelContext)
+    }
     private let reportGenerator = AIReportGenerator()
 
     private enum ProfileField: Hashable {

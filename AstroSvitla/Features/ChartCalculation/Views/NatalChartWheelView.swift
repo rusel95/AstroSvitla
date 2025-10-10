@@ -1,10 +1,58 @@
 import SwiftUI
 import Foundation
+import SwiftData
 
 struct NatalChartWheelView: View {
     let chart: NatalChart
+    @Environment(\.modelContext) private var modelContext
+
+    @State private var chartImageData: Data?
+    @State private var imageLoadingFailed = false
+    @State private var isLoadingImage = false
 
     var body: some View {
+        Group {
+            if let imageData = chartImageData {
+                // Display API-generated chart image
+                if let uiImage = UIImage(data: imageData) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                } else {
+                    // Image data is corrupted, show fallback
+                    fallbackChartView
+                }
+            } else if isLoadingImage {
+                // Show loading indicator while image loads
+                ProgressView("Loading chart...")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if imageLoadingFailed {
+                // Show fallback with retry option
+                VStack(spacing: 16) {
+                    fallbackChartView
+
+                    Text("Chart visualization unavailable")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    Button("Retry Image Load") {
+                        Task {
+                            await loadChartImage()
+                        }
+                    }
+                    .buttonStyle(.bordered)
+                }
+            } else {
+                // No image available, show custom-rendered chart
+                fallbackChartView
+            }
+        }
+        .task {
+            await loadChartImage()
+        }
+    }
+
+    private var fallbackChartView: some View {
         GeometryReader { geometry in
             let size = min(geometry.size.width, geometry.size.height)
             let center = CGPoint(x: size / 2, y: size / 2)
@@ -102,6 +150,36 @@ struct NatalChartWheelView: View {
             .frame(width: size, height: size)
         }
         .aspectRatio(1, contentMode: .fit)
+    }
+
+    // MARK: - Image Loading
+
+    private func loadChartImage() async {
+        // Check if chart has image information
+        guard let imageFileID = chart.imageFileID,
+              let imageFormat = chart.imageFormat else {
+            // No image available, keep using fallback rendering
+            return
+        }
+
+        isLoadingImage = true
+        imageLoadingFailed = false
+
+        do {
+            let imageCacheService = ImageCacheService()
+            let imageData = try imageCacheService.loadImage(fileID: imageFileID, format: imageFormat)
+
+            await MainActor.run {
+                self.chartImageData = imageData
+                self.isLoadingImage = false
+            }
+        } catch {
+            await MainActor.run {
+                self.imageLoadingFailed = true
+                self.isLoadingImage = false
+            }
+            print("Failed to load chart image: \(error)")
+        }
     }
 }
 

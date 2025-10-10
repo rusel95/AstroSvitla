@@ -21,17 +21,14 @@ enum Config {
     /// Base URL for OpenAI API requests
     static let openAIBaseURL = "https://api.openai.com/v1"
 
-    // MARK: - AstrologyAPI (Prokerala) Configuration
+    // MARK: - Prokerala API Configuration
 
-    /// AstrologyAPI User ID for Basic Authentication
-    /// Get credentials from https://astrologyapi.com (Free tier: 5,000 credits/month)
-    static let astrologyAPIUserID = "20b1efa7-2ebc-4b06-b4b4-ef776c0b9aff"
+    /// Prokerala API Token for Authentication
+    /// Get credentials from https://api.prokerala.com/
+    static let prokeralaAPIToken = "Lujc0u8mKE3lohy8SU10OWrIW5vx7ruR9o1BWTiV"
 
-    /// AstrologyAPI Key for Basic Authentication
-    static let astrologyAPIKey = "Lujc0u8mKE3lohy8SU10OWrIW5vx7ruR9o1BWTiV"
-
-    /// Base URL for AstrologyAPI endpoints
-    static let astrologyAPIBaseURL = "https://json.astrologyapi.com/v1"
+    /// Base URL for Prokerala API endpoints
+    static let prokeralaAPIBaseURL = "https://api.prokerala.com/v2"
 
     // MARK: - App Configuration
 
@@ -71,11 +68,9 @@ enum Config {
         openAIAPIKey != "YOUR_OPENAI_API_KEY_HERE"
     }
 
-    static var isAstrologyAPIConfigured: Bool {
-        !astrologyAPIUserID.isEmpty &&
-        astrologyAPIUserID != "YOUR_USER_ID_HERE" &&
-        !astrologyAPIKey.isEmpty &&
-        astrologyAPIKey != "YOUR_API_KEY_HERE"
+    static var isProkeralaAPIConfigured: Bool {
+        !prokeralaAPIToken.isEmpty &&
+        prokeralaAPIToken != "YOUR_API_KEY_HERE"
     }
 
     static func validate() throws {
@@ -83,8 +78,8 @@ enum Config {
             throw ConfigError.missingAPIKey("OpenAI API key not configured in Config.swift")
         }
 
-        guard isAstrologyAPIConfigured else {
-            throw ConfigError.missingAPIKey("AstrologyAPI credentials not configured in Config.swift")
+        guard isProkeralaAPIConfigured else {
+            throw ConfigError.missingAPIKey("Prokerala API token not configured in Config.swift")
         }
     }
 }

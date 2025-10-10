@@ -15,4 +15,8 @@ struct NatalChart: Codable, Sendable {
     let midheaven: Double
 
     var calculatedAt: Date
+
+    // API-generated chart image information (optional)
+    var imageFileID: String?
+    var imageFormat: String? // "svg" or "png"
 }

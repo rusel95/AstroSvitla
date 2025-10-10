@@ -26,7 +26,41 @@ struct NatalChartRequest {
         self.chartSize = chartSize
     }
 
-    /// Convert to request body for chart data endpoint
+    /// Convert to query parameters for Prokerala API
+    func toQueryParameters() -> [URLQueryItem] {
+        // Combine date and time into ISO 8601 format with timezone
+        let calendar = Calendar.current
+        var dateComponents = calendar.dateComponents([.year, .month, .day], from: birthDetails.birthDate)
+        let timeComponents = calendar.dateComponents([.hour, .minute, .second], from: birthDetails.birthTime)
+
+        dateComponents.hour = timeComponents.hour
+        dateComponents.minute = timeComponents.minute
+        dateComponents.second = timeComponents.second ?? 0
+        dateComponents.timeZone = birthDetails.timeZone
+
+        guard let combinedDateTime = calendar.date(from: dateComponents) else {
+            return []
+        }
+
+        // Format datetime as ISO 8601 with timezone
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime]
+        formatter.timeZone = birthDetails.timeZone
+        let datetimeString = formatter.string(from: combinedDateTime)
+
+        // Format coordinates as "lat,lon"
+        let coordinates = "\(birthDetails.coordinate?.latitude ?? 0),\(birthDetails.coordinate?.longitude ?? 0)"
+
+        return [
+            URLQueryItem(name: "datetime", value: datetimeString),
+            URLQueryItem(name: "coordinates", value: coordinates),
+            URLQueryItem(name: "ayanamsa", value: "1"), // 1 = Tropical/Western
+            URLQueryItem(name: "house_system", value: houseSystem),
+            URLQueryItem(name: "la", value: "en") // Language
+        ]
+    }
+
+    /// Convert to request body for chart data endpoint (legacy)
     func toChartDataBody() -> [String: Any] {
         let calendar = Calendar.current
         let dateComponents = calendar.dateComponents([.year, .month, .day], from: birthDetails.birthDate)
@@ -47,7 +81,7 @@ struct NatalChartRequest {
         ]
     }
 
-    /// Convert to request body for chart image endpoint
+    /// Convert to request body for chart image endpoint (legacy)
     func toChartImageBody() -> [String: Any] {
         var body = toChartDataBody()
         body["image_type"] = imageFormat

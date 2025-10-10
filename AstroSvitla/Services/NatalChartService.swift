@@ -74,8 +74,7 @@ final class NatalChartService: NatalChartServiceProtocol {
     /// Convenience initializer with default dependencies
     convenience init(modelContext: ModelContext) {
         let apiService = ProkralaAPIService(
-            userID: Config.astrologyAPIUserID,
-            apiKey: Config.astrologyAPIKey
+            token: Config.prokeralaAPIToken
         )
         let chartCacheService = ChartCacheService(context: modelContext)
         let imageCacheService = ImageCacheService()
@@ -142,12 +141,9 @@ final class NatalChartService: NatalChartServiceProtocol {
             let (dataResponse, imageResponse) = try await (chartDataResponse, chartImageResponse)
 
             // Step 5: Map API response to domain model
-            let natalChart = try DTOMapper.toDomain(response: dataResponse, birthDetails: birthDetails)
+            var natalChart = try DTOMapper.toDomain(response: dataResponse, birthDetails: birthDetails)
 
             // Step 6: Download and cache chart image
-            var imageFileID: String?
-            var imageFormat: String?
-
             if imageResponse.status, let imageURL = URL(string: imageResponse.chart_url) {
                 do {
                     let (imageData, _) = try await URLSession.shared.data(from: imageURL)
@@ -156,8 +152,9 @@ final class NatalChartService: NatalChartServiceProtocol {
 
                     try imageCacheService.saveImage(data: imageData, fileID: fileID, format: format)
 
-                    imageFileID = fileID
-                    imageFormat = format
+                    // Update chart with image information
+                    natalChart.imageFileID = fileID
+                    natalChart.imageFormat = format
                 } catch {
                     // Image download failed, but continue with chart data
                     // This is a non-fatal error - user can still see chart data
@@ -170,8 +167,8 @@ final class NatalChartService: NatalChartServiceProtocol {
                 try chartCacheService.saveChart(
                     natalChart,
                     birthDetails: birthDetails,
-                    imageFileID: imageFileID,
-                    imageFormat: imageFormat
+                    imageFileID: natalChart.imageFileID,
+                    imageFormat: natalChart.imageFormat
                 )
             } catch {
                 // Caching failed, but chart was generated successfully
