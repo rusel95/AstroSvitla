@@ -24,12 +24,15 @@ enum Config {
 
     // MARK: - Prokerala API Configuration
 
-    /// Prokerala API Token (JWT) for Authentication
-    /// Get credentials from https://api.prokerala.com/
-    /// You'll need to register and get a JWT token from your dashboard
-    static let prokeralaAPIToken = "YOUR_PROKERALA_JWT_TOKEN_HERE"
+    /// Prokerala OAuth2 client identifier
+    /// Obtain from https://api.prokerala.com/ dashboard (Sandbox or Production)
+    static let prokeralaClientID = "YOUR_PROKERALA_CLIENT_ID_HERE"
 
-    /// Base URL for Prokerala API endpoints
+    /// Prokerala OAuth2 client secret
+    /// Keep this value local and never commit it to source control
+    static let prokeralaClientSecret = "YOUR_PROKERALA_CLIENT_SECRET_HERE"
+
+    /// Base URL for Prokerala API endpoints (v2)
     static let prokeralaAPIBaseURL = "https://api.prokerala.com/v2"
 
     // MARK: - App Configuration
@@ -71,8 +74,10 @@ enum Config {
     }
 
     static var isProkeralaAPIConfigured: Bool {
-        !prokeralaAPIToken.isEmpty &&
-        prokeralaAPIToken != "YOUR_PROKERALA_JWT_TOKEN_HERE"
+        !prokeralaClientID.isEmpty &&
+        prokeralaClientID != "YOUR_PROKERALA_CLIENT_ID_HERE" &&
+        !prokeralaClientSecret.isEmpty &&
+        prokeralaClientSecret != "YOUR_PROKERALA_CLIENT_SECRET_HERE"
     }
 
     static func validate() throws {
@@ -81,7 +86,7 @@ enum Config {
         }
 
         guard isProkeralaAPIConfigured else {
-            throw ConfigError.missingAPIKey("Prokerala API token not configured in Config.swift")
+            throw ConfigError.missingAPIKey("Prokerala API client credentials not configured in Config.swift")
         }
     }
 }

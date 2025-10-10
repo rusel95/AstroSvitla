@@ -74,7 +74,8 @@ final class NatalChartService: NatalChartServiceProtocol {
     /// Convenience initializer with default dependencies
     convenience init(modelContext: ModelContext) {
         let apiService = ProkralaAPIService(
-            token: Config.prokeralaAPIToken
+            clientID: Config.prokeralaClientID,
+            clientSecret: Config.prokeralaClientSecret
         )
         let chartCacheService = ChartCacheService(context: modelContext)
         let imageCacheService = ImageCacheService()

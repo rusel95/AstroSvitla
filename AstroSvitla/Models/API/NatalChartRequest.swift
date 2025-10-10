@@ -26,10 +26,15 @@ struct NatalChartRequest {
         self.chartSize = chartSize
     }
 
+    struct QueryParameter: Sendable {
+        let name: String
+        let value: String
+    }
+
     /// Convert to query parameters for Prokerala API
-    func toQueryParameters() -> [URLQueryItem] {
+    func toQueryParameters() -> [QueryParameter] {
         // Combine date and time into ISO 8601 format with timezone
-        let calendar = Calendar.current
+        let calendar = Calendar(identifier: .gregorian)
         var dateComponents = calendar.dateComponents([.year, .month, .day], from: birthDetails.birthDate)
         let timeComponents = calendar.dateComponents([.hour, .minute, .second], from: birthDetails.birthTime)
 
@@ -49,16 +54,32 @@ struct NatalChartRequest {
         let datetimeString = formatter.string(from: combinedDateTime)
 
         // Format coordinates as "lat,lon"
-        let coordinates = "\(birthDetails.coordinate?.latitude ?? 0),\(birthDetails.coordinate?.longitude ?? 0)"
+        let latitude = birthDetails.coordinate?.latitude ?? 0
+        let longitude = birthDetails.coordinate?.longitude ?? 0
+        let coordinates = String(format: "%.6f,%.6f", latitude, longitude)
 
-        return [
-            URLQueryItem(name: "datetime", value: datetimeString),
-            URLQueryItem(name: "coordinates", value: coordinates),
-            URLQueryItem(name: "ayanamsa", value: "1"), // 1 = Tropical/Western
-            URLQueryItem(name: "house_system", value: houseSystem),
-            URLQueryItem(name: "la", value: "en") // Language
+        var parameters: [QueryParameter] = [
+            .init(name: "profile[datetime]", value: datetimeString),
+            .init(name: "profile[coordinates]", value: coordinates),
+            .init(name: "settings[ayanamsa]", value: "1"), // 1 = Tropical/Western
+            .init(name: "settings[house_system]", value: houseSystem),
+            .init(name: "settings[language]", value: "en")
         ]
+
+        // Include timezone offset minutes for clarity if API expects it
+        let timezoneSeconds = birthDetails.timeZone.secondsFromGMT(for: combinedDateTime)
+        let hours = timezoneSeconds / 3600
+        let minutes = abs(timezoneSeconds / 60) % 60
+        let timezoneString = String(format: "%+03d:%02d", hours, minutes)
+        parameters.append(.init(name: "profile[timezone]", value: timezoneString))
+
+        if birthDetails.location.isEmpty == false {
+            parameters.append(.init(name: "profile[place]", value: birthDetails.location))
+        }
+
+        return parameters
     }
+
 
     /// Convert to request body for chart data endpoint (legacy)
     func toChartDataBody() -> [String: Any] {

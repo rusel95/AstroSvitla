@@ -23,9 +23,13 @@ enum Config {
 
     // MARK: - Prokerala API Configuration
 
-    /// Prokerala API Token for Authentication
-    /// Get credentials from https://api.prokerala.com/
-    static let prokeralaAPIToken = "Lujc0u8mKE3lohy8SU10OWrIW5vx7ruR9o1BWTiV"
+    /// Prokerala OAuth2 client identifier
+    /// Retrieve from https://api.prokerala.com/ dashboard
+    static let prokeralaClientID = "89986136-65ba-4a75-aec3-d8e0f703e2e2"
+
+    /// Prokerala OAuth2 client secret
+    /// Keep secret local only (Config.swift is gitignored)
+    static let prokeralaClientSecret = "O1LSNIuy7HtwzNjY2atcOQA1hWzbP5p9gplnbWYX"
 
     /// Base URL for Prokerala API endpoints
     static let prokeralaAPIBaseURL = "https://api.prokerala.com/v2"
@@ -69,8 +73,10 @@ enum Config {
     }
 
     static var isProkeralaAPIConfigured: Bool {
-        !prokeralaAPIToken.isEmpty &&
-        prokeralaAPIToken != "YOUR_API_KEY_HERE"
+        !prokeralaClientID.isEmpty &&
+        prokeralaClientID != "YOUR_PROKERALA_CLIENT_ID_HERE" &&
+        !prokeralaClientSecret.isEmpty &&
+        prokeralaClientSecret != "YOUR_PROKERALA_CLIENT_SECRET_HERE"
     }
 
     static func validate() throws {
@@ -79,7 +85,7 @@ enum Config {
         }
 
         guard isProkeralaAPIConfigured else {
-            throw ConfigError.missingAPIKey("Prokerala API token not configured in Config.swift")
+            throw ConfigError.missingAPIKey("Prokerala API client credentials not configured in Config.swift")
         }
     }
 }
