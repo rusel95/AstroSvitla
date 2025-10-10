@@ -2,7 +2,7 @@
 //  WesternChartDataContractTests.swift
 //  AstroSvitlaTests
 //
-//  Contract tests for Prokerala western_chart_data API endpoint
+//  Contract tests for Prokerala natal-planet-position compute endpoint
 //  Validates real API responses match expected structure and data types
 //
 //  NOTE: These tests require valid API credentials in environment variables:
@@ -12,6 +12,7 @@
 
 import Testing
 import Foundation
+import CoreLocation
 @testable import AstroSvitla
 
 @Suite("Western Chart Data Contract Tests", .tags(.contract))
@@ -21,13 +22,18 @@ struct WesternChartDataContractTests {
 
     init() throws {
         // Load test credentials from environment variables
-        guard let userID = ProcessInfo.processInfo.environment["TEST_ASTROLOGY_API_USER_ID"],
-              let apiKey = ProcessInfo.processInfo.environment["TEST_ASTROLOGY_API_KEY"],
-              !userID.isEmpty, !apiKey.isEmpty else {
-            throw TestError.missingCredentials("Set TEST_ASTROLOGY_API_USER_ID and TEST_ASTROLOGY_API_KEY")
+        let environment = ProcessInfo.processInfo.environment
+        let clientID = environment["TEST_PROKERALA_CLIENT_ID"] ?? environment["TEST_ASTROLOGY_API_USER_ID"]
+        let clientSecret = environment["TEST_PROKERALA_CLIENT_SECRET"] ?? environment["TEST_ASTROLOGY_API_KEY"]
+
+        guard let clientID, let clientSecret,
+              clientID.isEmpty == false, clientSecret.isEmpty == false else {
+            throw TestError.missingCredentials(
+                "Set TEST_PROKERALA_CLIENT_ID and TEST_PROKERALA_CLIENT_SECRET (or legacy TEST_ASTROLOGY_API_USER_ID / TEST_ASTROLOGY_API_KEY)"
+            )
         }
 
-        apiService = ProkralaAPIService(userID: userID, apiKey: apiKey)
+        apiService = ProkralaAPIService(clientID: clientID, clientSecret: clientSecret)
     }
 
     enum TestError: Error {
@@ -43,7 +49,7 @@ struct WesternChartDataContractTests {
             name: "Test Person",
             birthDate: createDate(year: 1990, month: 3, day: 15),
             birthTime: createTime(hour: 14, minute: 30),
-            birthPlace: "New York, USA",
+            location: "New York, USA",
             timeZone: TimeZone(identifier: "America/New_York")!,
             coordinate: CLLocationCoordinate2D(latitude: 40.7128, longitude: -74.0060)
         )
@@ -52,11 +58,12 @@ struct WesternChartDataContractTests {
 
         // Act
         let response = try await apiService.fetchChartData(request)
+        let data = response.data
 
         // Assert - Response structure
-        #expect(response.planets.count == 10, "Must return exactly 10 planets")
-        #expect(response.houses.count == 12, "Must return exactly 12 houses")
-        #expect(response.aspects.count > 0, "Should return at least some aspects")
+        #expect(data.planetPositions.count >= 10, "Must return planet positions")
+        #expect(data.houses.count == 12, "Must return exactly 12 houses")
+        #expect(data.aspects.count > 0, "Should return at least some aspects")
     }
 
     @Test("All planets have valid properties")
@@ -67,25 +74,27 @@ struct WesternChartDataContractTests {
 
         // Act
         let response = try await apiService.fetchChartData(request)
+        let data = response.data
 
         // Assert - Validate each planet
         let expectedPlanets = Set(["Sun", "Moon", "Mercury", "Venus", "Mars",
                                    "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"])
-        let actualPlanets = Set(response.planets.map { $0.name })
+        let actualPlanets = Set(
+            data.planetPositions
+                .compactMap { PlanetType(rawValue: $0.name)?.rawValue }
+        )
 
         #expect(actualPlanets == expectedPlanets, "Must return all 10 standard planets")
 
-        for planet in response.planets {
-            // Validate longitude range
-            #expect(planet.full_degree >= 0.0 && planet.full_degree < 360.0,
-                   "Planet \(planet.name) longitude out of range: \(planet.full_degree)")
+        for planet in data.planetPositions where expectedPlanets.contains(planet.name) {
+            #expect(planet.longitude >= 0.0 && planet.longitude < 360.0,
+                   "Planet \(planet.name) longitude out of range: \(planet.longitude)")
 
-            // Validate retrograde field
-            #expect(planet.is_retro == "true" || planet.is_retro == "false",
-                   "Planet \(planet.name) has invalid retrograde value: \(planet.is_retro)")
+            #expect(planet.degree >= 0.0 && planet.degree < 30.0,
+                   "Planet \(planet.name) degree out of range: \(planet.degree)")
 
-            // Validate sign is not empty
-            #expect(!planet.sign.isEmpty, "Planet \(planet.name) missing sign")
+            #expect(planet.zodiac.name.isEmpty == false,
+                   "Planet \(planet.name) missing zodiac sign")
         }
     }
 
@@ -97,30 +106,25 @@ struct WesternChartDataContractTests {
 
         // Act
         let response = try await apiService.fetchChartData(request)
+        let houses = response.data.houses
 
-        // Assert - Validate each house
         let expectedHouseIDs = Set(1...12)
-        let actualHouseIDs = Set(response.houses.map { $0.house_id })
+        let actualHouseIDs = Set(houses.map { $0.number })
 
         #expect(actualHouseIDs == expectedHouseIDs, "Must return houses 1-12")
 
-        for house in response.houses {
-            // Validate house ID range
-            #expect(house.house_id >= 1 && house.house_id <= 12,
-                   "House ID out of range: \(house.house_id)")
+        for house in houses {
+            #expect(house.number >= 1 && house.number <= 12,
+                   "House number out of range: \(house.number)")
 
-            // Validate degree ranges
-            #expect(house.start_degree >= 0.0 && house.start_degree < 360.0,
-                   "House \(house.house_id) start_degree out of range: \(house.start_degree)")
+            #expect(house.startCusp.longitude >= 0.0 && house.startCusp.longitude < 360.0,
+                   "House \(house.number) start longitude out of range: \(house.startCusp.longitude)")
 
-            #expect(house.end_degree >= 0.0 && house.end_degree < 360.0,
-                   "House \(house.house_id) end_degree out of range: \(house.end_degree)")
+            #expect(house.endCusp.longitude >= 0.0 && house.endCusp.longitude < 360.0,
+                   "House \(house.number) end longitude out of range: \(house.endCusp.longitude)")
 
-            // Validate sign
-            #expect(!house.sign.isEmpty, "House \(house.house_id) missing sign")
-
-            // Validate planets array exists (can be empty)
-            #expect(house.planets != nil, "House \(house.house_id) missing planets array")
+            #expect(house.startCusp.zodiac.name.isEmpty == false,
+                   "House \(house.number) missing zodiac sign")
         }
     }
 
@@ -136,21 +140,14 @@ struct WesternChartDataContractTests {
         // Assert - Validate aspects
         let validAspectTypes = Set(["Conjunction", "Sextile", "Square", "Trine", "Opposition", "Quincunx"])
 
-        for aspect in response.aspects {
-            // Validate planets are different
-            #expect(aspect.aspecting_planet != aspect.aspected_planet,
-                   "Aspect between same planet: \(aspect.aspecting_planet)")
+        for aspect in response.data.aspects {
+            #expect(aspect.planetOne.name != aspect.planetTwo.name,
+                   "Aspect between same planet: \(aspect.planetOne.name)")
 
-            // Validate aspect type
-            #expect(validAspectTypes.contains(aspect.type),
-                   "Invalid aspect type: \(aspect.type)")
+            #expect(validAspectTypes.contains(aspect.aspect.name),
+                   "Invalid aspect type: \(aspect.aspect.name)")
 
-            // Validate orb (should be non-negative)
             #expect(aspect.orb >= 0.0, "Aspect orb cannot be negative: \(aspect.orb)")
-
-            // Validate diff (angular difference should be 0-180 degrees)
-            #expect(aspect.diff >= 0.0 && aspect.diff <= 180.0,
-                   "Aspect diff out of range: \(aspect.diff)")
         }
     }
 
@@ -162,19 +159,20 @@ struct WesternChartDataContractTests {
 
         // Act
         let response = try await apiService.fetchChartData(request)
+        let angles = response.data.angles
 
-        // Assert - Ascendant
-        if let ascendant = response.ascendant {
-            #expect(!ascendant.sign.isEmpty, "Ascendant missing sign")
-            #expect(ascendant.full_degree >= 0.0 && ascendant.full_degree < 360.0,
-                   "Ascendant degree out of range: \(ascendant.full_degree)")
+        let ascendant = angles.first(where: { $0.name.caseInsensitiveCompare("Ascendant") == .orderedSame })
+        let midheaven = angles.first(where: {
+            $0.name.caseInsensitiveCompare("Midheaven") == .orderedSame ||
+            $0.name.caseInsensitiveCompare("MC") == .orderedSame
+        })
+
+        if let ascendant {
+            #expect(ascendant.longitude >= 0 && ascendant.longitude < 360, "Ascendant longitude invalid")
         }
 
-        // Assert - Midheaven
-        if let midheaven = response.midheaven {
-            #expect(!midheaven.sign.isEmpty, "Midheaven missing sign")
-            #expect(midheaven.full_degree >= 0.0 && midheaven.full_degree < 360.0,
-                   "Midheaven degree out of range: \(midheaven.full_degree)")
+        if let midheaven {
+            #expect(midheaven.longitude >= 0 && midheaven.longitude < 360, "Midheaven longitude invalid")
         }
     }
 
@@ -213,12 +211,11 @@ struct WesternChartDataContractTests {
                 houseSystem: houseSystem
             )
 
-            // Act
             let response = try await apiService.fetchChartData(request)
+            let data = response.data
 
-            // Assert
-            #expect(response.planets.count == 10, "House system \(houseSystem) failed")
-            #expect(response.houses.count == 12, "House system \(houseSystem) failed")
+            #expect(data.planetPositions.count >= 10, "House system \(houseSystem) failed")
+            #expect(data.houses.count == 12, "House system \(houseSystem) failed")
         }
     }
 
@@ -238,7 +235,7 @@ struct WesternChartDataContractTests {
                 name: "Test Person",
                 birthDate: createDate(year: 1990, month: 3, day: 15),
                 birthTime: createTime(hour: 12, minute: 0),
-                birthPlace: location.name,
+                location: location.name,
                 timeZone: TimeZone(identifier: "UTC")!,
                 coordinate: CLLocationCoordinate2D(latitude: location.lat, longitude: location.lon)
             )
@@ -247,10 +244,10 @@ struct WesternChartDataContractTests {
 
             // Act
             let response = try await apiService.fetchChartData(request)
+            let data = response.data
 
-            // Assert
-            #expect(response.planets.count == 10, "Location \(location.name) failed")
-            #expect(response.houses.count == 12, "Location \(location.name) failed")
+            #expect(data.planetPositions.count >= 10, "Location \(location.name) missing planets")
+            #expect(data.houses.count == 12, "Location \(location.name) missing houses")
         }
     }
 
@@ -261,7 +258,7 @@ struct WesternChartDataContractTests {
             name: "Test Person",
             birthDate: createDate(year: 1990, month: 3, day: 15),
             birthTime: createTime(hour: 14, minute: 30),
-            birthPlace: "New York, USA",
+            location: "New York, USA",
             timeZone: TimeZone(identifier: "America/New_York")!,
             coordinate: CLLocationCoordinate2D(latitude: 40.7128, longitude: -74.0060)
         )

@@ -8,84 +8,129 @@
 
 import Foundation
 
-// MARK: - Planet DTO
-
-struct PlanetDTO: Codable {
-    let name: String
-    let sign: String
-    let full_degree: Double
-    let is_retro: String  // API returns "true" or "false" as string
-
-    enum CodingKeys: String, CodingKey {
-        case name
-        case sign
-        case full_degree
-        case is_retro
-    }
-}
-
-// MARK: - House DTO
-
-struct HouseDTO: Codable {
-    let house_id: Int
-    let sign: String
-    let start_degree: Double
-    let end_degree: Double
-    let planets: [String]?
-
-    enum CodingKeys: String, CodingKey {
-        case house_id
-        case sign
-        case start_degree
-        case end_degree
-        case planets
-    }
-}
-
-// MARK: - Aspect DTO
-
-struct AspectDTO: Codable {
-    let aspecting_planet: String
-    let aspected_planet: String
-    let type: String
-    let orb: Double
-    let diff: Double
-
-    enum CodingKeys: String, CodingKey {
-        case aspecting_planet
-        case aspected_planet
-        case type
-        case orb
-        case diff
-    }
-}
-
-// MARK: - Ascendant/Midheaven DTOs
-
-struct AscendantDTO: Codable {
-    let sign: String
-    let full_degree: Double
-}
-
-struct MidheavenDTO: Codable {
-    let sign: String
-    let full_degree: Double
-}
-
 // MARK: - Chart Data Response
 
-struct ProkralaChartDataResponse: Codable {
-    let planets: [PlanetDTO]
-    let houses: [HouseDTO]
-    let aspects: [AspectDTO]
-    let ascendant: AscendantDTO?
-    let midheaven: MidheavenDTO?
+struct ProkralaChartDataResponse: Decodable, Sendable {
+    let status: Status
+    let message: String?
+    let data: ChartData
+
+    struct Status: Decodable, Sendable {
+        let rawString: String?
+        let rawBool: Bool?
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            if let boolValue = try? container.decode(Bool.self) {
+                rawBool = boolValue
+                rawString = nil
+            } else if let stringValue = try? container.decode(String.self) {
+                rawBool = nil
+                rawString = stringValue
+            } else {
+                rawBool = nil
+                rawString = nil
+            }
+        }
+
+        var isSuccess: Bool {
+            if let rawBool {
+                return rawBool
+            }
+            guard let rawString else { return false }
+            let normalized = rawString.lowercased()
+            return normalized == "success" || normalized == "ok" || normalized == "true"
+        }
+
+        var description: String {
+            if let rawBool {
+                return rawBool ? "true" : "false"
+            }
+            return rawString ?? "unknown"
+        }
+    }
+
+    struct ChartData: Decodable, Sendable {
+        let houses: [House]
+        let planetPositions: [PlanetPosition]
+        let angles: [PlanetPosition]
+        let aspects: [PlanetAspect]
+        let declinations: [Declination]?
+    }
+
+    struct House: Decodable, Sendable {
+        let id: Int
+        let number: Int
+        let startCusp: Cusp
+        let endCusp: Cusp
+    }
+
+    struct Cusp: Decodable, Sendable {
+        let longitude: Double
+        let degree: Double
+        let zodiac: WesternZodiac
+    }
+
+    struct WesternZodiac: Decodable, Sendable {
+        let id: Int?
+        let name: String
+    }
+
+    struct PlanetPosition: Decodable, Sendable {
+        let id: Int?
+        let name: String
+        let longitude: Double
+        let degree: Double
+        let isRetrograde: Bool
+        let houseNumber: Int?
+        let zodiac: WesternZodiac
+    }
+
+    struct PlanetAspect: Decodable, Sendable {
+        let planetOne: WesternPlanet
+        let planetTwo: WesternPlanet
+        let aspect: Aspect
+        let orb: Double
+    }
+
+    struct WesternPlanet: Decodable, Sendable {
+        let id: Int?
+        let name: String
+    }
+
+    struct Aspect: Decodable, Sendable {
+        let id: Int?
+        let name: String
+    }
+
+    struct Declination: Decodable, Sendable {
+        let planetOne: WesternPlanet
+        let planetTwo: WesternPlanet
+        let aspect: Aspect
+        let orb: Double
+    }
 }
 
-// MARK: - Chart Image Response
+// MARK: - Chart Image Resource
 
-struct ProkralaChartImageResponse: Codable {
-    let status: Bool
-    let chart_url: String
-    let msg: String
+struct ProkralaChartImageResource: Sendable {
+    let data: Data
+    let contentType: String?
+
+    var format: String {
+        guard let contentType else {
+            return "svg"
+        }
+
+        let lowercased = contentType.lowercased()
+        if lowercased.contains("svg") {
+            return "svg"
+        }
+
+        if lowercased.contains("png") {
+            return "png"
+        }
+
+        return "svg"
+    }
 }

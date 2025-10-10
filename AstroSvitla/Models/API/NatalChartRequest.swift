@@ -80,6 +80,14 @@ struct NatalChartRequest {
         return parameters
     }
 
+    /// Query parameters for chart wheel endpoint (returns SVG/PNG content)
+    func toChartImageQueryParameters() -> [QueryParameter] {
+        var parameters = toQueryParameters()
+        parameters.append(.init(name: "image_type", value: imageFormat))
+        parameters.append(.init(name: "chart_size", value: "\(chartSize)"))
+        return parameters
+    }
+
 
     /// Convert to request body for chart data endpoint (legacy)
     func toChartDataBody() -> [String: Any] {

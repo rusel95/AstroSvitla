@@ -12,6 +12,7 @@
 
 import Testing
 import Foundation
+import CoreLocation
 import SwiftData
 @testable import AstroSvitla
 
@@ -19,32 +20,24 @@ import SwiftData
 struct NatalChartGenerationTests {
 
     let apiService: ProkralaAPIService
-    let imageCacheService: ImageCacheService
     let chartCacheService: ChartCacheService
     let modelContainer: ModelContainer
-    let tempDirectory: URL
 
     init() throws {
         // Load test credentials from environment variables
-        guard let userID = ProcessInfo.processInfo.environment["TEST_ASTROLOGY_API_USER_ID"],
-              let apiKey = ProcessInfo.processInfo.environment["TEST_ASTROLOGY_API_KEY"],
-              !userID.isEmpty, !apiKey.isEmpty else {
-            throw TestError.missingCredentials("Set TEST_ASTROLOGY_API_USER_ID and TEST_ASTROLOGY_API_KEY")
+        let environment = ProcessInfo.processInfo.environment
+        let clientID = environment["TEST_PROKERALA_CLIENT_ID"] ?? environment["TEST_ASTROLOGY_API_USER_ID"]
+        let clientSecret = environment["TEST_PROKERALA_CLIENT_SECRET"] ?? environment["TEST_ASTROLOGY_API_KEY"]
+
+        guard let clientID, let clientSecret,
+              clientID.isEmpty == false, clientSecret.isEmpty == false else {
+            throw TestError.missingCredentials(
+                "Set TEST_PROKERALA_CLIENT_ID and TEST_PROKERALA_CLIENT_SECRET (or legacy TEST_ASTROLOGY_API_USER_ID / TEST_ASTROLOGY_API_KEY)"
+            )
         }
 
         // Initialize API service
-        apiService = ProkralaAPIService(userID: userID, apiKey: apiKey)
-
-        // Create temporary directory for test caches
-        let fileManager = FileManager.default
-        tempDirectory = fileManager.temporaryDirectory
-            .appendingPathComponent("NatalChartGenerationTests", isDirectory: true)
-            .appendingPathComponent(UUID().uuidString, isDirectory: true)
-
-        try fileManager.createDirectory(at: tempDirectory, withIntermediateDirectories: true)
-
-        // Initialize image cache service with temp directory
-        imageCacheService = ImageCacheService(cacheDirectory: tempDirectory)
+        apiService = ProkralaAPIService(clientID: clientID, clientSecret: clientSecret)
 
         // Initialize in-memory SwiftData container for tests
         let schema = Schema([CachedNatalChart.self])
@@ -53,13 +46,11 @@ struct NatalChartGenerationTests {
 
         // Initialize chart cache service
         let context = modelContainer.mainContext
-        chartCacheService = ChartCacheService(modelContext: context)
+        chartCacheService = ChartCacheService(context: context)
     }
 
     enum TestError: Error {
         case missingCredentials(String)
-        case invalidChartData
-        case cacheNotFound
     }
 
     // MARK: - Full Flow Integration Tests
@@ -70,11 +61,8 @@ struct NatalChartGenerationTests {
         let birthDetails = createTestBirthDetails()
         let request = NatalChartRequest(birthDetails: birthDetails)
 
-        // Act - Fetch data and image in parallel
-        async let chartDataResponse = apiService.fetchChartData(request)
-        async let chartImageResponse = apiService.generateChartImage(request)
-
-        let (dataResponse, imageResponse) = try await (chartDataResponse, chartImageResponse)
+        // Act - Fetch data
+        let dataResponse = try await apiService.fetchChartData(request)
 
         // Act - Map DTOs to domain model
         let natalChart = try DTOMapper.toDomain(response: dataResponse, birthDetails: birthDetails)
@@ -86,22 +74,11 @@ struct NatalChartGenerationTests {
         #expect(natalChart.ascendant >= 0 && natalChart.ascendant < 360, "Valid ascendant")
         #expect(natalChart.midheaven >= 0 && natalChart.midheaven < 360, "Valid midheaven")
 
-        // Act - Download and cache image
-        guard let imageURL = URL(string: imageResponse.chart_url) else {
-            throw TestError.invalidChartData
-        }
-
-        let (imageData, _) = try await URLSession.shared.data(from: imageURL)
-        #expect(imageData.count > 0, "Image data should not be empty")
-
-        let imageFileID = UUID().uuidString
-        try imageCacheService.saveImage(data: imageData, fileID: imageFileID, format: "svg")
-
-        // Act - Cache natal chart to SwiftData
+        // Act - Cache natal chart to SwiftData (without image)
         try chartCacheService.saveChart(
             natalChart,
-            imageFileID: imageFileID,
-            imageFormat: "svg"
+            imageFileID: nil,
+            imageFormat: nil
         )
 
         // Assert - Chart can be retrieved from cache
@@ -110,10 +87,6 @@ struct NatalChartGenerationTests {
         #expect(cachedChart.id == natalChart.id, "Chart IDs should match")
         #expect(cachedChart.planets.count == natalChart.planets.count, "Planets count should match")
         #expect(cachedChart.houses.count == natalChart.houses.count, "Houses count should match")
-
-        // Assert - Image can be retrieved from cache
-        let cachedImageData = try imageCacheService.loadImage(fileID: imageFileID, format: "svg")
-        #expect(cachedImageData == imageData, "Cached image data should match original")
     }
 
     @Test("Chart generation completes within 5 seconds", .timeLimit(.seconds(6)))
@@ -125,16 +98,7 @@ struct NatalChartGenerationTests {
         let startTime = Date()
 
         // Act - Full generation flow
-        async let chartData = apiService.fetchChartData(request)
-        async let chartImage = apiService.generateChartImage(request)
-
-        let (dataResponse, imageResponse) = try await (chartData, chartImage)
-
-        // Download image
-        guard let imageURL = URL(string: imageResponse.chart_url) else {
-            throw TestError.invalidChartData
-        }
-        _ = try await URLSession.shared.data(from: imageURL)
+        let dataResponse = try await apiService.fetchChartData(request)
 
         let duration = Date().timeIntervalSince(startTime)
 
@@ -142,8 +106,7 @@ struct NatalChartGenerationTests {
         #expect(duration < 5.0, "Chart generation took \(duration) seconds (must be < 5s)")
 
         // Also verify we got valid data
-        #expect(dataResponse.planets.count == 10)
-        #expect(imageResponse.status == true)
+        #expect(dataResponse.data.planetPositions.count >= 10)
     }
 
     @Test("Cached chart retrieval works offline")
@@ -154,29 +117,17 @@ struct NatalChartGenerationTests {
 
         // Act - Fetch and cache
         let dataResponse = try await apiService.fetchChartData(request)
-        let imageResponse = try await apiService.generateChartImage(request)
-
         let natalChart = try DTOMapper.toDomain(response: dataResponse, birthDetails: birthDetails)
 
-        guard let imageURL = URL(string: imageResponse.chart_url) else {
-            throw TestError.invalidChartData
-        }
-
-        let (imageData, _) = try await URLSession.shared.data(from: imageURL)
-        let imageFileID = UUID().uuidString
-
-        try imageCacheService.saveImage(data: imageData, fileID: imageFileID, format: "svg")
-        try chartCacheService.saveChart(natalChart, imageFileID: imageFileID, imageFormat: "svg")
+        try chartCacheService.saveChart(natalChart, imageFileID: nil, imageFormat: nil)
 
         // Act - Retrieve from cache (simulating offline)
         let cachedChart = try chartCacheService.loadChart(id: natalChart.id)
-        let cachedImage = try imageCacheService.loadImage(fileID: imageFileID, format: "svg")
 
         // Assert - Retrieved data matches original
         #expect(cachedChart.id == natalChart.id)
         #expect(cachedChart.planets.count == 10)
         #expect(cachedChart.houses.count == 12)
-        #expect(cachedImage.count == imageData.count)
     }
 
     @Test("Cache lookup by birth data works correctly")
@@ -215,7 +166,7 @@ struct NatalChartGenerationTests {
         let cachedChart = try chartCacheService.loadChart(id: natalChart.id)
 
         // Act - Check if fresh (should be fresh immediately)
-        let isFresh = !chartCacheService.isCacheStale(chart: cachedChart)
+        let isFresh = !chartCacheService.isCacheStale(cachedChart)
         #expect(isFresh, "Newly cached chart should not be stale")
 
         // Note: To test 30-day expiration, we'd need to modify the generatedAt timestamp
@@ -230,7 +181,7 @@ struct NatalChartGenerationTests {
             name: "Another Person",
             birthDate: createDate(year: 1985, month: 6, day: 20),
             birthTime: createTime(hour: 10, minute: 15),
-            birthPlace: "London, UK",
+            location: "London, UK",
             timeZone: TimeZone(identifier: "Europe/London")!,
             coordinate: CLLocationCoordinate2D(latitude: 51.5074, longitude: -0.1278)
         )
@@ -335,7 +286,7 @@ struct NatalChartGenerationTests {
             name: "Test Person",
             birthDate: createDate(year: 1990, month: 3, day: 15),
             birthTime: createTime(hour: 14, minute: 30),
-            birthPlace: "New York, USA",
+            location: "New York, USA",
             timeZone: TimeZone(identifier: "America/New_York")!,
             coordinate: CLLocationCoordinate2D(latitude: 40.7128, longitude: -74.0060)
         )

@@ -13,8 +13,10 @@ struct NatalChartWheelView: View {
     var body: some View {
         Group {
             if let imageData = chartImageData {
-                // Display API-generated chart image
-                if let uiImage = UIImage(data: imageData) {
+                if chartImageFormat == "svg" {
+                    SVGImageView(svgData: imageData)
+                        .aspectRatio(contentMode: .fit)
+                } else if let uiImage = UIImage(data: imageData) {
                     Image(uiImage: uiImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -50,6 +52,10 @@ struct NatalChartWheelView: View {
         .task {
             await loadChartImage()
         }
+    }
+
+    private var chartImageFormat: String {
+        chart.imageFormat?.lowercased() ?? ""
     }
 
     private var fallbackChartView: some View {
@@ -159,11 +165,13 @@ struct NatalChartWheelView: View {
         guard let imageFileID = chart.imageFileID,
               let imageFormat = chart.imageFormat else {
             // No image available, keep using fallback rendering
+            print("[NatalChartWheelView] No cached image metadata found")
             return
         }
 
         isLoadingImage = true
         imageLoadingFailed = false
+        print("[NatalChartWheelView] Loading cached image id=\(imageFileID) format=\(imageFormat)")
 
         do {
             let imageCacheService = ImageCacheService()
@@ -173,12 +181,14 @@ struct NatalChartWheelView: View {
                 self.chartImageData = imageData
                 self.isLoadingImage = false
             }
+            print("[NatalChartWheelView] Image loaded successfully (\(imageData.count) bytes)")
         } catch {
             await MainActor.run {
                 self.imageLoadingFailed = true
                 self.isLoadingImage = false
             }
             print("Failed to load chart image: \(error)")
+            print("[NatalChartWheelView] Image load failed: \(error.localizedDescription)")
         }
     }
 }

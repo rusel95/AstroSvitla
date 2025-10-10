@@ -76,6 +76,7 @@ final class ImageCacheService {
 
         do {
             try data.write(to: fileURL, options: .atomic)
+            print("[ImageCacheService] Saved \(format.uppercased()) image \(fileID) (\(data.count) bytes)")
         } catch {
             throw CacheError.saveFailed(error)
         }
@@ -95,7 +96,9 @@ final class ImageCacheService {
         }
 
         do {
-            return try Data(contentsOf: fileURL)
+            let data = try Data(contentsOf: fileURL)
+            print("[ImageCacheService] Loaded \(format.uppercased()) image \(fileID) (\(data.count) bytes)")
+            return data
         } catch {
             throw CacheError.loadFailed(error)
         }
@@ -115,6 +118,7 @@ final class ImageCacheService {
 
         do {
             try fileManager.removeItem(at: fileURL)
+            print("[ImageCacheService] Deleted \(format.uppercased()) image \(fileID)")
         } catch {
             throw CacheError.deleteFailed(error)
         }

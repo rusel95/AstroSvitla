@@ -13,6 +13,7 @@ enum MappingError: LocalizedError {
     case invalidSign(String)
     case invalidHouseNumber(Int)
     case invalidAspectType(String)
+    case apiReturnedFailureStatus(String)
 
     var errorDescription: String? {
         switch self {
@@ -24,76 +25,90 @@ enum MappingError: LocalizedError {
             return "Invalid house number: \(num). Must be 1-12."
         case .invalidAspectType(let type):
             return "Unknown aspect type: \(type)"
+        case .apiReturnedFailureStatus(let status):
+            return "API returned failure status: \(status)"
         }
     }
 }
 
 enum DTOMapper {
 
-    // MARK: - Planet Mapping
-
-    static func toDomain(planetDTO: PlanetDTO, house: Int) throws -> Planet {
-        guard let planetType = PlanetType(rawValue: planetDTO.name) else {
-            throw MappingError.invalidPlanetName(planetDTO.name)
+    private static func toDomain(planetPosition: ProkralaChartDataResponse.PlanetPosition) throws -> Planet {
+        guard let planetType = PlanetType(rawValue: planetPosition.name) else {
+            throw MappingError.invalidPlanetName(planetPosition.name)
         }
 
-        guard let zodiacSign = ZodiacSign(rawValue: planetDTO.sign) else {
-            throw MappingError.invalidSign(planetDTO.sign)
+        guard let zodiacSign = ZodiacSign(rawValue: planetPosition.zodiac.name) else {
+            throw MappingError.invalidSign(planetPosition.zodiac.name)
         }
 
-        let isRetrograde = (planetDTO.is_retro.lowercased() == "true")
+        let houseNumber = planetPosition.houseNumber ?? 1
+        guard (1...12).contains(houseNumber) else {
+            throw MappingError.invalidHouseNumber(houseNumber)
+        }
 
         return Planet(
             name: planetType,
-            longitude: planetDTO.full_degree,
-            latitude: 0, // API doesn't provide latitude
+            longitude: planetPosition.longitude,
+            latitude: 0,
             sign: zodiacSign,
-            house: house,
-            isRetrograde: isRetrograde,
-            speed: 0 // API doesn't provide speed in basic response
+            house: houseNumber,
+            isRetrograde: planetPosition.isRetrograde,
+            speed: 0
         )
     }
 
-    // MARK: - House Mapping
-
-    static func toDomain(houseDTO: HouseDTO) throws -> House {
-        guard (1...12).contains(houseDTO.house_id) else {
-            throw MappingError.invalidHouseNumber(houseDTO.house_id)
+    private static func toDomain(house: ProkralaChartDataResponse.House) throws -> House {
+        guard (1...12).contains(house.number) else {
+            throw MappingError.invalidHouseNumber(house.number)
         }
 
-        guard let zodiacSign = ZodiacSign(rawValue: houseDTO.sign) else {
-            throw MappingError.invalidSign(houseDTO.sign)
+        guard let zodiacSign = ZodiacSign(rawValue: house.startCusp.zodiac.name) else {
+            throw MappingError.invalidSign(house.startCusp.zodiac.name)
         }
 
         return House(
-            number: houseDTO.house_id,
-            cusp: houseDTO.start_degree,
+            number: house.number,
+            cusp: house.startCusp.longitude,
             sign: zodiacSign
         )
     }
 
-    // MARK: - Aspect Mapping
-
-    static func toDomain(aspectDTO: AspectDTO) throws -> Aspect {
-        guard let planet1 = PlanetType(rawValue: aspectDTO.aspecting_planet) else {
-            throw MappingError.invalidPlanetName(aspectDTO.aspecting_planet)
+    private static func toDomain(aspect: ProkralaChartDataResponse.PlanetAspect) -> Aspect? {
+        guard let planet1 = PlanetType(rawValue: aspect.planetOne.name),
+              let planet2 = PlanetType(rawValue: aspect.planetTwo.name) else {
+            return nil
         }
 
-        guard let planet2 = PlanetType(rawValue: aspectDTO.aspected_planet) else {
-            throw MappingError.invalidPlanetName(aspectDTO.aspected_planet)
-        }
-
-        guard let aspectType = AspectType(rawValue: aspectDTO.type) else {
-            throw MappingError.invalidAspectType(aspectDTO.type)
+        guard let aspectType = AspectType(rawValue: aspect.aspect.name) else {
+            return nil
         }
 
         return Aspect(
             planet1: planet1,
             planet2: planet2,
             type: aspectType,
-            orb: aspectDTO.orb,
-            isApplying: false // API doesn't provide this; could calculate later
+            orb: aspect.orb,
+            isApplying: false
         )
+    }
+
+    private static func extractAngle(
+        names: [String],
+        from angles: [ProkralaChartDataResponse.PlanetPosition],
+        fallback: Double
+    ) -> Double {
+        guard let match = angles.first(where: { angle in
+            let normalized = angle.name
+                .replacingOccurrences(of: " ", with: "")
+                .lowercased()
+            return names.contains {
+                $0.replacingOccurrences(of: " ", with: "").lowercased() == normalized
+            }
+        }) else {
+            return fallback
+        }
+        return match.longitude
     }
 
     // MARK: - Full Chart Mapping
@@ -103,29 +118,36 @@ enum DTOMapper {
         birthDetails: BirthDetails
     ) throws -> NatalChart {
 
-        // Create house-to-planet mapping
-        var housePlanetMap: [String: Int] = [:]
-        for houseDTO in response.houses {
-            for planetName in (houseDTO.planets ?? []) {
-                housePlanetMap[planetName] = houseDTO.house_id
+        guard response.status.isSuccess else {
+            throw MappingError.apiReturnedFailureStatus(response.status.description)
+        }
+
+        let payload = response.data
+
+        let houses = try payload.houses.map { try toDomain(house: $0) }
+
+        let planets = try payload.planetPositions.compactMap { position -> Planet? in
+            guard PlanetType(rawValue: position.name) != nil else {
+                return nil
             }
+            return try toDomain(planetPosition: position)
         }
 
-        // Map planets with house assignments
-        let planets = try response.planets.map { planetDTO in
-            let house = housePlanetMap[planetDTO.name] ?? 1
-            return try toDomain(planetDTO: planetDTO, house: house)
-        }
+        let aspects = payload.aspects.compactMap { toDomain(aspect: $0) }
 
-        // Map houses
-        let houses = try response.houses.map { try toDomain(houseDTO: $0) }
+        let ascendantFallback = houses.first(where: { $0.number == 1 })?.cusp ?? houses.first?.cusp ?? 0
+        let ascendant = extractAngle(
+            names: ["Ascendant", "Asc"],
+            from: payload.angles,
+            fallback: ascendantFallback
+        )
 
-        // Map aspects
-        let aspects = try response.aspects.map { try toDomain(aspectDTO: $0) }
-
-        // Extract ascendant and midheaven
-        let ascendant = response.ascendant?.full_degree ?? houses.first?.cusp ?? 0
-        let midheaven = response.midheaven?.full_degree ?? (houses.count >= 10 ? houses[9].cusp : 0)
+        let midheavenFallback = houses.first(where: { $0.number == 10 })?.cusp ?? 0
+        let midheaven = extractAngle(
+            names: ["Midheaven", "MC", "MediumCoeli"],
+            from: payload.angles,
+            fallback: midheavenFallback
+        )
 
         // Create NatalChart
         return NatalChart(

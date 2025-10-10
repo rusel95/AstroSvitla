@@ -18,7 +18,7 @@ extension URLSession: @unchecked Sendable {}
 
 protocol ProkralaAPIServiceProtocol {
     func fetchChartData(_ request: NatalChartRequest) async throws -> ProkralaChartDataResponse
-    func generateChartImage(_ request: NatalChartRequest) async throws -> ProkralaChartImageResponse
+    func generateChartImage(_ request: NatalChartRequest) async throws -> ProkralaChartImageResource
 }
 
 // MARK: - API Errors
@@ -80,7 +80,7 @@ final class ProkralaAPIService: ProkralaAPIServiceProtocol {
     func fetchChartData(_ request: NatalChartRequest) async throws -> ProkralaChartDataResponse {
         // Prokerala uses GET requests with query parameters
         let parameters = request.toQueryParameters()
-        var components = URLComponents(string: "\(baseURL)/astrology/natal-chart")!
+        var components = URLComponents(string: "\(baseURL)/astrology/natal-planet-position")!
         components.percentEncodedQuery = percentEncodedQuery(from: parameters)
 
         guard let url = components.url else {
@@ -90,38 +90,105 @@ final class ProkralaAPIService: ProkralaAPIServiceProtocol {
         return try await fetchWithRetry(maxAttempts: 3) {
             let accessToken = try await self.tokenManager.accessToken()
             let urlRequest = self.buildRequest(url: url, accessToken: accessToken)
+            let acceptHeader = urlRequest.value(forHTTPHeaderField: "Accept") ?? "n/a"
+            self.log("➡️ Requesting chart data: \(url.absoluteString) (Accept: \(acceptHeader))")
+            let start = Date()
 
             do {
                 let (data, response) = try await self.session.data(for: urlRequest)
                 try self.validateResponse(response, data: data)
 
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    throw AstroAPIError.invalidResponse
+                }
+
+                let duration = Date().timeIntervalSince(start)
+                let contentType = httpResponse.value(forHTTPHeaderField: "Content-Type") ?? "n/a"
+                self.log("✅ Chart data \(httpResponse.statusCode) \(contentType) \(data.count) bytes in \(String(format: "%.2f", duration))s")
+
+                guard contentType.lowercased().contains("json") else {
+                    self.logUnexpectedBody(data, note: "Chart data content-type \(contentType)")
+                    throw AstroAPIError.invalidResponse
+                }
+
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
-                return try decoder.decode(ProkralaChartDataResponse.self, from: data)
+                do {
+                    return try decoder.decode(ProkralaChartDataResponse.self, from: data)
+                } catch {
+                    self.logUnexpectedBody(data, note: "Chart data decode failed: \(error.localizedDescription)")
+                    throw error
+                }
             } catch let error as AstroAPIError {
                 if case .authenticationFailed = error {
                     await self.tokenManager.invalidate()
                 }
+                self.log("❌ Chart data error: \(error.localizedDescription)")
                 throw error
             } catch {
+                self.log("❌ Chart data unexpected error: \(error.localizedDescription)")
                 throw error
             }
         }
     }
 
-    func generateChartImage(_ request: NatalChartRequest) async throws -> ProkralaChartImageResponse {
-        // For now, return empty response as Prokerala API doesn't have separate image endpoint
-        // Chart images are generated client-side or through different service
-        return ProkralaChartImageResponse(
-            status: false,
-            chart_url: "",
-            msg: "Chart visualization not available from Prokerala API"
+    func generateChartImage(_ request: NatalChartRequest) async throws -> ProkralaChartImageResource {
+        let parameters = request.toChartImageQueryParameters()
+        var components = URLComponents(string: "\(baseURL)/astrology/natal-chart/wheel")!
+        components.percentEncodedQuery = percentEncodedQuery(from: parameters)
+
+        guard let url = components.url else {
+            throw AstroAPIError.invalidResponse
+        }
+
+        let expectedContentType = request.imageFormat.lowercased() == "png"
+            ? "image/png"
+            : "image/svg+xml"
+
+        return try await fetchWithRetry(maxAttempts: 3) {
+            let accessToken = try await self.tokenManager.accessToken()
+        var urlRequest = self.buildRequest(
+            url: url,
+            accessToken: accessToken,
+            accept: expectedContentType
         )
+
+            let acceptHeader = urlRequest.value(forHTTPHeaderField: "Accept") ?? "n/a"
+            self.log("➡️ Requesting chart image: \(url.absoluteString) (Accept: \(acceptHeader))")
+            let start = Date()
+            let (data, response) = try await self.session.data(for: urlRequest)
+            try self.validateResponse(response, data: data)
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw AstroAPIError.invalidResponse
+            }
+
+            let contentType = httpResponse.value(forHTTPHeaderField: "Content-Type")
+
+            if let contentType,
+               contentType.lowercased().contains(expectedContentType) == false {
+                self.log("⚠️ Chart image content-type mismatch: \(contentType) expected \(expectedContentType)")
+                self.logUnexpectedBody(data, note: "Chart image unexpected response")
+                throw AstroAPIError.invalidResponse
+            }
+
+            let duration = Date().timeIntervalSince(start)
+            self.log("✅ Chart image \(httpResponse.statusCode) \(contentType ?? "n/a") \(data.count) bytes in \(String(format: "%.2f", duration))s")
+
+            return ProkralaChartImageResource(
+                data: data,
+                contentType: contentType
+            )
+        }
     }
 
     // MARK: - Private Helpers
 
-    private func buildRequest(url: URL, accessToken: String) -> URLRequest {
+    private func buildRequest(
+        url: URL,
+        accessToken: String,
+        accept: String = "application/json"
+    ) -> URLRequest {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
 
@@ -129,7 +196,7 @@ final class ProkralaAPIService: ProkralaAPIServiceProtocol {
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
 
         // Headers
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue(accept, forHTTPHeaderField: "Accept")
         request.addValue("en", forHTTPHeaderField: "Accept-Language")
 
         // Timeouts
@@ -183,12 +250,15 @@ final class ProkralaAPIService: ProkralaAPIServiceProtocol {
             } catch let error as AstroAPIError {
                 switch error {
                 case .rateLimitExceeded, .serverError, .networkError:
+                    log("⚠️ Attempt \(attempt + 1) failed: \(error.localizedDescription)")
                     lastError = error
                     if attempt < maxAttempts - 1 {
                         let delay = pow(2.0, Double(attempt)) // 1s, 2s, 4s
+                        log("⏳ Retrying in \(String(format: "%.2f", delay))s")
                         try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                     }
                 case .authenticationFailed:
+                    log("⚠️ Authentication failed on attempt \(attempt + 1)")
                     lastError = error
                     if attempt < maxAttempts - 1 {
                         // Token will be invalidated by caller; retry immediately
@@ -208,6 +278,21 @@ final class ProkralaAPIService: ProkralaAPIServiceProtocol {
         }
 
         throw lastError ?? AstroAPIError.invalidResponse
+    }
+
+    private func log(_ message: String) {
+        print("[ProkeralaAPIService] \(message)")
+    }
+
+    private func logUnexpectedBody(_ data: Data, note: String) {
+        let preview: String
+        if let string = String(data: data, encoding: .utf8) {
+            let trimmed = String(string.prefix(500))
+            preview = trimmed.replacingOccurrences(of: "\n", with: " ")
+        } else {
+            preview = data.prefix(64).map { String(format: "%02X", $0) }.joined(separator: " ")
+        }
+        log("⚠️ Unexpected response (\(note)): \(preview)")
     }
 }
 

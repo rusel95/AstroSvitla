@@ -104,10 +104,13 @@ final class NatalChartService: NatalChartServiceProtocol {
         forceRefresh: Bool = false
     ) async throws -> NatalChart {
 
+        log("🌌 Generate chart started for \(birthDetails.displayName) (\(birthDetails.formattedBirthDate) \(birthDetails.formattedBirthTime)) forceRefresh=\(forceRefresh)")
+
         // Step 1: Check cache first (unless force refresh requested)
         if !forceRefresh {
             if let cachedChart = getCachedChart(birthDetails: birthDetails) {
                 // Cache is fresh, return it
+                log("💾 Returning cached chart")
                 return cachedChart
             }
         }
@@ -116,54 +119,35 @@ final class NatalChartService: NatalChartServiceProtocol {
         guard networkMonitor.isConnected else {
             // If offline, try to return cached data
             if let cachedChart = getCachedChart(birthDetails: birthDetails) {
+                log("⚠️ Offline but cache available, returning cached chart")
                 return cachedChart
             }
+            log("❌ No internet connection and no cache available")
             throw ServiceError.noInternetConnection
         }
 
         // Step 3: Check rate limits
         let rateLimitCheck = rateLimiter.canMakeRequest()
         guard rateLimitCheck.allowed else {
+            log("❌ Rate limit exceeded, retry after \(rateLimitCheck.retryAfter ?? 60)s")
             throw ServiceError.rateLimitExceeded(retryAfter: rateLimitCheck.retryAfter ?? 60)
         }
 
-        // Step 4: Make API calls (parallel execution for performance)
+        // Step 4: Make API call for computational data
         let request = NatalChartRequest(birthDetails: birthDetails)
+        let start = Date()
 
         do {
-            // Record API requests for rate limiting (2 requests per chart)
-            rateLimiter.recordRequest()
+            // Record API request for rate limiting
             rateLimiter.recordRequest()
 
-            // Parallel API calls to meet < 5 second requirement
-            async let chartDataResponse = apiService.fetchChartData(request)
-            async let chartImageResponse = apiService.generateChartImage(request)
-
-            let (dataResponse, imageResponse) = try await (chartDataResponse, chartImageResponse)
+            let dataResponse = try await apiService.fetchChartData(request)
+            log("✅ Chart compute response received in \(String(format: "%.2f", Date().timeIntervalSince(start)))s")
 
             // Step 5: Map API response to domain model
             var natalChart = try DTOMapper.toDomain(response: dataResponse, birthDetails: birthDetails)
 
-            // Step 6: Download and cache chart image
-            if imageResponse.status, let imageURL = URL(string: imageResponse.chart_url) {
-                do {
-                    let (imageData, _) = try await URLSession.shared.data(from: imageURL)
-                    let fileID = UUID().uuidString
-                    let format = request.imageFormat
-
-                    try imageCacheService.saveImage(data: imageData, fileID: fileID, format: format)
-
-                    // Update chart with image information
-                    natalChart.imageFileID = fileID
-                    natalChart.imageFormat = format
-                } catch {
-                    // Image download failed, but continue with chart data
-                    // This is a non-fatal error - user can still see chart data
-                    print("Warning: Failed to download chart image: \(error)")
-                }
-            }
-
-            // Step 7: Cache natal chart for offline access
+            // Step 6: Cache natal chart for offline access (no image request)
             do {
                 try chartCacheService.saveChart(
                     natalChart,
@@ -171,14 +155,17 @@ final class NatalChartService: NatalChartServiceProtocol {
                     imageFileID: natalChart.imageFileID,
                     imageFormat: natalChart.imageFormat
                 )
+                log("💾 Chart cached successfully")
             } catch {
                 // Caching failed, but chart was generated successfully
                 print("Warning: Failed to cache chart: \(error)")
+                log("⚠️ Failed to cache chart: \(error.localizedDescription)")
             }
 
             return natalChart
 
         } catch {
+            log("❌ Chart generation failed: \(error.localizedDescription)")
             throw ServiceError.chartGenerationFailed(error)
         }
     }
@@ -224,6 +211,10 @@ final class NatalChartService: NatalChartServiceProtocol {
     func getRetryAfterSeconds() -> TimeInterval? {
         let check = rateLimiter.canMakeRequest()
         return check.allowed ? nil : check.retryAfter
+    }
+
+    private func log(_ message: String) {
+        print("[NatalChartService] \(message)")
     }
 }
 
