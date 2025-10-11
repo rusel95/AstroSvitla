@@ -18,6 +18,7 @@ tests/
 Swift 5.9+ (iOS 17+ SDK): Follow standard conventions
 
 ## Recent Changes
+- 003-integrate-free-astrology: Added Swift 5.9+ (iOS 17+ SDK)
 - 002-migrate-natal-chart: Added Swift 5.9+ (iOS 17+ SDK)
 
 <!-- MANUAL ADDITIONS START -->

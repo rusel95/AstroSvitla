@@ -45,19 +45,21 @@ enum ChartCalculatorError: LocalizedError, Equatable {
 final class ChartCalculator {
 
     private let natalChartService: NatalChartServiceProtocol?
-    private let ephemerisService: SwissEphemerisService?
+    // private let ephemerisService: SwissEphemerisService?  // COMMENTED OUT - SwissEphemeris disabled for Free Astrology API testing
 
-    /// Initialize with NatalChartService (new Prokerala API)
+    /// Initialize with NatalChartService (Free Astrology API)
     init(natalChartService: NatalChartServiceProtocol) {
         self.natalChartService = natalChartService
-        self.ephemerisService = nil
+        // self.ephemerisService = nil  // COMMENTED OUT
     }
 
+    /* COMMENTED OUT - Legacy SwissEphemeris initializer disabled for Free Astrology API testing
     /// Legacy initializer with SwissEphemeris (deprecated)
     init(ephemerisService: SwissEphemerisService = SwissEphemerisService()) {
         self.ephemerisService = ephemerisService
         self.natalChartService = nil
     }
+    */
 
     /// Convenience initializer with ModelContext for production use
     convenience init(modelContext: ModelContext) {
@@ -74,18 +76,21 @@ final class ChartCalculator {
         locationName: String
     ) async throws -> NatalChart {
 
-        // Use new API service if available
-        if let natalChartService = natalChartService {
-            return try await calculateWithAPI(
-                birthDate: birthDate,
-                birthTime: birthTime,
-                timeZoneIdentifier: timeZoneIdentifier,
-                latitude: latitude,
-                longitude: longitude,
-                locationName: locationName
-            )
+        // Use Free Astrology API service
+        guard let natalChartService = natalChartService else {
+            throw ChartCalculatorError.apiError("Chart service not initialized")
         }
 
+        return try await calculateWithAPI(
+            birthDate: birthDate,
+            birthTime: birthTime,
+            timeZoneIdentifier: timeZoneIdentifier,
+            latitude: latitude,
+            longitude: longitude,
+            locationName: locationName
+        )
+
+        /* COMMENTED OUT - Swiss Ephemeris fallback disabled for Free Astrology API testing
         // Fallback to Swiss Ephemeris (legacy path)
         guard let ephemerisService = ephemerisService else {
             throw ChartCalculatorError.apiError("No calculation service available")
@@ -100,6 +105,7 @@ final class ChartCalculator {
             locationName: locationName,
             ephemerisService: ephemerisService
         )
+        */
     }
 
     // MARK: - API-based Calculation (New)
@@ -155,8 +161,9 @@ final class ChartCalculator {
         }
     }
 
-    // MARK: - Swiss Ephemeris Calculation (Legacy)
+    // MARK: - Swiss Ephemeris Calculation (Legacy) - COMMENTED OUT
 
+    /* COMMENTED OUT - SwissEphemeris calculation disabled for Free Astrology API testing
     private func calculateWithSwissEphemeris(
         birthDate: Date,
         birthTime: Date,
@@ -257,4 +264,5 @@ final class ChartCalculator {
         let normalized = value.truncatingRemainder(dividingBy: 360)
         return normalized >= 0 ? normalized : normalized + 360
     }
+    */ // End of commented Swiss Ephemeris code
 }

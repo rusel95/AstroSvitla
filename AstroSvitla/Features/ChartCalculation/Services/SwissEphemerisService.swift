@@ -1,3 +1,18 @@
+/* TEMPORARILY DISABLED FOR FREE ASTROLOGY API TESTING
+ *
+ * This file has been commented out to enable isolated testing of the Free Astrology API integration.
+ *
+ * To re-enable:
+ * 1. Remove this comment block
+ * 2. Update NatalChartService to inject SwissEphemerisService instead of FreeAstrologyAPIService
+ * 3. Re-enable the skipped tests in AstroSvitlaTests/Features/ChartCalculation/SwissEphemerisServiceTests.swift
+ *
+ * Original implementation preserved below for easy rollback if Free Astrology API proves inadequate.
+ *
+ * Last modified: 2025-10-10
+ */
+
+/*
 import Foundation
 import SwissEphemeris
 
@@ -331,3 +346,4 @@ private extension AspectType {
         return nil
     }
 }
+*/

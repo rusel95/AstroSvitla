@@ -1,0 +1,58 @@
+### Free Astrology API - Aspects Endpoint Contract
+###
+### This contract defines the expected request/response for the aspects endpoint.
+### Used for contract testing to validate API behavior.
+
+POST https://json.freeastrologyapi.com/western/aspects
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+{
+  "year": 1990,
+  "month": 5,
+  "date": 15,
+  "hours": 14,
+  "minutes": 30,
+  "seconds": 0,
+  "latitude": 40.7128,
+  "longitude": -74.0060,
+  "timezone": -4.0,
+  "observation_point": "topocentric",
+  "ayanamsha": "tropical"
+}
+
+### Expected Response:
+### Status: 200 OK
+### Content-Type: application/json
+###
+### {
+###   "status": "success",
+###   "data": {
+###     "aspects": [
+###       {
+###         "planet1_name": "Sun",
+###         "planet2_name": "Moon",
+###         "aspect_name": "Trine",
+###         "orb_degree": 2.5
+###       },
+###       {
+###         "planet1_name": "Venus",
+###         "planet2_name": "Mars",
+###         "aspect_name": "Square",
+###         "orb_degree": 1.2
+###       }
+###       // ... more aspects
+###     ]
+###   }
+### }
+
+### Contract Test Assertions:
+### - Response status MUST be 200
+### - Response MUST include "status" field with value "success"
+### - Response MUST include "data.aspects" array
+### - Each aspect MUST have: planet1_name, planet2_name, aspect_name
+### - orb_degree is optional but if present MUST be numeric
+### - aspect_name MUST be one of: Conjunction, Opposition, Trine, Square, Sextile,
+###   Semi-Sextile, Quintile, Septile, Octile, Novile, Quincunx, Sesquiquadrate
+### - planet1_name and planet2_name MUST be valid planet names
+### - Aspects array may be empty if no aspects within orb

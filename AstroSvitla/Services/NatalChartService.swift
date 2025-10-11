@@ -21,7 +21,7 @@ final class NatalChartService: NatalChartServiceProtocol {
 
     // MARK: - Dependencies
 
-    private let apiService: ProkralaAPIServiceProtocol
+    private let apiService: FreeAstrologyAPIServiceProtocol
     private let chartCacheService: ChartCacheService
     private let imageCacheService: ImageCacheService
     private let rateLimiter: RateLimiter
@@ -58,7 +58,7 @@ final class NatalChartService: NatalChartServiceProtocol {
     // MARK: - Initialization
 
     init(
-        apiService: ProkralaAPIServiceProtocol,
+        apiService: FreeAstrologyAPIServiceProtocol,
         chartCacheService: ChartCacheService,
         imageCacheService: ImageCacheService,
         rateLimiter: RateLimiter,
@@ -73,9 +73,9 @@ final class NatalChartService: NatalChartServiceProtocol {
 
     /// Convenience initializer with default dependencies
     convenience init(modelContext: ModelContext) {
-        let apiService = ProkralaAPIService(
-            clientID: Config.prokeralaClientID,
-            clientSecret: Config.prokeralaClientSecret
+        let apiService = FreeAstrologyAPIService(
+            apiKey: Config.freeAstrologyAPIKey,
+            baseURL: Config.freeAstrologyBaseURL
         )
         let chartCacheService = ChartCacheService(context: modelContext)
         let imageCacheService = ImageCacheService()
@@ -133,21 +133,65 @@ final class NatalChartService: NatalChartServiceProtocol {
             throw ServiceError.rateLimitExceeded(retryAfter: rateLimitCheck.retryAfter ?? 60)
         }
 
-        // Step 4: Make API call for computational data
-        let request = NatalChartRequest(birthDetails: birthDetails)
+        // Step 4: Make API calls to all Free Astrology endpoints (sequentially with 1s delay)
+        let request = FreeAstrologyRequest(from: birthDetails)
         let start = Date()
 
         do {
-            // Record API request for rate limiting
+            // Call endpoints sequentially with 1-second delays to avoid rate limiting
             rateLimiter.recordRequest()
+            log("📡 Fetching planets...")
+            let planets = try await apiService.fetchPlanets(request)
 
-            let dataResponse = try await apiService.fetchChartData(request)
-            log("✅ Chart compute response received in \(String(format: "%.2f", Date().timeIntervalSince(start)))s")
+            try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+            rateLimiter.recordRequest()
+            log("📡 Fetching houses...")
+            let houses = try await apiService.fetchHouses(request)
 
-            // Step 5: Map API response to domain model
-            var natalChart = try DTOMapper.toDomain(response: dataResponse, birthDetails: birthDetails)
+            try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+            rateLimiter.recordRequest()
+            log("📡 Fetching aspects...")
+            let aspects = try await apiService.fetchAspects(request)
 
-            // Step 6: Cache natal chart for offline access (no image request)
+            try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
+            rateLimiter.recordRequest()
+            log("📡 Fetching natal wheel chart...")
+            let chart = try await apiService.fetchNatalWheelChart(request)
+
+            log("✅ All API responses received in \(String(format: "%.2f", Date().timeIntervalSince(start)))s")
+
+            // Step 5: Map API responses to domain model
+            let natalChart = try FreeAstrologyDTOMapper.toDomain(
+                planetsResponse: planets,
+                housesResponse: houses,
+                aspectsResponse: aspects,
+                chartResponse: chart,
+                birthDetails: birthDetails
+            )
+
+            // Step 6: Download and cache SVG image
+            let chartImageURL = chart.chartUrl
+            if !chartImageURL.isEmpty, let url = URL(string: chartImageURL) {
+                do {
+                    log("🖼️ Downloading chart image from \(chartImageURL)")
+                    let (imageData, _) = try await URLSession.shared.data(from: url)
+
+                    // Save image to cache
+                    if let imageFileID = natalChart.imageFileID {
+                        try imageCacheService.saveImage(
+                            data: imageData,
+                            fileID: imageFileID,
+                            format: "svg"
+                        )
+                        log("✅ Chart image downloaded and cached")
+                    }
+                } catch {
+                    // Log warning but don't fail the entire operation
+                    log("⚠️ Failed to download chart image: \(error.localizedDescription)")
+                }
+            }
+
+            // Step 7: Cache natal chart for offline access
             do {
                 try chartCacheService.saveChart(
                     natalChart,

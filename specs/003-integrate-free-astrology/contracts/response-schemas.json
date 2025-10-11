@@ -1,0 +1,200 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Free Astrology API Response Schemas",
+  "description": "JSON Schema definitions for Free Astrology API responses",
+
+  "definitions": {
+    "PlanetsResponse": {
+      "type": "object",
+      "required": ["status", "data"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["success"]
+        },
+        "data": {
+          "type": "object",
+          "required": ["planets"],
+          "properties": {
+            "planets": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Planet" },
+              "minItems": 7
+            }
+          }
+        }
+      }
+    },
+
+    "Planet": {
+      "type": "object",
+      "required": ["name", "full_degree", "normalized_degree", "speed", "is_retrograde", "sign_num", "sign"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "examples": ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "Ascendant"]
+        },
+        "full_degree": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 359.999
+        },
+        "normalized_degree": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 29.999
+        },
+        "speed": {
+          "type": "number"
+        },
+        "is_retrograde": {
+          "type": "boolean"
+        },
+        "sign_num": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "sign": {
+          "type": "string",
+          "enum": ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
+        }
+      }
+    },
+
+    "HousesResponse": {
+      "type": "object",
+      "required": ["status", "data"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["success"]
+        },
+        "data": {
+          "type": "object",
+          "required": ["houses"],
+          "properties": {
+            "houses": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/House" },
+              "minItems": 12,
+              "maxItems": 12
+            }
+          }
+        }
+      }
+    },
+
+    "House": {
+      "type": "object",
+      "required": ["house_num", "degree", "normalized_degree", "sign_num", "sign"],
+      "properties": {
+        "house_num": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "degree": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 359.999
+        },
+        "normalized_degree": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 29.999
+        },
+        "sign_num": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "sign": {
+          "type": "string",
+          "enum": ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
+        }
+      }
+    },
+
+    "AspectsResponse": {
+      "type": "object",
+      "required": ["status", "data"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["success"]
+        },
+        "data": {
+          "type": "object",
+          "required": ["aspects"],
+          "properties": {
+            "aspects": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Aspect" }
+            }
+          }
+        }
+      }
+    },
+
+    "Aspect": {
+      "type": "object",
+      "required": ["planet1_name", "planet2_name", "aspect_name"],
+      "properties": {
+        "planet1_name": {
+          "type": "string"
+        },
+        "planet2_name": {
+          "type": "string"
+        },
+        "aspect_name": {
+          "type": "string",
+          "enum": ["Conjunction", "Opposition", "Trine", "Square", "Sextile", "Semi-Sextile", "Quintile", "Septile", "Octile", "Novile", "Quincunx", "Sesquiquadrate"]
+        },
+        "orb_degree": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+
+    "NatalChartResponse": {
+      "type": "object",
+      "required": ["status", "data"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["success"]
+        },
+        "data": {
+          "type": "object",
+          "required": ["chart_url"],
+          "properties": {
+            "chart_url": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https://"
+            }
+          }
+        }
+      }
+    },
+
+    "ErrorResponse": {
+      "type": "object",
+      "required": ["status", "message"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["error", "fail"]
+        },
+        "message": {
+          "type": "string"
+        },
+        "code": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

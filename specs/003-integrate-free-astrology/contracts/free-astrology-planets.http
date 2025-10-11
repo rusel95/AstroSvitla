@@ -1,0 +1,64 @@
+### Free Astrology API - Planets Endpoint Contract
+###
+### This contract defines the expected request/response for the planets endpoint.
+### Used for contract testing to validate API behavior.
+
+POST https://json.freeastrologyapi.com/western/planets
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+{
+  "year": 1990,
+  "month": 5,
+  "date": 15,
+  "hours": 14,
+  "minutes": 30,
+  "seconds": 0,
+  "latitude": 40.7128,
+  "longitude": -74.0060,
+  "timezone": -4.0,
+  "observation_point": "topocentric",
+  "ayanamsha": "tropical"
+}
+
+### Expected Response:
+### Status: 200 OK
+### Content-Type: application/json
+###
+### {
+###   "status": "success",
+###   "data": {
+###     "planets": [
+###       {
+###         "name": "Sun",
+###         "full_degree": 54.123,
+###         "normalized_degree": 24.123,
+###         "speed": 0.9856,
+###         "is_retrograde": false,
+###         "sign_num": 2,
+###         "sign": "Taurus"
+###       },
+###       {
+###         "name": "Moon",
+###         "full_degree": 120.456,
+###         "normalized_degree": 0.456,
+###         "speed": 13.176,
+###         "is_retrograde": false,
+###         "sign_num": 5,
+###         "sign": "Leo"
+###       }
+###       // ... more planets
+###     ]
+###   }
+### }
+
+### Contract Test Assertions:
+### - Response status MUST be 200
+### - Response MUST include "status" field with value "success"
+### - Response MUST include "data.planets" array
+### - Planets array MUST include at minimum: Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn
+### - Each planet MUST have: name, full_degree, normalized_degree, speed, is_retrograde, sign_num, sign
+### - full_degree MUST be 0-359.999
+### - normalized_degree MUST be 0-29.999
+### - sign_num MUST be 1-12
+### - is_retrograde MUST be boolean

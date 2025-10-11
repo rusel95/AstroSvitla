@@ -34,6 +34,16 @@ enum Config {
     /// Base URL for Prokerala API endpoints
     static let prokeralaAPIBaseURL = "https://api.prokerala.com/v2"
 
+    // MARK: - Free Astrology API Configuration
+
+    /// Free Astrology API key
+    /// Sign up at https://freeastrologyapi.com/signup to obtain an API key
+    /// Keep secret local only (Config.swift is gitignored)
+    static let freeAstrologyAPIKey = ProcessInfo.processInfo.environment["FREE_ASTROLOGY_API_KEY"] ?? "YOUR_FREE_ASTROLOGY_API_KEY_HERE"
+
+    /// Base URL for Free Astrology API endpoints
+    static let freeAstrologyBaseURL = "https://json.freeastrologyapi.com"
+
     // MARK: - App Configuration
 
     static let appVersion = "1.0.0"
@@ -77,6 +87,11 @@ enum Config {
         prokeralaClientID != "YOUR_PROKERALA_CLIENT_ID_HERE" &&
         !prokeralaClientSecret.isEmpty &&
         prokeralaClientSecret != "YOUR_PROKERALA_CLIENT_SECRET_HERE"
+    }
+
+    static var isFreeAstrologyAPIConfigured: Bool {
+        !freeAstrologyAPIKey.isEmpty &&
+        freeAstrologyAPIKey != "YOUR_FREE_ASTROLOGY_API_KEY_HERE"
     }
 
     static func validate() throws {

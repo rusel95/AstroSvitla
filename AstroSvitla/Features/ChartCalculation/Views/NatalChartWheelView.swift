@@ -15,7 +15,8 @@ struct NatalChartWheelView: View {
             if let imageData = chartImageData {
                 if chartImageFormat == "svg" {
                     SVGImageView(svgData: imageData)
-                        .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .aspectRatio(1, contentMode: .fit)
                 } else if let uiImage = UIImage(data: imageData) {
                     Image(uiImage: uiImage)
                         .resizable()

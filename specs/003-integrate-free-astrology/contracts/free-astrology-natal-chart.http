@@ -1,0 +1,68 @@
+### Free Astrology API - Natal Wheel Chart Endpoint Contract
+###
+### This contract defines the expected request/response for the natal chart visualization endpoint.
+### Used for contract testing to validate API behavior.
+
+POST https://json.freeastrologyapi.com/western/natal-wheel-chart
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+{
+  "year": 1990,
+  "month": 5,
+  "date": 15,
+  "hours": 14,
+  "minutes": 30,
+  "seconds": 0,
+  "latitude": 40.7128,
+  "longitude": -74.0060,
+  "timezone": -4.0,
+  "observation_point": "topocentric",
+  "ayanamsha": "tropical",
+  "house_system": "placidus",
+  "language": "en"
+}
+
+### Expected Response:
+### Status: 200 OK
+### Content-Type: application/json
+###
+### {
+###   "status": "success",
+###   "data": {
+###     "chart_url": "https://storage.example.com/charts/abc123.svg"
+###   }
+### }
+
+### Contract Test Assertions:
+### - Response status MUST be 200
+### - Response MUST include "status" field with value "success"
+### - Response MUST include "data.chart_url" field
+### - chart_url MUST be a valid HTTPS URL
+### - chart_url MUST point to an SVG file (ends with .svg or returns SVG content-type)
+### - The URL MUST be accessible (HTTP GET returns 200)
+### - The SVG file MUST be valid XML
+### - The SVG SHOULD contain recognizable astrological symbols
+
+### Additional Test Cases:
+
+### Test with custom colors
+POST https://json.freeastrologyapi.com/western/natal-wheel-chart
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+{
+  "year": 1990,
+  "month": 5,
+  "date": 15,
+  "hours": 14,
+  "minutes": 30,
+  "seconds": 0,
+  "latitude": 40.7128,
+  "longitude": -74.0060,
+  "timezone": -4.0,
+  "chart_color": "#000000",
+  "aspect_color": "#0066cc"
+}
+
+### Expected: Same response structure with customized colors in SVG

@@ -1,0 +1,61 @@
+### Free Astrology API - Houses Endpoint Contract
+###
+### This contract defines the expected request/response for the houses endpoint.
+### Used for contract testing to validate API behavior.
+
+POST https://json.freeastrologyapi.com/western/houses
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+{
+  "year": 1990,
+  "month": 5,
+  "date": 15,
+  "hours": 14,
+  "minutes": 30,
+  "seconds": 0,
+  "latitude": 40.7128,
+  "longitude": -74.0060,
+  "timezone": -4.0,
+  "observation_point": "topocentric",
+  "ayanamsha": "tropical",
+  "house_system": "placidus"
+}
+
+### Expected Response:
+### Status: 200 OK
+### Content-Type: application/json
+###
+### {
+###   "status": "success",
+###   "data": {
+###     "houses": [
+###       {
+###         "house_num": 1,
+###         "degree": 30.5,
+###         "normalized_degree": 0.5,
+###         "sign_num": 2,
+###         "sign": "Taurus"
+###       },
+###       {
+###         "house_num": 2,
+###         "degree": 60.2,
+###         "normalized_degree": 0.2,
+###         "sign_num": 3,
+###         "sign": "Gemini"
+###       }
+###       // ... houses 3-12
+###     ]
+###   }
+### }
+
+### Contract Test Assertions:
+### - Response status MUST be 200
+### - Response MUST include "status" field with value "success"
+### - Response MUST include "data.houses" array
+### - Houses array MUST contain exactly 12 houses
+### - Houses MUST be numbered 1-12 in order
+### - Each house MUST have: house_num, degree, normalized_degree, sign_num, sign
+### - degree MUST be 0-359.999
+### - normalized_degree MUST be 0-29.999
+### - sign_num MUST be 1-12
