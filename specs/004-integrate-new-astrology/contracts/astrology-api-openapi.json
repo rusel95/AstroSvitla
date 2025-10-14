@@ -1,0 +1,490 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Astrology API Integration",
+    "description": "API contracts for api.astrology-api.io integration in AstroSvitla",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.astrology-api.io",
+      "description": "Production Astrology API"
+    }
+  ],
+  "paths": {
+    "/api/v3/charts/natal": {
+      "post": {
+        "summary": "Generate Natal Chart",
+        "description": "Calculate complete natal chart with planetary positions, houses, and aspects",
+        "operationId": "generateNatalChart",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NatalChartRequest"
+              },
+              "example": {
+                "subject": {
+                  "name": "John Doe",
+                  "birth_data": {
+                    "year": 1990,
+                    "month": 5,
+                    "day": 15,
+                    "hour": 14,
+                    "minute": 30,
+                    "second": 0,
+                    "city": "London",
+                    "country_code": "GB"
+                  }
+                },
+                "options": {
+                  "house_system": "P",
+                  "zodiac_type": "Tropic",
+                  "active_points": ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"],
+                  "precision": 2
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful natal chart calculation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NatalChartResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid birth data or request format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity - validation errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v3/svg/natal": {
+      "post": {
+        "summary": "Generate Natal Chart SVG",
+        "description": "Generate visual natal chart in SVG format",
+        "operationId": "generateNatalChartSVG",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NatalChartSVGRequest"
+              },
+              "example": {
+                "subject": {
+                  "name": "John Doe",
+                  "birth_data": {
+                    "year": 1990,
+                    "month": 5,
+                    "day": 15,
+                    "hour": 14,
+                    "minute": 30,
+                    "second": 0,
+                    "city": "London",
+                    "country_code": "GB"
+                  }
+                },
+                "options": {
+                  "house_system": "P",
+                  "zodiac_type": "Tropic",
+                  "active_points": ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"],
+                  "precision": 2
+                },
+                "svg_options": {
+                  "theme": "classic",
+                  "language": "en"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful SVG generation",
+            "content": {
+              "image/svg+xml": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid birth data or request format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity - validation errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BirthData": {
+        "type": "object",
+        "required": ["year", "month", "day", "hour", "minute", "city", "country_code"],
+        "properties": {
+          "year": {
+            "type": "integer",
+            "minimum": 1800,
+            "maximum": 2100,
+            "example": 1990
+          },
+          "month": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12,
+            "example": 5
+          },
+          "day": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 31,
+            "example": 15
+          },
+          "hour": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 23,
+            "example": 14
+          },
+          "minute": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 59,
+            "example": 30
+          },
+          "second": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 59,
+            "example": 0
+          },
+          "city": {
+            "type": "string",
+            "minLength": 1,
+            "example": "London"
+          },
+          "country_code": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$",
+            "example": "GB"
+          }
+        }
+      },
+      "Subject": {
+        "type": "object",
+        "required": ["name", "birth_data"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "example": "John Doe"
+          },
+          "birth_data": {
+            "$ref": "#/components/schemas/BirthData"
+          }
+        }
+      },
+      "ChartOptions": {
+        "type": "object",
+        "properties": {
+          "house_system": {
+            "type": "string",
+            "enum": ["P", "W", "K", "E", "C"],
+            "default": "P",
+            "description": "House system: P=Placidus, W=Whole Sign, K=Koch, E=Equal, C=Campanus"
+          },
+          "zodiac_type": {
+            "type": "string",
+            "enum": ["Tropic", "Sidereal"],
+            "default": "Tropic",
+            "description": "Zodiac type: Tropic=Western/Tropical, Sidereal=Vedic"
+          },
+          "active_points": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]
+            },
+            "default": ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"]
+          },
+          "precision": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 6,
+            "default": 2,
+            "description": "Decimal precision for degree calculations"
+          }
+        }
+      },
+      "SVGOptions": {
+        "type": "object",
+        "properties": {
+          "theme": {
+            "type": "string",
+            "enum": ["classic", "modern", "dark", "light"],
+            "default": "classic"
+          },
+          "language": {
+            "type": "string",
+            "enum": ["en", "de", "fr", "es", "it", "pt", "ru", "zh", "hi"],
+            "default": "en"
+          }
+        }
+      },
+      "NatalChartRequest": {
+        "type": "object",
+        "required": ["subject"],
+        "properties": {
+          "subject": {
+            "$ref": "#/components/schemas/Subject"
+          },
+          "options": {
+            "$ref": "#/components/schemas/ChartOptions"
+          }
+        }
+      },
+      "NatalChartSVGRequest": {
+        "type": "object",
+        "required": ["subject"],
+        "properties": {
+          "subject": {
+            "$ref": "#/components/schemas/Subject"
+          },
+          "options": {
+            "$ref": "#/components/schemas/ChartOptions"
+          },
+          "svg_options": {
+            "$ref": "#/components/schemas/SVGOptions"
+          }
+        }
+      },
+      "SubjectData": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "year": {
+            "type": "integer"
+          },
+          "month": {
+            "type": "integer"
+          },
+          "day": {
+            "type": "integer"
+          },
+          "hour": {
+            "type": "integer"
+          },
+          "minute": {
+            "type": "integer"
+          },
+          "city": {
+            "type": "string"
+          },
+          "nation": {
+            "type": "string"
+          },
+          "lng": {
+            "type": "number",
+            "format": "double"
+          },
+          "lat": {
+            "type": "number",
+            "format": "double"
+          },
+          "tz_str": {
+            "type": "string"
+          }
+        }
+      },
+      "PlanetaryPosition": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "quality": {
+            "type": "string"
+          },
+          "element": {
+            "type": "string"
+          },
+          "sign": {
+            "type": "string"
+          },
+          "sign_num": {
+            "type": "integer"
+          },
+          "position": {
+            "type": "number",
+            "format": "double"
+          },
+          "abs_pos": {
+            "type": "number",
+            "format": "double"
+          },
+          "emoji": {
+            "type": "string"
+          },
+          "point_type": {
+            "type": "string"
+          },
+          "house": {
+            "type": "string"
+          },
+          "retrograde": {
+            "type": "boolean"
+          },
+          "speed": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "HouseCusp": {
+        "type": "object",
+        "properties": {
+          "house": {
+            "type": "integer"
+          },
+          "sign": {
+            "type": "string"
+          },
+          "degree": {
+            "type": "number",
+            "format": "double"
+          },
+          "abs_pos": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "Aspect": {
+        "type": "object",
+        "properties": {
+          "planet1": {
+            "type": "string"
+          },
+          "planet2": {
+            "type": "string"
+          },
+          "aspect": {
+            "type": "string"
+          },
+          "orb": {
+            "type": "number",
+            "format": "double"
+          },
+          "applying": {
+            "type": "boolean"
+          },
+          "strength": {
+            "type": "string"
+          }
+        }
+      },
+      "ChartData": {
+        "type": "object",
+        "properties": {
+          "planetary_positions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlanetaryPosition"
+            }
+          },
+          "house_cusps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HouseCusp"
+            }
+          },
+          "aspects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Aspect"
+            }
+          }
+        }
+      },
+      "NatalChartResponse": {
+        "type": "object",
+        "properties": {
+          "subject_data": {
+            "$ref": "#/components/schemas/SubjectData"
+          },
+          "chart_data": {
+            "$ref": "#/components/schemas/ChartData"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "details": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

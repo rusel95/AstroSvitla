@@ -5,6 +5,10 @@
 //  Created for Free Astrology API integration testing
 //  Mock implementation for testing without real API calls
 //
+//  ⚠️ LEGACY TEST MOCK - PRESERVED FOR ROLLBACK (2025-10-11)
+//  This mock has been replaced by tests using AstrologyAPIService
+//  DO NOT DELETE - Keep for potential rollback
+//
 
 import Foundation
 @testable import AstroSvitla

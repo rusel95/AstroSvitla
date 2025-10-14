@@ -2,13 +2,13 @@
 //  DTOMapper.swift
 //  AstroSvitla
 //
-//  TEMPORARILY DISABLED FOR FREE ASTROLOGY API TESTING
+//  ⚠️ LEGACY API - PRESERVED FOR ROLLBACK (2025-10-11)
+//  This implementation has been replaced by AstrologyAPIDTOMapper (api.astrology-api.io)
+//  DO NOT DELETE - Keep for potential rollback
 //
 //  To re-enable:
 //  1. Restore original implementation from git history
 //  2. Update NatalChartService to use Prokerala DTOMapper
-//
-//  Last modified: 2025-10-10
 //
 
 import Foundation

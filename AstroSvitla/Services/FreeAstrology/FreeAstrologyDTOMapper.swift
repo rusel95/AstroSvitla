@@ -5,6 +5,11 @@
 //  Created for Free Astrology API integration
 //  Maps Free Astrology API DTOs to domain models
 //
+//  ⚠️ LEGACY API - PRESERVED FOR ROLLBACK (2025-10-11)
+//  This implementation has been replaced by AstrologyAPIDTOMapper (api.astrology-api.io)
+//  DO NOT DELETE - Keep for potential rollback
+//  To restore: Remove AstrologyAPI integration and re-enable this mapper in NatalChartService
+//
 
 import Foundation
 import CoreLocation

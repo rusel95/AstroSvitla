@@ -1,62 +1,50 @@
-<!--
-Sync Impact Report
-Version change: n/a -> 1.0.0
-Modified principles:
-- n/a -> I. Spec-Driven Delivery
-- n/a -> II. SwiftUI Modular Architecture
-- n/a -> III. Test-First Reliability
-- n/a -> IV. Secure Configuration & Secrets Hygiene
-- n/a -> V. Release Quality Discipline
-Added sections:
-- Core Principles
-- Operational Standards
-- Development Workflow & Quality Gates
-- Governance
-Removed sections:
-- None
-Templates requiring updates:
-- ✅ .specify/templates/spec-template.md (structure already enforces spec-first scenarios and edge-case coverage)
-- ✅ .specify/templates/plan-template.md (Constitution Check references these principles; no edits required)
-- ✅ .specify/templates/tasks-template.md (user story grouping matches independence rule)
-- ✅ (no command templates present under .specify/templates/commands/)
-Follow-up TODOs:
-- None
--->
-
-# AstroSvitla Constitution
+# [PROJECT_NAME] Constitution
+<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
 
 ## Core Principles
 
-### I. Spec-Driven Delivery
-All work MUST begin with a `/specify` request that generates the spec-kit folder, and each downstream artifact (`plan.md`, `research.md`, `data-model.md`, `quickstart.md`, `tasks.md`) MUST stay synchronized with the active feature branch. Teams MUST gate coding work on an approved specification and keep the spec updated when scope changes so business, design, and engineering remain aligned on value.
+### [PRINCIPLE_1_NAME]
+<!-- Example: I. Library-First -->
+[PRINCIPLE_1_DESCRIPTION]
+<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
 
-### II. SwiftUI Modular Architecture
-The `AstroSvitla/` project MUST follow MVVM boundaries: UI in `Views`, state in `ViewModels`, domain types in `Models`, integrations in `Services`, and shared helpers in `Utils`. Keep one primary type per file named after its directory entry, favor SwiftUI previews for fixtures, and source all design tokens from `Assets.xcassets` to ensure consistent styling and localization.
+### [PRINCIPLE_2_NAME]
+<!-- Example: II. CLI Interface -->
+[PRINCIPLE_2_DESCRIPTION]
+<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
 
-### III. Test-First Reliability (NON-NEGOTIABLE)
-Implement features using strict TDD: write failing tests before implementation, then iterate Red -> Green -> Refactor. All new logic MUST be covered by targeted `AstroSvitlaTests` unit cases (using `#expect`) and relevant `AstroSvitlaUITests` flows. `xcodebuild test -scheme AstroSvitla` MUST pass locally before merging, and deliberate gaps require explicit documentation in specs and PRs.
+### [PRINCIPLE_3_NAME]
+<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
+[PRINCIPLE_3_DESCRIPTION]
+<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
 
-### IV. Secure Configuration & Secrets Hygiene
-`Config/Config.swift` MUST never contain real secrets in the repository; use `.example` files for placeholders and document required keys. Feature toggles default to safe/off states, sensitive assets live outside version control, and exposed credentials MUST be rotated immediately with the incident recorded in team runbooks.
+### [PRINCIPLE_4_NAME]
+<!-- Example: IV. Integration Testing -->
+[PRINCIPLE_4_DESCRIPTION]
+<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
 
-### V. Release Quality Discipline
-Builds MUST stay reproducible: use the documented CLI build target (`xcodebuild -scheme AstroSvitla -destination 'platform=iOS Simulator,name=iPhone 15' build`) and keep dependencies pinned. Commits follow imperative, sentence-case subjects under 72 characters, PRs link the corresponding `specs/NNN-*` folder, include test evidence (`xcodebuild test`, manual notes), and attach UI screenshots whenever the interface changes.
+### [PRINCIPLE_5_NAME]
+<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
+[PRINCIPLE_5_DESCRIPTION]
+<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
 
-## Operational Standards
+## [SECTION_2_NAME]
+<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
 
-- **Toolchain**: macOS 14.0+, Xcode 15+, iOS 17 SDK, Swift 5.9. Keep Swift Package versions locked and verify StoreKit, SwissEphemeris, and OpenAI integrations compile via the standard build command.
-- **Code Style**: Enforce four-space indentation, trailing commas for multiline literals, and default to `private` access. Types use PascalCase, members camelCase, and view models carry the `ViewModel` suffix.
-- **Assets & Localization**: Centralize colors, typography, and imagery inside `Assets.xcassets`, and ship English and Ukrainian strings together so each release remains bilingual.
-- **Documentation**: Specs, plans, research, data models, quickstarts, and task lists offered by spec-kit are living documents; update them at the same time as code so reviewers and stakeholders always reference current truth.
+[SECTION_2_CONTENT]
+<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
 
-## Development Workflow & Quality Gates
+## [SECTION_3_NAME]
+<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
 
-- **Phase Discipline**: Follow the spec-kit phases sequentially (spec -> plan -> research -> data model -> quickstart -> tasks -> implementation) and require checkpoint sign-off before advancing to coding.
-- **Constitution Check**: Each plan MUST document how the feature satisfies these principles; violations go into Complexity Tracking with explicit justification and mitigation.
-- **Review Expectations**: Code reviews focus on catching behavioral regressions, ensuring tests exist for new rules, and confirming Config hygiene. Approval requires green builds, spec alignment, and documented manual validation for risky flows.
+[SECTION_3_CONTENT]
+<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
 
 ## Governance
+<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-This constitution supersedes other internal guidelines for the AstroSvitla iOS app. Amendments require consensus from product, design, and engineering leads, an updated version number, and a migration or rollout note in the affected spec-kit folder. Version bumps follow semantic rules (MAJOR for breaking principle changes, MINOR for new principles/sections, PATCH for clarifications), and `Last Amended` MUST update whenever edits occur.
+[GOVERNANCE_RULES]
+<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
 
-**Version**: 1.0.0 | **Ratified**: 2025-10-08 | **Last Amended**: 2025-10-08
+**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
+<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->

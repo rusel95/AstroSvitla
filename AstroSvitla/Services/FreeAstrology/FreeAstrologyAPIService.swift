@@ -5,6 +5,11 @@
 //  Created for Free Astrology API integration
 //  HTTP client for Free Astrology API endpoints
 //
+//  ⚠️ LEGACY API - PRESERVED FOR ROLLBACK (2025-10-11)
+//  This implementation has been replaced by AstrologyAPIService (api.astrology-api.io)
+//  DO NOT DELETE - Keep for potential rollback
+//  To restore: Remove AstrologyAPI integration and re-enable this service in NatalChartService
+//
 
 import Foundation
 

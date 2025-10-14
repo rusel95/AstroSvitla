@@ -5,6 +5,11 @@
 //  Orchestrator service for natal chart generation
 //  Coordinates API calls, data mapping, caching, and offline support
 //
+//  API MIGRATION NOTE (2025-10-11):
+//  This service has been migrated to use api.astrology-api.io as the primary API provider.
+//  Previous Free Astrology API integration has been commented out but preserved for potential rollback.
+//  To restore old API: uncomment FreeAstrologyAPI code and comment out AstrologyAPI code.
+//
 
 import Foundation
 import SwiftData
@@ -21,7 +26,12 @@ final class NatalChartService: NatalChartServiceProtocol {
 
     // MARK: - Dependencies
 
-    private let apiService: FreeAstrologyAPIServiceProtocol
+    // NEW: Primary API service using api.astrology-api.io
+    private let astrologyAPIService: AstrologyAPIService
+    
+    // LEGACY: Commented out for potential rollback
+    // private let apiService: FreeAstrologyAPIServiceProtocol
+    
     private let chartCacheService: ChartCacheService
     private let imageCacheService: ImageCacheService
     private let rateLimiter: RateLimiter
@@ -58,13 +68,17 @@ final class NatalChartService: NatalChartServiceProtocol {
     // MARK: - Initialization
 
     init(
-        apiService: FreeAstrologyAPIServiceProtocol,
+        astrologyAPIService: AstrologyAPIService,
+        // LEGACY: Old API service parameter commented out
+        // apiService: FreeAstrologyAPIServiceProtocol,
         chartCacheService: ChartCacheService,
         imageCacheService: ImageCacheService,
         rateLimiter: RateLimiter,
         networkMonitor: NetworkMonitor
     ) {
-        self.apiService = apiService
+        self.astrologyAPIService = astrologyAPIService
+        // LEGACY: Old API service assignment commented out
+        // self.apiService = apiService
         self.chartCacheService = chartCacheService
         self.imageCacheService = imageCacheService
         self.rateLimiter = rateLimiter
@@ -73,17 +87,31 @@ final class NatalChartService: NatalChartServiceProtocol {
 
     /// Convenience initializer with default dependencies
     convenience init(modelContext: ModelContext) {
-        let apiService = FreeAstrologyAPIService(
-            apiKey: Config.freeAstrologyAPIKey,
-            baseURL: Config.freeAstrologyBaseURL
+        // NEW: Initialize AstrologyAPI service
+        let astrologyRateLimiter = RateLimiter(
+            maxRequestsPerWindow: Config.astrologyAPIRateLimitRequests,
+            windowInterval: Config.astrologyAPIRateLimitTimeWindow
         )
+        let astrologyAPIService = AstrologyAPIService(
+            baseURL: Config.astrologyAPIBaseURL,
+            rateLimiter: astrologyRateLimiter
+        )
+        
+        // LEGACY: Old FreeAstrology API initialization commented out
+        // let apiService = FreeAstrologyAPIService(
+        //     apiKey: Config.freeAstrologyAPIKey,
+        //     baseURL: Config.freeAstrologyBaseURL
+        // )
+        
         let chartCacheService = ChartCacheService(context: modelContext)
         let imageCacheService = ImageCacheService()
         let rateLimiter = RateLimiter()
         let networkMonitor = NetworkMonitor()
 
         self.init(
-            apiService: apiService,
+            astrologyAPIService: astrologyAPIService,
+            // LEGACY: Old API service parameter commented out
+            // apiService: apiService,
             chartCacheService: chartCacheService,
             imageCacheService: imageCacheService,
             rateLimiter: rateLimiter,
@@ -133,65 +161,41 @@ final class NatalChartService: NatalChartServiceProtocol {
             throw ServiceError.rateLimitExceeded(retryAfter: rateLimitCheck.retryAfter ?? 60)
         }
 
-        // Step 4: Make API calls to all Free Astrology endpoints (sequentially with 1s delay)
-        let request = FreeAstrologyRequest(from: birthDetails)
+        // Step 4: Make API call to AstrologyAPI (single request for all data)
         let start = Date()
 
         do {
-            // Call endpoints sequentially with 1-second delays to avoid rate limiting
-            rateLimiter.recordRequest()
-            log("📡 Fetching planets...")
-            let planets = try await apiService.fetchPlanets(request)
+            // NEW: Single API call to api.astrology-api.io for complete natal chart
+            log("📡 Fetching natal chart from AstrologyAPI...")
+            let natalChart = try await astrologyAPIService.generateNatalChart(birthDetails: birthDetails)
+            
+            log("✅ Natal chart received in \(String(format: "%.2f", Date().timeIntervalSince(start)))s")
 
-            try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
-            rateLimiter.recordRequest()
-            log("📡 Fetching houses...")
-            let houses = try await apiService.fetchHouses(request)
-
-            try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
-            rateLimiter.recordRequest()
-            log("📡 Fetching aspects...")
-            let aspects = try await apiService.fetchAspects(request)
-
-            try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second delay
-            rateLimiter.recordRequest()
-            log("📡 Fetching natal wheel chart...")
-            let chart = try await apiService.fetchNatalWheelChart(request)
-
-            log("✅ All API responses received in \(String(format: "%.2f", Date().timeIntervalSince(start)))s")
-
-            // Step 5: Map API responses to domain model
-            let natalChart = try FreeAstrologyDTOMapper.toDomain(
-                planetsResponse: planets,
-                housesResponse: houses,
-                aspectsResponse: aspects,
-                chartResponse: chart,
-                birthDetails: birthDetails
-            )
-
-            // Step 6: Download and cache SVG image
-            let chartImageURL = chart.chartUrl
-            if !chartImageURL.isEmpty, let url = URL(string: chartImageURL) {
-                do {
-                    log("🖼️ Downloading chart image from \(chartImageURL)")
-                    let (imageData, _) = try await URLSession.shared.data(from: url)
-
-                    // Save image to cache
-                    if let imageFileID = natalChart.imageFileID {
-                        try imageCacheService.saveImage(
-                            data: imageData,
-                            fileID: imageFileID,
-                            format: "svg"
-                        )
-                        log("✅ Chart image downloaded and cached")
-                    }
-                } catch {
-                    // Log warning but don't fail the entire operation
-                    log("⚠️ Failed to download chart image: \(error.localizedDescription)")
+            // Step 5: Generate and cache SVG visualization
+            do {
+                log("🖼️ Generating SVG chart visualization...")
+                let svgContent = try await astrologyAPIService.generateChartSVG(
+                    birthDetails: birthDetails,
+                    theme: "classic",
+                    language: "en"
+                )
+                
+                // Save SVG to cache
+                if let imageFileID = natalChart.imageFileID,
+                   let svgData = svgContent.data(using: .utf8) {
+                    try imageCacheService.saveImage(
+                        data: svgData,
+                        fileID: imageFileID,
+                        format: "svg"
+                    )
+                    log("✅ Chart SVG generated and cached")
                 }
+            } catch {
+                // Log warning but don't fail the entire operation
+                log("⚠️ Failed to generate chart SVG: \(error.localizedDescription)")
             }
 
-            // Step 7: Cache natal chart for offline access
+            // Step 6: Cache natal chart for offline access
             do {
                 try chartCacheService.saveChart(
                     natalChart,

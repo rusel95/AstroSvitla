@@ -4,6 +4,7 @@ Auto-generated from all feature plans. Last updated: 2025-10-09
 
 ## Active Technologies
 - Swift 5.9+ (iOS 17+ SDK) (002-migrate-natal-chart)
+- SwiftData for caching natal charts and metadata (existing models preserved) (004-integrate-new-astrology)
 
 ## Project Structure
 ```
@@ -18,6 +19,7 @@ tests/
 Swift 5.9+ (iOS 17+ SDK): Follow standard conventions
 
 ## Recent Changes
+- 004-integrate-new-astrology: Added Swift 5.9+ (iOS 17+ SDK)
 - 003-integrate-free-astrology: Added Swift 5.9+ (iOS 17+ SDK)
 - 002-migrate-natal-chart: Added Swift 5.9+ (iOS 17+ SDK)
 

@@ -1,177 +1,209 @@
 import SwiftUI
-import UIKit
 import WebKit
 
+#if canImport(UIKit)
+import UIKit
+#endif
+
+/// Renders SVG data by converting it to PNG using WKWebView
+/// This approach handles complex SVG features (gradients, filters, fonts) that native SVG parsers may not support
 struct SVGImageView: View {
     let svgData: Data
-
-    @State private var renderedImage: UIImage?
-    @State private var isRendering = false
+    
+    @State private var renderedImage: Image?
+    @State private var isLoading = true
+    @State private var webViewController: SVGWebViewController?
 
     var body: some View {
         GeometryReader { geometry in
-            Group {
+            ZStack {
+                Color.white
+                
                 if let image = renderedImage {
-                    Image(uiImage: image)
+                    image
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if isRendering {
+                        .frame(width: geometry.size.width)
+                } else if isLoading {
                     ProgressView("Rendering chart...")
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
-                    Color.clear
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    VStack(spacing: 12) {
+                        Image(systemName: "exclamationmark.triangle")
+                            .font(.system(size: 40))
+                            .foregroundStyle(.orange)
+                        
+                        Text("Failed to Render Chart")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
-            .onChange(of: geometry.size) { oldSize, newSize in
-                if newSize.width > 0 && newSize.height > 0 && renderedImage == nil {
-                    renderSVG(size: newSize)
-                }
-            }
-            .onAppear {
-                if geometry.size.width > 0 && geometry.size.height > 0 {
-                    renderSVG(size: geometry.size)
-                }
-            }
+            .frame(width: geometry.size.width, height: geometry.size.width)
+            .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
         }
         .aspectRatio(1, contentMode: .fit)
-    }
-
-    private func renderSVG(size: CGSize) {
-        guard !isRendering else { return }
-        isRendering = true
-
-        print("[SVGImageView] Starting SVG render for size: \(size)")
-
-        Task { @MainActor in
-            let image = await SVGRenderer.render(svgData: svgData, targetSize: size)
-            self.renderedImage = image
-            self.isRendering = false
-
-            if image != nil {
-                print("[SVGImageView] ✅ SVG rendered successfully")
-            } else {
-                print("[SVGImageView] ❌ Failed to render SVG")
-            }
+        .task {
+            await renderSVG()
         }
     }
-}
-
-// MARK: - SVG Renderer
-
-actor SVGRenderer {
-    static func render(svgData: Data, targetSize: CGSize) async -> UIImage? {
-        guard targetSize.width > 0, targetSize.height > 0 else { return nil }
-
+    
+    @MainActor
+    private func renderSVG() async {
+        print("[SVGImageView] 🎨 Starting SVG to PNG conversion (\(svgData.count) bytes)")
+        
+        // Debug: Check first 200 bytes
+        if let preview = String(data: svgData.prefix(200), encoding: .utf8) {
+            print("[SVGImageView] 📄 SVG preview: \(preview)")
+        }
+        
         guard let svgString = String(data: svgData, encoding: .utf8) else {
-            print("[SVGRenderer] Failed to decode SVG data")
-            return nil
+            print("[SVGImageView] ❌ Invalid SVG data (not UTF-8)")
+            isLoading = false
+            return
         }
-
-        // Extract SVG dimensions
-        let svgSize = extractSVGDimensions(from: svgString)
-
-        // Calculate scale to fit
-        let scale = min(targetSize.width / svgSize.width, targetSize.height / svgSize.height)
-        let scaledSize = CGSize(
-            width: svgSize.width * scale,
-            height: svgSize.height * scale
-        )
-
-        print("[SVGRenderer] SVG: \(svgSize) -> scaled: \(scaledSize)")
-
-        // Render using WebKit snapshot
-        return await withCheckedContinuation { continuation in
-            DispatchQueue.main.async {
-                let image = renderWithWebKit(svgString: svgString, size: scaledSize)
-                continuation.resume(returning: image)
-            }
+        
+        // Create web view controller to render SVG
+        let controller = SVGWebViewController()
+        self.webViewController = controller
+        
+        do {
+            let image = try await controller.renderSVGToImage(svg: svgString, size: CGSize(width: 800, height: 800))
+            self.renderedImage = Image(uiImage: image)
+            self.isLoading = false
+            print("[SVGImageView] ✅ SVG converted to PNG successfully: \(image.size)")
+        } catch {
+            print("[SVGImageView] ❌ SVG to PNG conversion failed: \(error.localizedDescription)")
+            self.isLoading = false
         }
-    }
-
-    private static func extractSVGDimensions(from svgString: String) -> CGSize {
-        var width: CGFloat = 700
-        var height: CGFloat = 700
-
-        // Extract width
-        if let match = svgString.range(of: "width=\"([0-9.]+)\"", options: .regularExpression) {
-            let value = svgString[match]
-                .replacingOccurrences(of: "width=\"", with: "")
-                .replacingOccurrences(of: "\"", with: "")
-            width = CGFloat(Double(value) ?? 700)
-        }
-
-        // Extract height
-        if let match = svgString.range(of: "height=\"([0-9.]+)\"", options: .regularExpression) {
-            let value = svgString[match]
-                .replacingOccurrences(of: "height=\"", with: "")
-                .replacingOccurrences(of: "\"", with: "")
-            height = CGFloat(Double(value) ?? 700)
-        }
-
-        return CGSize(width: width, height: height)
-    }
-
-    private static func renderWithWebKit(svgString: String, size: CGSize) -> UIImage? {
-        let html = """
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta name="viewport" content="width=\(Int(size.width)), initial-scale=1.0, maximum-scale=1.0">
-            <style>
-                * { margin: 0; padding: 0; box-sizing: border-box; }
-                html, body {
-                    width: \(Int(size.width))px;
-                    height: \(Int(size.height))px;
-                    overflow: hidden;
-                }
-                body {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: white;
-                }
-                svg {
-                    max-width: 100%;
-                    max-height: 100%;
-                    width: auto;
-                    height: auto;
-                }
-            </style>
-        </head>
-        <body>\(svgString)</body>
-        </html>
-        """
-
-        let config = WKWebViewConfiguration()
-        let webView = WKWebView(frame: CGRect(origin: .zero, size: size), configuration: config)
-        webView.isOpaque = false
-        webView.backgroundColor = .white
-
-        let semaphore = DispatchSemaphore(value: 0)
-        var snapshot: UIImage?
-
-        webView.loadHTMLString(html, baseURL: nil)
-
-        // Wait for rendering, then snapshot
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-            let snapshotConfig = WKSnapshotConfiguration()
-            snapshotConfig.rect = CGRect(origin: .zero, size: size)
-
-            webView.takeSnapshot(with: snapshotConfig) { image, error in
-                if let error = error {
-                    print("[SVGRenderer] Snapshot error: \(error.localizedDescription)")
-                } else {
-                    snapshot = image
-                }
-                semaphore.signal()
-            }
-        }
-
-        // Wait max 3 seconds
-        _ = semaphore.wait(timeout: .now() + 3.0)
-
-        return snapshot
+        
+        // Clean up
+        self.webViewController = nil
     }
 }
+
+// MARK: - Web View Controller
+
+/// Helper class to render SVG using WKWebView and capture as image
+@MainActor
+fileprivate class SVGWebViewController: NSObject, WKNavigationDelegate {
+    private var webView: WKWebView?
+    private var continuation: CheckedContinuation<UIImage, Error>?
+    
+    enum RenderError: LocalizedError {
+        case webViewLoadFailed
+        case snapshotFailed
+        case timeout
+        
+        var errorDescription: String? {
+            switch self {
+            case .webViewLoadFailed:
+                return "WebView failed to load SVG"
+            case .snapshotFailed:
+                return "Failed to capture SVG as image"
+            case .timeout:
+                return "SVG rendering timed out"
+            }
+        }
+    }
+    
+    func renderSVGToImage(svg: String, size: CGSize, timeout: TimeInterval = 10.0) async throws -> UIImage {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.continuation = continuation
+            
+            // Create HTML wrapper
+            let html = """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <style>
+                    * { margin: 0; padding: 0; }
+                    html, body {
+                        width: \(size.width)px;
+                        height: \(size.height)px;
+                        overflow: hidden;
+                        background: white;
+                    }
+                    svg {
+                        width: 100%;
+                        height: 100%;
+                        display: block;
+                    }
+                </style>
+            </head>
+            <body>
+                \(svg)
+            </body>
+            </html>
+            """
+            
+            // Create web view
+            let config = WKWebViewConfiguration()
+            config.suppressesIncrementalRendering = false
+            
+            let webView = WKWebView(frame: CGRect(origin: .zero, size: size), configuration: config)
+            webView.navigationDelegate = self
+            self.webView = webView
+            
+            // Load HTML
+            webView.loadHTMLString(html, baseURL: nil)
+            
+            // Setup timeout
+            Task {
+                try? await Task.sleep(nanoseconds: UInt64(timeout * 1_000_000_000))
+                if self.continuation != nil {
+                    self.cleanup()
+                    continuation.resume(throwing: RenderError.timeout)
+                }
+            }
+        }
+    }
+    
+    nonisolated func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        Task { @MainActor in
+            // Give WebView time to render (important for complex SVGs)
+            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+            
+            guard let webView = self.webView, let continuation = self.continuation else {
+                return
+            }
+            
+            // Take snapshot
+            let config = WKSnapshotConfiguration()
+            config.rect = webView.frame
+            
+            webView.takeSnapshot(with: config) { image, error in
+                Task { @MainActor in
+                    if let error = error {
+                        print("[SVGWebViewController] ❌ Snapshot failed: \(error)")
+                        self.continuation?.resume(throwing: error)
+                    } else if let image = image {
+                        self.continuation?.resume(returning: image)
+                    } else {
+                        self.continuation?.resume(throwing: RenderError.snapshotFailed)
+                    }
+                    self.cleanup()
+                }
+            }
+        }
+    }
+    
+    nonisolated func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        Task { @MainActor in
+            print("[SVGWebViewController] ❌ WebView failed: \(error)")
+            self.continuation?.resume(throwing: RenderError.webViewLoadFailed)
+            self.cleanup()
+        }
+    }
+    
+    private func cleanup() {
+        self.webView?.navigationDelegate = nil
+        self.webView = nil
+        self.continuation = nil
+    }
+}
+
+

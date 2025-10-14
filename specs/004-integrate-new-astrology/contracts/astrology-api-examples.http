@@ -1,0 +1,224 @@
+### Natal Chart Generation - Basic Request
+POST https://api.astrology-api.io/api/v3/charts/natal
+Content-Type: application/json
+
+{
+  "subject": {
+    "name": "Test Subject",
+    "birth_data": {
+      "year": 1990,
+      "month": 5,
+      "day": 15,
+      "hour": 14,
+      "minute": 30,
+      "second": 0,
+      "city": "London",
+      "country_code": "GB"
+    }
+  },
+  "options": {
+    "house_system": "P",
+    "zodiac_type": "Tropic",
+    "active_points": [
+      "Sun",
+      "Moon", 
+      "Mercury",
+      "Venus",
+      "Mars",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune",
+      "Pluto"
+    ],
+    "precision": 2
+  }
+}
+
+### 
+### Natal Chart Generation - Ukrainian Birth Location
+POST https://api.astrology-api.io/api/v3/charts/natal
+Content-Type: application/json
+
+{
+  "subject": {
+    "name": "Oleg Kharkiv",
+    "birth_data": {
+      "year": 1985,
+      "month": 5,
+      "day": 11,
+      "hour": 18,
+      "minute": 15,
+      "second": 45,
+      "city": "Kharkiv",
+      "country_code": "UA"
+    }
+  },
+  "options": {
+    "house_system": "P",
+    "zodiac_type": "Tropic",
+    "active_points": [
+      "Sun",
+      "Moon",
+      "Mercury",
+      "Venus",
+      "Mars",
+      "Jupiter",
+      "Saturn"
+    ],
+    "precision": 2
+  }
+}
+
+###
+### SVG Chart Generation - Basic Request
+POST https://api.astrology-api.io/api/v3/svg/natal
+Content-Type: application/json
+
+{
+  "subject": {
+    "name": "Test Subject",
+    "birth_data": {
+      "year": 1990,
+      "month": 5,
+      "day": 15,
+      "hour": 14,
+      "minute": 30,
+      "second": 0,
+      "city": "London",
+      "country_code": "GB"
+    }
+  },
+  "options": {
+    "house_system": "P",
+    "zodiac_type": "Tropic",
+    "active_points": [
+      "Sun",
+      "Moon",
+      "Mercury",
+      "Venus",
+      "Mars",
+      "Jupiter",
+      "Saturn"
+    ],
+    "precision": 2
+  },
+  "svg_options": {
+    "theme": "classic",
+    "language": "en"
+  }
+}
+
+###
+### SVG Chart Generation - Dark Theme
+POST https://api.astrology-api.io/api/v3/svg/natal
+Content-Type: application/json
+
+{
+  "subject": {
+    "name": "Dark Theme Test",
+    "birth_data": {
+      "year": 1985,
+      "month": 5,
+      "day": 11,
+      "hour": 18,
+      "minute": 15,
+      "second": 0,
+      "city": "Kharkiv",
+      "country_code": "UA"
+    }
+  },
+  "options": {
+    "house_system": "P",
+    "zodiac_type": "Tropic",
+    "active_points": [
+      "Sun",
+      "Moon",
+      "Mercury",
+      "Venus",
+      "Mars",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune",
+      "Pluto"
+    ],
+    "precision": 3
+  },
+  "svg_options": {
+    "theme": "dark",
+    "language": "en"
+  }
+}
+
+###
+### Error Testing - Invalid Birth Data
+POST https://api.astrology-api.io/api/v3/charts/natal
+Content-Type: application/json
+
+{
+  "subject": {
+    "name": "Invalid Test",
+    "birth_data": {
+      "year": 1990,
+      "month": 13,
+      "day": 32,
+      "hour": 25,
+      "minute": 61,
+      "second": 0,
+      "city": "InvalidCity",
+      "country_code": "XX"
+    }
+  }
+}
+
+###
+### Error Testing - Missing Required Fields
+POST https://api.astrology-api.io/api/v3/charts/natal
+Content-Type: application/json
+
+{
+  "subject": {
+    "birth_data": {
+      "year": 1990,
+      "month": 5
+    }
+  }
+}
+
+###
+### Alternative House System - Whole Sign
+POST https://api.astrology-api.io/api/v3/charts/natal
+Content-Type: application/json
+
+{
+  "subject": {
+    "name": "Whole Sign Houses",
+    "birth_data": {
+      "year": 1990,
+      "month": 5,
+      "day": 15,
+      "hour": 14,
+      "minute": 30,
+      "second": 0,
+      "city": "London",
+      "country_code": "GB"
+    }
+  },
+  "options": {
+    "house_system": "W",
+    "zodiac_type": "Tropic",
+    "active_points": [
+      "Sun",
+      "Moon",
+      "Mercury",
+      "Venus",
+      "Mars",
+      "Jupiter",
+      "Saturn"
+    ],
+    "precision": 2
+  }
+}
+
+###

@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		85479E082E95466A0055CC08 /* SwissEphemeris in Frameworks */ = {isa = PBXBuildFile; productRef = 85479E072E95466A0055CC08 /* SwissEphemeris */; };
-		859E902F2E991629003C4D9C /* TestPlan.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 859E902E2E991629003C4D9C /* TestPlan.xctestplan */; };
 		85E2C24C2E96896700349727 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 85E2C24B2E96896700349727 /* OpenAI */; };
 /* End PBXBuildFile section */
 
@@ -30,7 +28,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		859E902E2E991629003C4D9C /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
 		85F4816D2E805C4B0031646F /* AstroSvitla.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AstroSvitla.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85F4817E2E805C4D0031646F /* AstroSvitlaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AstroSvitlaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		85F481882E805C4D0031646F /* AstroSvitlaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AstroSvitlaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,7 +70,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				85E2C24C2E96896700349727 /* OpenAI in Frameworks */,
-				85479E082E95466A0055CC08 /* SwissEphemeris in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,7 +93,6 @@
 		85F481642E805C4B0031646F = {
 			isa = PBXGroup;
 			children = (
-				859E902E2E991629003C4D9C /* TestPlan.xctestplan */,
 				85F4816F2E805C4B0031646F /* AstroSvitla */,
 				85F481812E805C4D0031646F /* AstroSvitlaTests */,
 				85F4818B2E805C4D0031646F /* AstroSvitlaUITests */,
@@ -135,7 +130,6 @@
 			);
 			name = AstroSvitla;
 			packageProductDependencies = (
-				85479E072E95466A0055CC08 /* SwissEphemeris */,
 				85E2C24B2E96896700349727 /* OpenAI */,
 			);
 			productName = AstroSvitla;
@@ -222,7 +216,6 @@
 			mainGroup = 85F481642E805C4B0031646F;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				85479E062E95466A0055CC08 /* XCRemoteSwiftPackageReference "SwissEphemeris" */,
 				85E2C24A2E96896700349727 /* XCRemoteSwiftPackageReference "OpenAI" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -242,7 +235,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				859E902F2E991629003C4D9C /* TestPlan.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -650,14 +642,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		85479E062E95466A0055CC08 /* XCRemoteSwiftPackageReference "SwissEphemeris" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/vsmithers1087/SwissEphemeris";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.0.99;
-			};
-		};
 		85E2C24A2E96896700349727 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/MacPaw/OpenAI/";
@@ -669,11 +653,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		85479E072E95466A0055CC08 /* SwissEphemeris */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 85479E062E95466A0055CC08 /* XCRemoteSwiftPackageReference "SwissEphemeris" */;
-			productName = SwissEphemeris;
-		};
 		85E2C24B2E96896700349727 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 85E2C24A2E96896700349727 /* XCRemoteSwiftPackageReference "OpenAI" */;

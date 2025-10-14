@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SwiftData
-import SwissEphemeris
 
 @main
 struct AstroSvitlaApp: App {
@@ -17,10 +16,6 @@ struct AstroSvitlaApp: App {
     @StateObject private var repositoryContext: RepositoryContext
 
     init() {
-        // CRITICAL: Initialize SwissEphemeris before any astronomical calculations
-        // This sets the path to ephemeris data files (bundled with the library)
-        JPLFileManager.setEphemerisPath()
-
         // Optional: Validate configuration
         #if DEBUG
         do {

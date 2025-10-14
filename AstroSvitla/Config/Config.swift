@@ -44,6 +44,19 @@ enum Config {
     /// Base URL for Free Astrology API endpoints
     static let freeAstrologyBaseURL = "https://json.freeastrologyapi.com"
 
+    // MARK: - Astrology API Configuration (api.astrology-api.io)
+
+    /// Astrology API base URL
+    /// No authentication required - open API
+    static let astrologyAPIBaseURL = "https://api.astrology-api.io/api/v3"
+
+    /// Rate limiting configuration for Astrology API
+    static let astrologyAPIRateLimitRequests = 60
+    static let astrologyAPIRateLimitTimeWindow: TimeInterval = 60
+
+    /// Request timeout for Astrology API calls
+    static let astrologyAPIRequestTimeout: TimeInterval = 30
+
     // MARK: - App Configuration
 
     static let appVersion = "1.0.0"

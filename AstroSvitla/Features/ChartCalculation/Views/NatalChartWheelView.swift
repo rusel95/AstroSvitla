@@ -15,148 +15,56 @@ struct NatalChartWheelView: View {
             if let imageData = chartImageData {
                 if chartImageFormat == "svg" {
                     SVGImageView(svgData: imageData)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .aspectRatio(1, contentMode: .fit)
                 } else if let uiImage = UIImage(data: imageData) {
                     Image(uiImage: uiImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: .infinity)
                 } else {
-                    // Image data is corrupted, show fallback
-                    fallbackChartView
+                    // Image data is corrupted
+                    errorPlaceholder
                 }
             } else if isLoadingImage {
                 // Show loading indicator while image loads
                 ProgressView("Loading chart...")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if imageLoadingFailed {
-                // Show fallback with retry option
-                VStack(spacing: 16) {
-                    fallbackChartView
-
-                    Text("Chart visualization unavailable")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-
-                    Button("Retry Image Load") {
-                        Task {
-                            await loadChartImage()
-                        }
-                    }
-                    .buttonStyle(.bordered)
-                }
             } else {
-                // No image available, show custom-rendered chart
-                fallbackChartView
+                // No image available or loading failed
+                errorPlaceholder
             }
         }
+        .frame(maxWidth: .infinity)
+        .aspectRatio(1, contentMode: .fit)
         .task {
             await loadChartImage()
         }
     }
+    
+    private var errorPlaceholder: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "chart.xyaxis.line")
+                .font(.system(size: 60))
+                .foregroundStyle(.secondary)
+            
+            Text("Chart Visualization Unavailable")
+                .font(.headline)
+                .foregroundStyle(.secondary)
+            
+            if imageLoadingFailed {
+                Button("Retry") {
+                    Task {
+                        await loadChartImage()
+                    }
+                }
+                .buttonStyle(.bordered)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding()
+    }
 
     private var chartImageFormat: String {
         chart.imageFormat?.lowercased() ?? ""
-    }
-
-    private var fallbackChartView: some View {
-        GeometryReader { geometry in
-            let size = min(geometry.size.width, geometry.size.height)
-            let center = CGPoint(x: size / 2, y: size / 2)
-            let outerRadius = size / 2 - 20
-            let innerRadius = outerRadius * 0.6
-            let houseRadius = outerRadius * 0.4
-
-            ZStack {
-                // Background circle
-                Circle()
-                    .fill(Color(.systemBackground))
-                    .stroke(Color.secondary.opacity(0.3), lineWidth: 2)
-                    .frame(width: outerRadius * 2, height: outerRadius * 2)
-                    .position(center)
-
-                // Outer zodiac circle with colored backgrounds
-                ForEach(0..<12, id: \.self) { index in
-                    ZodiacSegment(index: index, center: center, radius: outerRadius)
-                }
-
-                // Inner circle for aspect lines background
-                Circle()
-                    .fill(Color(.systemBackground).opacity(0.95))
-                    .frame(width: houseRadius * 2.4, height: houseRadius * 2.4)
-                    .position(center)
-
-                // Aspect lines (drawn first, behind planets)
-                ForEach(chart.aspects) { aspect in
-                    AspectLine(
-                        aspect: aspect,
-                        planets: chart.planets,
-                        center: center,
-                        radius: innerRadius * 0.85
-                    )
-                }
-
-                // House lines
-                ForEach(chart.houses) { house in
-                    HouseLine(
-                        house: house,
-                        center: center,
-                        innerRadius: houseRadius,
-                        outerRadius: outerRadius
-                    )
-                }
-
-                // House numbers
-                ForEach(chart.houses) { house in
-                    HouseNumber(
-                        house: house,
-                        center: center,
-                        radius: houseRadius * 0.7
-                    )
-                }
-
-                // Planets
-                ForEach(chart.planets) { planet in
-                    PlanetMarker(
-                        planet: planet,
-                        center: center,
-                        radius: innerRadius
-                    )
-                }
-
-                // Planet degree labels
-                ForEach(chart.planets) { planet in
-                    PlanetDegreeLabel(
-                        planet: planet,
-                        center: center,
-                        radius: innerRadius + 25
-                    )
-                }
-
-                // Ascendant marker
-                AscendantMarker(
-                    degree: chart.ascendant,
-                    center: center,
-                    radius: outerRadius
-                )
-
-                // Midheaven marker
-                MidheavenMarker(
-                    degree: chart.midheaven,
-                    center: center,
-                    radius: outerRadius
-                )
-
-                // Center circle
-                Circle()
-                    .fill(Color(.systemBackground))
-                    .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
-                    .frame(width: houseRadius * 1.2, height: houseRadius * 1.2)
-                    .position(center)
-            }
-            .frame(width: size, height: size)
-        }
-        .aspectRatio(1, contentMode: .fit)
     }
 
     // MARK: - Image Loading

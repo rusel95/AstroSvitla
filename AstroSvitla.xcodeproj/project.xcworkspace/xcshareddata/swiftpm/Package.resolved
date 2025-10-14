@@ -1,5 +1,5 @@
 {
-  "originHash" : "89f931a2b0b5e24b8ca8b2afc1013906404da3b7537c2c76c82b3ce3a6d983dd",
+  "originHash" : "9ec82d97c2649985ef7bc0df3caa5384cfa3157194efbee33b470f6d224d0567",
   "pins" : [
     {
       "identity" : "openai",
@@ -26,15 +26,6 @@
       "state" : {
         "revision" : "7722cf8eac05c1f1b5b05895b04cfcc29576d9be",
         "version" : "1.8.3"
-      }
-    },
-    {
-      "identity" : "swissephemeris",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/vsmithers1087/SwissEphemeris",
-      "state" : {
-        "revision" : "9d9ac62383eafa176e744af1130dcb0da17ca325",
-        "version" : "0.0.99"
       }
     }
   ],
