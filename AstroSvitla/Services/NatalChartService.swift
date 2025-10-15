@@ -97,12 +97,6 @@ final class NatalChartService: NatalChartServiceProtocol {
             rateLimiter: astrologyRateLimiter
         )
         
-        // LEGACY: Old FreeAstrology API initialization commented out
-        // let apiService = FreeAstrologyAPIService(
-        //     apiKey: Config.freeAstrologyAPIKey,
-        //     baseURL: Config.freeAstrologyBaseURL
-        // )
-        
         let chartCacheService = ChartCacheService(context: modelContext)
         let imageCacheService = ImageCacheService()
         let rateLimiter = RateLimiter()
@@ -110,8 +104,6 @@ final class NatalChartService: NatalChartServiceProtocol {
 
         self.init(
             astrologyAPIService: astrologyAPIService,
-            // LEGACY: Old API service parameter commented out
-            // apiService: apiService,
             chartCacheService: chartCacheService,
             imageCacheService: imageCacheService,
             rateLimiter: rateLimiter,
