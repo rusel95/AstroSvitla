@@ -15,6 +15,9 @@ final class ReportPurchase {
     var language: String
     var knowledgeVectorUsed: Bool = false
     var knowledgeNotes: String?
+    var knowledgeSourceTitles: [String]?
+    var knowledgeSourceAuthors: [String]?
+    var knowledgeSourcePages: [String]?
 
     var price: Decimal
     var currency: String
@@ -38,6 +41,9 @@ final class ReportPurchase {
         language: String,
         knowledgeVectorUsed: Bool = false,
         knowledgeNotes: String? = nil,
+        knowledgeSourceTitles: [String]? = nil,
+        knowledgeSourceAuthors: [String]? = nil,
+        knowledgeSourcePages: [String]? = nil,
         price: Decimal,
         currency: String = "USD",
         transactionId: String
@@ -52,6 +58,9 @@ final class ReportPurchase {
         self.language = language
         self.knowledgeVectorUsed = knowledgeVectorUsed
         self.knowledgeNotes = knowledgeNotes
+        self.knowledgeSourceTitles = knowledgeSourceTitles
+        self.knowledgeSourceAuthors = knowledgeSourceAuthors
+        self.knowledgeSourcePages = knowledgeSourcePages
         self.price = price
         self.currency = currency
         self.transactionId = transactionId
@@ -88,13 +97,40 @@ final class ReportPurchase {
 
     var generatedReport: GeneratedReport? {
         guard let reportArea = ReportArea(rawValue: area) else { return nil }
+
+        // Convert stored arrays to KnowledgeSource objects
+        var sources: [KnowledgeSource]? = nil
+        if let titles = knowledgeSourceTitles,
+           let authors = knowledgeSourceAuthors,
+           let pages = knowledgeSourcePages,
+           !titles.isEmpty {
+            var sourcesArray: [KnowledgeSource] = []
+            for i in 0..<min(titles.count, authors.count, pages.count) {
+                // Create a KnowledgeSource from stored data
+                // Note: snippet will be empty as we don't store it separately
+                sourcesArray.append(KnowledgeSource(
+                    bookTitle: titles[i],
+                    author: authors[i].isEmpty ? nil : authors[i],
+                    section: nil,
+                    pageRange: pages[i].isEmpty ? nil : pages[i],
+                    snippet: "",
+                    relevanceScore: nil
+                ))
+            }
+            sources = sourcesArray
+        }
+
         return GeneratedReport(
             area: reportArea,
             summary: summary,
             keyInfluences: keyInfluences,
             detailedAnalysis: detailedAnalysis,
             recommendations: recommendations,
-            knowledgeUsage: KnowledgeUsage(vectorSourceUsed: knowledgeVectorUsed, notes: knowledgeNotes)
+            knowledgeUsage: KnowledgeUsage(
+                vectorSourceUsed: knowledgeVectorUsed,
+                notes: knowledgeNotes,
+                sources: sources
+            )
         )
     }
 }

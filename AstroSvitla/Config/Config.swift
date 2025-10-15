@@ -88,6 +88,16 @@ enum Config {
     static let debugLoggingEnabled = true
     static let analyticsEnabled = false
 
+    /// Shows debug features like knowledge source logs
+    /// Should be false in production builds
+    static var isDebugMode: Bool {
+        #if DEBUG
+        return true
+        #else
+        return false
+        #endif
+    }
+
     // MARK: - Validation Helpers
 
     static var isOpenAIConfigured: Bool {

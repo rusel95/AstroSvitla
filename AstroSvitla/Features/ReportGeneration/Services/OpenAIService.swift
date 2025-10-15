@@ -53,7 +53,18 @@ struct OpenAIService {
                 let (payload, usage) = try await performRequest(client: client, query: query)
                 logUsage(usage)
                 let fallbackNotes = knowledgeSnippets.isEmpty ? localized("report.knowledge.no_snippets") : nil
-                let usagePayload = payload.knowledgeUsage ?? OpenAIReportPayload.KnowledgeUsagePayload(vectorSourceUsed: knowledgeSnippets.isEmpty == false, notes: fallbackNotes)
+                let usagePayload = payload.knowledgeUsage ?? OpenAIReportPayload.KnowledgeUsagePayload(vectorSourceUsed: knowledgeSnippets.isEmpty == false, notes: fallbackNotes, sources: nil)
+
+                let sources = usagePayload.sources?.map { sourcePayload in
+                    KnowledgeSource(
+                        bookTitle: sourcePayload.bookTitle,
+                        author: sourcePayload.author,
+                        section: sourcePayload.section,
+                        pageRange: sourcePayload.pageRange,
+                        snippet: sourcePayload.snippet,
+                        relevanceScore: sourcePayload.relevanceScore
+                    )
+                }
 
                 return GeneratedReport(
                     area: area,
@@ -61,7 +72,11 @@ struct OpenAIService {
                     keyInfluences: payload.keyInfluences,
                     detailedAnalysis: payload.detailedAnalysis,
                     recommendations: payload.recommendations,
-                    knowledgeUsage: KnowledgeUsage(vectorSourceUsed: usagePayload.vectorSourceUsed, notes: usagePayload.notes)
+                    knowledgeUsage: KnowledgeUsage(
+                        vectorSourceUsed: usagePayload.vectorSourceUsed,
+                        notes: usagePayload.notes,
+                        sources: sources
+                    )
                 )
             } catch let error as ReportGenerationError {
                 lastError = error
@@ -248,10 +263,30 @@ private struct OpenAIReportPayload: Decodable {
     struct KnowledgeUsagePayload: Decodable {
         let vectorSourceUsed: Bool
         let notes: String?
+        let sources: [KnowledgeSourcePayload]?
 
         private enum CodingKeys: String, CodingKey {
             case vectorSourceUsed = "vector_source_used"
             case notes
+            case sources
+        }
+    }
+
+    struct KnowledgeSourcePayload: Decodable {
+        let bookTitle: String
+        let author: String?
+        let section: String?
+        let pageRange: String?
+        let snippet: String
+        let relevanceScore: Double?
+
+        private enum CodingKeys: String, CodingKey {
+            case bookTitle = "book_title"
+            case author
+            case section
+            case pageRange = "page_range"
+            case snippet
+            case relevanceScore = "relevance_score"
         }
     }
 }

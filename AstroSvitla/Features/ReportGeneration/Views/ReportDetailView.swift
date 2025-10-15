@@ -13,6 +13,7 @@ struct ReportDetailView: View {
     @State private var shareURL: URL?
     @State private var isPresentingShareSheet = false
     @State private var isShowingSuccessAlert = false
+    @State private var isShowingKnowledgeLogs = false
 
     private let pdfGenerator = ReportPDFGenerator()
 
@@ -25,7 +26,9 @@ struct ReportDetailView: View {
                 influencesSection
                 analysisSection
                 recommendationsSection
-                knowledgeUsageSection
+                if Config.isDebugMode {
+                    knowledgeLogsButton
+                }
                 actionButtons
             }
             .padding()
@@ -75,7 +78,6 @@ struct ReportDetailView: View {
             Text("report.section.chart", tableName: "Localizable")
                 .font(.headline)
             NatalChartWheelView(chart: natalChart)
-                .frame(height: 350)
                 .background(Color(.systemBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         }
@@ -129,19 +131,30 @@ struct ReportDetailView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private var knowledgeUsageSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("report.section.knowledge_usage", tableName: "Localizable")
-                .font(.headline)
-            Label(report.knowledgeUsage.vectorSourceUsed ? "report.knowledge.used" : "report.knowledge.not_used", systemImage: report.knowledgeUsage.vectorSourceUsed ? "checkmark.circle.fill" : "xmark.circle")
-                .foregroundStyle(report.knowledgeUsage.vectorSourceUsed ? .green : .secondary)
-            if let notes = report.knowledgeUsage.notes, notes.isEmpty == false {
-                Text(notes)
-                    .font(.footnote)
+    private var knowledgeLogsButton: some View {
+        Button {
+            isShowingKnowledgeLogs = true
+        } label: {
+            HStack {
+                Image(systemName: "book.closed")
+                Text("Логи джерел знань")
+                Spacer()
+                if report.knowledgeUsage.vectorSourceUsed {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(.green)
+                }
+                Image(systemName: "chevron.right")
+                    .font(.caption)
                     .foregroundStyle(.secondary)
             }
+            .padding()
+            .background(Color.gray.opacity(0.15))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .buttonStyle(.plain)
+        .sheet(isPresented: $isShowingKnowledgeLogs) {
+            KnowledgeSourceLogsView(knowledgeUsage: report.knowledgeUsage)
+        }
     }
 
     private var actionButtons: some View {

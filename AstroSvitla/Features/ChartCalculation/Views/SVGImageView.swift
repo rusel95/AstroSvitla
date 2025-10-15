@@ -13,37 +13,34 @@ struct SVGImageView: View {
     @State private var renderedImage: Image?
     @State private var isLoading = true
     @State private var webViewController: SVGWebViewController?
+    @State private var imageAspectRatio: CGFloat = 1.0  // Track actual image aspect ratio
 
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                Color.white
-                
-                if let image = renderedImage {
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: geometry.size.width)
-                } else if isLoading {
-                    ProgressView("Rendering chart...")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else {
-                    VStack(spacing: 12) {
-                        Image(systemName: "exclamationmark.triangle")
-                            .font(.system(size: 40))
-                            .foregroundStyle(.orange)
-                        
-                        Text("Failed to Render Chart")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+        VStack(spacing: 0) {
+            if let image = renderedImage {
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: .infinity)
+            } else if isLoading {
+                ProgressView("Rendering chart...")
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 400)  // Placeholder height while loading
+            } else {
+                VStack(spacing: 12) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.system(size: 40))
+                        .foregroundStyle(.orange)
+                    
+                    Text("Failed to Render Chart")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
+                .frame(maxWidth: .infinity)
+                .frame(height: 400)  // Placeholder height for error
             }
-            .frame(width: geometry.size.width, height: geometry.size.width)
-            .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
         }
-        .aspectRatio(1, contentMode: .fit)
+        .background(Color.white)
         .task {
             await renderSVG()
         }
@@ -69,7 +66,11 @@ struct SVGImageView: View {
         self.webViewController = controller
         
         do {
-            let image = try await controller.renderSVGToImage(svg: svgString, size: CGSize(width: 800, height: 800))
+            // Extract SVG dimensions or use default
+            let dimensions = extractSVGDimensions(from: svgString)
+            let renderSize = CGSize(width: 1200, height: 1200 * (dimensions.height / dimensions.width))
+            
+            let image = try await controller.renderSVGToImage(svg: svgString, size: renderSize)
             self.renderedImage = Image(uiImage: image)
             self.isLoading = false
             print("[SVGImageView] ✅ SVG converted to PNG successfully: \(image.size)")
@@ -80,6 +81,50 @@ struct SVGImageView: View {
         
         // Clean up
         self.webViewController = nil
+    }
+    
+    /// Extract dimensions from SVG viewBox or width/height attributes
+    private func extractSVGDimensions(from svg: String) -> CGSize {
+        // Try to extract viewBox first (e.g., viewBox="0 0 800 800")
+        if let viewBoxRegex = try? NSRegularExpression(pattern: #"viewBox\s*=\s*"([^"]+)""#),
+           let match = viewBoxRegex.firstMatch(in: svg, range: NSRange(svg.startIndex..., in: svg)),
+           let viewBoxRange = Range(match.range(at: 1), in: svg) {
+            let viewBoxString = String(svg[viewBoxRange])
+            let values = viewBoxString.split(separator: " ").compactMap { Double($0) }
+            if values.count == 4 {
+                let width = values[2]
+                let height = values[3]
+                print("[SVGImageView] 📐 Extracted viewBox dimensions: \(width)x\(height)")
+                return CGSize(width: width, height: height)
+            }
+        }
+        
+        // Try to extract width and height attributes
+        var width: Double?
+        var height: Double?
+        
+        if let widthRegex = try? NSRegularExpression(pattern: #"width\s*=\s*"([^"]+)""#),
+           let match = widthRegex.firstMatch(in: svg, range: NSRange(svg.startIndex..., in: svg)),
+           let widthRange = Range(match.range(at: 1), in: svg) {
+            let widthString = String(svg[widthRange]).replacingOccurrences(of: "px", with: "")
+            width = Double(widthString)
+        }
+        
+        if let heightRegex = try? NSRegularExpression(pattern: #"height\s*=\s*"([^"]+)""#),
+           let match = heightRegex.firstMatch(in: svg, range: NSRange(svg.startIndex..., in: svg)),
+           let heightRange = Range(match.range(at: 1), in: svg) {
+            let heightString = String(svg[heightRange]).replacingOccurrences(of: "px", with: "")
+            height = Double(heightString)
+        }
+        
+        if let w = width, let h = height {
+            print("[SVGImageView] 📐 Extracted width/height attributes: \(w)x\(h)")
+            return CGSize(width: w, height: h)
+        }
+        
+        // Default to square if dimensions can't be extracted
+        print("[SVGImageView] ⚠️ Could not extract dimensions, using default 800x800")
+        return CGSize(width: 800, height: 800)
     }
 }
 

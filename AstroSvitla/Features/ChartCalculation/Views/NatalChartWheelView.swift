@@ -34,7 +34,6 @@ struct NatalChartWheelView: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .aspectRatio(1, contentMode: .fit)
         .task {
             await loadChartImage()
         }
