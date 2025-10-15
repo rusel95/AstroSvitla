@@ -122,7 +122,7 @@ struct OpenAIService {
         return ChatQuery(
             messages: [systemMessage, userMessage],
             model: "gpt-4o-mini",
-            maxCompletionTokens: 900,
+            maxCompletionTokens: 1500, // Increased from 900 to accommodate expanded analysis (10 planet points, aspects, nodes, Lilith, house rulers)
             responseFormat: .jsonObject,
             temperature: 0.7,
             topP: 0.9

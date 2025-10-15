@@ -32,7 +32,7 @@ enum OpenAIConfig {
     }()
 
     static let model: Model = .gpt4oMini
-    static let maxOutputTokens = 800 // ~500-600 words
+    static let maxOutputTokens = 1500 // ~800-1000 words (increased for comprehensive planetary, aspect, node, and house ruler analysis)
     static let temperature: Double = 0.7 // Creative but focused
     static let topP: Double = 0.9
 }
@@ -133,12 +133,21 @@ func buildPrompt(
     REPORT FOCUS: \(areaFocus)
 
     REQUIREMENTS:
-    - Length: 400-500 words
-    - Structure: 3 sections
-      1. Key Influences (2-3 sentences about dominant factors)
-      2. Detailed Analysis (350-400 words specific to \(area.displayName))
+    - Length: 600-800 words (expanded for comprehensive analysis)
+    - Structure: 4 sections
+      1. Key Influences (10 bullet points covering ALL planets: Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto)
+      2. Detailed Analysis (500-650 words) MUST include:
+         a) Detailed explanation of ALL aspects between all planets in this natal chart (reference specific angles and orbs)
+         b) Explanation of karmic nodes (North Node and South Node) placement and their significance in this chart
+         c) Explanation of existing aspects between karmic nodes and other planets
+         d) Explanation of Lilith (Black Moon) placement and its meaning in this natal chart
+         e) Analysis of house rulers (lords): where they are located, what they rule, and what this means for the person's life
       3. Practical Recommendations (3-4 actionable tips)
-    - Be specific to THIS chart (reference actual placements)
+      4. Knowledge Usage (track vector source utilization)
+    - Be specific to THIS chart (reference actual placements with degrees and houses)
+    - Cover ALL planetary aspects, not just major ones
+    - Include karmic nodes and Lilith in analysis
+    - Analyze house rulerships and their implications
     - Avoid generic statements that could apply to anyone
     - Supportive and empowering tone
     - Focus on growth potential and self-awareness
