@@ -5,7 +5,6 @@ struct SettingsView: View {
     @EnvironmentObject private var preferences: AppPreferences
     @EnvironmentObject private var repositoryContext: RepositoryContext
     @Environment(\.modelContext) private var modelContext
-    @State private var isResetOnboardingConfirmationPresented = false
     @State private var showingProfileManager = false
 
     private var profileViewModel: UserProfileViewModel {
@@ -18,19 +17,8 @@ struct SettingsView: View {
             profileSection
             appearanceSection
             languageSection
-            onboardingSection
         }
         .navigationTitle(Text("settings.title", tableName: "Localizable"))
-        .confirmationDialog(
-            String(localized: "settings.dialog.onboarding.title", table: "Localizable"),
-            isPresented: $isResetOnboardingConfirmationPresented,
-            titleVisibility: .visible
-        ) {
-            Button(String(localized: "settings.dialog.onboarding.confirm", table: "Localizable"), role: .destructive) {
-                OnboardingViewModel.resetStoredProgress()
-            }
-            Button(String(localized: "action.cancel", table: "Localizable"), role: .cancel) { }
-        }
         .sheet(isPresented: $showingProfileManager) {
             UserProfileListView(viewModel: profileViewModel)
         }
@@ -80,22 +68,6 @@ struct SettingsView: View {
                 .foregroundStyle(.secondary)
         } header: {
             Text("settings.section.language", tableName: "Localizable")
-        }
-    }
-
-    private var onboardingSection: some View {
-        Section {
-            Button {
-                isResetOnboardingConfirmationPresented = true
-            } label: {
-                Label {
-                    Text("settings.action.replay_onboarding", tableName: "Localizable")
-                } icon: {
-                    Image(systemName: "sparkles")
-                }
-            }
-        } header: {
-            Text("settings.section.onboarding", tableName: "Localizable")
         }
     }
 }

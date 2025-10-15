@@ -135,3 +135,73 @@
 "area.section.choose" = "Choose a focus area";
 "area.navigation.title" = "Select area";
 "area.action.edit_details" = "Edit data";
+
+// Chart Details
+"chart_details.title" = "Chart Details";
+"chart_details.section.birth_info" = "Birth Data";
+"chart_details.label.name" = "Name";
+"chart_details.label.date" = "Date";
+"chart_details.label.time" = "Time";
+"chart_details.label.place" = "Place";
+"chart_details.label.coordinates" = "Coordinates";
+"chart_details.label.timezone" = "Timezone";
+"chart_details.section.angles" = "Chart Angles";
+"chart_details.label.ascendant" = "Ascendant (ASC)";
+"chart_details.label.midheaven" = "Midheaven (MC)";
+"chart_details.section.planets" = "Planets";
+"chart_details.house_label" = "House";
+"chart_details.speed_label" = "Speed";
+"chart_details.day_label" = "day";
+"chart_details.section.houses" = "Houses";
+"chart_details.section.aspects" = "Aspects";
+"chart_details.orb_label" = "Orb";
+"chart_details.section.metadata" = "Metadata";
+"chart_details.label.calculated_at" = "Calculation Date";
+
+// Purchase Confirmation
+"purchase.title" = "Purchase Confirmation";
+"purchase.generate_report" = "Generate Report";
+"purchase.at_time" = "at";
+"purchase.what_next" = "What's Next";
+"purchase.info.birth_data" = "We will use your birth data and expert astrological rules to create a personalized report.";
+"purchase.info.one_time" = "This is a one-time purchase. You can return to the generated report in the Reports section (coming soon).";
+"purchase.info.preview_build" = "In this preview build, you will not be charged.";
+
+// Profile Management
+"profile.manage.title" = "Manage Profiles";
+"profile.delete.title" = "Delete Profile";
+"profile.delete.action" = "Delete";
+"profile.empty.title" = "No Profiles Yet";
+"profile.empty.description" = "Create profiles from the Home tab to get started with personalized natal charts and reports";
+"profile.badge.active" = "Active";
+"profile.report.singular" = "report";
+"profile.report.plural" = "reports";
+
+// Chart Loading
+"chart.loading" = "Loading chart...";
+"chart.unavailable" = "Chart Visualization Unavailable";
+"chart.retry" = "Retry";
+
+// SVG Rendering
+"svg.rendering" = "Rendering chart...";
+"svg.failed" = "Failed to Render Chart";
+
+// Onboarding
+"onboarding.skip" = "Skip";
+"onboarding.start" = "Start";
+"onboarding.next" = "Next";
+
+// Knowledge Source Logs
+"knowledge_logs.button.title" = "View Knowledge Logs";
+"knowledge_logs.title" = "Knowledge Source Logs";
+"knowledge_logs.status.title" = "Status";
+"knowledge_logs.status.used" = "Vector knowledge base was used";
+"knowledge_logs.status.not_used" = "Vector knowledge base was not used";
+"knowledge_logs.sources.title" = "Sources Used";
+"knowledge_logs.source.section" = "Section";
+"knowledge_logs.source.pages" = "Pages";
+"knowledge_logs.source.snippet" = "Snippet";
+"knowledge_logs.source.relevance" = "Relevance";
+"knowledge_logs.empty.title" = "No Sources";
+"knowledge_logs.empty.message" = "No specific knowledge sources were tracked for this report.";
+"knowledge_logs.notes.title" = "Notes";

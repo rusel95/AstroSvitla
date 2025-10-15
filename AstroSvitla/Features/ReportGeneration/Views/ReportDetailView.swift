@@ -137,7 +137,7 @@ struct ReportDetailView: View {
         } label: {
             HStack {
                 Image(systemName: "book.closed")
-                Text("Логи джерел знань")
+                Text("knowledge_logs.button.title", tableName: "Localizable")
                 Spacer()
                 if report.knowledgeUsage.vectorSourceUsed {
                     Image(systemName: "checkmark.circle.fill")

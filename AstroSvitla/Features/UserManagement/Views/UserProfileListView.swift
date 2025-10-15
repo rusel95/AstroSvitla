@@ -15,11 +15,11 @@ struct UserProfileListView: View {
                     profileListView
                 }
             }
-            .navigationTitle("Manage Profiles")
+            .navigationTitle(String(localized: "profile.manage.title", table: "Localizable"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") {
+                    Button(String(localized: "action.done", table: "Localizable")) {
                         dismiss()
                     }
                 }
@@ -27,11 +27,11 @@ struct UserProfileListView: View {
                 // NOTE: Profile creation now happens inline on Home tab
                 // Remove the "Create Profile" button from Settings for simplified UX
             }
-            .alert("Delete Profile", isPresented: $viewModel.showDeleteConfirmation) {
-                Button("Cancel", role: .cancel) {
+            .alert(String(localized: "profile.delete.title", table: "Localizable"), isPresented: $viewModel.showDeleteConfirmation) {
+                Button(String(localized: "action.cancel", table: "Localizable"), role: .cancel) {
                     viewModel.cancelDelete()
                 }
-                Button("Delete", role: .destructive) {
+                Button(String(localized: "profile.delete.action", table: "Localizable"), role: .destructive) {
                     Task {
                         await viewModel.confirmDeleteProfile()
                     }
@@ -63,11 +63,11 @@ struct UserProfileListView: View {
                 .font(.system(size: 80))
                 .foregroundColor(.secondary)
 
-            Text("No Profiles Yet")
+            Text(String(localized: "profile.empty.title", table: "Localizable"))
                 .font(.title2)
                 .fontWeight(.semibold)
 
-            Text("Create profiles from the Home tab to get started with personalized natal charts and reports")
+            Text(String(localized: "profile.empty.description", table: "Localizable"))
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -117,7 +117,7 @@ private struct ProfileRowView: View {
                             .font(.headline)
 
                         if isActive {
-                            Text("Active")
+                            Text(String(localized: "profile.badge.active", table: "Localizable"))
                                 .font(.caption)
                                 .fontWeight(.medium)
                                 .foregroundColor(.white)
@@ -152,7 +152,7 @@ private struct ProfileRowView: View {
                 Button(role: .destructive) {
                     onDelete()
                 } label: {
-                    Label("Delete", systemImage: "trash")
+                    Label(String(localized: "profile.delete.action", table: "Localizable"), systemImage: "trash")
                         .font(.caption)
                         .foregroundColor(.red)
                 }
@@ -189,7 +189,7 @@ private struct ProfileRowView: View {
         HStack(spacing: 4) {
             Image(systemName: "doc.text.fill")
                 .font(.caption2)
-            Text("\(profile.reports.count) report\(profile.reports.count == 1 ? "" : "s")")
+            Text("\(profile.reports.count) " + String(localized: profile.reports.count == 1 ? "profile.report.singular" : "profile.report.plural", table: "Localizable"))
                 .font(.caption)
         }
         .foregroundColor(.secondary)

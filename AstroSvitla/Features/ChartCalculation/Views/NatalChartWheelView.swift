@@ -26,7 +26,7 @@ struct NatalChartWheelView: View {
                 }
             } else if isLoadingImage {
                 // Show loading indicator while image loads
-                ProgressView("Loading chart...")
+                ProgressView(String(localized: "chart.loading", table: "Localizable"))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 // No image available or loading failed
@@ -45,12 +45,12 @@ struct NatalChartWheelView: View {
                 .font(.system(size: 60))
                 .foregroundStyle(.secondary)
             
-            Text("Chart Visualization Unavailable")
+            Text(String(localized: "chart.unavailable", table: "Localizable"))
                 .font(.headline)
                 .foregroundStyle(.secondary)
-            
+
             if imageLoadingFailed {
-                Button("Retry") {
+                Button(String(localized: "chart.retry", table: "Localizable")) {
                     Task {
                         await loadChartImage()
                     }

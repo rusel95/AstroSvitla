@@ -51,7 +51,7 @@ struct OnboardingView: View {
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 24)
 
-            Button("Пропустити") {
+            Button(String(localized: "onboarding.skip", table: "Localizable")) {
                 let didFinish = viewModel.skip()
                 if didFinish {
                     onFinish()
@@ -63,7 +63,7 @@ struct OnboardingView: View {
     }
 
     private var primaryButtonTitle: String {
-        viewModel.currentIndex == viewModel.pages.count - 1 ? "Почати" : "Далі"
+        viewModel.currentIndex == viewModel.pages.count - 1 ? String(localized: "onboarding.start", table: "Localizable") : String(localized: "onboarding.next", table: "Localizable")
     }
 }
 

@@ -22,11 +22,11 @@ struct KnowledgeSourceLogsView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Логи джерел знань")
+            .navigationTitle(Text("knowledge_logs.title", tableName: "Localizable"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Закрити") {
+                    Button(String(localized: "action.close", table: "Localizable")) {
                         dismiss()
                     }
                 }
@@ -36,13 +36,15 @@ struct KnowledgeSourceLogsView: View {
 
     private var statusSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Статус використання")
+            Text("knowledge_logs.status.title", tableName: "Localizable")
                 .font(.headline)
 
             HStack {
                 Image(systemName: knowledgeUsage.vectorSourceUsed ? "checkmark.circle.fill" : "xmark.circle")
                     .foregroundStyle(knowledgeUsage.vectorSourceUsed ? .green : .secondary)
-                Text(knowledgeUsage.vectorSourceUsed ? "Векторна база використана" : "Векторна база не використана")
+                Text(knowledgeUsage.vectorSourceUsed ?
+                     String(localized: "knowledge_logs.status.used", table: "Localizable") :
+                     String(localized: "knowledge_logs.status.not_used", table: "Localizable"))
                     .font(.subheadline)
             }
         }
@@ -54,7 +56,9 @@ struct KnowledgeSourceLogsView: View {
 
     private func sourcesSection(_ sources: [KnowledgeSource]) -> some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Використані джерела (\(sources.count))")
+            Text("knowledge_logs.sources.title", tableName: "Localizable")
+                .font(.headline)
+            + Text(" (\(sources.count))")
                 .font(.headline)
 
             ForEach(sources) { source in
@@ -93,7 +97,7 @@ struct KnowledgeSourceLogsView: View {
                             Image(systemName: "text.book.closed")
                                 .foregroundStyle(.secondary)
                                 .frame(width: 20)
-                            Text("Розділ: \(section)")
+                            (Text("knowledge_logs.source.section", tableName: "Localizable") + Text(": \(section)"))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -104,7 +108,7 @@ struct KnowledgeSourceLogsView: View {
                             Image(systemName: "doc.text")
                                 .foregroundStyle(.secondary)
                                 .frame(width: 20)
-                            Text("Сторінки: \(pageRange)")
+                            (Text("knowledge_logs.source.pages", tableName: "Localizable") + Text(": \(pageRange)"))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -116,7 +120,7 @@ struct KnowledgeSourceLogsView: View {
             Divider()
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("Використаний уривок:")
+                Text("knowledge_logs.source.snippet", tableName: "Localizable")
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
@@ -133,7 +137,7 @@ struct KnowledgeSourceLogsView: View {
                     Image(systemName: "star.fill")
                         .foregroundStyle(.yellow)
                         .font(.caption)
-                    Text("Релевантність: \(String(format: "%.1f%%", score * 100))")
+                    (Text("knowledge_logs.source.relevance", tableName: "Localizable") + Text(": \(String(format: "%.1f%%", score * 100))"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -154,11 +158,11 @@ struct KnowledgeSourceLogsView: View {
                 .font(.largeTitle)
                 .foregroundStyle(.secondary)
 
-            Text("Детальні джерела не доступні")
+            Text("knowledge_logs.empty.title", tableName: "Localizable")
                 .font(.headline)
                 .foregroundStyle(.secondary)
 
-            Text("AI не повернув інформацію про конкретні джерела з векторної бази знань для цього звіту.")
+            Text("knowledge_logs.empty.message", tableName: "Localizable")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -169,7 +173,7 @@ struct KnowledgeSourceLogsView: View {
 
     private func notesSection(_ notes: String) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Примітки")
+            Text("knowledge_logs.notes.title", tableName: "Localizable")
                 .font(.headline)
 
             Text(notes)
