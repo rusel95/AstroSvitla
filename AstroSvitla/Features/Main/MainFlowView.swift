@@ -671,10 +671,14 @@ struct MainFlowView: View {
 private extension MainFlowView {
     @MainActor
     func persistGeneratedReport(details: BirthDetails, natalChart: NatalChart, generatedReport: GeneratedReport) throws {
-        let chartEntity = try upsertBirthChart(details: details, natalChart: natalChart)
-
         let reportText = renderReportText(from: generatedReport)
         let languageCode = preferences.selectedLanguageCode
+
+        // Extract knowledge source data for storage
+        let sources = generatedReport.knowledgeUsage.sources ?? []
+        let sourceTitles = sources.map { $0.bookTitle }
+        let sourceAuthors = sources.map { $0.author ?? "" }
+        let sourcePages = sources.map { $0.pageRange ?? "" }
 
         let purchase = ReportPurchase(
             area: generatedReport.area.rawValue,
@@ -686,14 +690,25 @@ private extension MainFlowView {
             language: languageCode,
             knowledgeVectorUsed: generatedReport.knowledgeUsage.vectorSourceUsed,
             knowledgeNotes: generatedReport.knowledgeUsage.notes,
+            knowledgeSourceTitles: sourceTitles.isEmpty ? nil : sourceTitles,
+            knowledgeSourceAuthors: sourceAuthors.isEmpty ? nil : sourceAuthors,
+            knowledgeSourcePages: sourcePages.isEmpty ? nil : sourcePages,
             price: generatedReport.area.price,
             transactionId: UUID().uuidString
         )
 
-        // TODO: Update to link to UserProfile instead of BirthChart
-        // purchase.profile = activeUserProfile
+        // Link report to active profile
+        if let activeProfile = repositoryContext.activeProfile {
+            purchase.profile = activeProfile
+            print("[MainFlowView] ✅ Linked report to profile: \(activeProfile.name)")
+        } else {
+            print("[MainFlowView] ⚠️ No active profile found when saving report")
+        }
+
         modelContext.insert(purchase)
         try modelContext.save()
+
+        print("[MainFlowView] ✅ Report saved successfully")
     }
 
     @MainActor

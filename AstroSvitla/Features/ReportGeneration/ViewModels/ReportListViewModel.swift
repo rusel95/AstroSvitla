@@ -42,6 +42,21 @@ final class ReportListViewModel: ObservableObject {
         loadReports()
     }
 
+    func deleteReport(_ report: ReportPurchase) {
+        guard let context = modelContext else { return }
+
+        context.delete(report)
+
+        do {
+            try context.save()
+            print("[ReportListViewModel] ✅ Report deleted successfully")
+            loadReports() // Refresh the list
+        } catch {
+            print("[ReportListViewModel] ❌ Failed to delete report: \(error)")
+            errorMessage = String(localized: "reports.error.delete_failed", table: "Localizable")
+        }
+    }
+
     private func loadReports() {
         guard let context = modelContext else { return }
         isLoading = true

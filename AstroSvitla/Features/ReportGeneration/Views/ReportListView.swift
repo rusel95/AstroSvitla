@@ -72,6 +72,9 @@ struct ReportListView: View {
                             ReportListRow(item: item)
                         }
                     }
+                    .onDelete { indexSet in
+                        deleteReports(at: indexSet, in: section)
+                    }
                 } header: {
                     ReportSectionHeader(title: section.chartName, subtitle: section.chartSubtitle, isOrphan: section.isOrphan)
                 }
@@ -87,6 +90,13 @@ struct ReportListView: View {
             description: Text("reports.empty.description", tableName: "Localizable")
         )
         .padding()
+    }
+
+    private func deleteReports(at offsets: IndexSet, in section: ReportListViewModel.Section) {
+        for index in offsets {
+            let item = section.reports[index]
+            viewModel.deleteReport(item.report)
+        }
     }
 }
 
@@ -194,16 +204,39 @@ private struct SavedReportDetailView: View {
     }
 
     private var preparedViewData: PreparedViewData? {
-        guard
-            let generatedReport = item.report.generatedReport,
-            let profile = item.report.profile,
-            let chartEntity = profile.chart,
-            let natalChart = chartEntity.decodedNatalChart(),
-            let birthDetails = chartEntity.makeBirthDetails()
-        else {
+        // Debug: Check what's nil
+        print("[SavedReportDetailView] Checking report data availability:")
+        print("  - report.generatedReport: \(item.report.generatedReport != nil)")
+        print("  - report.profile: \(item.report.profile != nil)")
+
+        guard let generatedReport = item.report.generatedReport else {
+            print("  ❌ generatedReport is nil")
             return nil
         }
 
+        guard let profile = item.report.profile else {
+            print("  ❌ profile is nil")
+            return nil
+        }
+
+        guard let chartEntity = profile.chart else {
+            print("  ❌ profile.chart is nil")
+            return nil
+        }
+
+        print("  - chartDataJSON length: \(chartEntity.chartDataJSON.count)")
+
+        guard let natalChart = chartEntity.decodedNatalChart() else {
+            print("  ❌ decodedNatalChart() returned nil")
+            return nil
+        }
+
+        guard let birthDetails = chartEntity.makeBirthDetails() else {
+            print("  ❌ makeBirthDetails() returned nil")
+            return nil
+        }
+
+        print("  ✅ All data available, showing full report with chart")
         return PreparedViewData(
             birthDetails: birthDetails,
             natalChart: natalChart,
