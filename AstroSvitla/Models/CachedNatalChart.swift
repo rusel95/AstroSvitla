@@ -159,6 +159,21 @@ extension CachedNatalChart {
         let planets = try Self.decoder.decode([Planet].self, from: planetsJSON)
         let houses = try Self.decoder.decode([House].self, from: housesJSON)
         let aspects = try Self.decoder.decode([Aspect].self, from: aspectsJSON)
+        
+        // Calculate house rulers from houses and planets
+        let houseRulers = houses.compactMap { house -> HouseRuler? in
+            let rulingPlanet = TraditionalRulershipTable.ruler(of: house.sign)
+            guard let ruler = planets.first(where: { $0.name == rulingPlanet }) else {
+                return nil
+            }
+            return HouseRuler(
+                houseNumber: house.number,
+                rulingPlanet: rulingPlanet,
+                rulerSign: ruler.sign,
+                rulerHouse: ruler.house,
+                rulerLongitude: ruler.longitude
+            )
+        }
 
         return NatalChart(
             birthDate: birthDetails.birthDate,
@@ -169,6 +184,7 @@ extension CachedNatalChart {
             planets: planets,
             houses: houses,
             aspects: aspects,
+            houseRulers: houseRulers,
             ascendant: ascendant,
             midheaven: midheaven,
             calculatedAt: generatedAt,
