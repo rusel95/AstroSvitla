@@ -354,6 +354,9 @@ struct PlanetMarker: View {
         case .uranus: return "♅"
         case .neptune: return "♆"
         case .pluto: return "♇"
+        case .trueNode: return "☊"  // North Node symbol
+        case .southNode: return "☋"  // South Node symbol
+        case .lilith: return "⚸"  // Lilith symbol
         }
     }
 
@@ -369,6 +372,9 @@ struct PlanetMarker: View {
         case .uranus: return .cyan
         case .neptune: return .blue
         case .pluto: return .indigo
+        case .trueNode: return .green  // North Node color
+        case .southNode: return .mint  // South Node color
+        case .lilith: return .purple.opacity(0.8)  // Lilith color
         }
     }
 }
