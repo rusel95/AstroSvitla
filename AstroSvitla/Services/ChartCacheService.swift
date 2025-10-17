@@ -29,19 +29,26 @@ final class ChartCacheService {
         imageFileID: String? = nil,
         imageFormat: String? = nil
     ) throws {
-        let cached = try fetchCachedChart(for: birthDetails) ?? CachedNatalChart()
-        let isNew = cached.persistentModelID == nil
-        
-        try cached.apply(
-            chart: chart,
-            birthDetails: birthDetails,
-            houseSystem: defaultHouseSystem,
-            imageFileID: imageFileID,
-            imageFormat: imageFormat
-        )
-
-        if isNew {
-            context.insert(cached)
+        if let existingCached = try fetchCachedChart(for: birthDetails) {
+            // Update existing cached chart
+            try existingCached.apply(
+                chart: chart,
+                birthDetails: birthDetails,
+                houseSystem: defaultHouseSystem,
+                imageFileID: imageFileID,
+                imageFormat: imageFormat
+            )
+        } else {
+            // Create and insert new cached chart
+            let newCached = CachedNatalChart()
+            try newCached.apply(
+                chart: chart,
+                birthDetails: birthDetails,
+                houseSystem: defaultHouseSystem,
+                imageFileID: imageFileID,
+                imageFormat: imageFormat
+            )
+            context.insert(newCached)
         }
 
         try context.save()
