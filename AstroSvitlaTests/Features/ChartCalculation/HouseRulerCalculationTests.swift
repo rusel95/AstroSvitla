@@ -1,5 +1,6 @@
 import Testing
 import Foundation
+import CoreLocation
 @testable import AstroSvitla
 
 /// Tests for house ruler calculation logic using traditional rulerships.
@@ -44,7 +45,10 @@ struct HouseRulerCalculationTests {
         let birthDetails = BirthDetails(
             name: "Test Person",
             birthDate: Date(timeIntervalSince1970: 315532800), // 1980-01-01
-            location: Location(name: "Test City", latitude: 50.0, longitude: 30.0, timeZone: TimeZone.current)
+            birthTime: Date(timeIntervalSince1970: 315532800),
+            location: "Test City",
+            timeZone: TimeZone.current,
+            coordinate: CLLocationCoordinate2D(latitude: 50.0, longitude: 30.0)
         )
         
         // Map to domain model
@@ -70,7 +74,10 @@ struct HouseRulerCalculationTests {
         let birthDetails = BirthDetails(
             name: "Test Person",
             birthDate: Date(timeIntervalSince1970: 315532800),
-            location: Location(name: "Test City", latitude: 50.0, longitude: 30.0, timeZone: TimeZone.current)
+            birthTime: Date(timeIntervalSince1970: 315532800),
+            location: "Test City",
+            timeZone: TimeZone.current,
+            coordinate: CLLocationCoordinate2D(latitude: 50.0, longitude: 30.0)
         )
         
         // Map to domain model
@@ -81,13 +88,13 @@ struct HouseRulerCalculationTests {
         
         // Find 1st house (Ascendant) ruler
         guard let ascendantRuler = natalChart.houseRulers.first(where: { $0.houseNumber == 1 }) else {
-            Issue.record("Ascendant ruler not found")
+            Issue.record(Comment(rawValue: "Ascendant ruler not found"))
             return
         }
         
         // Verify ascendant ruler matches the sign on the 1st house cusp
         guard let firstHouse = natalChart.houses.first(where: { $0.number == 1 }) else {
-            Issue.record("First house not found")
+            Issue.record(Comment(rawValue: "First house not found"))
             return
         }
         
@@ -111,7 +118,10 @@ struct HouseRulerCalculationTests {
         let birthDetails = BirthDetails(
             name: "Test Person",
             birthDate: Date(timeIntervalSince1970: 315532800),
-            location: Location(name: "Test City", latitude: 50.0, longitude: 30.0, timeZone: TimeZone.current)
+            birthTime: Date(timeIntervalSince1970: 315532800),
+            location: "Test City",
+            timeZone: TimeZone.current,
+            coordinate: CLLocationCoordinate2D(latitude: 50.0, longitude: 30.0)
         )
         
         let natalChart = try AstrologyAPIDTOMapper.toDomain(
@@ -135,7 +145,10 @@ struct HouseRulerCalculationTests {
         let birthDetails = BirthDetails(
             name: "Test Person",
             birthDate: Date(timeIntervalSince1970: 315532800),
-            location: Location(name: "Test City", latitude: 50.0, longitude: 30.0, timeZone: TimeZone.current)
+            birthTime: Date(timeIntervalSince1970: 315532800),
+            location: "Test City",
+            timeZone: TimeZone.current,
+            coordinate: CLLocationCoordinate2D(latitude: 50.0, longitude: 30.0)
         )
         
         let natalChart = try AstrologyAPIDTOMapper.toDomain(
