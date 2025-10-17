@@ -95,11 +95,28 @@ final class NatalChartService: NatalChartServiceProtocol {
     ) async throws -> NatalChart {
 
         log("🌌 Generate chart started for \(birthDetails.displayName) (\(birthDetails.formattedBirthDate) \(birthDetails.formattedBirthTime)) forceRefresh=\(forceRefresh)")
+        
+        // Check cache first if not forcing refresh
+        if !forceRefresh, let cachedChart = getCachedChart(birthDetails: birthDetails) {
+            log("✅ Returning cached chart")
+            return cachedChart
+        }
+        
         do {
             // Single API call to api.astrology-api.io for complete natal chart
             log("📡 Fetching natal chart from AstrologyAPI...")
             let natalChart = try await astrologyAPIService.generateNatalChart(birthDetails: birthDetails)
-            log("✅ Natal chart received")
+            log("✅ Natal chart received with \(natalChart.planets.count) planets, \(natalChart.houses.count) houses")
+            
+            // Cache the result
+            do {
+                try chartCacheService.saveChart(natalChart, birthDetails: birthDetails)
+                log("💾 Chart cached successfully")
+            } catch {
+                log("⚠️ Failed to cache chart: \(error.localizedDescription)")
+                // Don't throw - chart generation succeeded even if caching failed
+            }
+            
             return natalChart
         } catch {
             log("❌ Chart generation failed: \(error.localizedDescription)")
@@ -111,8 +128,7 @@ final class NatalChartService: NatalChartServiceProtocol {
     /// - Parameter birthDetails: Birth information to search for
     /// - Returns: Cached natal chart if found, nil otherwise
     func getCachedChart(birthDetails: BirthDetails) -> NatalChart? {
-    // Caching is not supported with astrology-api.io only integration
-    return nil
+        return try? chartCacheService.findChart(birthData: birthDetails)
     }
 
     /// Get cached chart by ID
