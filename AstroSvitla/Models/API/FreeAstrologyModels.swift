@@ -48,8 +48,8 @@ struct FreeAstrologyConfig: Codable {
             ayanamsha: "tropical",
             language: "en",
             excludePlanets: [
-                "Lilith", "Chiron", "Ceres", "Vesta", "Juno", "Pallas",
-                "True Node", "Mean Node", "IC", "Descendant"
+                "Chiron", "Ceres", "Vesta", "Juno", "Pallas",
+                "IC", "Descendant"
             ],
             allowedAspects: [
                 "Conjunction", "Opposition", "Trine", "Square", "Sextile"
