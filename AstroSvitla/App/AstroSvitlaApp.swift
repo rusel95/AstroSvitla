@@ -35,6 +35,10 @@ struct AstroSvitlaApp: App {
         let repoContext = RepositoryContext(context: sharedModelContainer.mainContext)
         repoContext.loadActiveProfile()
         _repositoryContext = StateObject(wrappedValue: repoContext)
+
+        // Initialize app language for localization
+        let prefs = AppPreferences()
+        setAppLanguage(prefs.selectedLanguageCode)
     }
 
     var body: some Scene {
