@@ -10,6 +10,7 @@ struct NatalChart: Codable, Sendable {
     let planets: [Planet]
     let houses: [House]
     let aspects: [Aspect]
+    let houseRulers: [HouseRuler]
 
     let ascendant: Double
     let midheaven: Double
