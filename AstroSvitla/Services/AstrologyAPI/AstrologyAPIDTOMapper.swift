@@ -7,9 +7,11 @@
 //
 
 import Foundation
+import SwiftData
 
 // MARK: - Main Mapper
 
+@MainActor
 enum AstrologyAPIDTOMapper {
     
     /// Convert birth details to API request format
@@ -93,6 +95,14 @@ enum AstrologyAPIDTOMapper {
         )
     }
     
+    /// Alias for toDomain (used by tests)
+    static func toDomainModel(
+        response: AstrologyAPINatalChartResponse,
+        birthDetails: BirthDetails
+    ) throws -> NatalChart {
+        return try toDomain(response: response, birthDetails: birthDetails)
+    }
+    
     // MARK: - Private Mapping Methods
     
     private static func mapPlanetsFromSubjectData(
@@ -111,7 +121,9 @@ enum AstrologyAPIDTOMapper {
             (subjectData.saturn, .saturn),
             (subjectData.uranus, .uranus),
             (subjectData.neptune, .neptune),
-            (subjectData.pluto, .pluto)
+            (subjectData.pluto, .pluto),
+            (subjectData.trueNode, .trueNode),
+            (subjectData.lilith, .lilith)
         ]
         
         for (body, planetType) in celestialBodies {
@@ -128,13 +140,32 @@ enum AstrologyAPIDTOMapper {
             ))
         }
         
+        // Compute South Node if True Node is present
+        if let trueNode = planets.first(where: { $0.name == .trueNode }) {
+            let southNodeLongitude = (trueNode.longitude + 180).truncatingRemainder(dividingBy: 360)
+            let southNodeSign = ZodiacSign.from(degree: southNodeLongitude)
+            let southNodeHouse = ((trueNode.house + 5) % 12) + 1 // Approximate opposite house
+            
+            let southNode = Planet(
+                name: .southNode,
+                longitude: southNodeLongitude,
+                latitude: 0,
+                sign: southNodeSign,
+                house: southNodeHouse,
+                isRetrograde: false,
+                speed: 0
+            )
+            
+            planets.append(southNode)
+        }
+        
         return planets
     }
     
     private static func mapPlanets(
         _ apiPlanets: [AstrologyAPIPlanetaryPosition]
     ) throws -> [Planet] {
-        return apiPlanets.compactMap { apiPlanet in
+        var planets = apiPlanets.compactMap { apiPlanet -> Planet? in
             guard let planetType = PlanetType.from(apiName: apiPlanet.name) else {
                 return nil // Skip unrecognized planets
             }
@@ -149,6 +180,31 @@ enum AstrologyAPIDTOMapper {
                 speed: apiPlanet.speed
             )
         }
+        
+        // Compute South Node if True Node is present but South Node is missing
+        if let trueNode = planets.first(where: { $0.name == PlanetType.trueNode }),
+           !planets.contains(where: { $0.name == PlanetType.southNode }) {
+            let southNodeLongitude = (trueNode.longitude + 180).truncatingRemainder(dividingBy: 360)
+            let southNodeSign = ZodiacSign.from(degree: southNodeLongitude)
+            
+            // Calculate house for South Node
+            // TODO: Implement proper house calculation based on house cusps
+            let southNodeHouse = ((trueNode.house + 5) % 12) + 1 // Approximate opposite house
+            
+            let southNode = Planet(
+                name: .southNode,
+                longitude: southNodeLongitude,
+                latitude: 0,
+                sign: southNodeSign,
+                house: southNodeHouse,
+                isRetrograde: false, // Nodes are always considered retrograde in motion
+                speed: -trueNode.speed // South Node moves opposite to True Node
+            )
+            
+            planets.append(southNode)
+        }
+        
+        return planets
     }
     
     private static func mapHouses(
@@ -229,6 +285,9 @@ extension PlanetType {
         case "uranus": return .uranus
         case "neptune": return .neptune
         case "pluto": return .pluto
+        case "true node", "true_node", "truenode": return .trueNode
+        case "south node", "south_node", "southnode": return .southNode
+        case "lilith", "mean lilith", "black moon": return .lilith
         default: return nil
         }
     }
