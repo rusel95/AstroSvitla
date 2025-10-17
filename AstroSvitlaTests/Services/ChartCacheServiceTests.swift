@@ -84,6 +84,7 @@ struct ChartCacheServiceTests {
             planets: planets,
             houses: houses,
             aspects: aspects,
+            houseRulers: [],
             ascendant: 15.0,
             midheaven: 275.0,
             calculatedAt: calculatedAt
