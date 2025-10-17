@@ -1,0 +1,144 @@
+### Astrology API (api.astrology-api.io) – Natal Chart + SVG Contracts
+
+# Authentication
+# - Use Bearer token in Authorization header
+# - API key stored in Config.astrologyAPIKey (do not commit real key)
+
+### Natal Chart Request
+POST https://api.astrology-api.io/api/v3/charts/natal
+Authorization: Bearer {{ASTROLOGY_API_KEY}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "subject": {
+    "name": "Test Subject",
+    "birth_data": {
+      "year": 1990,
+      "month": 3,
+      "day": 25,
+      "hour": 14,
+      "minute": 30,
+      "second": 0,
+      "city": "Kyiv",
+      "country_code": "UA"
+    }
+  },
+  "options": {
+    "house_system": "P",
+    "zodiac_type": "Tropic",
+    "precision": 2,
+    "active_points": [
+      "Sun","Moon","Mercury","Venus","Mars",
+      "Jupiter","Saturn","Uranus","Neptune","Pluto",
+      "True Node","Lilith"
+    ]
+  }
+}
+
+### Expected 200 Response (abridged)
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "subject_data": {
+    "name": "Test Subject",
+    "year": 1990,
+    "month": 3,
+    "day": 25,
+    "hour": 14,
+    "minute": 30,
+    "city": "Kyiv",
+    "nation": "UA",
+    "lng": 30.5234,
+    "lat": 50.4501,
+    "tz_str": "Europe/Kyiv"
+  },
+  "chart_data": {
+    "planetary_positions": [
+      {
+        "name": "Sun",
+        "sign": "Ari",
+        "position": 4.39,
+        "abs_pos": 4.39,
+        "house": "First_House",
+        "retrograde": false
+      },
+      {
+        "name": "True Node",
+        "sign": "Aqu",
+        "position": 4.70,
+        "abs_pos": 304.70,
+        "house": "Eleventh_House",
+        "retrograde": false
+      },
+      {
+        "name": "Lilith",
+        "sign": "Vir",
+        "position": 6.89,
+        "abs_pos": 156.89,
+        "house": "Sixth_House",
+        "retrograde": false
+      }
+    ],
+    "house_cusps": [
+      { "house": "First_House", "position": 15.00, "sign": "Ari" },
+      { "house": "Tenth_House", "position": 285.20, "sign": "Cap" }
+    ],
+    "aspects": [
+      { "point1": "Sun", "point2": "Moon", "type": "Trine", "orb": 0.32 },
+      { "point1": "True Node", "point2": "Venus", "type": "Square", "orb": 1.85 }
+    ]
+  }
+}
+
+---
+
+### Natal SVG Request
+POST https://api.astrology-api.io/api/v3/svg/natal
+Authorization: Bearer {{ASTROLOGY_API_KEY}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "subject": { /* same as natal request */ },
+  "options": {
+    "theme": "classic",
+    "language": "en",
+    "precision": 2,
+    "house_system": "P"
+  }
+}
+
+### Expected 200 Response (either JSON wrapper or raw SVG)
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+{
+  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"1024\" ...>..." }
+```
+
+or
+
+```
+HTTP/1.1 200 OK
+Content-Type: image/svg+xml
+<svg xmlns="http://www.w3.org/2000/svg">...</svg>
+```
+
+The client must:
+- Accept both representations (JSON wrapper or raw SVG text).
+- Cache SVG by `chart.id` using `ImageCacheService`.
+- Associate cached file ID with `NatalChart.imageFileID` and `imageFormat = "svg"`.
+
+---
+
+### Error Handling
+
+| HTTP Code | Reason | Action |
+|-----------|--------|--------|
+| 400 | Invalid payload | Surface validation error to user and log request body (without key) |
+| 401 | Missing/invalid key | Refresh key in Config; retry once after user prompt |
+| 429 | Rate limited | Respect `Retry-After` header or default to 60 seconds; rely on client `RateLimiter` |
+| 500 | Provider error | Retry with exponential backoff (max 2 attempts), then fail with user-friendly message |
