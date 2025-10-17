@@ -1,0 +1,371 @@
+### OpenAI Vector Store API Contract (Deferred)
+### STATUS: Vector store integration is paused for this iteration.
+### Keep this contract for future reactivation; current implementation uses a stub provider
+### that reports "Vector database was not used" while preserving payload structure.
+
+---
+### 1. One-Time Setup: Create Vector Store
+
+POST https://api.openai.com/v1/vector_stores
+Authorization: Bearer {{OPENAI_API_KEY}}
+Content-Type: application/json
+
+{
+  "name": "astrology-knowledge-base",
+  "expires_after": null,
+  "metadata": {
+    "project": "AstroSvitla",
+    "version": "1.0",
+    "language": "ukrainian"
+  }
+}
+
+### Expected Response:
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": "vs_abc123",
+  "object": "vector_store",
+  "name": "astrology-knowledge-base",
+  "status": "completed",
+  "file_counts": {
+    "total": 0,
+    "in_progress": 0,
+    "completed": 0
+  },
+  "created_at": 1729080000
+}
+
+---
+### 2. Upload Knowledge Files
+
+POST https://api.openai.com/v1/files
+Authorization: Bearer {{OPENAI_API_KEY}}
+Content-Type: multipart/form-data
+
+### File format: JSONL with metadata
+### Each line:
+{
+  "text": "North Node in Taurus in the 3rd house indicates a soul's journey from...",
+  "metadata": {
+    "book_title": "The Inner Sky",
+    "author": "Steven Forrest",
+    "chapter": "Chapter 8: The Lunar Nodes",
+    "page_range": "pp. 156-162",
+    "topic": "karmic_nodes",
+    "area": "general"
+  }
+}
+
+### Expected Response:
+HTTP/1.1 200 OK
+
+{
+  "id": "file_xyz789",
+  "object": "file",
+  "bytes": 245600,
+  "created_at": 1729080100,
+  "filename": "astrology-nodes.jsonl",
+  "purpose": "assistants"
+}
+
+---
+### 3. Attach Files to Vector Store
+
+POST https://api.openai.com/v1/vector_stores/vs_abc123/files
+Authorization: Bearer {{OPENAI_API_KEY}}
+Content-Type: application/json
+
+{
+  "file_id": "file_xyz789"
+}
+
+### Expected Response:
+HTTP/1.1 200 OK
+
+{
+  "id": "vsf_def456",
+  "object": "vector_store.file",
+  "vector_store_id": "vs_abc123",
+  "file_id": "file_xyz789",
+  "status": "completed"
+}
+
+---
+### 4. Query Vector Store (Per-Report)
+
+POST https://api.openai.com/v1/chat/completions
+Authorization: Bearer {{OPENAI_API_KEY}}
+Content-Type: application/json
+
+{
+  "model": "gpt-4o",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a professional astrologer. Use the knowledge base to generate reports."
+    },
+    {
+      "role": "user",
+      "content": "Generate a general overview report for: North Node in Taurus 3rd house, South Node in Scorpio 9th house..."
+    }
+  ],
+  "tools": [
+    {
+      "type": "file_search",
+      "file_search": {
+        "vector_store_ids": ["vs_abc123"],
+        "max_num_results": 20
+      }
+    }
+  ],
+  "tool_choice": "required",
+  "metadata": {
+    "chart_hash": "abc123def456",
+    "area": "general"
+  }
+}
+
+### Expected Response:
+HTTP/1.1 200 OK
+
+{
+  "id": "chatcmpl_789xyz",
+  "object": "chat.completion",
+  "model": "gpt-4o",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"summary\": \"...\", \"key_influences\": [...], ...}",
+        "tool_calls": [
+          {
+            "id": "call_abc123",
+            "type": "file_search",
+            "file_search": {
+              "results": [
+                {
+                  "file_id": "file_xyz789",
+                  "file_name": "astrology-nodes.jsonl",
+                  "score": 0.94,
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "North Node in Taurus in the 3rd house indicates..."
+                    }
+                  ],
+                  "metadata": {
+                    "book_title": "The Inner Sky",
+                    "author": "Steven Forrest",
+                    "chapter": "Chapter 8: The Lunar Nodes",
+                    "page_range": "pp. 156-162"
+                  }
+                },
+                {
+                  "file_id": "file_xyz789",
+                  "file_name": "astrology-nodes.jsonl",
+                  "score": 0.89,
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "The 3rd-9th house axis represents..."
+                    }
+                  ],
+                  "metadata": {
+                    "book_title": "Houses of the Horoscope",
+                    "author": "Alan Oken",
+                    "chapter": "Chapter 3: The Learning Axis",
+                    "page_range": "pp. 45-52"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1250,
+    "completion_tokens": 850,
+    "total_tokens": 2100
+  }
+}
+
+---
+### 5. Parse Sources from Response
+
+**Swift Implementation**:
+```swift
+struct VectorStoreResult {
+    let snippets: [KnowledgeSnippet]
+    let usage: TokenUsage
+}
+
+struct KnowledgeSnippet {
+    let text: String
+    let bookTitle: String
+    let author: String?
+    let chapter: String?
+    let pageRange: String?
+    let relevanceScore: Double
+}
+
+func parseVectorStoreResponse(_ response: ChatResult) -> VectorStoreResult {
+    guard let toolCall = response.choices.first?.message.toolCalls?.first,
+          case .fileSearch(let fileSearch) = toolCall.type else {
+        return VectorStoreResult(snippets: [], usage: response.usage)
+    }
+    
+    let snippets = fileSearch.results.map { result in
+        KnowledgeSnippet(
+            text: result.content.first?.text ?? "",
+            bookTitle: result.metadata["book_title"] as? String ?? "Unknown",
+            author: result.metadata["author"] as? String,
+            chapter: result.metadata["chapter"] as? String,
+            pageRange: result.metadata["page_range"] as? String,
+            relevanceScore: result.score
+        )
+    }
+    
+    return VectorStoreResult(snippets: snippets, usage: response.usage)
+}
+```
+
+---
+### Cost Calculation
+
+**Storage**:
+- 20 books × 300 pages × 2KB = 12MB
+- Cost: $0.10/GB/day = $0.0012/day
+
+**Query**:
+- File search: $0.03 per 1M tokens
+- Avg query: ~500 tokens
+- Cost per query: $0.015
+
+**Total per report**: ~$0.02 (10% of $0.10 budget)
+
+---
+### Metadata Schema
+
+**Required fields**:
+- `book_title`: String (max 200 chars)
+- `text`: String (the actual knowledge snippet)
+
+**Optional fields**:
+- `author`: String (max 100 chars)
+- `chapter`: String (max 100 chars)
+- `page_range`: String (e.g., "pp. 87-92")
+- `topic`: Enum (karmic_nodes, house_rulers, aspects, lilith, etc.)
+- `area`: Enum (finances, career, relationships, health, general)
+
+**Filtering**:
+Use metadata filters in query:
+```json
+{
+  "tools": [
+    {
+      "type": "file_search",
+      "file_search": {
+        "vector_store_ids": ["vs_abc123"],
+        "max_num_results": 20,
+        "ranking_options": {
+          "score_threshold": 0.7
+        }
+      }
+    }
+  ]
+}
+```
+
+---
+### Error Handling
+
+**Vector Store Not Found**:
+```json
+{
+  "error": {
+    "message": "No such vector store: vs_abc123",
+    "type": "invalid_request_error",
+    "code": "resource_not_found"
+  }
+}
+```
+**Action**: Log error, fall back to empty sources, continue with AI general knowledge
+
+**Query Timeout** (>10s):
+**Action**: Cancel request, return cached results if available, otherwise empty sources
+
+**Rate Limit Exceeded**:
+```json
+{
+  "error": {
+    "message": "Rate limit reached for requests",
+    "type": "rate_limit_error"
+  }
+}
+```
+**Action**: Retry with exponential backoff (max 3 attempts), then fall back to cache or empty sources
+
+---
+### Caching Strategy
+
+**Cache Key**: SHA256 hash of chart configuration + report area
+```swift
+func cacheKey(chart: NatalChart, area: ReportArea) -> String {
+    let components = [
+        chart.ascendant,
+        chart.midheaven,
+        chart.planets.map { "\($0.name):\($0.longitude)" }.joined(),
+        area.rawValue
+    ].joined(separator: "|")
+    
+    return components.sha256()
+}
+```
+
+**Cache Storage**:
+- In-memory NSCache with 1000 entry limit
+- TTL: None (cache persists for app lifetime)
+- Eviction: LRU (automatic via NSCache)
+
+**Cache Hit**:
+- Skip vector store query
+- Return cached snippets immediately
+- Set `KnowledgeUsageMetrics.cacheHit = true`
+
+**Cache Miss**:
+- Query vector store
+- Store results in cache
+- Set `KnowledgeUsageMetrics.cacheHit = false`
+
+---
+### Testing Contract
+
+**Test Query**:
+```http
+POST https://api.openai.com/v1/chat/completions
+Authorization: Bearer {{TEST_API_KEY}}
+
+{
+  "model": "gpt-4o",
+  "messages": [
+    { "role": "user", "content": "Test vector store: North Node in Taurus 3rd house" }
+  ],
+  "tools": [{ "type": "file_search", "file_search": { "vector_store_ids": ["vs_test"] } }]
+}
+```
+
+**Expected**:
+- Status: 200
+- Results: Array length ≥ 10
+- Each result has: score ≥ 0.7, metadata.book_title present, content.text non-empty
+
+**Failure Cases**:
+1. Empty results → Verify vector store populated, check query text
+2. Low scores (<0.5) → Refine query, check embedding quality
+3. Missing metadata → Verify JSONL file format during upload
