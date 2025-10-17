@@ -47,7 +47,7 @@ struct AIPromptBuilder {
         {
           "summary": "1-2 речення короткого підсумку українською.",
           "key_influences": ["10 марковані пунктів з ключовими впливами (ОБОВ'ЯЗКОВО для всіх планет: Сонце, Місяць, Меркурій, Венера, Марс, Юпітер, Сатурн, Уран, Нептун, Плутон)"],
-          "detailed_analysis": "Розгорнутий аналіз 6-8 абзаців українською, який ОБОВ'ЯЗКОВО містить:\n1. Детальне роз'яснення про ВСІ аспекти між усіма планетами в даній натальній карті (з посиланням на конкретні кути та орби)\n2. Роз'яснення про розташування кармічних вузлів (Північний та Південний вузли) і їх значення в даній карті\n3. Роз'яснення про існуючі аспекти між кармічними вузлами та іншими планетами\n4. Роз'яснення про розміщення і значення Ліліт (Чорна Місяць) в даній натальній карті\n5. Аналіз управителів полів (домів) в даній НК: де вони знаходяться, чим управляють і що це значить для життя людини",
+          "detailed_analysis": "Розгорнутий аналіз 6-8 абзаців українською, який ОБОВ'ЯЗКОВО містить:\n1. Пояснення Асцендента (знак і значення для особистості та підходу до життя)\n2. Пояснення Середини Неба/MC (знак і значення для кар'єри, репутації та життєвого напрямку)\n3. Роз'яснення про розташування кармічних вузлів (Північний вузол - куди йти, Південний вузол - що залишити позаду), їх дома та осі домів\n4. Роз'яснення про існуючі аспекти між кармічними вузлами та іншими планетами\n5. Роз'яснення про розміщення і значення Ліліт/Чорної Місяць (знак, дім, тіньові теми)\n6. Аналіз управителів домів (особливо Асцендента, 7-го та 10-го домів): де вони знаходяться і що це означає\n7. Детальний аналіз мінімум 20 найтісніших аспектів між планетами (з посиланням на конкретні кути та орби)",
           "recommendations": ["3-4 практичні поради українською, починай з дієслова."],
           "knowledge_usage": {
             "vector_source_used": true або false,
@@ -133,11 +133,22 @@ struct AIPromptBuilder {
             lines.append("- Дім \(house.number): \(format(degree: house.cusp)) у \(house.sign.rawValue)")
         }
 
-        // Major Aspects
+        // House Rulers (key ones)
+        if !chart.houseRulers.isEmpty {
+            lines.append("\nУправителі домів (ключові):")
+            // Show Ascendant ruler (1st house), 7th house (relationships), 10th house (career)
+            for houseNum in [1, 7, 10] {
+                if let ruler = chart.houseRulers.first(where: { $0.houseNumber == houseNum }) {
+                    lines.append("- Дім \(houseNum) управляється \(ruler.rulingPlanet.rawValue) (у \(ruler.rulerSign.rawValue), дім \(ruler.rulerHouse))")
+                }
+            }
+        }
+
+        // Major Aspects (expanded to 20)
         if !chart.aspects.isEmpty {
-            lines.append("\nОсновні аспекти (орб <\(String(format: "%.1f", chart.aspects.first?.orb ?? 0))°):")
-            for aspect in chart.aspects.prefix(8) {
-                lines.append("- \(aspect.planet1.rawValue) \(aspect.type.rawValue) \(aspect.planet2.rawValue) (орб: \(String(format: "%.2f", aspect.orb))°)")
+            lines.append("\nОсновні аспекти (20 найтісніших, відсортовано за орбом):")
+            for (index, aspect) in chart.aspects.prefix(20).enumerated() {
+                lines.append("- \(index + 1). \(aspect.planet1.rawValue) \(aspect.type.rawValue) \(aspect.planet2.rawValue) (орб: \(String(format: "%.2f", aspect.orb))°)")
             }
         }
 
