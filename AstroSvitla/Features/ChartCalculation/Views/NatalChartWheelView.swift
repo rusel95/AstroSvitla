@@ -227,6 +227,12 @@ struct AspectLine: View {
         case .trine: return .green
         case .square: return .orange
         case .sextile: return .purple
+        case .quincunx: return .brown
+        case .semisextile: return .cyan
+        case .semisquare: return .pink
+        case .sesquisquare: return .indigo
+        case .quintile: return .mint
+        case .biquintile: return .teal
         }
     }
 
@@ -237,6 +243,12 @@ struct AspectLine: View {
         case .trine: return 2.0
         case .square: return 1.5
         case .sextile: return 1.5
+        case .quincunx: return 1.0
+        case .semisextile: return 1.0
+        case .semisquare: return 1.0
+        case .sesquisquare: return 1.0
+        case .quintile: return 0.8
+        case .biquintile: return 0.8
         }
     }
 
@@ -247,6 +259,12 @@ struct AspectLine: View {
         case .trine: return []
         case .square: return [5, 3]
         case .sextile: return [3, 2]
+        case .quincunx: return [4, 4]
+        case .semisextile: return [2, 3]
+        case .semisquare: return [2, 2]
+        case .sesquisquare: return [3, 3]
+        case .quintile: return [1, 2]
+        case .biquintile: return [1, 2]
         }
     }
 }
