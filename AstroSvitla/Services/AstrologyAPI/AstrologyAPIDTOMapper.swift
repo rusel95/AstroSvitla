@@ -226,7 +226,7 @@ enum AstrologyAPIDTOMapper {
     private static func mapAspects(
         _ apiAspects: [AstrologyAPIAspect]
     ) throws -> [Aspect] {
-        let allAspects = apiAspects.compactMap { apiAspect in
+        let allAspects: [Aspect] = apiAspects.compactMap { apiAspect -> Aspect? in
             guard let planet1 = PlanetType.from(apiName: apiAspect.point1),
                   let planet2 = PlanetType.from(apiName: apiAspect.point2),
                   let aspectType = AspectType.from(apiName: apiAspect.aspectType) else {
