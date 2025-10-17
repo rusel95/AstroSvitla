@@ -66,7 +66,7 @@ extension CachedNatalChart {
             birthDate = details.birthDate
             birthTime = details.birthTime
             location = details.location
-            timeZoneIdentifier = details.timeZone.identifier ?? TimeZone.current.identifier
+            timeZoneIdentifier = details.timeZone.identifier
             latitude = details.coordinate?.latitude
             longitude = details.coordinate?.longitude
         }
@@ -130,7 +130,7 @@ extension CachedNatalChart {
             return false
         }
 
-        let timeZoneIdentifier = birthDetails.timeZone.identifier ?? TimeZone.current.identifier
+        let timeZoneIdentifier = birthDetails.timeZone.identifier
         let coordinatesMatch: Bool
 
         switch (cached.latitude, cached.longitude, birthDetails.coordinate) {
