@@ -1,0 +1,208 @@
+### Astrology API - Nodes and Lilith Request
+### This contract shows how to request North Node, South Node, and Lilith
+### from the astronomy calculation APIs after removing exclusions.
+
+---
+### Free Astrology API - With Nodes and Lilith
+
+POST https://json.freeastrologyapi.com/western/planets
+Content-Type: application/json
+x-api-key: {{apiKey}}
+
+{
+  "year": 1990,
+  "month": 3,
+  "date": 25,
+  "hours": 14,
+  "minutes": 30,
+  "seconds": 0,
+  "latitude": 50.4501,
+  "longitude": 30.5234,
+  "timezone": 3.0,
+  "config": {
+    "observation_point": "topocentric",
+    "ayanamsha": "tropical",
+    "language": "en",
+    "exclude_planets": []
+  }
+}
+
+### Expected Response:
+### Status: 200 OK
+### Content-Type: application/json
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "statusCode": 200,
+  "output": [
+    {
+      "planet": { "en": "Sun" },
+      "fullDegree": 4.391915,
+      "normDegree": 4.391915,
+      "isRetro": "false",
+      "zodiac_sign": { "number": 0, "name": { "en": "Aries" } }
+    },
+    {
+      "planet": { "en": "Moon" },
+      "fullDegree": 123.456789,
+      "normDegree": 3.456789,
+      "isRetro": "false",
+      "zodiac_sign": { "number": 3, "name": { "en": "Cancer" } }
+    },
+    {
+      "planet": { "en": "True Node" },
+      "fullDegree": 304.7,
+      "normDegree": 4.7,
+      "isRetro": "false",
+      "zodiac_sign": { "number": 10, "name": { "en": "Aquarius" } }
+    },
+    {
+      "planet": { "en": "Lilith" },
+      "fullDegree": 156.89,
+      "normDegree": 6.89,
+      "isRetro": "false",
+      "zodiac_sign": { "number": 5, "name": { "en": "Virgo" } }
+    }
+  ]
+}
+
+---
+### Astrology API (api.astrology-api.io) - With Nodes and Lilith
+
+POST https://api.astrology-api.io/api/v3/charts/natal
+Content-Type: application/json
+
+{
+  "subject": {
+    "name": "Test Subject",
+    "birth_data": {
+      "year": 1990,
+      "month": 3,
+      "day": 25,
+      "hour": 14,
+      "minute": 30,
+      "second": 0,
+      "city": "Kyiv",
+      "country_code": "UA"
+    }
+  },
+  "options": {
+    "house_system": "P",
+    "zodiac_type": "Tropic",
+    "active_points": [
+      "Sun",
+      "Moon",
+      "Mercury",
+      "Venus",
+      "Mars",
+      "Jupiter",
+      "Saturn",
+      "Uranus",
+      "Neptune",
+      "Pluto",
+      "True Node",
+      "Lilith"
+    ],
+    "precision": 2
+  }
+}
+
+### Expected Response:
+### Status: 200 OK
+### Content-Type: application/json
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "subject_data": {
+    "name": "Test Subject",
+    "year": 1990,
+    "month": 3,
+    "day": 25,
+    "hour": 14,
+    "minute": 30,
+    "city": "Kyiv",
+    "nation": "UA",
+    "lng": 30.5234,
+    "lat": 50.4501,
+    "tz_str": "Europe/Kiev"
+  },
+  "chart_data": {
+    "planetary_positions": [
+      {
+        "name": "Sun",
+        "sign": "Ari",
+        "position": 4.39,
+        "abs_pos": 4.39,
+        "house": "First_House",
+        "retrograde": false
+      },
+      {
+        "name": "True Node",
+        "sign": "Aqu",
+        "position": 4.70,
+        "abs_pos": 304.70,
+        "house": "Eleventh_House",
+        "retrograde": false
+      },
+      {
+        "name": "Lilith",
+        "sign": "Vir",
+        "position": 6.89,
+        "abs_pos": 156.89,
+        "house": "Sixth_House",
+        "retrograde": false
+      }
+    ],
+    "house_cusps": [
+      { "house": "First_House", "position": 15.0, "sign": "Ari" }
+    ]
+  }
+}
+
+---
+### Mapping Notes
+
+**Free Astrology API**:
+- Node: Look for `planet.en == "True Node"`
+- South Node: Calculate as `(northNodeLongitude + 180) % 360`
+- Lilith: Look for `planet.en == "Lilith"`
+- House placement: Calculate from `fullDegree` and house cusps
+
+**Astrology API**:
+- Node: Look for `name == "True Node"`
+- South Node: Calculate as `(northNodePosition + 180) % 360`  
+- Lilith: Look for `name == "Lilith"`
+- House placement: Provided in `house` field
+
+**Validation**:
+- Verify longitude is 0-360
+- Verify zodiac sign matches calculated sign from longitude
+- Calculate house number from house cusps if not provided
+- South Node must be exactly 180° opposite North Node
+
+---
+### Error Cases
+
+**Missing Node Data**:
+```json
+{
+  "statusCode": 200,
+  "output": [
+    // Node not in response
+  ]
+}
+```
+**Action**: Log error, attempt backup calculation, flag report as "partial data"
+
+**Invalid Longitude**:
+```json
+{
+  "planet": { "en": "True Node" },
+  "fullDegree": -5.0  // Invalid!
+}
+```
+**Action**: Reject response, throw MappingError.invalidPlanetData
