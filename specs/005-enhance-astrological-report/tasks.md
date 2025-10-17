@@ -8,16 +8,16 @@
 ## Phase 1 – Setup
 | Task ID | Description | Deliverable |
 |---------|-------------|-------------|
-| T001 [Setup] | Update `AstroSvitla/Config/Config.swift` and `AstroSvitla/Config/Config.swift.example` to keep only astrology-api.io placeholders (base URL, API key, rate limits) and add doc comments pointing to `quickstart.md`. | Sanitised config files with legacy providers removed. |
+| [X] T001 [Setup] | Update `AstroSvitla/Config/Config.swift` and `AstroSvitla/Config/Config.swift.example` to keep only astrology-api.io placeholders (base URL, API key, rate limits) and add doc comments pointing to `quickstart.md`. | Sanitised config files with legacy providers removed. |
 
 ---
 
 ## Phase 2 – Foundational Prerequisites
 | Task ID | Description | Deliverable |
 |---------|-------------|-------------|
-| T002 [Foundational] | Capture a canonical natal chart payload from astrology-api.io and store it as `specs/005-enhance-astrological-report/contracts/fixtures/natal-chart-sample.json` for reuse in tests and docs. | JSON fixture committed under `contracts/fixtures/`. |
-| T003 [Foundational] | Add caching regression test in `AstroSvitlaTests/Core/Storage/ModelContainerSharedTests.swift` asserting that `ChartCacheService` returns a cached chart when offline (using mocked `NetworkMonitor`). | New XCTest covering offline cache behaviour. |
-| T004 [Foundational] | Introduce a `KnowledgeSourceProvider` protocol in `AstroSvitla/Features/ReportGeneration/Services/AstrologyKnowledgeProvider.swift` and update call sites for dependency injection (no functional change). | Protocol-based knowledge provider ready for stub implementation. |
+| [X] T002 [Foundational] | Capture a canonical natal chart payload from astrology-api.io and store it as `specs/005-enhance-astrological-report/contracts/fixtures/natal-chart-sample.json` for reuse in tests and docs. | JSON fixture committed under `contracts/fixtures/`. |
+| [X] T003 [Foundational] | Add caching regression test in `AstroSvitlaTests/Core/Storage/ModelContainerSharedTests.swift` asserting that `ChartCacheService` returns a cached chart when offline (using mocked `NetworkMonitor`). | New XCTest covering offline cache behaviour. |
+| [X] T004 [Foundational] | Introduce a `KnowledgeSourceProvider` protocol in `AstroSvitla/Features/ReportGeneration/Services/AstrologyKnowledgeProvider.swift` and update call sites for dependency injection (no functional change). | Protocol-based knowledge provider ready for stub implementation. |
 
 ---
 
@@ -27,9 +27,9 @@
 
 | Task ID | Description | Deliverable |
 |---------|-------------|-------------|
-| T005 [Story US1] | Create failing contract test `AstroSvitlaTests/Features/ChartCalculation/AstrologyAPIContractTests.swift` using the new fixture to assert presence of True Node, computed South Node, and Lilith. | Red XCT test covering node & Lilith expectations. |
-| T006 [Story US1] | Implement DTOs and mapper updates in `AstroSvitla/Models/API/AstrologyAPI/` (response models + `AstrologyAPIDTOMapper`) to populate nodes, Lilith, ascendant, and midheaven. | Green mapper translating API payload into domain models. |
-| T007 [Story US1] | Refactor `AstroSvitla/Services/AstrologyAPI/AstrologyAPIService.swift` and `AstroSvitla/Services/NatalChartService.swift` to call `/api/v3/charts/natal`, honour rate limiting, and persist mapped data while keeping existing cache writes intact. | Service layer using new provider with caching unchanged. |
+| [X] T005 [Story US1] | Create failing contract test `AstroSvitlaTests/Features/ChartCalculation/AstrologyAPIContractTests.swift` using the new fixture to assert presence of True Node, computed South Node, and Lilith. | Red XCT test covering node & Lilith expectations. |
+| [X] T006 [Story US1] | Implement DTOs and mapper updates in `AstroSvitla/Models/API/AstrologyAPI/` (response models + `AstrologyAPIDTOMapper`) to populate nodes, Lilith, ascendant, and midheaven. | Green mapper translating API payload into domain models. |
+| [X] T007 [Story US1] | Refactor `AstroSvitla/Services/AstrologyAPI/AstrologyAPIService.swift` and `AstroSvitla/Services/NatalChartService.swift` to call `/api/v3/charts/natal`, honour rate limiting, and persist mapped data while keeping existing cache writes intact. | Service layer using new provider with caching unchanged. |
 
 **Checkpoint**: US1 data requests return accurate nodes/Lilith, tests pass, cache persists enriched charts.
 
@@ -41,9 +41,9 @@
 
 | Task ID | Description | Deliverable |
 |---------|-------------|-------------|
-| T008 [Story US2] | Add failing `HouseRulerCalculationTests` under `AstroSvitlaTests/Features/ChartCalculation/` covering 12 houses, ascendant ruler focus, and sample chart assertions. | Red XCT tests for house ruler outcomes. |
-| T009 [Story US2] | Finalise `TraditionalRulershipTable` in `AstroSvitla/Shared/Utilities/TraditionalRulershipTable.swift` and extend mapper logic to generate 12 `HouseRuler` entries. | Traditional rulership lookup usable by chart mapper. |
-| T010 [Story US2] | Update `AstroSvitla/Services/NatalChartService.swift` and `AstroSvitla/Services/ChartCacheService.swift` to persist computed house rulers and expose them via cached charts. | House rulers cached & retrievable across launches. |
+| [X] T008 [Story US2] | Add failing `HouseRulerCalculationTests` under `AstroSvitlaTests/Features/ChartCalculation/` covering 12 houses, ascendant ruler focus, and sample chart assertions. | Red XCT tests for house ruler outcomes. |
+| [X] T009 [Story US2] | Finalise `TraditionalRulershipTable` in `AstroSvitla/Shared/Utilities/TraditionalRulershipTable.swift` and extend mapper logic to generate 12 `HouseRuler` entries. | Traditional rulership lookup usable by chart mapper. |
+| [X] T010 [Story US2] | Update `AstroSvitla/Services/NatalChartService.swift` and `AstroSvitla/Services/ChartCacheService.swift` to persist computed house rulers and expose them via cached charts. | House rulers cached & retrievable across launches. |
 
 **Checkpoint**: US2 exposes 12 house rulers with deterministic tests and cached persistence.
 
