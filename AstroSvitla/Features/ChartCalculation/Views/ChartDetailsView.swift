@@ -180,6 +180,7 @@ struct ChartDetailsView: View {
                 planets: [],
                 houses: [],
                 aspects: [],
+                houseRulers: [],
                 ascendant: 127.5,
                 midheaven: 215.3,
                 calculatedAt: Date()
