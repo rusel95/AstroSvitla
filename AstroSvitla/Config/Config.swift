@@ -21,29 +21,9 @@ enum Config {
     /// Base URL for OpenAI API requests
     static let openAIBaseURL = "https://api.openai.com/v1"
 
-    // MARK: - Prokerala API Configuration
-
-    /// Prokerala OAuth2 client identifier
-    /// Retrieve from https://api.prokerala.com/ dashboard
-    static let prokeralaClientID = "89986136-65ba-4a75-aec3-d8e0f703e2e2"
-
-    /// Prokerala OAuth2 client secret
-    /// Keep secret local only (Config.swift is gitignored)
-    static let prokeralaClientSecret = "O1LSNIuy7HtwzNjY2atcOQA1hWzbP5p9gplnbWYX"
-
-    /// Base URL for Prokerala API endpoints
-    static let prokeralaAPIBaseURL = "https://api.prokerala.com/v2"
-
-    // MARK: - Free Astrology API Configuration
-
-    /// Free Astrology API key
-    /// Sign up at https://freeastrologyapi.com/signup to obtain an API key
-    /// Keep secret local only (Config.swift is gitignored)
-    static let freeAstrologyAPIKey = ProcessInfo.processInfo.environment["FREE_ASTROLOGY_API_KEY"] ?? "YOUR_FREE_ASTROLOGY_API_KEY_HERE"
-
-    /// Base URL for Free Astrology API endpoints
-    static let freeAstrologyBaseURL = "https://json.freeastrologyapi.com"
-
+    /// Identifier of the OpenAI vector store that contains the astrology knowledge base
+    static let openAIVectorStoreID = ProcessInfo.processInfo.environment["OPENAI_VECTOR_STORE_ID"] ?? "YOUR_OPENAI_VECTOR_STORE_ID_HERE"
+    
     // MARK: - Astrology API Configuration (api.astrology-api.io)
 
     /// Astrology API base URL
