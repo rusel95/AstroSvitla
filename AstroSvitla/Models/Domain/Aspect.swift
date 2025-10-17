@@ -6,6 +6,12 @@ enum AspectType: String, Codable, Sendable {
     case trine = "Trine"
     case square = "Square"
     case sextile = "Sextile"
+    case quincunx = "Quincunx"
+    case semisextile = "Semisextile"
+    case semisquare = "Semisquare"
+    case sesquisquare = "Sesquisquare"
+    case quintile = "Quintile"
+    case biquintile = "Biquintile"
 
     var angle: Double {
         switch self {
@@ -14,6 +20,12 @@ enum AspectType: String, Codable, Sendable {
         case .trine: return 120
         case .square: return 90
         case .sextile: return 60
+        case .quincunx: return 150
+        case .semisextile: return 30
+        case .semisquare: return 45
+        case .sesquisquare: return 135
+        case .quintile: return 72
+        case .biquintile: return 144
         }
     }
 
@@ -22,6 +34,8 @@ enum AspectType: String, Codable, Sendable {
         case .conjunction, .opposition: return 8.0
         case .trine, .square: return 7.0
         case .sextile: return 6.0
+        case .quincunx, .semisextile, .semisquare, .sesquisquare: return 3.0
+        case .quintile, .biquintile: return 2.0
         }
     }
 }
