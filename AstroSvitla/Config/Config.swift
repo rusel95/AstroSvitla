@@ -85,25 +85,9 @@ enum Config {
         openAIAPIKey != "YOUR_OPENAI_API_KEY_HERE"
     }
 
-    static var isProkeralaAPIConfigured: Bool {
-        !prokeralaClientID.isEmpty &&
-        prokeralaClientID != "YOUR_PROKERALA_CLIENT_ID_HERE" &&
-        !prokeralaClientSecret.isEmpty &&
-        prokeralaClientSecret != "YOUR_PROKERALA_CLIENT_SECRET_HERE"
-    }
-
-    static var isFreeAstrologyAPIConfigured: Bool {
-        !freeAstrologyAPIKey.isEmpty &&
-        freeAstrologyAPIKey != "YOUR_FREE_ASTROLOGY_API_KEY_HERE"
-    }
-
     static func validate() throws {
         guard isOpenAIConfigured else {
             throw ConfigError.missingAPIKey("OpenAI API key not configured in Config.swift")
-        }
-
-        guard isProkeralaAPIConfigured else {
-            throw ConfigError.missingAPIKey("Prokerala API client credentials not configured in Config.swift")
         }
     }
 }
