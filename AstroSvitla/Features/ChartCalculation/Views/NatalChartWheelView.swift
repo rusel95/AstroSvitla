@@ -442,6 +442,7 @@ private func polarToCartesian(center: CGPoint, radius: CGFloat, angle: Double) -
             ],
             houses: (1...12).map { House(id: UUID(), number: $0, cusp: Double($0 - 1) * 30, sign: ZodiacSign.allCases[($0 - 1) % 12]) },
             aspects: [],
+            houseRulers: [],
             ascendant: 127.5,
             midheaven: 215.3,
             calculatedAt: Date()
