@@ -159,7 +159,7 @@ struct HouseRulerCalculationTests {
         // For each house, verify its ruler matches the traditional ruler of the cusp sign
         for house in natalChart.houses {
             guard let houseRuler = natalChart.houseRulers.first(where: { $0.houseNumber == house.number }) else {
-                Issue.record("No ruler found for house \(house.number)")
+                Issue.record(Comment(rawValue: "No ruler found for house \(house.number)"))
                 continue
             }
             
