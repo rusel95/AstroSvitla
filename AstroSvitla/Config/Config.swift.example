@@ -11,13 +11,18 @@ import Foundation
 
 enum Config {
 
+    /// Refer to `specs/005-enhance-astrological-report/quickstart.md` for instructions on how to populate these placeholders.
+
     // MARK: - OpenAI Configuration
+
+    /// Replace with your project-specific OpenAI project identifier
+    static let openAIProjectID = "YOUR_OPENAI_PROJECT_ID_HERE"
 
     /// Replace with your project-specific OpenAI API key
     static let openAIAPIKey = "YOUR_OPENAI_API_KEY_HERE"
 
     /// Identifier of the OpenAI vector store that contains the astrology knowledge base
-    static let openAIVectorStoreID = ProcessInfo.processInfo.environment["OPENAI_VECTOR_STORE_ID"] ?? "YOUR_OPENAI_VECTOR_STORE_ID_HERE"
+    static let openAIVectorStoreID = "YOUR_OPENAI_VECTOR_STORE_ID_HERE"
 
     /// OpenAI model to use for report generation
     static let openAIModel = "gpt-4o"
@@ -25,38 +30,16 @@ enum Config {
     /// Base URL for OpenAI API requests
     static let openAIBaseURL = "https://api.openai.com/v1"
 
-    // MARK: - Prokerala API Configuration
-
-    /// Prokerala OAuth2 client identifier
-    /// Obtain from https://api.prokerala.com/ dashboard (Sandbox or Production)
-    static let prokeralaClientID = "YOUR_PROKERALA_CLIENT_ID_HERE"
-
-    /// Prokerala OAuth2 client secret
-    /// Keep this value local and never commit it to source control
-    static let prokeralaClientSecret = "YOUR_PROKERALA_CLIENT_SECRET_HERE"
-
-    /// Base URL for Prokerala API endpoints (v2)
-    static let prokeralaAPIBaseURL = "https://api.prokerala.com/v2"
-
-    // MARK: - Free Astrology API Configuration
-
-    /// Free Astrology API key
-    /// Sign up at https://freeastrologyapi.com/signup to obtain an API key
-    /// Free tier: 50 requests/day (sufficient for testing)
-    /// Keep this value local and never commit it to source control
-    static let freeAstrologyAPIKey = ProcessInfo.processInfo.environment["FREE_ASTROLOGY_API_KEY"] ?? "YOUR_FREE_ASTROLOGY_API_KEY_HERE"
-
-    /// Base URL for Free Astrology API endpoints
-    static let freeAstrologyBaseURL = "https://json.freeastrologyapi.com"
-
     // MARK: - Astrology API Configuration (api.astrology-api.io)
 
-    /// Astrology API base URL
-    /// No authentication required - open API
+    /// Base URL for Astrology API requests
     static let astrologyAPIBaseURL = "https://api.astrology-api.io/api/v3"
 
+    /// Bearer token for Astrology API (see quickstart.md); do not commit real keys
+    static let astrologyAPIKey = "YOUR_ASTROLOGY_API_KEY_HERE"
+
     /// Rate limiting configuration for Astrology API
-    static let astrologyAPIRateLimitRequests = 60
+    static let astrologyAPIRateLimitRequests = 10
     static let astrologyAPIRateLimitTimeWindow: TimeInterval = 60
 
     /// Request timeout for Astrology API calls
@@ -100,16 +83,9 @@ enum Config {
         openAIAPIKey != "YOUR_OPENAI_API_KEY_HERE"
     }
 
-    static var isProkeralaAPIConfigured: Bool {
-        !prokeralaClientID.isEmpty &&
-        prokeralaClientID != "YOUR_PROKERALA_CLIENT_ID_HERE" &&
-        !prokeralaClientSecret.isEmpty &&
-        prokeralaClientSecret != "YOUR_PROKERALA_CLIENT_SECRET_HERE"
-    }
-
-    static var isFreeAstrologyAPIConfigured: Bool {
-        !freeAstrologyAPIKey.isEmpty &&
-        freeAstrologyAPIKey != "YOUR_FREE_ASTROLOGY_API_KEY_HERE"
+    static var isAstrologyAPIConfigured: Bool {
+        astrologyAPIKey.isEmpty == false &&
+        astrologyAPIKey != "YOUR_ASTROLOGY_API_KEY_HERE"
     }
 
     static func validate() throws {
@@ -117,8 +93,8 @@ enum Config {
             throw ConfigError.missingAPIKey("OpenAI API key not configured in Config.swift")
         }
 
-        guard isProkeralaAPIConfigured else {
-            throw ConfigError.missingAPIKey("Prokerala API client credentials not configured in Config.swift")
+        guard isAstrologyAPIConfigured else {
+            throw ConfigError.missingAPIKey("Astrology API key not configured in Config.swift")
         }
     }
 }
