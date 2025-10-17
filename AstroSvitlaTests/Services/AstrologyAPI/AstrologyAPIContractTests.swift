@@ -19,15 +19,8 @@ final class AstrologyAPIContractTests: XCTestCase {
     /// with accurate positions (within 1° of expected values) and that these points are persisted in cache.
     func testNodesAndLilithMapping() throws {
         // Load the canonical fixture from specs/005-enhance-astrological-report/contracts/fixtures/
-        let fixtureURL = URL(fileURLWithPath: #filePath)
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .deletingLastPathComponent()
-            .appendingPathComponent("specs")
-            .appendingPathComponent("005-enhance-astrological-report")
-            .appendingPathComponent("contracts")
-            .appendingPathComponent("fixtures")
-            .appendingPathComponent("natal-chart-sample.json")
+        // Use absolute path from project root
+        let fixtureURL = URL(fileURLWithPath: "/Users/Ruslan_Popesku/Desktop/AstroSvitla/specs/005-enhance-astrological-report/contracts/fixtures/natal-chart-sample.json")
 
         let fixtureData = try Data(contentsOf: fixtureURL)
         let apiResponse = try JSONDecoder().decode(AstrologyAPINatalChartResponse.self, from: fixtureData)
