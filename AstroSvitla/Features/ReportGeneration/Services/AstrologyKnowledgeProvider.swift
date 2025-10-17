@@ -8,6 +8,12 @@ protocol KnowledgeSourceProvider {
         birthDetails: BirthDetails,
         natalChart: NatalChart
     ) async -> [String]
+
+    func loadKnowledgeUsage(
+        for area: ReportArea,
+        birthDetails: BirthDetails,
+        natalChart: NatalChart
+    ) async -> KnowledgeUsage
 }
 
 /// Default implementation using stub data
@@ -52,6 +58,20 @@ actor AstrologyKnowledgeProvider: KnowledgeSourceProvider {
         }
     }
 
+    func loadKnowledgeUsage(
+        for area: ReportArea,
+        birthDetails: BirthDetails,
+        natalChart: NatalChart
+    ) async -> KnowledgeUsage {
+        // Current implementation doesn't use vector store
+        // Return stub indicating no vector sources
+        return KnowledgeUsage(
+            vectorSourceUsed: false,
+            notes: "Vector database integration is currently paused. This report uses AI's general astrological knowledge.",
+            sources: nil
+        )
+    }
+
     nonisolated private func buildChartContext(from chart: NatalChart) -> [String] {
         var context: [String] = []
 
@@ -87,5 +107,32 @@ actor AstrologyKnowledgeProvider: KnowledgeSourceProvider {
         }
 
         return context
+    }
+}
+
+/// Stub implementation for testing transparency when vector store is unavailable
+/// Returns empty sources with a user-friendly transparency notice
+actor StubKnowledgeSourceProvider: KnowledgeSourceProvider {
+
+    func loadSnippets(
+        for area: ReportArea,
+        birthDetails: BirthDetails,
+        natalChart: NatalChart
+    ) async -> [String] {
+        // Return empty snippets - no knowledge sources available
+        return []
+    }
+
+    func loadKnowledgeUsage(
+        for area: ReportArea,
+        birthDetails: BirthDetails,
+        natalChart: NatalChart
+    ) async -> KnowledgeUsage {
+        // Return transparent notice that vector store is not in use
+        return KnowledgeUsage(
+            vectorSourceUsed: false,
+            notes: "This report is based on the AI's general astrological knowledge. The specialized knowledge base (vector store) is not currently integrated.",
+            sources: nil
+        )
     }
 }
