@@ -11,6 +11,21 @@ enum PlanetType: String, Codable, CaseIterable, Sendable {
     case uranus = "Uranus"
     case neptune = "Neptune"
     case pluto = "Pluto"
+    
+    // Astrological points (nodes and calculated points)
+    case trueNode = "True Node"
+    case southNode = "South Node"
+    case lilith = "Lilith"
+    
+    /// Traditional planets (Sun through Pluto)
+    static var traditional: [PlanetType] {
+        [.sun, .moon, .mercury, .venus, .mars, .jupiter, .saturn, .uranus, .neptune, .pluto]
+    }
+    
+    /// Astrological points (nodes, Lilith, etc.)
+    static var points: [PlanetType] {
+        [.trueNode, .southNode, .lilith]
+    }
 }
 
 struct Planet: Codable, Identifiable, Sendable {
