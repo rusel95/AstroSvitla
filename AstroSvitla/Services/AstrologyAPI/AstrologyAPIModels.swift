@@ -140,6 +140,9 @@ struct AstrologyAPISubjectData: Codable, Sendable {
     let uranus: AstrologyAPICelestialBody?
     let neptune: AstrologyAPICelestialBody?
     let pluto: AstrologyAPICelestialBody?
+    let trueNode: AstrologyAPICelestialBody?
+    let southNode: AstrologyAPICelestialBody?
+    let lilith: AstrologyAPICelestialBody?
     let ascendant: AstrologyAPICelestialBody?
     let descendant: AstrologyAPICelestialBody?
     let mediumCoeli: AstrologyAPICelestialBody?
@@ -149,6 +152,9 @@ struct AstrologyAPISubjectData: Codable, Sendable {
         case name, year, month, day, hour, minute, city, nation, lng, lat
         case tzStr = "tz_str"
         case sun, moon, mercury, venus, mars, jupiter, saturn, uranus, neptune, pluto
+        case trueNode = "true_node"
+        case southNode = "south_node"
+        case lilith
         case ascendant, descendant
         case mediumCoeli = "medium_coeli"
         case imumCoeli = "imum_coeli"
