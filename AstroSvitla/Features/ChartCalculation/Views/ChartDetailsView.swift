@@ -154,6 +154,12 @@ struct ChartDetailsView: View {
         case .trine: return "△"
         case .square: return "□"
         case .sextile: return "⚹"
+        case .quincunx: return "⚻"
+        case .semisextile: return "⚺"
+        case .semisquare: return "∠"
+        case .sesquisquare: return "⚼"
+        case .quintile: return "Q"
+        case .biquintile: return "bQ"
         }
     }
 
@@ -164,6 +170,12 @@ struct ChartDetailsView: View {
         case .trine: return .green
         case .square: return .orange
         case .sextile: return .purple
+        case .quincunx: return .brown
+        case .semisextile: return .cyan
+        case .semisquare: return .pink
+        case .sesquisquare: return .indigo
+        case .quintile: return .mint
+        case .biquintile: return .teal
         }
     }
 }
