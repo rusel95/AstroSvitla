@@ -1,6 +1,18 @@
 import Foundation
 
-actor AstrologyKnowledgeProvider {
+/// Protocol for astrology knowledge source providers
+/// Enables dependency injection and testing of different knowledge backends
+protocol KnowledgeSourceProvider {
+    func loadSnippets(
+        for area: ReportArea,
+        birthDetails: BirthDetails,
+        natalChart: NatalChart
+    ) async -> [String]
+}
+
+/// Default implementation using stub data
+/// Future: Replace with OpenAI Vector Store integration
+actor AstrologyKnowledgeProvider: KnowledgeSourceProvider {
 
     func loadSnippets(
         for area: ReportArea,
