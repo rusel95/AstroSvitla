@@ -88,13 +88,13 @@ struct HouseRulerCalculationTests {
         
         // Find 1st house (Ascendant) ruler
         guard let ascendantRuler = natalChart.houseRulers.first(where: { $0.houseNumber == 1 }) else {
-            Issue.record(Comment(rawValue: "Ascendant ruler not found"))
+            Issue.record(String("Ascendant ruler not found"))
             return
         }
         
         // Verify ascendant ruler matches the sign on the 1st house cusp
         guard let firstHouse = natalChart.houses.first(where: { $0.number == 1 }) else {
-            Issue.record(Comment(rawValue: "First house not found"))
+            Issue.record(String("First house not found"))
             return
         }
         
@@ -159,7 +159,7 @@ struct HouseRulerCalculationTests {
         // For each house, verify its ruler matches the traditional ruler of the cusp sign
         for house in natalChart.houses {
             guard let houseRuler = natalChart.houseRulers.first(where: { $0.houseNumber == house.number }) else {
-                Issue.record(Comment(rawValue: "No ruler found for house \(house.number)"))
+                Issue.record(String("No ruler found for house \(house.number)"))
                 continue
             }
             
