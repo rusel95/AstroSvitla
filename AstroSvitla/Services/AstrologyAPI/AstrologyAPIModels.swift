@@ -55,7 +55,11 @@ struct AstrologyAPIOptions: Codable, Sendable {
     static let `default` = AstrologyAPIOptions(
         houseSystem: "P", // Placidus
         zodiacType: "Tropic", // Tropical/Western
-        activePoints: ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"],
+        activePoints: [
+            "Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter",
+            "Saturn", "Uranus", "Neptune", "Pluto", "True Node",
+            "South Node", "Lilith"
+        ],
         precision: 2
     )
 }
