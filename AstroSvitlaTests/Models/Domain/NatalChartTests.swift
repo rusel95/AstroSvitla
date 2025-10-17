@@ -42,6 +42,7 @@ struct NatalChartTests {
             planets: [planet],
             houses: [house],
             aspects: [aspect],
+            houseRulers: [],
             ascendant: 18.3,
             midheaven: 12.7,
             calculatedAt: Date()
