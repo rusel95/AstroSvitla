@@ -39,23 +39,32 @@ enum AstrologyAPIError: LocalizedError {
 }
 
 /// Main service for communicating with api.astrology-api.io
-final class AstrologyAPIService: @unchecked Sendable {
+@MainActor
+final class AstrologyAPIService {
     
     // MARK: - Properties
     
     private let baseURL: String
     private let session: URLSession
     private let requestTimeout: TimeInterval
+    private let rateLimiter: RateLimiter
     
     // MARK: - Initialization
     
     init(
         baseURL: String = Config.astrologyAPIBaseURL,
-        session: URLSession = .shared
+        session: URLSession = .shared,
+        rateLimiter: RateLimiter? = nil
     ) {
         self.baseURL = baseURL
         self.session = session
         self.requestTimeout = Config.astrologyAPIRequestTimeout
+        // AstrologyAPI has a limit of 10 requests per 60 seconds
+        self.rateLimiter = rateLimiter ?? RateLimiter(
+            maxRequestsPerWindow: 10,
+            windowInterval: 60,
+            requestsPerChart: 1  // Single endpoint for natal chart
+        )
     }
     
     // MARK: - Public API
@@ -67,8 +76,18 @@ final class AstrologyAPIService: @unchecked Sendable {
     func generateNatalChart(
         birthDetails: BirthDetails
     ) async throws -> NatalChart {
+        // Check rate limit before making request
+        let (allowed, retryAfter) = rateLimiter.canMakeRequest()
+        if !allowed {
+            throw AstrologyAPIError.rateLimitExceeded(retryAfter: retryAfter ?? 60)
+        }
+        
         // Build request
         let request = try buildNatalChartRequest(birthDetails: birthDetails)
+        
+        // Record request for rate limiting
+        rateLimiter.recordRequest()
+        
         // Execute request
         let (data, httpResponse) = try await executeRequest(request)
         // Validate response
