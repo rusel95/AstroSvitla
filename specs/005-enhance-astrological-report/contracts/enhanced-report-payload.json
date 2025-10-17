@@ -1,0 +1,331 @@
+{{
+
+  "_comment": "Enhanced GeneratedReport structure while vector knowledge is stubbed",  "_comment": "Enhanced GeneratedReport JSON Structure",
+
+  "_version": "2.1",  "_version": "2.0",
+
+  "id": "d2e5b6d0-2f1a-4f6f-93a2-7e9a12345678",  "_changes": [
+
+  "chartId": "9a4c33c4-38d6-4f47-9f39-1f4c9bb0d111",    "Added knowledgeSources array with full metadata (book, author, chapter, pages, relevance)",
+
+  "reportArea": "general",    "Added knowledgeMetrics object for analytics (cache hit, source counts, avg relevance)",
+
+  "generatedAt": "2025-10-17T12:30:00Z",    "Extended report sections to include ascendant, midheaven, nodes, house rulers, lilith",
+
+    "Expanded aspects array from 8 to 20 entries",
+
+  "report": {    "Backward compatible: All existing fields preserved"
+
+    "summary": "Цей натальний гороскоп поєднує в собі сміливість Асцендента в Овні з рішучістю Сатурна на MC, а вузли вказують на рух від таємниць Скорпіона до практичних цінностей Тельця.",  ],
+
+  
+
+    "ascendant": {  "id": "550e8400-e29b-41d4-a716-446655440000",
+
+      "sign": "Овен",  "chartId": "c7a8b3f0-d12e-4c56-9ab7-8e9f0123abcd",
+
+      "degree": 15.7,  "reportArea": "general",
+
+      "interpretation": "Асцендент в Овні додає особистості прямолінійності та стартової енергії. Правитель Асцендента Марс у 7-му домі показує, що лідерство розкривається через партнерства."  "generatedAt": "2024-01-15T14:30:00Z",
+
+    },  
+
+  "_comment_report_structure": "All sections now included with astrological points",
+
+    "midheaven": {  "report": {
+
+      "sign": "Козеріг",    "summary": "Цей натальний гороскоп розкриває унікальну душу з сильним акцентом на практичні навички спілкування (Північний Вузол у Тельці в 3-му домі) та трансформацію через філософські пошуки (Південний Вузол у Скорпіоні в 9-му домі)...",
+
+      "degree": 285.2,    
+
+      "interpretation": "MC у Козерозі робить цілі структурними та довготривалими. Сатурн у 4-му домі вимагає врівноважити кар'єру та сімейні обов'язки."    "_comment_ascendant": "NEW: Dedicated interpretation for rising sign",
+
+    },    "ascendant": {
+
+      "sign": "Овен",
+
+    "karmicNodes": {      "degree": 15.7,
+
+      "northNode": {      "interpretation": "Асцендент в Овні надає особистості природну сміливість і схильність до лідерства. Ця людина сприймається оточуючими як енергійна, рішуча та готова до нових викликів. Марс, правитель Асценденту, розташований у 10-му домі, посилюючи професійні амбіції."
+
+        "sign": "Телець",    },
+
+        "house": 3,    
+
+        "degree": 47.2,    "_comment_midheaven": "NEW: Dedicated interpretation for MC",
+
+        "interpretation": "Північний Вузол у Тельці (3-й дім) закликає до стабільного навчання, простих зв'язків і майстерності у повсякденній комунікації."    "midheaven": {
+
+      },      "sign": "Козеріг",
+
+      "southNode": {      "degree": 285.3,
+
+        "sign": "Скорпіон",      "interpretation": "Середина Неба в Козерозі вказує на кар'єрні цілі, пов'язані з відповідальністю, структурою та довгостроковими досягненнями. Сатурн, правитель MC, у 4-му домі створює баланс між професійними амбіціями та сімейними зобов'язаннями."
+
+        "house": 9,    },
+
+        "degree": 227.2,    
+
+        "interpretation": "Південний Вузол у Скорпіоні (9-й дім) нагадує про минуле захоплення кризами та крайніми віруваннями. Важливо зменшити драму та зробити знання практичними."    "_comment_nodes": "NEW: Karmic axis with North/South Node interpretations",
+
+      },    "karmicNodes": {
+
+      "axisInterpretation": "Вісь 3-9 закликає перейти від інтенсивних пошуків сенсу до щоденної практики знань."      "northNode": {
+
+    },        "sign": "Телець",
+
+        "house": 3,
+
+    "houseRulers": [        "degree": 47.2,
+
+      {        "interpretation": "Північний Вузол у Тельці в 3-му домі означає, що душа прагне розвинути практичні навички спілкування, навчання та обміну інформацією. Ця людина має вивчати цінність повсякденних зв'язків,LocalBroadcasts та розвивати фінансову грамотність через освіту."
+
+        "houseNumber": 1,      },
+
+        "houseCusp": 15.7,      "southNode": {
+
+        "rulingPlanet": "Марс",        "sign": "Скорпіон",
+
+        "rulerSign": "Терези",        "house": 9,
+
+        "rulerHouse": 7,        "degree": 227.2,
+
+        "interpretation": "Марс як правитель 1-го дому у 7-му: особистий імпульс веде до партнерств, де розкривається лідерство."        "interpretation": "Південний Вузол у Скорпіоні в 9-му домі вказує на минулі життєві досвіди, пов'язані з глибокими філософськими пошуками, емоційними кризами та трансформацією через віру. Важливо уникати надмірної схильності до догм і емоційних крайнощів."
+
+      },      }
+
+      {    },
+
+        "houseNumber": 10,    
+
+        "houseCusp": 285.2,    "_comment_house_rulers": "NEW: Systematic analysis of all 12 house rulers",
+
+        "rulingPlanet": "Сатурн",    "houseRulers": [
+
+        "rulerSign": "Рак",      {
+
+        "rulerHouse": 4,        "houseNumber": 1,
+
+        "interpretation": "Сатурн як правитель 10-го у 4-му домі: кар'єра базується на сімейній відповідальності та традиціях."        "houseCusp": 15.7,
+
+      }        "rulingPlanet": "Марс",
+
+    ],        "rulerSign": "Козеріг",
+
+        "rulerHouse": 10,
+
+    "keyAspects": [        "rulerDegree": 285.8,
+
+      {        "interpretation": "Правитель 1-го дому (Марс) у 10-му домі: особистість виражається через професійні досягнення. Сила волі спрямована на кар'єрні цілі."
+
+        "planet1": "Сонце",      },
+
+        "planet2": "Місяць",      {
+
+        "aspectType": "Тригон",        "houseNumber": 2,
+
+        "orb": 0.3,        "houseCusp": 42.5,
+
+        "interpretation": "Гармонія між свідомими цілями і емоціями забезпечує стабільність."        "rulingPlanet": "Венера",
+
+      },        "rulerSign": "Риби",
+
+      {        "rulerHouse": 12,
+
+        "planet1": "Північний Вузол",        "rulerDegree": 348.2,
+
+        "planet2": "Венера",        "interpretation": "Правитель 2-го дому (Венера) у 12-му домі: фінансові ресурси пов'язані з духовними цінностями або прихованими джерелами. Можлива робота за кадром."
+
+        "aspectType": "Квадрат",      },
+
+        "orb": 1.8,      {
+
+        "interpretation": "Квадрат до Венери показує, що комфортні стосунки випробовують кармічний шлях."        "houseNumber": 3,
+
+      }        "houseCusp": 72.1,
+
+    ],        "rulingPlanet": "Меркурій",
+
+        "rulerSign": "Близнюки",
+
+    "lilith": {        "rulerHouse": 3,
+
+      "sign": "Лев",        "rulerDegree": 78.5,
+
+      "house": 5,        "interpretation": "Правитель 3-го дому (Меркурій) у 3-му домі: сильний акцент на спілкування, навчання та короткі подорожі. Природний талант до мови та письма."
+
+      "degree": 135.7,      }
+
+      "interpretation": "Ліліт у Леві (5-й дім) наголошує на відновленні автентичної творчості та зціленні теми видимості."    ],
+
+    },    "_comment_house_rulers_note": "Showing 3 of 12 house rulers for brevity. Full report contains all 12.",
+
+    
+
+    "knowledgeNotice": "Vector database was not used for this report; transparency maintained via stub provider."    "_comment_aspects": "Expanded from 8 to 20, sorted by orb tightness",
+
+  },    "keyAspects": [
+
+      {
+
+  "knowledgeSources": [],        "planet1": "Сонце",
+
+        "planet2": "Місяць",
+
+  "knowledgeMetrics": {        "aspectType": "Тригон",
+
+    "totalSourcesConsulted": 0,        "orb": 0.3,
+
+    "vectorDBSourceCount": 0,        "interpretation": "Тригон між Сонцем і Місяцем створює природну гармонію між свідомим його і емоційними потребами. Це один із найсприятливіших аспектів для внутрішнього балансу."
+
+    "aiTrainingSourceCount": 0,      },
+
+    "averageRelevanceScore": 0.0,      {
+
+    "cacheHit": false        "planet1": "Венера",
+
+  },        "planet2": "Марс",
+
+        "aspectType": "Сполучення",
+
+  "generationMetadata": {        "orb": 0.8,
+
+    "apiProvider": "AstrologyAPI",        "interpretation": "Сполучення Венери і Марса поєднує жіночу і чоловічу енергії, створюючи магнетизм у стосунках та творчій експресії."
+
+    "calculationTimeMs": 420,      },
+
+    "reportGenerationTimeMs": 3100,      {
+
+    "totalTimeMs": 3520,        "planet1": "Меркурій",
+
+    "tokensUsed": 1650,        "planet2": "Юпітер",
+
+    "cacheStatus": "miss"        "aspectType": "Тригон",
+
+  },        "orb": 1.2,
+
+        "interpretation": "Тригон Меркурія і Юпітера сприяє оптимістичному мисленню, успіху в навчанні та здатності бачити широку перспективу."
+
+  "validationStatus": {      }
+
+    "allSectionsPresent": true,    ],
+
+    "missingSections": [],    "_comment_aspects_note": "Showing 3 of 20 aspects. Full array continues with increasing orbs up to 8° for major aspects.",
+
+    "aspectCount": 22,    
+
+    "sourceCount": 0,    "_comment_lilith": "NEW: Black Moon Lilith interpretation",
+
+    "meetsMinimumRequirements": true    "lilith": {
+
+  }      "sign": "Лев",
+
+}      "house": 5,
+
+      "degree": 135.7,
+      "interpretation": "Чорна Місяця Ліліт у Леві в 5-му домі вказує на придушені потреби у творчому самовираженні та визнанні. Можуть бути теми, пов'язані з сексуальністю, дітьми або романтичними стосунками, де проявляється внутрішній бунт проти соціальних очікувань."
+    },
+    
+    "_comment_existing_fields": "All existing report sections preserved for backward compatibility",
+    "keyInfluences": [
+      "Сильна енергія Марса у Козерозі в 10-му домі",
+      "Північний Вузол у Тельці - кармічний шлях практичного навчання",
+      "Сполучення Венера-Марс - баланс бажань та дій"
+    ],
+    
+    "challenges": [
+      "Квадрат Сатурна до Місяця - емоційні обмеження",
+      "Південний Вузол у Скорпіоні - схильність до емоційних криз"
+    ],
+    
+    "opportunities": [
+      "Тригон Сонця і Місяця - природна гармонія",
+      "Правитель 3-го дому в 3-му домі - талант до комунікації"
+    ]
+  },
+  
+  "_comment_knowledge_sources": "NEW: Full transparency of AI knowledge sources",
+  "knowledgeSources": [
+    {
+      "bookTitle": "The Inner Sky",
+      "author": "Steven Forrest",
+      "chapter": "Chapter 8: The Lunar Nodes",
+      "pageRange": "pp. 156-162",
+      "snippet": "North Node in Taurus in the 3rd house indicates a soul's journey from abstract philosophical exploration (Scorpio 9th) toward practical, grounded communication and learning...",
+      "relevanceScore": 0.94,
+      "sourceType": "VectorDB",
+      "usedInSections": ["karmicNodes"]
+    },
+    {
+      "bookTitle": "Houses of the Horoscope",
+      "author": "Alan Oken",
+      "chapter": "Chapter 3: The Learning Axis",
+      "pageRange": "pp. 45-52",
+      "snippet": "The 3rd-9th house axis represents the balance between immediate environment and distant horizons. When the North Node occupies the 3rd house...",
+      "relevanceScore": 0.89,
+      "sourceType": "VectorDB",
+      "usedInSections": ["karmicNodes", "houseRulers"]
+    },
+    {
+      "bookTitle": "Aspects in Astrology",
+      "author": "Sue Tompkins",
+      "chapter": "Chapter 5: The Trine",
+      "pageRange": "pp. 78-84",
+      "snippet": "Sun trine Moon is perhaps the most harmonious aspect in the natal chart, indicating a natural integration of masculine and feminine principles...",
+      "relevanceScore": 0.87,
+      "sourceType": "VectorDB",
+      "usedInSections": ["keyAspects"]
+    },
+    {
+      "bookTitle": "The Twelve Houses",
+      "author": "Howard Sasportas",
+      "chapter": "Chapter 10: The Tenth House",
+      "pageRange": "pp. 201-215",
+      "snippet": "Mars in the 10th house signifies a career built on courage, initiative, and competitive drive. These individuals are natural leaders in professional settings...",
+      "relevanceScore": 0.85,
+      "sourceType": "VectorDB",
+      "usedInSections": ["ascendant", "houseRulers"]
+    },
+    {
+      "bookTitle": "Lilith: The Dark Moon",
+      "author": "Ivy Goldstein-Jacobson",
+      "chapter": "Chapter 4: Lilith in Leo",
+      "pageRange": "pp. 67-73",
+      "snippet": "Black Moon Lilith in Leo in the 5th house brings themes of creative suppression and the need to reclaim authentic self-expression...",
+      "relevanceScore": 0.83,
+      "sourceType": "VectorDB",
+      "usedInSections": ["lilith"]
+    }
+  ],
+  "_comment_sources_note": "Showing 5 of ~15 sources. Full report includes 12-20 sources from vector database.",
+  
+  "_comment_knowledge_metrics": "NEW: Analytics for knowledge retrieval",
+  "knowledgeMetrics": {
+    "totalSourcesConsulted": 15,
+    "vectorDBSourceCount": 14,
+    "aiTrainingSourceCount": 1,
+    "averageRelevanceScore": 0.82,
+    "cacheHit": false,
+    "vectorQueryTimeMs": 285,
+    "_comment": "cacheHit=true would show vectorQueryTimeMs=0"
+  },
+  
+  "_comment_performance": "Existing performance tracking",
+  "generationMetadata": {
+    "apiProvider": "FreeAstrology",
+    "calculationTimeMs": 450,
+    "reportGenerationTimeMs": 2800,
+    "totalTimeMs": 3250,
+    "tokensUsed": 1750,
+    "cacheStatus": "miss"
+  },
+  
+  "_comment_validation": "Schema validation ensures all required sections present",
+  "validationStatus": {
+    "allSectionsPresent": true,
+    "missingSections": [],
+    "aspectCount": 20,
+    "sourceCount": 15,
+    "meetsMinimumRequirements": true
+  }
+}
