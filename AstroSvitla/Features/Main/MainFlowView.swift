@@ -664,6 +664,12 @@ struct MainFlowView: View {
         case .trine: return "△"
         case .square: return "□"
         case .sextile: return "⚹"
+        case .quincunx: return "⚻"
+        case .semisextile: return "⚺"
+        case .semisquare: return "∠"
+        case .sesquisquare: return "⚼"
+        case .quintile: return "Q"
+        case .biquintile: return "bQ"
         }
     }
 }
