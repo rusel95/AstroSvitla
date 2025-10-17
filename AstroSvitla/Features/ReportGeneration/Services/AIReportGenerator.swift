@@ -3,12 +3,12 @@ import Foundation
 actor AIReportGenerator {
 
     private let openAIService: OpenAIService
-    private let knowledgeProvider: AstrologyKnowledgeProvider
+    private let knowledgeProvider: KnowledgeSourceProvider
 
     @MainActor
     init(
         openAIService: OpenAIService = OpenAIService(),
-        knowledgeProvider: AstrologyKnowledgeProvider = AstrologyKnowledgeProvider()
+        knowledgeProvider: KnowledgeSourceProvider = AstrologyKnowledgeProvider()
     ) {
         self.openAIService = openAIService
         self.knowledgeProvider = knowledgeProvider
