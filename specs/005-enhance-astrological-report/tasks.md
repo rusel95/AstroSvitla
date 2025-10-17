@@ -55,8 +55,8 @@
 
 | Task ID | Description | Deliverable |
 |---------|-------------|-------------|
-| T011 [Story US3] | Author failing `AspectSortingTests` in `AstroSvitlaTests/Features/ChartCalculation/` using fixture data to demand ≥20 aspects sorted by orb. | Red XCT enforcing aspect requirements. |
-| T012 [Story US3] | Enhance `AstrologyAPIDTOMapper` aspect mapping and related domain helpers to sort by orb and trim/extend to top 20 entries. | Mapper producing sorted aspect arrays satisfying tests. |
+| [X] T011 [Story US3] | Author failing `AspectSortingTests` in `AstroSvitlaTests/Features/ChartCalculation/` using fixture data to demand ≥20 aspects sorted by orb. | Red XCT enforcing aspect requirements. |
+| [X] T012 [Story US3] | Enhance `AstrologyAPIDTOMapper` aspect mapping and related domain helpers to sort by orb and trim/extend to top 20 entries. | Mapper producing sorted aspect arrays satisfying tests. |
 
 **Checkpoint**: US3 ensures reports list ≥20 aspects in tightness order with passing tests.
 
@@ -68,8 +68,8 @@
 
 | Task ID | Description | Deliverable |
 |---------|-------------|-------------|
-| T013 [Story US4] | Add failing stub tests in `AstroSvitlaTests/Features/ReportGeneration/KnowledgeProviderStubTests.swift` to assert empty sources, zero counts, and explanatory notice. | Red XCT capturing transparency expectations. |
-| T014 [Story US4] | Implement `StubKnowledgeSourceProvider` in `AstroSvitla/Features/ReportGeneration/Services/` and wire it through `AstrologyKnowledgeProvider` plus report assembly to surface the "Vector database was not used" notice. | Stubbed transparency path with passing tests. |
+| [X] T013 [Story US4] | Add failing stub tests in `AstroSvitlaTests/Features/ReportGeneration/KnowledgeProviderStubTests.swift` to assert empty sources, zero counts, and explanatory notice. | Red XCT capturing transparency expectations. |
+| [X] T014 [Story US4] | Implement `StubKnowledgeSourceProvider` in `AstroSvitla/Features/ReportGeneration/Services/` and wire it through `AstrologyKnowledgeProvider` plus report assembly to surface the "Vector database was not used" notice. | Stubbed transparency path with passing tests. |
 
 **Checkpoint**: US4 surfaces honest transparency messaging when vector store is unavailable.
 
@@ -81,9 +81,9 @@
 
 | Task ID | Description | Deliverable |
 |---------|-------------|-------------|
-| T015 [Story US5] | Add failing tests in `AstroSvitlaTests/Features/ReportGeneration/ReportAssemblerTests.swift` to demand all required sections and knowledge notice. | Red XCT validating report structure. |
-| T016 [Story US5] | Update `AstroSvitla/Features/ReportGeneration/Services/AIPromptBuilder.swift` and `ReportAssembler.swift` to emit mandated sections and data payloads. | Prompt + assembler emitting full report schema. |
-| T017 [Story US5] | Extend `AstroSvitla/Features/ReportGeneration/Views/ReportDetailView.swift` (and related SwiftUI views) to render new sections and transparency notice. | Updated UI showing complete structured report. |
+| [X] T015 [Story US5] | Add failing tests in `AstroSvitlaTests/Features/ReportGeneration/ReportAssemblerTests.swift` to demand all required sections and knowledge notice. | Red XCT validating report structure. |
+| [X] T016 [Story US5] | Update `AstroSvitla/Features/ReportGeneration/Services/AIPromptBuilder.swift` and `ReportAssembler.swift` to emit mandated sections and data payloads. | Prompt + assembler emitting full report schema. |
+| [X] T017 [Story US5] | Extend `AstroSvitla/Features/ReportGeneration/Views/ReportDetailView.swift` (and related SwiftUI views) to render new sections and transparency notice. | Updated UI showing complete structured report. |
 
 **Checkpoint**: US5 delivers enriched report structure in data and UI, tests pass.
 
@@ -92,8 +92,8 @@
 ## Phase 8 – Polish & Cross-Cutting
 | Task ID | Description | Deliverable |
 |---------|-------------|-------------|
-| T018 [Polish] | Add integration test `AstroSvitlaTests/IntegrationTests/NatalChartGenerationTests.testReturnsCachedChartWhenOffline` validating cache-first behaviour after API switch. | Integration test proving caching regression-free. |
-| T019 [Polish] | Update `quickstart.md` and `plan.md` with final manual QA steps (`xcodebuild test`, offline cache verification checklist) and record dependency notes. | Documentation refreshed with final QA instructions. |
+| [X] T018 [Polish] | Add integration test `AstroSvitlaTests/IntegrationTests/NatalChartGenerationTests.testReturnsCachedChartWhenOffline` validating cache-first behaviour after API switch. | Integration test proving caching regression-free. |
+| [X] T019 [Polish] | Update `quickstart.md` and `plan.md` with final manual QA steps (`xcodebuild test`, offline cache verification checklist) and record dependency notes. | Documentation refreshed with final QA instructions. |
 
 ---
 
