@@ -1,0 +1,72 @@
+{
+  "subject_data": {
+    "name": "Sample Chart",
+    "year": 1990,
+    "month": 3,
+    "day": 25,
+    "hour": 14,
+    "minute": 30,
+    "city": "Kyiv",
+    "nation": "UA",
+    "lat": 50.4501,
+    "lng": 30.5234,
+    "tz_str": "Europe/Kyiv"
+  },
+  "chart_data": {
+    "planetary_positions": [
+      { "name": "Sun", "sign": "Ari", "position": 4.39, "abs_pos": 4.39, "house": "First_House", "retrograde": false },
+      { "name": "Moon", "sign": "Leo", "position": 11.52, "abs_pos": 131.52, "house": "Fifth_House", "retrograde": false },
+      { "name": "Mercury", "sign": "Pis", "position": 28.74, "abs_pos": 358.74, "house": "Twelfth_House", "retrograde": true },
+      { "name": "Venus", "sign": "Tau", "position": 7.18, "abs_pos": 37.18, "house": "Second_House", "retrograde": false },
+      { "name": "Mars", "sign": "Gem", "position": 15.22, "abs_pos": 75.22, "house": "Third_House", "retrograde": false },
+      { "name": "Jupiter", "sign": "Can", "position": 22.94, "abs_pos": 112.94, "house": "Fourth_House", "retrograde": false },
+      { "name": "Saturn", "sign": "Cap", "position": 10.63, "abs_pos": 280.63, "house": "Tenth_House", "retrograde": true },
+      { "name": "Uranus", "sign": "Cap", "position": 18.45, "abs_pos": 288.45, "house": "Tenth_House", "retrograde": false },
+      { "name": "Neptune", "sign": "Cap", "position": 9.88, "abs_pos": 279.88, "house": "Tenth_House", "retrograde": false },
+      { "name": "Pluto", "sign": "Sco", "position": 14.12, "abs_pos": 224.12, "house": "Eighth_House", "retrograde": true },
+      { "name": "True Node", "sign": "Tau", "position": 17.12, "abs_pos": 47.12, "house": "Third_House", "retrograde": false },
+      { "name": "Lilith", "sign": "Vir", "position": 24.63, "abs_pos": 174.63, "house": "Sixth_House", "retrograde": false }
+    ],
+    "house_cusps": [
+      { "house": "First_House", "position": 15.70, "sign": "Ari" },
+      { "house": "Second_House", "position": 42.50, "sign": "Tau" },
+      { "house": "Third_House", "position": 72.10, "sign": "Gem" },
+      { "house": "Fourth_House", "position": 102.35, "sign": "Can" },
+      { "house": "Fifth_House", "position": 132.88, "sign": "Leo" },
+      { "house": "Sixth_House", "position": 163.41, "sign": "Vir" },
+      { "house": "Seventh_House", "position": 195.70, "sign": "Lib" },
+      { "house": "Eighth_House", "position": 222.50, "sign": "Sco" },
+      { "house": "Ninth_House", "position": 252.10, "sign": "Sag" },
+      { "house": "Tenth_House", "position": 285.20, "sign": "Cap" },
+      { "house": "Eleventh_House", "position": 312.00, "sign": "Aqu" },
+      { "house": "Twelfth_House", "position": 342.40, "sign": "Pis" }
+    ],
+    "aspects": [
+      { "point1": "Sun", "point2": "Moon", "type": "Trine", "orb": 0.32 },
+      { "point1": "Sun", "point2": "Mars", "type": "Sextile", "orb": 1.48 },
+      { "point1": "Sun", "point2": "Saturn", "type": "Square", "orb": 1.24 },
+      { "point1": "Moon", "point2": "Venus", "type": "Sextile", "orb": 0.66 },
+      { "point1": "Moon", "point2": "Jupiter", "type": "Conjunction", "orb": 1.42 },
+      { "point1": "Mercury", "point2": "Mars", "type": "Square", "orb": 0.48 },
+      { "point1": "Mercury", "point2": "Saturn", "type": "Sextile", "orb": 0.11 },
+      { "point1": "Venus", "point2": "Mars", "type": "Conjunction", "orb": 0.98 },
+      { "point1": "Venus", "point2": "Pluto", "type": "Opposition", "orb": 1.06 },
+      { "point1": "Mars", "point2": "Jupiter", "type": "Square", "orb": 0.72 },
+      { "point1": "Mars", "point2": "Saturn", "type": "Trine", "orb": 2.13 },
+      { "point1": "Jupiter", "point2": "Saturn", "type": "Opposition", "orb": 2.31 },
+      { "point1": "Jupiter", "point2": "Neptune", "type": "Trine", "orb": 0.94 },
+      { "point1": "Saturn", "point2": "Uranus", "type": "Conjunction", "orb": 0.18 },
+      { "point1": "Saturn", "point2": "Neptune", "type": "Conjunction", "orb": 0.75 },
+      { "point1": "Uranus", "point2": "Neptune", "type": "Conjunction", "orb": 0.57 },
+      { "point1": "Pluto", "point2": "Venus", "type": "Opposition", "orb": 1.06 },
+      { "point1": "True Node", "point2": "Venus", "type": "Square", "orb": 0.94 },
+      { "point1": "True Node", "point2": "Mars", "type": "Sextile", "orb": 2.10 },
+      { "point1": "True Node", "point2": "Saturn", "type": "Trine", "orb": 0.51 },
+      { "point1": "True Node", "point2": "Pluto", "type": "Opposition", "orb": 0.98 },
+      { "point1": "Lilith", "point2": "Sun", "type": "Quincunx", "orb": 0.24 },
+      { "point1": "Lilith", "point2": "Moon", "type": "Sextile", "orb": 1.11 },
+      { "point1": "Lilith", "point2": "Mars", "type": "Square", "orb": 1.41 },
+      { "point1": "Lilith", "point2": "True Node", "type": "Trine", "orb": 1.51 }
+    ]
+  }
+}
