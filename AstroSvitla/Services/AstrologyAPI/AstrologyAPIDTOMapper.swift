@@ -226,13 +226,13 @@ enum AstrologyAPIDTOMapper {
     private static func mapAspects(
         _ apiAspects: [AstrologyAPIAspect]
     ) throws -> [Aspect] {
-        return apiAspects.compactMap { apiAspect in
+        let allAspects = apiAspects.compactMap { apiAspect in
             guard let planet1 = PlanetType.from(apiName: apiAspect.point1),
                   let planet2 = PlanetType.from(apiName: apiAspect.point2),
                   let aspectType = AspectType.from(apiName: apiAspect.aspectType) else {
                 return nil
             }
-            
+
             return Aspect(
                 planet1: planet1,
                 planet2: planet2,
@@ -241,6 +241,12 @@ enum AstrologyAPIDTOMapper {
                 isApplying: false // API doesn't provide this info
             )
         }
+
+        // Sort by orb (ascending - tightest aspects first)
+        let sortedAspects = allAspects.sorted { $0.orb < $1.orb }
+
+        // Return top 20 aspects (or all if fewer than 20)
+        return Array(sortedAspects.prefix(20))
     }
     
     private static func calculateHouseRulers(
@@ -348,6 +354,12 @@ extension AspectType {
         case "trine": return .trine
         case "square": return .square
         case "sextile": return .sextile
+        case "quincunx", "inconjunct": return .quincunx
+        case "semisextile", "semi-sextile": return .semisextile
+        case "semisquare", "semi-square": return .semisquare
+        case "sesquisquare", "sesqui-square": return .sesquisquare
+        case "quintile": return .quintile
+        case "biquintile", "bi-quintile": return .biquintile
         default: return nil
         }
     }
