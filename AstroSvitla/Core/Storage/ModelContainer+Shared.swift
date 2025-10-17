@@ -6,6 +6,7 @@ extension ModelContainer {
             User.self,
             UserProfile.self,
             BirthChart.self,
+            CachedNatalChart.self,
             ReportPurchase.self,
         ])
 
