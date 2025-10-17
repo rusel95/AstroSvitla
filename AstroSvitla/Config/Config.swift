@@ -9,11 +9,15 @@ import Foundation
 
 enum Config {
 
+    /// Refer to `specs/005-enhance-astrological-report/quickstart.md` for setup guidance and placeholder replacement.
+
     // MARK: - OpenAI Configuration
 
-    static let openAIProjectID = "proj_0Okcswia9PZrXTqsS4JkfsnN"
-    /// Replace with your project-specific OpenAI API key
-    static let openAIAPIKey = "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"
+    /// Replace with your project-specific OpenAI project identifier before distributing the app.
+    static let openAIProjectID = ProcessInfo.processInfo.environment["OPENAI_PROJECT_ID"] ?? "YOUR_OPENAI_PROJECT_ID_HERE"
+
+    /// Replace with your project-specific OpenAI API key before running the app.
+    static let openAIAPIKey = ProcessInfo.processInfo.environment["OPENAI_API_KEY"] ?? "YOUR_OPENAI_API_KEY_HERE"
 
     /// OpenAI model to use for report generation
     static let openAIModel = "gpt-4o"
@@ -23,15 +27,17 @@ enum Config {
 
     /// Identifier of the OpenAI vector store that contains the astrology knowledge base
     static let openAIVectorStoreID = ProcessInfo.processInfo.environment["OPENAI_VECTOR_STORE_ID"] ?? "YOUR_OPENAI_VECTOR_STORE_ID_HERE"
-    
+
     // MARK: - Astrology API Configuration (api.astrology-api.io)
 
-    /// Astrology API base URL
-    /// No authentication required - open API
+    /// Base URL for Astrology API requests
     static let astrologyAPIBaseURL = "https://api.astrology-api.io/api/v3"
 
-    /// Rate limiting configuration for Astrology API
-    static let astrologyAPIRateLimitRequests = 60
+    /// Bearer token used to authenticate against api.astrology-api.io. Replace the placeholder with a valid key before building.
+    static let astrologyAPIKey = ProcessInfo.processInfo.environment["ASTROLOGY_API_KEY"] ?? "YOUR_ASTROLOGY_API_KEY_HERE"
+
+    /// Rate limiting configuration (requests per time window) expected by api.astrology-api.io
+    static let astrologyAPIRateLimitRequests = 10
     static let astrologyAPIRateLimitTimeWindow: TimeInterval = 60
 
     /// Request timeout for Astrology API calls
@@ -85,9 +91,18 @@ enum Config {
         openAIAPIKey != "YOUR_OPENAI_API_KEY_HERE"
     }
 
+    static var isAstrologyAPIConfigured: Bool {
+        astrologyAPIKey.isEmpty == false &&
+        astrologyAPIKey != "YOUR_ASTROLOGY_API_KEY_HERE"
+    }
+
     static func validate() throws {
         guard isOpenAIConfigured else {
             throw ConfigError.missingAPIKey("OpenAI API key not configured in Config.swift")
+        }
+
+        guard isAstrologyAPIConfigured else {
+            throw ConfigError.missingAPIKey("Astrology API key not configured in Config.swift")
         }
     }
 }
