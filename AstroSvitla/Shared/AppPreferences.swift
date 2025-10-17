@@ -44,7 +44,10 @@ final class AppPreferences: ObservableObject {
     }
 
     @Published var language: LanguageOption {
-        didSet { UserDefaults.standard.set(language.rawValue, forKey: Keys.language) }
+        didSet {
+            UserDefaults.standard.set(language.rawValue, forKey: Keys.language)
+            setAppLanguage(selectedLanguageCode)
+        }
     }
 
     var selectedColorScheme: ColorScheme? { theme.colorScheme }
