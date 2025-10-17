@@ -72,38 +72,7 @@ struct FreeAstrologyRequest: Codable {
     let timezone: Double
     let config: FreeAstrologyConfig
 
-    /// Initialize from BirthDetails domain model
-    init(from birthDetails: BirthDetails) {
-        let calendar = Calendar.current
-
-        // Extract date components
-        let dateComponents = calendar.dateComponents(
-            [.year, .month, .day],
-            from: birthDetails.birthDate
-        )
-
-        // Extract time components
-        let timeComponents = calendar.dateComponents(
-            [.hour, .minute, .second],
-            from: birthDetails.birthTime
-        )
-
-        self.year = dateComponents.year ?? 1900
-        self.month = dateComponents.month ?? 1
-        self.date = dateComponents.day ?? 1
-        self.hours = timeComponents.hour ?? 0
-        self.minutes = timeComponents.minute ?? 0
-        self.seconds = timeComponents.second ?? 0
-        self.latitude = birthDetails.coordinate?.latitude ?? 0.0
-        self.longitude = birthDetails.coordinate?.longitude ?? 0.0
-
-        // Convert TimeZone to UTC offset in hours
-        let secondsFromGMT = birthDetails.timeZone.secondsFromGMT(for: birthDetails.birthDate)
-        self.timezone = Double(secondsFromGMT) / 3600.0
-
-        // Use simplified config to reduce chart complexity
-        self.config = FreeAstrologyConfig.simplified
-    }
+    // Initializer referencing BirthDetails removed; struct now only contains properties.
 }
 
 // MARK: - Planets Response Models
