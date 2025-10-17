@@ -16,7 +16,7 @@
 
 
 
-### User Story 1 - Complete Astrological Point Coverage (Priority: P1)<!--
+### User Story 1 - Complete Astrological Point Coverage (Priority: P1)
 
   IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
 
@@ -38,7 +38,7 @@ An astrology expert generates a natal chart report for a client and expects all 
 
 1. **Given** a user generates a natal chart report, **When** the report is displayed, **Then** it includes accurate positions for North Node, South Node, and Lilith matching astronomical calculations  - Demonstrated to users independently
 
-2. **Given** a report is generated, **When** viewing the detailed analysis section, **Then** it contains explicit interpretation of Ascendant's meaning for personality and life approach-->
+2. **Given** a report is generated, **When** viewing the detailed analysis section, **Then** it contains explicit interpretation of Ascendant's meaning for personality and life approach
 
 3. **Given** a report is generated, **When** viewing the detailed analysis section, **Then** it contains explicit interpretation of Midheaven's significance for career and public image
 
@@ -136,16 +136,6 @@ An astrology app owner wants to understand which knowledge sources the AI used t
 
 **Why this priority**: Transparency builds trust with users and allows quality control. If a report contains questionable interpretations, the owner needs to trace which sources were used and potentially update the knowledge base.
 
-<!--
-
-**Independent Test**: Generate a report and verify that the knowledge usage section lists at least 10-15 distinct sources with complete metadata (book title, author, chapter, page range, snippet, relevance score) for sources from the vector database.  ACTION REQUIRED: The content in this section represents placeholders.
-
-  Fill them out with the right edge cases.
-
-**Acceptance Scenarios**:-->
-
-
-
 1. **Given** a report is generated using vector database knowledge, **When** viewing the knowledge usage section, **Then** it displays a list of all sources consulted with book titles- What happens when [boundary condition]?
 
 2. **Given** vector sources are listed, **When** reviewing each source, **Then** metadata includes: book title, author name, chapter/section, page range, quoted snippet used, and relevance score- How does system handle [error scenario]?
@@ -156,19 +146,9 @@ An astrology app owner wants to understand which knowledge sources the AI used t
 
 5. **Given** no vector database matches were found, **When** viewing the report, **Then** the knowledge usage section explicitly states "Vector database was not used" with brief explanation
 
-6. **Given** vector sources have varying relevance, **When** reviewing the source list, **Then** sources are sorted by relevance score (highest first)<!--
-
-7. **Given** a specific astrological interpretation appears in the report, **When** reviewing sources, **Then** the user can trace which book/page that interpretation came from via the snippet  ACTION REQUIRED: The content in this section represents placeholders.
-
-  Fill them out with the right functional requirements.
-
------>
-
-
+6. **Given** vector sources have varying relevance, **When** reviewing the source list, **Then** sources are sorted by relevance score (highest first)
 
 ### User Story 5 - Enhanced Report Structure with All Components (Priority: P3)### Functional Requirements
-
-
 
 A user purchasing a "General Overview" report expects a comprehensive analysis that covers all fundamental chart elements in a well-organized structure, not just planets but also points, rulers, and axes.- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
 
@@ -206,13 +186,7 @@ A user purchasing a "General Overview" report expects a comprehensive analysis t
 
 
 
-- **What happens when the API fails to return node positions?** System should log a warning, fall back to calculating nodes via backup method or secondary API, and flag the report as "partial data" if nodes cannot be obtained.<!--
-
-- **What happens when house rulers form contradictory aspects?** (e.g., ruler is both strongly supported and heavily afflicted) Report should acknowledge both influences and explain the tension or balance between them.  ACTION REQUIRED: Define measurable success criteria.
-
-- **What happens when no vector database matches are found for an obscure chart configuration?** AI should explicitly state in knowledge usage that it relied on general astrological training data and mark relevance as lower.  These must be technology-agnostic and measurable.
-
-- **What happens when Lilith placement is in the same sign/house as a major planet?** Report should discuss the conjunction and its intensification of shadow themes.-->
+- **What happens when the API fails to return node positions?** System should log a warning, fall back to calculating nodes via backup method or secondary API, and flag the report as "partial data" if nodes cannot be obtained.
 
 - **What happens when karmic nodes are exactly on a house cusp?** Report should note this significant placement and its amplification of that house's themes.
 
