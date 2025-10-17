@@ -45,19 +45,16 @@ final class AstrologyAPIService: @unchecked Sendable {
     
     private let baseURL: String
     private let session: URLSession
-    private let rateLimiter: RateLimiter
     private let requestTimeout: TimeInterval
     
     // MARK: - Initialization
     
     init(
         baseURL: String = Config.astrologyAPIBaseURL,
-        session: URLSession = .shared,
-        rateLimiter: RateLimiter
+        session: URLSession = .shared
     ) {
         self.baseURL = baseURL
         self.session = session
-        self.rateLimiter = rateLimiter
         self.requestTimeout = Config.astrologyAPIRequestTimeout
     }
     
@@ -70,24 +67,12 @@ final class AstrologyAPIService: @unchecked Sendable {
     func generateNatalChart(
         birthDetails: BirthDetails
     ) async throws -> NatalChart {
-        // Check rate limit
-        let (allowed, retryAfter) = rateLimiter.canMakeRequest()
-        guard allowed else {
-            throw AstrologyAPIError.rateLimitExceeded(retryAfter: retryAfter ?? 60)
-        }
-        
         // Build request
         let request = try buildNatalChartRequest(birthDetails: birthDetails)
-        
         // Execute request
         let (data, httpResponse) = try await executeRequest(request)
-        
-        // Record successful request
-        rateLimiter.recordRequest()
-        
         // Validate response
         try validateHTTPResponse(httpResponse)
-        
         // Decode response
         let response: AstrologyAPINatalChartResponse
         do {
@@ -95,7 +80,6 @@ final class AstrologyAPIService: @unchecked Sendable {
         } catch {
             throw AstrologyAPIError.decodingError(error)
         }
-        
         // Map to domain model
         return try AstrologyAPIDTOMapper.toDomain(response: response, birthDetails: birthDetails)
     }
@@ -112,29 +96,16 @@ final class AstrologyAPIService: @unchecked Sendable {
         theme: String = "classic",
         language: String = "en"
     ) async throws -> String {
-        // Check rate limit
-        let (allowed, retryAfter) = rateLimiter.canMakeRequest()
-        guard allowed else {
-            throw AstrologyAPIError.rateLimitExceeded(retryAfter: retryAfter ?? 60)
-        }
-        
         // Build request
         let request = try buildSVGRequest(birthDetails: birthDetails, theme: theme, language: language)
-        
         // Execute request
         let (data, httpResponse) = try await executeRequest(request)
-        
-        // Record successful request
-        rateLimiter.recordRequest()
-        
         // Validate response
         try validateHTTPResponse(httpResponse)
-        
         // Try to decode as JSON first (if API returns {"svg": "..."})
         if let jsonResponse = try? JSONDecoder().decode(AstrologyAPISVGResponse.self, from: data) {
             return jsonResponse.svgContent
         }
-        
         // Otherwise, treat response as plain SVG text
         guard let svgString = String(data: data, encoding: .utf8) else {
             throw AstrologyAPIError.decodingError(
@@ -143,7 +114,6 @@ final class AstrologyAPIService: @unchecked Sendable {
                 ])
             )
         }
-        
         return svgString
     }
     
