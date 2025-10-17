@@ -30,6 +30,8 @@ final class ChartCacheService {
         imageFormat: String? = nil
     ) throws {
         let cached = try fetchCachedChart(for: birthDetails) ?? CachedNatalChart()
+        let isNew = cached.persistentModelID == nil
+        
         try cached.apply(
             chart: chart,
             birthDetails: birthDetails,
@@ -38,13 +40,11 @@ final class ChartCacheService {
             imageFormat: imageFormat
         )
 
-        if cached.persistentModelID == nil {
+        if isNew {
             context.insert(cached)
         }
 
-        if context.hasChanges {
-            try context.save()
-        }
+        try context.save()
     }
 
     func loadChart(id: UUID) throws -> NatalChart? {
