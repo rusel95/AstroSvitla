@@ -72,6 +72,9 @@ enum AstrologyAPIDTOMapper {
         // Map aspects from chart_data
         let aspects = try mapAspects(response.chartData.aspects ?? [])
         
+        // Calculate house rulers from houses and planets
+        let houseRulers = calculateHouseRulers(houses: houses, planets: planets)
+        
         // Extract angles from subject_data
         let angles = extractAnglesFromSubjectData(response.subjectData)
         
@@ -87,6 +90,7 @@ enum AstrologyAPIDTOMapper {
             planets: planets,
             houses: houses,
             aspects: aspects,
+            houseRulers: houseRulers,
             ascendant: angles.ascendant,
             midheaven: angles.midheaven,
             calculatedAt: Date(),
@@ -235,6 +239,29 @@ enum AstrologyAPIDTOMapper {
                 type: aspectType,
                 orb: apiAspect.orb,
                 isApplying: false // API doesn't provide this info
+            )
+        }
+    }
+    
+    private static func calculateHouseRulers(
+        houses: [House],
+        planets: [Planet]
+    ) -> [HouseRuler] {
+        return houses.compactMap { house in
+            // Get traditional ruler for the sign on the house cusp
+            let rulingPlanet = TraditionalRulershipTable.ruler(of: house.sign)
+            
+            // Find the ruling planet in the chart
+            guard let ruler = planets.first(where: { $0.name == rulingPlanet }) else {
+                return nil
+            }
+            
+            return HouseRuler(
+                houseNumber: house.number,
+                rulingPlanet: rulingPlanet,
+                rulerSign: ruler.sign,
+                rulerHouse: ruler.house,
+                rulerLongitude: ruler.longitude
             )
         }
     }
