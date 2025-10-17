@@ -16,6 +16,9 @@ enum Config {
     /// Replace with your project-specific OpenAI API key
     static let openAIAPIKey = "YOUR_OPENAI_API_KEY_HERE"
 
+    /// Identifier of the OpenAI vector store that contains the astrology knowledge base
+    static let openAIVectorStoreID = ProcessInfo.processInfo.environment["OPENAI_VECTOR_STORE_ID"] ?? "YOUR_OPENAI_VECTOR_STORE_ID_HERE"
+
     /// OpenAI model to use for report generation
     static let openAIModel = "gpt-4o"
 
