@@ -142,15 +142,16 @@ final class AstrologyAPIService {
         guard let url = URL(string: "\(baseURL)/charts/natal") else {
             throw AstrologyAPIError.invalidURL
         }
-        
+
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(Config.astrologyAPIKey)", forHTTPHeaderField: "Authorization")
         request.timeoutInterval = requestTimeout
-        
+
         let requestBody = AstrologyAPIDTOMapper.toAPIRequest(birthDetails: birthDetails)
         request.httpBody = try JSONEncoder().encode(requestBody)
-        
+
         return request
     }
     
@@ -162,19 +163,20 @@ final class AstrologyAPIService {
         guard let url = URL(string: "\(baseURL)/svg/natal") else {
             throw AstrologyAPIError.invalidURL
         }
-        
+
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(Config.astrologyAPIKey)", forHTTPHeaderField: "Authorization")
         request.timeoutInterval = requestTimeout
-        
+
         let requestBody = AstrologyAPIDTOMapper.toSVGRequest(
             birthDetails: birthDetails,
             theme: theme,
             language: language
         )
         request.httpBody = try JSONEncoder().encode(requestBody)
-        
+
         return request
     }
     
