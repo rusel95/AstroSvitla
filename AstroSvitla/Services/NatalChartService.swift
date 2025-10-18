@@ -107,7 +107,24 @@ final class NatalChartService: NatalChartServiceProtocol {
             log("📡 Fetching natal chart from AstrologyAPI...")
             let natalChart = try await astrologyAPIService.generateNatalChart(birthDetails: birthDetails)
             log("✅ Natal chart received with \(natalChart.planets.count) planets, \(natalChart.houses.count) houses")
-            
+
+            // Download SVG chart visualization
+            if let imageFileID = natalChart.imageFileID, let imageFormat = natalChart.imageFormat {
+                do {
+                    log("🖼️ Downloading chart SVG visualization...")
+                    let svgString = try await astrologyAPIService.generateChartSVG(birthDetails: birthDetails)
+                    let svgData = Data(svgString.utf8)
+
+                    // Save SVG to file system
+                    let imageCacheService = ImageCacheService()
+                    try imageCacheService.saveImage(data: svgData, fileID: imageFileID, format: imageFormat)
+                    log("✅ Chart image saved (\(svgData.count) bytes)")
+                } catch {
+                    log("⚠️ Failed to download chart image: \(error.localizedDescription)")
+                    // Don't throw - chart data is still valid even without image
+                }
+            }
+
             // Cache the result
             do {
                 try chartCacheService.saveChart(natalChart, birthDetails: birthDetails)
@@ -116,7 +133,7 @@ final class NatalChartService: NatalChartServiceProtocol {
                 log("⚠️ Failed to cache chart: \(error.localizedDescription)")
                 // Don't throw - chart generation succeeded even if caching failed
             }
-            
+
             return natalChart
         } catch {
             log("❌ Chart generation failed: \(error.localizedDescription)")
