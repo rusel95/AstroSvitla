@@ -9,15 +9,15 @@ final class ReportPurchase {
     var area: String
     var reportText: String
     var summary: String
-    var keyInfluences: [String]
+    @Attribute(.transformable(by: "NSSecureUnarchiveFromData")) var keyInfluences: [String]
     var detailedAnalysis: String
-    var recommendations: [String]
+    @Attribute(.transformable(by: "NSSecureUnarchiveFromData")) var recommendations: [String]
     var language: String
     var knowledgeVectorUsed: Bool = false
     var knowledgeNotes: String?
-    var knowledgeSourceTitles: [String]?
-    var knowledgeSourceAuthors: [String]?
-    var knowledgeSourcePages: [String]?
+    @Attribute(.transformable(by: "NSSecureUnarchiveFromData")) var knowledgeSourceTitles: [String]?
+    @Attribute(.transformable(by: "NSSecureUnarchiveFromData")) var knowledgeSourceAuthors: [String]?
+    @Attribute(.transformable(by: "NSSecureUnarchiveFromData")) var knowledgeSourcePages: [String]?
 
     var price: Decimal
     var currency: String
