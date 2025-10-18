@@ -57,8 +57,8 @@ struct AstrologyAPIOptions: Codable, Sendable {
         zodiacType: "Tropic", // Tropical/Western
         activePoints: [
             "Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter",
-            "Saturn", "Uranus", "Neptune", "Pluto", "True Node",
-            "South Node", "Lilith"
+            "Saturn", "Uranus", "Neptune", "Pluto", "True_Node",
+            "True_South_Node", "Mean_Lilith"
         ],
         precision: 2
     )
