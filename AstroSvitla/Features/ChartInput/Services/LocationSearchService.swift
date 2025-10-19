@@ -10,22 +10,35 @@ struct LocationSearchService {
 
         if Task.isCancelled { return [] }
 
-        let placemarks = try await geocode(address: trimmed)
+        // First, geocode the query to get coordinates
+        let initialPlacemarks = try await geocode(address: trimmed)
 
-        return placemarks.compactMap { placemark in
-            guard let name = placemark.name ?? placemark.locality else { return nil }
+        // Then reverse geocode with coordinates to get English names
+        var suggestions: [LocationSuggestion] = []
+
+        for placemark in initialPlacemarks {
+            guard let coordinate = placemark.location?.coordinate else { continue }
+
+            // Reverse geocode with coordinates to get English location names
+            // Note: CLGeocoder returns English names when using preferredLocale in iOS 17+
+            let englishPlacemark = try? await reverseGeocodeEnglish(coordinate: coordinate)
+
+            let actualPlacemark = englishPlacemark ?? placemark
+
+            guard let name = actualPlacemark.locality ?? actualPlacemark.name else { continue }
 
             var components: [String] = []
-            if let locality = placemark.locality, locality.caseInsensitiveCompare(name) != .orderedSame {
-                components.append(locality)
-            } else if let subLocality = placemark.subLocality {
-                components.append(subLocality)
-            }
-            if let administrativeArea = placemark.administrativeArea {
+
+            if let administrativeArea = actualPlacemark.administrativeArea {
                 components.append(administrativeArea)
             }
-            if let country = placemark.country {
+            if let country = actualPlacemark.country {
                 components.append(country)
+            }
+
+            // Add ISO country code for API geocoding reliability
+            if let isoCountryCode = actualPlacemark.isoCountryCode {
+                components.append(isoCountryCode)
             }
 
             let subtitle = components
@@ -33,14 +46,15 @@ struct LocationSearchService {
                 .filter { $0.isEmpty == false }
                 .joined(separator: ", ")
 
-            return LocationSuggestion(
+            suggestions.append(LocationSuggestion(
                 title: name,
                 subtitle: subtitle,
-                coordinate: placemark.location?.coordinate,
-                timeZone: placemark.timeZone
-            )
+                coordinate: coordinate,
+                timeZone: actualPlacemark.timeZone
+            ))
         }
-        .unique(by: \.displayName)
+
+        return suggestions.unique(by: \.displayName)
     }
 
     private func geocode(address: String) async throws -> [CLPlacemark] {
@@ -50,6 +64,36 @@ struct LocationSearchService {
                     continuation.resume(throwing: error)
                 } else {
                     continuation.resume(returning: placemarks ?? [])
+                }
+            }
+        }
+    }
+
+    private func reverseGeocodeEnglish(coordinate: CLLocationCoordinate2D) async throws -> CLPlacemark {
+        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+
+        // iOS 17+ supports preferredLocale for English names
+        if #available(iOS 17.0, *) {
+            let placemarks = try await geocoder.reverseGeocodeLocation(
+                location,
+                preferredLocale: Locale(identifier: "en_US")
+            )
+            guard let placemark = placemarks.first else {
+                throw NSError(domain: "LocationSearchService", code: -1)
+            }
+            return placemark
+        } else {
+            // For older iOS versions, use standard reverse geocoding
+            // Names may still be localized, but at least we tried
+            return try await withCheckedThrowingContinuation { continuation in
+                geocoder.reverseGeocodeLocation(location) { placemarks, error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                    } else if let placemark = placemarks?.first {
+                        continuation.resume(returning: placemark)
+                    } else {
+                        continuation.resume(throwing: NSError(domain: "LocationSearchService", code: -1))
+                    }
                 }
             }
         }
