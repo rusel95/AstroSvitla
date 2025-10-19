@@ -7,6 +7,12 @@
     ": %@" : {
 
     },
+    ": %lld" : {
+
+    },
+    "(%lld books)" : {
+
+    },
     "%.4f°, %.4f°" : {
       "localizations" : {
         "en" : {
@@ -51,6 +57,12 @@
       }
     },
     "%lld" : {
+
+    },
+    "%lld chunks" : {
+
+    },
+    "%lld used" : {
 
     },
     "%lld°%@'" : {
@@ -1005,6 +1017,9 @@
         }
       }
     },
+    "ID: %@" : {
+
+    },
     "knowledge_logs.button.title" : {
       "localizations" : {
         "en" : {
@@ -1021,7 +1036,17 @@
         }
       }
     },
+    "knowledge_logs.database.empty" : {
+
+    },
+    "knowledge_logs.database.empty_message" : {
+
+    },
+    "knowledge_logs.database.title" : {
+
+    },
     "knowledge_logs.empty.message" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1038,6 +1063,7 @@
       }
     },
     "knowledge_logs.empty.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1070,6 +1096,7 @@
       }
     },
     "knowledge_logs.source.pages" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1102,6 +1129,7 @@
       }
     },
     "knowledge_logs.source.section" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1118,6 +1146,7 @@
       }
     },
     "knowledge_logs.source.snippet" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1134,6 +1163,7 @@
       }
     },
     "knowledge_logs.sources.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1164,6 +1194,9 @@
           }
         }
       }
+    },
+    "knowledge_logs.status.sources_count" : {
+
     },
     "knowledge_logs.status.title" : {
       "localizations" : {
@@ -1212,6 +1245,9 @@
           }
         }
       }
+    },
+    "knowledge_logs.used_sources.title" : {
+
     },
     "location.search.hint_short" : {
       "localizations" : {
