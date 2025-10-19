@@ -53,7 +53,7 @@ struct OpenAIService {
                 let (payload, usage) = try await performRequest(client: client, query: query)
                 logUsage(usage)
                 let fallbackNotes = knowledgeSnippets.isEmpty ? localized("report.knowledge.no_snippets") : nil
-                let usagePayload = payload.knowledgeUsage ?? OpenAIReportPayload.KnowledgeUsagePayload(vectorSourceUsed: knowledgeSnippets.isEmpty == false, notes: fallbackNotes, sources: nil)
+                let usagePayload = payload.knowledgeUsage ?? OpenAIReportPayload.KnowledgeUsagePayload(vectorSourceUsed: knowledgeSnippets.isEmpty == false, notes: fallbackNotes, sources: nil, availableBooks: nil)
 
                 let sources = usagePayload.sources?.map { sourcePayload in
                     KnowledgeSource(
@@ -62,7 +62,27 @@ struct OpenAIService {
                         section: sourcePayload.section,
                         pageRange: sourcePayload.pageRange,
                         snippet: sourcePayload.snippet,
-                        relevanceScore: sourcePayload.relevanceScore
+                        relevanceScore: sourcePayload.relevanceScore,
+                        chunkId: sourcePayload.chunkId
+                    )
+                }
+
+                let availableBooks = usagePayload.availableBooks?.map { bookPayload in
+                    BookMetadata(
+                        bookTitle: bookPayload.bookTitle,
+                        author: bookPayload.author,
+                        totalChunks: bookPayload.totalChunks,
+                        usedChunks: bookPayload.usedChunks,
+                        availableChunks: bookPayload.availableChunks.map { chunkPayload in
+                            ChunkOption(
+                                chunkId: chunkPayload.chunkId,
+                                section: chunkPayload.section,
+                                pageRange: chunkPayload.pageRange,
+                                preview: chunkPayload.preview,
+                                fullText: chunkPayload.fullText,
+                                wasUsed: chunkPayload.wasUsed
+                            )
+                        }
                     )
                 }
 
@@ -75,7 +95,8 @@ struct OpenAIService {
                     knowledgeUsage: KnowledgeUsage(
                         vectorSourceUsed: usagePayload.vectorSourceUsed,
                         notes: usagePayload.notes,
-                        sources: sources
+                        sources: sources,
+                        availableBooks: availableBooks
                     )
                 )
             } catch let error as ReportGenerationError {
@@ -137,7 +158,7 @@ struct OpenAIService {
         return ChatQuery(
             messages: [systemMessage, userMessage],
             model: "gpt-4o-mini",
-            maxCompletionTokens: 1500, // Increased from 900 to accommodate expanded analysis (10 planet points, aspects, nodes, Lilith, house rulers)
+            maxCompletionTokens: 10000, // Increased to accommodate full knowledge base metadata with available_books
             responseFormat: .jsonObject,
             temperature: 0.7,
             topP: 0.9
@@ -264,11 +285,13 @@ private struct OpenAIReportPayload: Decodable {
         let vectorSourceUsed: Bool
         let notes: String?
         let sources: [KnowledgeSourcePayload]?
+        let availableBooks: [BookMetadataPayload]?
 
         private enum CodingKeys: String, CodingKey {
             case vectorSourceUsed = "vector_source_used"
             case notes
             case sources
+            case availableBooks = "available_books"
         }
     }
 
@@ -279,6 +302,7 @@ private struct OpenAIReportPayload: Decodable {
         let pageRange: String?
         let snippet: String
         let relevanceScore: Double?
+        let chunkId: String?
 
         private enum CodingKeys: String, CodingKey {
             case bookTitle = "book_title"
@@ -287,6 +311,41 @@ private struct OpenAIReportPayload: Decodable {
             case pageRange = "page_range"
             case snippet
             case relevanceScore = "relevance_score"
+            case chunkId = "chunk_id"
+        }
+    }
+
+    struct BookMetadataPayload: Decodable {
+        let bookTitle: String
+        let author: String?
+        let totalChunks: Int
+        let usedChunks: [String]
+        let availableChunks: [ChunkOptionPayload]
+
+        private enum CodingKeys: String, CodingKey {
+            case bookTitle = "book_title"
+            case author
+            case totalChunks = "total_chunks"
+            case usedChunks = "used_chunks"
+            case availableChunks = "available_chunks"
+        }
+    }
+
+    struct ChunkOptionPayload: Decodable {
+        let chunkId: String
+        let section: String?
+        let pageRange: String?
+        let preview: String
+        let fullText: String
+        let wasUsed: Bool
+
+        private enum CodingKeys: String, CodingKey {
+            case chunkId = "chunk_id"
+            case section
+            case pageRange = "page_range"
+            case preview
+            case fullText = "full_text"
+            case wasUsed = "was_used"
         }
     }
 }
