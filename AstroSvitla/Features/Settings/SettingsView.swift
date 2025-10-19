@@ -17,6 +17,7 @@ struct SettingsView: View {
             profileSection
             appearanceSection
             languageSection
+            openAIModelSection
         }
         .navigationTitle(Text("settings.title", tableName: "Localizable"))
         .sheet(isPresented: $showingProfileManager) {
@@ -68,6 +69,54 @@ struct SettingsView: View {
                 .foregroundStyle(.secondary)
         } header: {
             Text("settings.section.language", tableName: "Localizable")
+        }
+    }
+
+    private var openAIModelSection: some View {
+        Section {
+            Picker(selection: $preferences.selectedModel) {
+                ForEach(AppPreferences.OpenAIModel.allCases) { model in
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(model.displayName)
+                        Text("~$\(String(format: "%.4f", model.estimatedCostPer1000Tokens))/1K токенів")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                    .tag(model)
+                }
+            } label: {}
+            .pickerStyle(.inline)
+
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Обрана модель: **\(preferences.selectedModel.displayName)**")
+                    .font(.subheadline)
+
+                HStack {
+                    Label("Макс. токенів", systemImage: "number")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Text("\(preferences.selectedModel.maxTokens)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                HStack {
+                    Label("Приблизна вартість", systemImage: "dollarsign.circle")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Text("$\(String(format: "%.4f", preferences.selectedModel.estimatedCostPer1000Tokens))/1K")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .padding(.vertical, 8)
+        } header: {
+            Text("Модель OpenAI")
+        } footer: {
+            Text("Обирайте більш потужні моделі для кращої якості аналізу. GPT-4o Mini рекомендовано для оптимального співвідношення ціни та якості.")
+                .font(.footnote)
         }
     }
 }
