@@ -1825,6 +1825,7 @@
       }
     },
     "report.action.generate_another" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1841,6 +1842,7 @@
       }
     },
     "report.action.start_over" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
