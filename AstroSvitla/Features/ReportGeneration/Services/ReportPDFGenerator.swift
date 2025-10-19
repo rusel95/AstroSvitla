@@ -77,7 +77,7 @@ private struct ReportPDFContentView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(localized("pdf.title"))
+            Text("Астрологічний звіт")
                 .font(.title.bold())
             Text("\(birthDetails.displayName) • \(birthDetails.formattedBirthDate) • \(birthDetails.formattedBirthTime)")
                 .font(.subheadline)
@@ -146,7 +146,7 @@ private struct ReportPDFContentView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Використані джерела")
                 .font(.headline)
-            Text(report.knowledgeUsage.vectorSourceUsed ? localized("report.knowledge.used") : localized("report.knowledge.not_used"))
+            Text(report.knowledgeUsage.vectorSourceUsed ? "Джерела использованы" : "Джерела не використано")
                 .font(.body)
             if let notes = report.knowledgeUsage.notes, notes.isEmpty == false {
                 Text(notes)
@@ -159,7 +159,7 @@ private struct ReportPDFContentView: View {
     private var footer: some View {
         VStack(alignment: .leading, spacing: 4) {
             Divider()
-            Text(localized("pdf.generated_on", Date().formatted(date: .abbreviated, time: .shortened)))
+            Text("Генеровано: \(Date().formatted(date: .abbreviated, time: .shortened))")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
