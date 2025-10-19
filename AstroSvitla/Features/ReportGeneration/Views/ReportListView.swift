@@ -32,11 +32,11 @@ struct ReportListView: View {
                         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                 }
             }
-            .navigationTitle(showsTitle ? localized("nav.reports") : "")
+            .navigationTitle(showsTitle ? "Звіти" : "")
             .toolbar {
                 if allowsDismiss {
                     ToolbarItem(placement: .topBarLeading) {
-                        Button(localized("action.close")) {
+                        Button("Закрити") {
                             dismiss()
                         }
                     }
@@ -51,12 +51,12 @@ struct ReportListView: View {
             .onChange(of: viewModel.errorMessage) { _, newValue in
                 isShowingErrorAlert = newValue != nil
             }
-            .alert(localized("alert.generic.title"), isPresented: $isShowingErrorAlert, actions: {
-                Button(localized("action.close"), role: .cancel) {
+            .alert("Помилка", isPresented: $isShowingErrorAlert, actions: {
+                Button("Закрити", role: .cancel) {
                     isShowingErrorAlert = false
                 }
             }, message: {
-                Text(viewModel.errorMessage ?? localized("alert.generic.message"))
+                Text(viewModel.errorMessage ?? "Щось пішло не так")
             })
         }
     }
