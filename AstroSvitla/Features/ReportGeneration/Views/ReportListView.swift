@@ -169,9 +169,7 @@ private struct SavedReportDetailView: View {
                 ReportDetailView(
                     birthDetails: prepared.birthDetails,
                     natalChart: prepared.natalChart,
-                    report: prepared.generatedReport,
-                    onGenerateAnother: nil,
-                    onStartOver: nil
+                    report: prepared.generatedReport
                 )
                 .background(Color(.systemBackground))
             } else {
