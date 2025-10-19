@@ -27,10 +27,10 @@ struct AreaSelectionView: View {
                 Button {
                     showChartDetails = true
                 } label: {
-                    Label(String(localized: "area.action.view_details", table: "Localizable"), systemImage: "chart.bar.doc.horizontal")
+                    Label("Переглянути деталі", systemImage: "chart.bar.doc.horizontal")
                 }
             } header: {
-                Text("area.section.birth_details", tableName: "Localizable")
+                Text("Дані народження")
             }
 
             Section {
@@ -42,17 +42,17 @@ struct AreaSelectionView: View {
                     }
                 }
             } header: {
-                Text("area.section.choose", tableName: "Localizable")
+                Text("Оберіть сферу")
             }
         }
         .listStyle(.insetGrouped)
-        .navigationTitle(Text("area.navigation.title", tableName: "Localizable"))
+        .navigationTitle(Text("Вибір сфери"))
         .fullScreenCover(isPresented: $showChartDetails) {
             NavigationStack {
                 ChartDetailsView(chart: natalChart, birthDetails: birthDetails)
                     .toolbar {
                         ToolbarItem(placement: .confirmationAction) {
-                            Button(String(localized: "action.done", table: "Localizable")) {
+                            Button("Готово") {
                                 showChartDetails = false
                             }
                         }
