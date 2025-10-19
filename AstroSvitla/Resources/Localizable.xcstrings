@@ -7,6 +7,9 @@
     ": %lld" : {
 
     },
+    "«%@»" : {
+
+    },
     "(%lld книг)" : {
 
     },
@@ -74,6 +77,9 @@
           }
         }
       }
+    },
+    "•" : {
+
     },
     "• %@" : {
 
@@ -413,6 +419,9 @@
           }
         }
       }
+    },
+    "birth.field.location_placeholder" : {
+
     },
     "birth.field.name_optional" : {
       "localizations" : {
@@ -947,6 +956,7 @@
       }
     },
     "error.chart.calculation_failed" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1529,6 +1539,7 @@
       }
     },
     "profile.form.error.location_required" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1545,6 +1556,7 @@
       }
     },
     "profile.form.error.missing_coordinate" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1561,6 +1573,7 @@
       }
     },
     "profile.form.error.name_duplicate" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1577,6 +1590,7 @@
       }
     },
     "profile.form.error.name_length" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1593,6 +1607,7 @@
       }
     },
     "profile.form.error.name_required" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1609,6 +1624,7 @@
       }
     },
     "profile.form.error.unknown" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1625,6 +1641,7 @@
       }
     },
     "profile.form.field.name" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1641,6 +1658,7 @@
       }
     },
     "profile.inline.location.placeholder" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1705,6 +1723,7 @@
       }
     },
     "profile.selector.create_new" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1721,6 +1740,7 @@
       }
     },
     "profile.selector.new_profile" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2908,7 +2928,16 @@
     "Вартість" : {
 
     },
+    "Введіть дані про народження для розрахунку натальної карти" : {
+
+    },
+    "Введіть дані про народження, щоб розрахувати вашу натальну карту та отримати персоналізовані астрологічні прогнози" : {
+
+    },
     "Векторна база знань не містить книг" : {
+
+    },
+    "Виберіть профіль для розрахунку натальної карти або створіть новий" : {
 
     },
     "Всього токенів" : {
@@ -2923,6 +2952,9 @@
     "Дата генерації" : {
 
     },
+    "Дата народження" : {
+
+    },
     "Дата розрахунку" : {
 
     },
@@ -2935,6 +2967,9 @@
     "Дім %lld" : {
 
     },
+    "Додайте дані народження для нової людини" : {
+
+    },
     "Доступна векторна база даних" : {
 
     },
@@ -2942,6 +2977,9 @@
 
     },
     "Закрити" : {
+
+    },
+    "Зберегти" : {
 
     },
     "Зовнішні книги" : {
@@ -2981,6 +3019,9 @@
     "Місце" : {
 
     },
+    "Місце народження" : {
+
+    },
     "Модель" : {
 
     },
@@ -2988,6 +3029,15 @@
 
     },
     "Надано фрагментів" : {
+
+    },
+    "Наприклад: Олександра" : {
+
+    },
+    "Новий профіль" : {
+
+    },
+    "Оберіть профіль" : {
 
     },
     "Обирайте більш потужні моделі для кращої якості аналізу. GPT-4o Mini рекомендовано для оптимального співвідношення ціни та якості." : {
@@ -3005,10 +3055,19 @@
     "Планети (%lld)" : {
 
     },
+    "Початок" : {
+
+    },
     "Приблизна вартість" : {
 
     },
     "Примітки" : {
+
+    },
+    "Продовжити з профілем" : {
+
+    },
+    "Профілі" : {
 
     },
     "Процитовані джерела" : {
@@ -3020,16 +3079,37 @@
     "Середина неба (MC)" : {
 
     },
+    "Скасувати" : {
+
+    },
+    "Створити новий профіль" : {
+
+    },
+    "Створити профіль" : {
+
+    },
+    "Створіть свій перший профіль" : {
+
+    },
     "Токени (completion)" : {
 
     },
     "Токени (prompt)" : {
 
     },
+    "Точний час і місце народження необхідні для коректного розрахунку натальної карти" : {
+
+    },
+    "Це займе всього 30 секунд" : {
+
+    },
     "Цитовано джерел" : {
 
     },
     "Час" : {
+
+    },
+    "Час народження" : {
 
     },
     "Час обробки" : {

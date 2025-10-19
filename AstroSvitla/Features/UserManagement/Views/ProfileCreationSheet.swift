@@ -32,7 +32,7 @@ struct ProfileCreationSheet: View {
     }
 
     private var locationDisplay: String {
-        location.isEmpty ? String(localized: "birth.field.location_placeholder", table: "Localizable") : location
+        location.isEmpty ? "Виберіть місце народження" : location
     }
 
     var body: some View {
