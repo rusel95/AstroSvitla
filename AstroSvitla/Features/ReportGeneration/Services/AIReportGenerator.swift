@@ -20,7 +20,8 @@ actor AIReportGenerator {
         natalChart: NatalChart,
         languageCode: String,
         languageDisplayName: String,
-        repositoryContext: String
+        repositoryContext: String,
+        selectedModel: AppPreferences.OpenAIModel
     ) async throws -> GeneratedReport {
         let knowledgeSnippets = await knowledgeProvider.loadSnippets(
             for: area,
@@ -35,7 +36,8 @@ actor AIReportGenerator {
             knowledgeSnippets: knowledgeSnippets,
             languageCode: languageCode,
             languageDisplayName: languageDisplayName,
-            repositoryContext: repositoryContext
+            repositoryContext: repositoryContext,
+            selectedModel: selectedModel
         )
     }
 }
