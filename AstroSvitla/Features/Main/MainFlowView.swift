@@ -8,7 +8,7 @@ enum ChartCalculationError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .missingCoordinate:
-            return String(localized: "error.chart.missing_coordinate", table: "Localizable")
+            return "Координати не знайдені"
         }
     }
 }
@@ -46,13 +46,13 @@ struct MainFlowView: View {
             content
                 .animation(.default, value: flowState.animationID)
         }
-        .alert(String(localized: "alert.generic.title", table: "Localizable"), isPresented: Binding(
+        .alert("Помилка", isPresented: Binding(
             get: { errorMessage != nil },
             set: { if !$0 { errorMessage = nil } }
         )) {
-            Button(String(localized: "action.ok", table: "Localizable"), role: .cancel) { errorMessage = nil }
+            Button("OK", role: .cancel) { errorMessage = nil }
         } message: {
-            Text(errorMessage ?? String(localized: "alert.generic.message", table: "Localizable"))
+            Text(errorMessage ?? "Щось пішло не так")
         }
         .onAppear {
             profileViewModel.loadProfiles()
@@ -134,7 +134,7 @@ struct MainFlowView: View {
                     } label: {
                         HStack(spacing: 4) {
                             Image(systemName: "chevron.left")
-                            Text("action.back", tableName: "Localizable")
+                            Text("Назад")
                         }
                     }
                 }
@@ -174,7 +174,7 @@ struct MainFlowView: View {
                     } label: {
                         HStack(spacing: 4) {
                             Image(systemName: "chevron.left")
-                            Text("action.back", tableName: "Localizable")
+                            Text("Назад")
                         }
                     }
                 }
@@ -491,17 +491,17 @@ private extension MainFlowView {
 
         if report.keyInfluences.isEmpty == false {
             lines.append("")
-            lines.append(String(localized: "report.export.key_influences_header", table: "Localizable"))
+            lines.append("Ключові впливи")
             report.keyInfluences.forEach { lines.append("• \($0)") }
         }
 
         lines.append("")
-        lines.append(String(localized: "report.export.analysis_header", table: "Localizable"))
+        lines.append("Аналіз")
         lines.append(report.detailedAnalysis)
 
         if report.recommendations.isEmpty == false {
             lines.append("")
-            lines.append(String(localized: "report.export.recommendations_header", table: "Localizable"))
+            lines.append("Рекомендації")
             report.recommendations.forEach { lines.append("• \($0)") }
         }
 
@@ -551,9 +551,9 @@ private struct CalculatingChartView: View {
                 .scaleEffect(1.5)
 
             VStack(spacing: 8) {
-                Text("calculating.title", tableName: "Localizable")
+                Text("Розрахунок")
                     .font(.headline)
-                Text("calculating.description", tableName: "Localizable")
+                Text("Будь ласка, почекайте")
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
             }
@@ -561,7 +561,7 @@ private struct CalculatingChartView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGroupedBackground))
-        .navigationTitle(Text("calculating.navigation_title", tableName: "Localizable"))
+        .navigationTitle(Text("Розрахунок"))
     }
 }
 
@@ -579,7 +579,7 @@ private struct GeneratingReportView: View {
             VStack(spacing: 8) {
             Text(localized("generating.title", area.displayName))
                     .font(.headline)
-                Text("generating.description", tableName: "Localizable")
+                Text("Аналізуємо дані")
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
             }
@@ -593,7 +593,7 @@ private struct GeneratingReportView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGroupedBackground))
-        .navigationTitle(Text("generating.navigation_title", tableName: "Localizable"))
+        .navigationTitle(Text("Генерування"))
     }
 }
 

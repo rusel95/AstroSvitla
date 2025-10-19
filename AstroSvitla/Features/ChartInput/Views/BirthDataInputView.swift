@@ -18,17 +18,17 @@ struct BirthDataInputView: View {
                 TextField("birth.field.name_optional", text: $viewModel.name)
                     .focused($focusedField, equals: .name)
             } header: {
-                Text("birth.section.person", tableName: "Localizable")
+                Text("Персона")
             }
 
             Section {
-                DatePicker("birth.field.date", selection: $viewModel.birthDate, in: viewModel.dateRange, displayedComponents: .date)
-                DatePicker("birth.field.time", selection: $viewModel.birthTime, displayedComponents: .hourAndMinute)
+                DatePicker("Дата", selection: $viewModel.birthDate, in: viewModel.dateRange, displayedComponents: .date)
+                DatePicker("Час", selection: $viewModel.birthTime, displayedComponents: .hourAndMinute)
                 Button {
                     showLocationSearch = true
                 } label: {
                     HStack {
-                        Text("birth.field.location", tableName: "Localizable")
+                        Text("Місце")
                             .foregroundStyle(.primary)
                         Spacer()
                         Text(viewModel.locationDisplay)
@@ -40,11 +40,11 @@ struct BirthDataInputView: View {
                     }
                 }
             } header: {
-                Text("birth.section.details", tableName: "Localizable")
+                Text("Деталі")
             }
 
             Section {
-                Text("birth.help.precision", tableName: "Localizable")
+                Text("Точніший час дає кращі результати")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -54,16 +54,16 @@ struct BirthDataInputView: View {
                     Button(role: .destructive) {
                         viewModel.clearData()
                     } label: {
-                        Label(String(localized: "birth.action.clear_saved", table: "Localizable"), systemImage: "trash")
+                        Label("Видалити збережені дані", systemImage: "trash")
                     }
                 }
             }
         }
-        .navigationTitle(Text("birth.navigation.title", tableName: "Localizable"))
+        .navigationTitle(Text("Дані народження"))
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 if let onCancel {
-                    Button(String(localized: "action.back", table: "Localizable"), action: onCancel)
+                    Button("Назад", action: onCancel)
                 }
             }
         }
@@ -75,7 +75,7 @@ struct BirthDataInputView: View {
                 }
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button(String(localized: "action.close", table: "Localizable")) {
+                        Button("Закрити") {
                             showLocationSearch = false
                         }
                     }
@@ -88,7 +88,7 @@ struct BirthDataInputView: View {
                 Button(action: {
                     onContinue(viewModel.makeDetails())
                 }) {
-                    Text("action.continue", tableName: "Localizable")
+                    Text("Продовжити")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)

@@ -201,7 +201,7 @@ struct ProfileCreationSheet: View {
                     }
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
-                            Button(String(localized: "action.close", table: "Localizable")) {
+                            Button("Закрити") {
                                 showLocationSearch = false
                             }
                         }

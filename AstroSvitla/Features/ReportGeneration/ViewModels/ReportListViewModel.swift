@@ -53,7 +53,7 @@ final class ReportListViewModel: ObservableObject {
             loadReports() // Refresh the list
         } catch {
             print("[ReportListViewModel] ❌ Failed to delete report: \(error)")
-            errorMessage = String(localized: "reports.error.delete_failed", table: "Localizable")
+            errorMessage = "Помилка видалення звіту"
         }
     }
 
@@ -70,7 +70,7 @@ final class ReportListViewModel: ObservableObject {
             sections = Self.buildSections(from: reports)
             errorMessage = nil
         } catch {
-            errorMessage = String(localized: "reports.error.load_failed", table: "Localizable")
+            errorMessage = "Помилка завантаження звітів"
             sections = []
         }
     }
@@ -97,8 +97,8 @@ private extension ReportListViewModel {
 
             let profile = purchases.first?.profile
             let isOrphan = profile == nil
-            let chartName = profile?.name ?? String(localized: "reports.section.unknown_profile", table: "Localizable")
-            let subtitle = profile.map { profileSubtitle(for: $0) } ?? String(localized: "reports.section.no_chart", table: "Localizable")
+            let chartName = profile?.name ?? "Невідомий профіль"
+            let subtitle = profile.map { profileSubtitle(for: $0) } ?? "Без карти"
 
             let items = purchases.map { purchase in
                 makeItem(from: purchase)

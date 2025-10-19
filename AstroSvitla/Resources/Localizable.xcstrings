@@ -97,6 +97,7 @@
 
     },
     "action.back" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -145,6 +146,7 @@
       }
     },
     "action.continue" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -161,6 +163,7 @@
       }
     },
     "action.done" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -306,6 +309,7 @@
       }
     },
     "area.action.view_details" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -322,6 +326,7 @@
       }
     },
     "area.navigation.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -338,6 +343,7 @@
       }
     },
     "area.section.birth_details" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -354,6 +360,7 @@
       }
     },
     "area.section.choose" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -373,6 +380,7 @@
 
     },
     "birth.action.clear_saved" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -405,6 +413,7 @@
       }
     },
     "birth.field.location" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -453,6 +462,7 @@
       }
     },
     "birth.help.precision" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -469,6 +479,7 @@
       }
     },
     "birth.navigation.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -485,6 +496,7 @@
       }
     },
     "birth.section.details" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -501,6 +513,7 @@
       }
     },
     "birth.section.person" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -517,6 +530,7 @@
       }
     },
     "calculating.description" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -533,6 +547,7 @@
       }
     },
     "calculating.navigation_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -549,6 +564,7 @@
       }
     },
     "calculating.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -905,6 +921,7 @@
       }
     },
     "chart.loading" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -921,6 +938,7 @@
       }
     },
     "chart.retry" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -937,6 +955,7 @@
       }
     },
     "chart.unavailable" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -970,6 +989,7 @@
       }
     },
     "error.chart.missing_coordinate" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -986,6 +1006,7 @@
       }
     },
     "generating.description" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1002,6 +1023,7 @@
       }
     },
     "generating.navigation_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1037,6 +1059,7 @@
 
     },
     "knowledge_logs.button.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1257,6 +1280,7 @@
       }
     },
     "location.search.hint_short" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1273,6 +1297,7 @@
       }
     },
     "location.search.loading" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1289,6 +1314,7 @@
       }
     },
     "location.search.no_results" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1305,6 +1331,7 @@
       }
     },
     "location.search.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1372,10 +1399,11 @@
         }
       }
     },
-    "onboarding.back" : {
+    "OK" : {
 
     },
     "onboarding.next" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1392,6 +1420,7 @@
       }
     },
     "onboarding.skip" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1408,6 +1437,7 @@
       }
     },
     "onboarding.start" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1456,6 +1486,7 @@
       }
     },
     "profile.badge.active" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1472,6 +1503,7 @@
       }
     },
     "profile.delete.action" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1488,6 +1520,7 @@
       }
     },
     "profile.delete.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1504,6 +1537,7 @@
       }
     },
     "profile.empty.description" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1520,6 +1554,7 @@
       }
     },
     "profile.empty.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1672,6 +1707,7 @@
       }
     },
     "profile.manage.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1688,6 +1724,7 @@
       }
     },
     "profile.report.plural" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1704,6 +1741,7 @@
       }
     },
     "profile.report.singular" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1754,6 +1792,7 @@
       }
     },
     "purchase.at_time" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1770,6 +1809,7 @@
       }
     },
     "purchase.generate_report" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1786,6 +1826,7 @@
       }
     },
     "purchase.info.birth_data" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1802,6 +1843,7 @@
       }
     },
     "purchase.info.one_time" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1818,6 +1860,7 @@
       }
     },
     "purchase.info.preview_build" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1834,6 +1877,7 @@
       }
     },
     "purchase.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1850,6 +1894,7 @@
       }
     },
     "purchase.what_next" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2001,6 +2046,7 @@
       }
     },
     "report.export.analysis_header" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2017,6 +2063,7 @@
       }
     },
     "report.export.key_influences_header" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2033,6 +2080,7 @@
       }
     },
     "report.export.recommendations_header" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2161,6 +2209,7 @@
       }
     },
     "report.section.analysis" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2177,6 +2226,7 @@
       }
     },
     "report.section.chart" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2193,6 +2243,7 @@
       }
     },
     "report.section.influences" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2209,6 +2260,7 @@
       }
     },
     "report.section.knowledge_usage" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2225,6 +2277,7 @@
       }
     },
     "report.section.recommendations" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2241,6 +2294,7 @@
       }
     },
     "report.section.summary" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2257,6 +2311,7 @@
       }
     },
     "reports.empty.description" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2289,6 +2344,7 @@
       }
     },
     "reports.error.delete_failed" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2305,6 +2361,7 @@
       }
     },
     "reports.error.load_failed" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2337,6 +2394,7 @@
       }
     },
     "reports.section.no_chart" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2353,6 +2411,7 @@
       }
     },
     "reports.section.orphan_notice" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2369,6 +2428,7 @@
       }
     },
     "reports.section.unknown_profile" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2402,6 +2462,7 @@
       }
     },
     "settings.action.manage_profiles" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2571,6 +2632,7 @@
       }
     },
     "settings.language.english" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2587,6 +2649,7 @@
       }
     },
     "settings.language.note" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2603,6 +2666,7 @@
       }
     },
     "settings.language.system" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2619,6 +2683,7 @@
       }
     },
     "settings.language.ukrainian" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2652,6 +2717,7 @@
       }
     },
     "settings.picker.theme" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2685,6 +2751,7 @@
       }
     },
     "settings.section.language" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2718,6 +2785,7 @@
       }
     },
     "settings.section.profiles" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2734,6 +2802,7 @@
       }
     },
     "settings.section.theme" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2750,6 +2819,7 @@
       }
     },
     "settings.theme.dark" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2766,6 +2836,7 @@
       }
     },
     "settings.theme.light" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2782,6 +2853,7 @@
       }
     },
     "settings.theme.system" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2798,6 +2870,7 @@
       }
     },
     "settings.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2814,6 +2887,7 @@
       }
     },
     "svg.failed" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2830,6 +2904,7 @@
       }
     },
     "svg.rendering" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2910,6 +2985,15 @@
         }
       }
     },
+    "Активний" : {
+
+    },
+    "Аналіз" : {
+
+    },
+    "Аналізуємо дані" : {
+
+    },
     "Аспекти (%lld)" : {
 
     },
@@ -2922,6 +3006,9 @@
     "Будинки (%lld)" : {
 
     },
+    "Будь ласка, почекайте" : {
+
+    },
     "Вартість" : {
 
     },
@@ -2931,13 +3018,37 @@
     "Введіть дані про народження, щоб розрахувати вашу натальну карту та отримати персоналізовані астрологічні прогнози" : {
 
     },
+    "Введіть місто, область або країну" : {
+
+    },
     "Векторна база знань не містить книг" : {
 
     },
     "Виберіть профіль для розрахунку натальної карти або створіть новий" : {
 
     },
+    "Вибір сфери" : {
+
+    },
+    "Видалити" : {
+
+    },
+    "Видалити збережені дані" : {
+
+    },
+    "Видалити профіль" : {
+
+    },
+    "Використані джерела" : {
+
+    },
     "Всього токенів" : {
+
+    },
+    "Генерування" : {
+
+    },
+    "Готово" : {
 
     },
     "Дані народження" : {
@@ -2953,6 +3064,9 @@
 
     },
     "Дата розрахунку" : {
+
+    },
+    "Деталі" : {
 
     },
     "Деталі карти" : {
@@ -2973,16 +3087,31 @@
     "З нашої БД" : {
 
     },
+    "Завантаження карти" : {
+
+    },
     "Закрити" : {
 
     },
     "Зберегти" : {
 
     },
+    "Звіти без профілю" : {
+
+    },
     "Зовнішні книги" : {
 
     },
     "Ім'я" : {
+
+    },
+    "Карта недоступна" : {
+
+    },
+    "Керувати профілями" : {
+
+    },
+    "Ключові впливи" : {
 
     },
     "Координати" : {
@@ -3002,6 +3131,9 @@
 
     },
     "Логи генерації" : {
+
+    },
+    "Логи генерування" : {
 
     },
     "Макс. токенів" : {
@@ -3028,13 +3160,31 @@
     "Надано фрагментів" : {
 
     },
+    "Назад" : {
+
+    },
+    "Налаштування" : {
+
+    },
     "Наприклад: Олександра" : {
+
+    },
+    "Натальна карта" : {
+
+    },
+    "Немає збережених звітів" : {
+
+    },
+    "Немає профілів" : {
 
     },
     "Новий профіль" : {
 
     },
     "Оберіть профіль" : {
+
+    },
+    "Оберіть сферу" : {
 
     },
     "Обирайте більш потужні моделі для кращої якості аналізу. GPT-4o Mini рекомендовано для оптимального співвідношення ціни та якості." : {
@@ -3046,13 +3196,46 @@
     "Огляд джерел" : {
 
     },
+    "Одноразовий платіж" : {
+
+    },
     "Орб: %.2f°" : {
+
+    },
+    "Оформлення" : {
+
+    },
+    "Переглянути деталі" : {
+
+    },
+    "Персона" : {
+
+    },
+    "Підтвердження" : {
 
     },
     "Планети (%lld)" : {
 
     },
+    "Повторити" : {
+
+    },
+    "Помилка" : {
+
+    },
+    "Помилка рендерингу" : {
+
+    },
+    "Попередня версія" : {
+
+    },
     "Початок" : {
+
+    },
+    "Пошук місця" : {
+
+    },
+    "Пошук..." : {
 
     },
     "Приблизна вартість" : {
@@ -3061,7 +3244,13 @@
     "Примітки" : {
 
     },
+    "Продовжити" : {
+
+    },
     "Продовжити з профілем" : {
+
+    },
+    "Пропустити" : {
 
     },
     "Профілі" : {
@@ -3070,10 +3259,31 @@
     "Процитовані джерела" : {
 
     },
+    "Результатів не знайдено" : {
+
+    },
+    "Резюме" : {
+
+    },
+    "Рекомендації" : {
+
+    },
     "Релевантність: %@" : {
 
     },
+    "Рендеринг" : {
+
+    },
+    "Розрахунок" : {
+
+    },
+    "Світле" : {
+
+    },
     "Середина неба (MC)" : {
+
+    },
+    "Система" : {
 
     },
     "Скасувати" : {
@@ -3085,7 +3295,16 @@
     "Створити профіль" : {
 
     },
+    "Створіть перший профіль" : {
+
+    },
     "Створіть свій перший профіль" : {
+
+    },
+    "Тема" : {
+
+    },
+    "Темне" : {
 
     },
     "Токени (completion)" : {
@@ -3095,6 +3314,9 @@
 
     },
     "Точний час і місце народження необхідні для коректного розрахунку натальної карти" : {
+
+    },
+    "Точніший час дає кращі результати" : {
 
     },
     "Це займе всього 30 секунд" : {
@@ -3116,6 +3338,9 @@
 
     },
     "Швидкість: %.4f°/день" : {
+
+    },
+    "Що далі?" : {
 
     }
   },

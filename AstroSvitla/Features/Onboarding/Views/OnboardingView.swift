@@ -51,7 +51,7 @@ struct OnboardingView: View {
                                 onFinish()
                             }
                         }) {
-                            Text(String(localized: "onboarding.skip", table: "Localizable"))
+                            Text("Пропустити")
                                 .font(.system(size: 14, weight: .semibold, design: .default))
                                 .foregroundStyle(.secondary)
                         }
@@ -129,9 +129,9 @@ struct OnboardingView: View {
     private var primaryButtonTitle: String {
         let lastIndex = viewModel.pages.count - 1
         if viewModel.currentIndex == lastIndex {
-            return String(localized: "onboarding.start", table: "Localizable")
+            return "Розпочати"
         } else {
-            return String(localized: "onboarding.next", table: "Localizable")
+            return "Далі"
         }
     }
 }

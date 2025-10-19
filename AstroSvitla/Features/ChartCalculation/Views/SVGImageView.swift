@@ -23,7 +23,7 @@ struct SVGImageView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: .infinity)
             } else if isLoading {
-                ProgressView(String(localized: "svg.rendering", table: "Localizable"))
+                ProgressView("Рендеринг")
                     .frame(maxWidth: .infinity)
                     .frame(height: 400)  // Placeholder height while loading
             } else {
@@ -32,7 +32,7 @@ struct SVGImageView: View {
                         .font(.system(size: 40))
                         .foregroundStyle(.orange)
                     
-                    Text(String(localized: "svg.failed", table: "Localizable"))
+                    Text("Помилка рендерингу")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

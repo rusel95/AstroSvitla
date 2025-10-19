@@ -74,7 +74,7 @@ struct ReportDetailView: View {
 
     private var chartSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("report.section.chart", tableName: "Localizable")
+            Text("Натальна карта")
                 .font(.headline)
             NatalChartWheelView(chart: natalChart)
                 .background(Color(.systemBackground))
@@ -85,7 +85,7 @@ struct ReportDetailView: View {
 
     private var summarySection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("report.section.summary", tableName: "Localizable")
+            Text("Резюме")
                 .font(.headline)
             Text(report.summary)
         }
@@ -94,7 +94,7 @@ struct ReportDetailView: View {
 
     private var influencesSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("report.section.influences", tableName: "Localizable")
+            Text("Ключові впливи")
                 .font(.headline)
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(report.keyInfluences, id: \.self) { influence in
@@ -108,7 +108,7 @@ struct ReportDetailView: View {
 
     private var analysisSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("report.section.analysis", tableName: "Localizable")
+            Text("Аналіз")
                 .font(.headline)
             Text(report.detailedAnalysis)
                 .fixedSize(horizontal: false, vertical: true)
@@ -118,7 +118,7 @@ struct ReportDetailView: View {
 
     private var recommendationsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("report.section.recommendations", tableName: "Localizable")
+            Text("Рекомендації")
                 .font(.headline)
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(report.recommendations, id: \.self) { recommendation in
@@ -136,7 +136,7 @@ struct ReportDetailView: View {
         } label: {
             HStack {
                 Image(systemName: "book.closed")
-                Text("knowledge_logs.button.title", tableName: "Localizable")
+                Text("Логи генерування")
                 Spacer()
                 if report.knowledgeUsage.vectorSourceUsed {
                     Image(systemName: "checkmark.circle.fill")

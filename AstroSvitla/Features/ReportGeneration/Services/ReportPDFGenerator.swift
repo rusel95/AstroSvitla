@@ -90,7 +90,7 @@ private struct ReportPDFContentView: View {
 
     private var chartSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("report.section.chart", tableName: "Localizable")
+            Text("Натальна карта")
                 .font(.headline)
             NatalChartWheelView(chart: natalChart)
                 .frame(height: 320)
@@ -100,7 +100,7 @@ private struct ReportPDFContentView: View {
 
     private var summarySection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("report.section.summary", tableName: "Localizable")
+            Text("Резюме")
                 .font(.headline)
             Text(report.summary)
                 .font(.body)
@@ -109,7 +109,7 @@ private struct ReportPDFContentView: View {
 
     private var influencesSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("report.section.influences", tableName: "Localizable")
+            Text("Ключові впливи")
                 .font(.headline)
             VStack(alignment: .leading, spacing: 6) {
                 ForEach(report.keyInfluences, id: \.self) { influence in
@@ -122,7 +122,7 @@ private struct ReportPDFContentView: View {
 
     private var analysisSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("report.section.analysis", tableName: "Localizable")
+            Text("Аналіз")
                 .font(.headline)
             Text(report.detailedAnalysis)
                 .font(.body)
@@ -131,7 +131,7 @@ private struct ReportPDFContentView: View {
 
     private var recommendationsSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("report.section.recommendations", tableName: "Localizable")
+            Text("Рекомендації")
                 .font(.headline)
             VStack(alignment: .leading, spacing: 6) {
                 ForEach(report.recommendations, id: \.self) { recommendation in
@@ -144,7 +144,7 @@ private struct ReportPDFContentView: View {
 
     private var knowledgeUsageSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("report.section.knowledge_usage", tableName: "Localizable")
+            Text("Використані джерела")
                 .font(.headline)
             Text(report.knowledgeUsage.vectorSourceUsed ? localized("report.knowledge.used") : localized("report.knowledge.not_used"))
                 .font(.body)

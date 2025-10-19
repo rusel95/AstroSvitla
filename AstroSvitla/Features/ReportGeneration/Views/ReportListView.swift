@@ -87,7 +87,7 @@ struct ReportListView: View {
         ContentUnavailableView(
             "reports.empty.title",
             systemImage: "doc.text.magnifyingglass",
-            description: Text("reports.empty.description", tableName: "Localizable")
+            description: Text("Немає збережених звітів")
         )
         .padding()
     }
@@ -148,7 +148,7 @@ private struct ReportSectionHeader: View {
                 .font(.caption)
                 .foregroundStyle(.secondary)
             if isOrphan {
-                Text("reports.section.orphan_notice", tableName: "Localizable")
+                Text("Звіти без профілю")
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
             }

@@ -12,7 +12,7 @@ struct PurchaseConfirmationView: View {
                 summaryCard
                 purchaseInfo
                 Button(action: onGenerateReport) {
-                    Text(String(localized: "purchase.generate_report", table: "Localizable") + " «\(area.displayName)»")
+                    Text("Створити звіт" + " «\(area.displayName)»")
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.accentColor)
@@ -23,7 +23,7 @@ struct PurchaseConfirmationView: View {
             }
             .padding()
         }
-        .navigationTitle(String(localized: "purchase.title", table: "Localizable"))
+        .navigationTitle("Підтвердження")
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 if let onBack {
@@ -32,7 +32,7 @@ struct PurchaseConfirmationView: View {
                     } label: {
                         HStack(spacing: 4) {
                             Image(systemName: "chevron.left")
-                            Text("action.back", tableName: "Localizable")
+                            Text("Назад")
                         }
                     }
                 }
@@ -61,7 +61,7 @@ struct PurchaseConfirmationView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(birthDetails.displayName)
                     .font(.headline)
-                Text("\(birthDetails.formattedBirthDate) " + String(localized: "purchase.at_time", table: "Localizable") + " \(birthDetails.formattedBirthTime)")
+                Text("\(birthDetails.formattedBirthDate) " + "о" + " \(birthDetails.formattedBirthTime)")
                     .foregroundStyle(.secondary)
                 Text(birthDetails.formattedLocation)
                     .foregroundStyle(.secondary)
@@ -74,12 +74,12 @@ struct PurchaseConfirmationView: View {
 
     private var purchaseInfo: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(String(localized: "purchase.what_next", table: "Localizable"))
+            Text("Що далі?")
                 .font(.headline)
 
-            Label(String(localized: "purchase.info.birth_data", table: "Localizable"), systemImage: "sparkles")
-            Label(String(localized: "purchase.info.one_time", table: "Localizable"), systemImage: "doc.text.magnifyingglass")
-            Label(String(localized: "purchase.info.preview_build", table: "Localizable"), systemImage: "lock.open")
+            Label("Дані народження", systemImage: "sparkles")
+            Label("Одноразовий платіж", systemImage: "doc.text.magnifyingglass")
+            Label("Попередня версія", systemImage: "lock.open")
         }
     }
 

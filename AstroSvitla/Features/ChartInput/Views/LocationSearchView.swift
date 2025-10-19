@@ -20,7 +20,7 @@ struct LocationSearchView: View {
     var body: some View {
         List {
             if isSearching {
-                ProgressView(String(localized: "location.search.loading", table: "Localizable"))
+                ProgressView("Пошук...")
                     .frame(maxWidth: .infinity, alignment: .center)
             } else if let errorMessage {
                 Section {
@@ -30,8 +30,8 @@ struct LocationSearchView: View {
             } else if results.isEmpty {
                 Section {
                     Text(query.count < 3
-                         ? String(localized: "location.search.hint_short", table: "Localizable")
-                         : String(localized: "location.search.no_results", table: "Localizable"))
+                         ? "Введіть місто, область або країну"
+                         : "Результатів не знайдено")
                         .foregroundStyle(.secondary)
                 }
             } else {
@@ -56,7 +56,7 @@ struct LocationSearchView: View {
                 }
             }
         }
-        .navigationTitle(Text("location.search.title", tableName: "Localizable"))
+        .navigationTitle(Text("Пошук місця"))
         .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always))
         .onChange(of: query) { _, newValue in
             scheduleSearch(for: newValue)

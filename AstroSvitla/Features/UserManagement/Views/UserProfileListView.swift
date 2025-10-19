@@ -15,11 +15,11 @@ struct UserProfileListView: View {
                     profileListView
                 }
             }
-            .navigationTitle(String(localized: "profile.manage.title", table: "Localizable"))
+            .navigationTitle("Керувати профілями")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(String(localized: "action.done", table: "Localizable")) {
+                    Button("Готово") {
                         dismiss()
                     }
                 }
@@ -27,11 +27,11 @@ struct UserProfileListView: View {
                 // NOTE: Profile creation now happens inline on Home tab
                 // Remove the "Create Profile" button from Settings for simplified UX
             }
-            .alert(String(localized: "profile.delete.title", table: "Localizable"), isPresented: $viewModel.showDeleteConfirmation) {
-                Button(String(localized: "action.cancel", table: "Localizable"), role: .cancel) {
+            .alert("Видалити профіль", isPresented: $viewModel.showDeleteConfirmation) {
+                Button("Скасувати", role: .cancel) {
                     viewModel.cancelDelete()
                 }
-                Button(String(localized: "profile.delete.action", table: "Localizable"), role: .destructive) {
+                Button("Видалити", role: .destructive) {
                     Task {
                         await viewModel.confirmDeleteProfile()
                     }
@@ -63,11 +63,11 @@ struct UserProfileListView: View {
                 .font(.system(size: 80))
                 .foregroundColor(.secondary)
 
-            Text(String(localized: "profile.empty.title", table: "Localizable"))
+            Text("Немає профілів")
                 .font(.title2)
                 .fontWeight(.semibold)
 
-            Text(String(localized: "profile.empty.description", table: "Localizable"))
+            Text("Створіть перший профіль")
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -117,7 +117,7 @@ private struct ProfileRowView: View {
                             .font(.headline)
 
                         if isActive {
-                            Text(String(localized: "profile.badge.active", table: "Localizable"))
+                            Text("Активний")
                                 .font(.caption)
                                 .fontWeight(.medium)
                                 .foregroundColor(.white)
@@ -152,7 +152,7 @@ private struct ProfileRowView: View {
                 Button(role: .destructive) {
                     onDelete()
                 } label: {
-                    Label(String(localized: "profile.delete.action", table: "Localizable"), systemImage: "trash")
+                    Label("Видалити", systemImage: "trash")
                         .font(.caption)
                         .foregroundColor(.red)
                 }
@@ -189,7 +189,7 @@ private struct ProfileRowView: View {
         HStack(spacing: 4) {
             Image(systemName: "doc.text.fill")
                 .font(.caption2)
-            Text("\(profile.reports.count) " + String(localized: profile.reports.count == 1 ? "profile.report.singular" : "profile.report.plural", table: "Localizable"))
+            Text("\(profile.reports.count) " + (profile.reports.count == 1 ? "звіт" : "звітів"))
                 .font(.caption)
         }
         .foregroundColor(.secondary)
