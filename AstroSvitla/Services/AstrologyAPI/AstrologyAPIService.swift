@@ -146,7 +146,7 @@ final class AstrologyAPIService {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(Config.astrologyAPIKey)", forHTTPHeaderField: "Authorization")
+//        request.setValue("Bearer \(Config.astrologyAPIKey)", forHTTPHeaderField: "Authorization")
         request.timeoutInterval = requestTimeout
 
         let requestBody = AstrologyAPIDTOMapper.toAPIRequest(birthDetails: birthDetails)
@@ -167,7 +167,7 @@ final class AstrologyAPIService {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(Config.astrologyAPIKey)", forHTTPHeaderField: "Authorization")
+//        request.setValue("Bearer \(Config.astrologyAPIKey)", forHTTPHeaderField: "Authorization")
         request.timeoutInterval = requestTimeout
 
         let requestBody = AstrologyAPIDTOMapper.toSVGRequest(
