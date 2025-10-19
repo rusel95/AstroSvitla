@@ -82,6 +82,16 @@ final class ChartCacheService {
         }
 
         let chart = try cached.toNatalChart()
+
+        // Check if cached chart has image metadata
+        if chart.imageFileID == nil || chart.imageFormat == nil {
+            print("[ChartCacheService] ⚠️ Cached chart missing image metadata - will regenerate")
+            // Delete the old cache entry so it gets regenerated with SVG
+            context.delete(cached)
+            try context.save()
+            return nil
+        }
+
         print("[ChartCacheService] Successfully loaded cached chart with \(chart.planets.count) planets")
         return chart
     }
