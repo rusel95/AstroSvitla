@@ -5,21 +5,120 @@ struct OnboardingView: View {
     var onFinish: () -> Void
 
     var body: some View {
-        VStack(spacing: 24) {
-            TabView(selection: $viewModel.currentIndex) {
-                ForEach(Array(viewModel.pages.enumerated()), id: \.element.id) { index, page in
-                    OnboardingPageView(page: page)
-                        .tag(index)
-                }
+        ZStack {
+            // Background animation with gradient
+            VStack {
+                Spacer()
+                Circle()
+                    .fill(Color.accentColor.opacity(0.08))
+                    .frame(width: 300, height: 300)
+                    .offset(y: 200)
+                    .blur(radius: 40)
+                Spacer()
             }
-            .tabViewStyle(.page(indexDisplayMode: .never))
+            .ignoresSafeArea()
 
-            pageIndicators
+            VStack(spacing: 0) {
+                // Header with progress
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Крок \(viewModel.currentIndex + 1) з \(viewModel.pages.count)")
+                                .font(.system(size: 12, weight: .semibold, design: .default))
+                                .tracking(0.5)
+                                .foregroundStyle(.secondary)
 
-            actionButtons
+                            // Progress bar
+                            GeometryReader { geometry in
+                                ZStack(alignment: .leading) {
+                                    RoundedRectangle(cornerRadius: 2)
+                                        .fill(Color.accentColor.opacity(0.2))
+
+                                    RoundedRectangle(cornerRadius: 2)
+                                        .fill(Color.accentColor)
+                                        .frame(width: geometry.size.width * CGFloat(viewModel.currentIndex + 1) / CGFloat(viewModel.pages.count))
+                                }
+                            }
+                            .frame(height: 4)
+                        }
+
+                        Spacer()
+
+                        // Skip button (always visible)
+                        Button(action: {
+                            let didFinish = viewModel.skip()
+                            if didFinish {
+                                onFinish()
+                            }
+                        }) {
+                            Text(String(localized: "onboarding.skip", table: "Localizable"))
+                                .font(.system(size: 14, weight: .semibold, design: .default))
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                .padding(.horizontal, 24)
+                .padding(.vertical, 20)
+
+                Divider()
+                    .opacity(0.2)
+
+                // Main carousel
+                TabView(selection: $viewModel.currentIndex) {
+                    ForEach(Array(viewModel.pages.enumerated()), id: \.element.id) { index, page in
+                        OnboardingPageView(page: page)
+                            .tag(index)
+                    }
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .frame(maxHeight: .infinity)
+
+                // Action buttons (sticky at bottom)
+                VStack(spacing: 12) {
+                    // Primary button
+                    Button(action: {
+                        let didFinish = viewModel.advance()
+                        if didFinish {
+                            onFinish()
+                        }
+                    }) {
+                        HStack {
+                            Text(primaryButtonTitle)
+                                .font(.system(size: 16, weight: .semibold, design: .default))
+
+                            if viewModel.currentIndex < viewModel.pages.count - 1 {
+                                Image(systemName: "arrow.right")
+                                    .font(.system(size: 14, weight: .semibold, design: .default))
+                                    .transition(.opacity.combined(with: .scale))
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 54)
+                    .background(Color.accentColor, in: RoundedRectangle(cornerRadius: 12))
+                    .foregroundStyle(.white)
+
+                    // Back button (appears after first page)
+                    if viewModel.currentIndex > 0 {
+                        Button(action: {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                viewModel.goBack()
+                            }
+                        }) {
+                            Text(String(localized: "onboarding.back", table: "Localizable"))
+                                .font(.system(size: 16, weight: .semibold, design: .default))
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 50)
+                                .foregroundStyle(.secondary)
+                                .background(Color.accentColor.opacity(0.06), in: RoundedRectangle(cornerRadius: 12))
+                        }
+                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+                    }
+                }
+                .padding(.horizontal, 24)
+                .padding(.vertical, 20)
+            }
         }
-        .padding(.vertical, 32)
-        .background(Color(.systemBackground))
         .onAppear {
             if viewModel.isCompleted {
                 onFinish()
@@ -27,43 +126,13 @@ struct OnboardingView: View {
         }
     }
 
-    private var pageIndicators: some View {
-        HStack(spacing: 8) {
-            ForEach(0..<viewModel.pages.count, id: \.self) { index in
-                Capsule()
-                    .fill(index == viewModel.currentIndex ? Color.accentColor : Color.accentColor.opacity(0.2))
-                    .frame(width: index == viewModel.currentIndex ? 24 : 8, height: 8)
-                    .animation(.easeInOut(duration: 0.2), value: viewModel.currentIndex)
-            }
-        }
-        .padding(.horizontal)
-    }
-
-    private var actionButtons: some View {
-        VStack(spacing: 12) {
-            Button(primaryButtonTitle) {
-                let didFinish = viewModel.advance()
-                if didFinish {
-                    onFinish()
-                }
-            }
-            .buttonStyle(.borderedProminent)
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal, 24)
-
-            Button(String(localized: "onboarding.skip", table: "Localizable")) {
-                let didFinish = viewModel.skip()
-                if didFinish {
-                    onFinish()
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal, 24)
-        }
-    }
-
     private var primaryButtonTitle: String {
-        viewModel.currentIndex == viewModel.pages.count - 1 ? String(localized: "onboarding.start", table: "Localizable") : String(localized: "onboarding.next", table: "Localizable")
+        let lastIndex = viewModel.pages.count - 1
+        if viewModel.currentIndex == lastIndex {
+            return String(localized: "onboarding.start", table: "Localizable")
+        } else {
+            return String(localized: "onboarding.next", table: "Localizable")
+        }
     }
 }
 
