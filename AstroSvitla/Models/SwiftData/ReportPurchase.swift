@@ -27,6 +27,11 @@ final class ReportPurchase {
     var generatedAt: Date
     var wordCount: Int
 
+    // Logging data - stored as JSON strings for full persistence
+    var metadataJSON: String?  // GenerationMetadata as JSON
+    var knowledgeSourcesJSON: String?  // Complete [KnowledgeSource] as JSON
+    var availableBooksJSON: String?  // Complete [BookMetadata] as JSON
+
     @Relationship(inverse: \UserProfile.reports)
     var profile: UserProfile?
 
@@ -46,7 +51,10 @@ final class ReportPurchase {
         knowledgeSourcePages: [String]? = nil,
         price: Decimal,
         currency: String = "USD",
-        transactionId: String
+        transactionId: String,
+        metadataJSON: String? = nil,
+        knowledgeSourcesJSON: String? = nil,
+        availableBooksJSON: String? = nil
     ) {
         self.id = id
         self.area = area
@@ -67,6 +75,9 @@ final class ReportPurchase {
         self.purchaseDate = Date()
         self.generatedAt = Date()
         self.wordCount = reportText.split(whereSeparator: \.isWhitespace).count
+        self.metadataJSON = metadataJSON
+        self.knowledgeSourcesJSON = knowledgeSourcesJSON
+        self.availableBooksJSON = availableBooksJSON
     }
 
     var areaDisplayName: String {
@@ -98,16 +109,23 @@ final class ReportPurchase {
     var generatedReport: GeneratedReport? {
         guard let reportArea = ReportArea(rawValue: area) else { return nil }
 
-        // Convert stored arrays to KnowledgeSource objects
+        let decoder = JSONDecoder()
+
+        // Try to decode full sources from JSON
         var sources: [KnowledgeSource]? = nil
-        if let titles = knowledgeSourceTitles,
+        if let sourcesJSON = knowledgeSourcesJSON,
+           let data = sourcesJSON.data(using: .utf8) {
+            sources = try? decoder.decode([KnowledgeSource].self, from: data)
+        }
+
+        // Fallback to legacy stored arrays if JSON not available
+        if sources == nil,
+           let titles = knowledgeSourceTitles,
            let authors = knowledgeSourceAuthors,
            let pages = knowledgeSourcePages,
            !titles.isEmpty {
             var sourcesArray: [KnowledgeSource] = []
             for i in 0..<min(titles.count, authors.count, pages.count) {
-                // Create a KnowledgeSource from stored data
-                // Note: snippet will be empty as we don't store it separately
                 sourcesArray.append(KnowledgeSource(
                     bookTitle: titles[i],
                     author: authors[i].isEmpty ? nil : authors[i],
@@ -120,6 +138,35 @@ final class ReportPurchase {
             sources = sourcesArray
         }
 
+        // Try to decode metadata from JSON
+        var metadata = GenerationMetadata(
+            modelName: "unknown",
+            promptTokens: 0,
+            completionTokens: 0,
+            totalTokens: 0,
+            estimatedCost: 0.0,
+            generationDate: generatedAt,
+            processingTimeSeconds: 0.0,
+            knowledgeSnippetsProvided: sources?.count ?? 0,
+            totalSourcesCited: sources?.count ?? 0,
+            vectorDatabaseSourcesCount: knowledgeVectorUsed ? (sources?.count ?? 0) : 0,
+            externalSourcesCount: 0
+        )
+
+        if let metadataJSON = metadataJSON,
+           let data = metadataJSON.data(using: .utf8) {
+            if let decodedMetadata = try? decoder.decode(GenerationMetadata.self, from: data) {
+                metadata = decodedMetadata
+            }
+        }
+
+        // Try to decode available books from JSON
+        var availableBooks: [BookMetadata]? = nil
+        if let booksJSON = availableBooksJSON,
+           let data = booksJSON.data(using: .utf8) {
+            availableBooks = try? decoder.decode([BookMetadata].self, from: data)
+        }
+
         return GeneratedReport(
             area: reportArea,
             summary: summary,
@@ -129,8 +176,10 @@ final class ReportPurchase {
             knowledgeUsage: KnowledgeUsage(
                 vectorSourceUsed: knowledgeVectorUsed,
                 notes: knowledgeNotes,
-                sources: sources
-            )
+                sources: sources,
+                availableBooks: availableBooks
+            ),
+            metadata: metadata
         )
     }
 }
