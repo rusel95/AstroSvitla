@@ -47,11 +47,14 @@ struct OpenAIService {
 
         let maxAttempts = 3
         var lastError: ReportGenerationError?
+        let startTime = Date()
 
         for attempt in 0..<maxAttempts {
             do {
                 let (payload, usage) = try await performRequest(client: client, query: query)
                 logUsage(usage)
+                let processingTime = Date().timeIntervalSince(startTime)
+
                 let fallbackNotes = knowledgeSnippets.isEmpty ? localized("report.knowledge.no_snippets") : nil
                 let usagePayload = payload.knowledgeUsage ?? OpenAIReportPayload.KnowledgeUsagePayload(vectorSourceUsed: knowledgeSnippets.isEmpty == false, notes: fallbackNotes, sources: nil, availableBooks: nil)
 
@@ -86,6 +89,25 @@ struct OpenAIService {
                     )
                 }
 
+                // Calculate metadata
+                let totalSourcesCited = sources?.count ?? 0
+                let vectorDBSourcesCount = sources?.filter { $0.isFromVectorDatabase }.count ?? 0
+                let externalSourcesCount = totalSourcesCited - vectorDBSourcesCount
+
+                let metadata = GenerationMetadata(
+                    modelName: query.model,
+                    promptTokens: usage?.promptTokens ?? 0,
+                    completionTokens: usage?.completionTokens ?? 0,
+                    totalTokens: usage?.totalTokens ?? 0,
+                    estimatedCost: Double(usage?.totalTokens ?? 0) / 1000.0 * 0.0007,  // gpt-4o-mini pricing
+                    generationDate: Date(),
+                    processingTimeSeconds: processingTime,
+                    knowledgeSnippetsProvided: knowledgeSnippets.count,
+                    totalSourcesCited: totalSourcesCited,
+                    vectorDatabaseSourcesCount: vectorDBSourcesCount,
+                    externalSourcesCount: externalSourcesCount
+                )
+
                 return GeneratedReport(
                     area: area,
                     summary: payload.summary,
@@ -97,7 +119,8 @@ struct OpenAIService {
                         notes: usagePayload.notes,
                         sources: sources,
                         availableBooks: availableBooks
-                    )
+                    ),
+                    metadata: metadata
                 )
             } catch let error as ReportGenerationError {
                 lastError = error
