@@ -1,16 +1,16 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    " (%lld)" : {
-
-    },
     ": %@" : {
 
     },
     ": %lld" : {
 
     },
-    "(%lld books)" : {
+    "(%lld книг)" : {
+
+    },
+    "(%lld)" : {
 
     },
     "%.4f°, %.4f°" : {
@@ -62,7 +62,7 @@
     "%lld chunks" : {
 
     },
-    "%lld used" : {
+    "%lld використано" : {
 
     },
     "%lld°%@'" : {
@@ -79,6 +79,15 @@
 
     },
     "℞" : {
+
+    },
+    "~$%@/1K токенів" : {
+
+    },
+    "$%@" : {
+
+    },
+    "$%@/1K" : {
 
     },
     "action.back" : {
@@ -1036,15 +1045,6 @@
         }
       }
     },
-    "knowledge_logs.database.empty" : {
-
-    },
-    "knowledge_logs.database.empty_message" : {
-
-    },
-    "knowledge_logs.database.title" : {
-
-    },
     "knowledge_logs.empty.message" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1080,6 +1080,7 @@
       }
     },
     "knowledge_logs.notes.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1113,6 +1114,7 @@
       }
     },
     "knowledge_logs.source.relevance" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1180,6 +1182,7 @@
       }
     },
     "knowledge_logs.status.not_used" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1195,10 +1198,8 @@
         }
       }
     },
-    "knowledge_logs.status.sources_count" : {
-
-    },
     "knowledge_logs.status.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1215,6 +1216,7 @@
       }
     },
     "knowledge_logs.status.used" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1231,6 +1233,7 @@
       }
     },
     "knowledge_logs.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1245,9 +1248,6 @@
           }
         }
       }
-    },
-    "knowledge_logs.used_sources.title" : {
-
     },
     "location.search.hint_short" : {
       "localizations" : {
@@ -2896,7 +2896,19 @@
     "Асцендент (ASC)" : {
 
     },
+    "База даних порожня" : {
+
+    },
     "Будинки (%lld)" : {
+
+    },
+    "Вартість" : {
+
+    },
+    "Векторна база знань не містить книг" : {
+
+    },
+    "Всього токенів" : {
 
     },
     "Дані народження" : {
@@ -2905,13 +2917,31 @@
     "Дата" : {
 
     },
+    "Дата генерації" : {
+
+    },
     "Дата розрахунку" : {
 
     },
     "Деталі карти" : {
 
     },
+    "Джерела не були процитовані" : {
+
+    },
     "Дім %lld" : {
+
+    },
+    "Доступна векторна база даних" : {
+
+    },
+    "З нашої БД" : {
+
+    },
+    "Закрити" : {
+
+    },
+    "Зовнішні книги" : {
 
     },
     "Ім'я" : {
@@ -2923,10 +2953,37 @@
     "Кути карти" : {
 
     },
+    "Логи генерації" : {
+
+    },
+    "Макс. токенів" : {
+
+    },
     "Метадані" : {
 
     },
+    "Метадані генерації" : {
+
+    },
     "Місце" : {
+
+    },
+    "Модель" : {
+
+    },
+    "Модель OpenAI" : {
+
+    },
+    "Надано фрагментів" : {
+
+    },
+    "Обирайте більш потужні моделі для кращої якості аналізу. GPT-4o Mini рекомендовано для оптимального співвідношення ціни та якості." : {
+
+    },
+    "Обрана модель: **%@**" : {
+
+    },
+    "Огляд джерел" : {
 
     },
     "Орб: %.2f°" : {
@@ -2935,10 +2992,34 @@
     "Планети (%lld)" : {
 
     },
+    "Приблизна вартість" : {
+
+    },
+    "Примітки" : {
+
+    },
+    "Процитовані джерела" : {
+
+    },
+    "Релевантність: %@" : {
+
+    },
     "Середина неба (MC)" : {
 
     },
+    "Токени (completion)" : {
+
+    },
+    "Токени (prompt)" : {
+
+    },
+    "Цитовано джерел" : {
+
+    },
     "Час" : {
+
+    },
+    "Час обробки" : {
 
     },
     "Часовий пояс" : {
