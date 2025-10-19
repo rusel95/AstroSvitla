@@ -28,7 +28,8 @@ struct OpenAIService {
         knowledgeSnippets: [String],
         languageCode: String,
         languageDisplayName: String,
-        repositoryContext: String
+        repositoryContext: String,
+        selectedModel: AppPreferences.OpenAIModel
     ) async throws -> GeneratedReport {
         guard let client = clientProvider.client else {
             throw ReportGenerationError.missingAPIKey
@@ -43,7 +44,7 @@ struct OpenAIService {
             languageDisplayName: languageDisplayName,
             repositoryContext: repositoryContext
         )
-        let query = makeChatQuery(systemPrompt: prompt.system, userPrompt: prompt.user)
+        let query = makeChatQuery(systemPrompt: prompt.system, userPrompt: prompt.user, model: selectedModel)
 
         let maxAttempts = 3
         var lastError: ReportGenerationError?
@@ -99,7 +100,7 @@ struct OpenAIService {
                     promptTokens: usage?.promptTokens ?? 0,
                     completionTokens: usage?.completionTokens ?? 0,
                     totalTokens: usage?.totalTokens ?? 0,
-                    estimatedCost: Double(usage?.totalTokens ?? 0) / 1000.0 * 0.0007,  // gpt-4o-mini pricing
+                    estimatedCost: Double(usage?.totalTokens ?? 0) / 1000.0 * selectedModel.estimatedCostPer1000Tokens,
                     generationDate: Date(),
                     processingTimeSeconds: processingTime,
                     knowledgeSnippetsProvided: knowledgeSnippets.count,
@@ -170,7 +171,7 @@ struct OpenAIService {
         }
     }
 
-    private func makeChatQuery(systemPrompt: String, userPrompt: String) -> ChatQuery {
+    private func makeChatQuery(systemPrompt: String, userPrompt: String, model: AppPreferences.OpenAIModel) -> ChatQuery {
         let systemMessage = ChatQuery.ChatCompletionMessageParam.system(
             .init(content: .textContent(systemPrompt))
         )
@@ -178,10 +179,13 @@ struct OpenAIService {
             .init(content: .string(userPrompt))
         )
 
+        // Use 10000 or model's max, whichever is smaller
+        let maxTokens = min(10000, model.maxTokens)
+
         return ChatQuery(
             messages: [systemMessage, userMessage],
-            model: "gpt-4o-mini",
-            maxCompletionTokens: 10000, // Increased to accommodate full knowledge base metadata with available_books
+            model: model.rawValue,
+            maxCompletionTokens: maxTokens,
             responseFormat: .jsonObject,
             temperature: 0.7,
             topP: 0.9
