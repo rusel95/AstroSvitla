@@ -13,27 +13,6 @@ enum ChartCalculationError: LocalizedError {
     }
 }
 
-// MARK: - Profile Form State Management
-/// Manages the three states of the inline profile form:
-/// - empty: No profiles exist (first-time user)
-/// - viewing: Displaying an existing profile's data
-/// - creating: User selected "Create New Profile"
-enum ProfileFormMode: Equatable {
-    case empty                    // No profiles exist yet
-    case viewing(UserProfile)     // Existing profile selected
-    case creating                 // "Create New" selected
-
-    var isCreating: Bool {
-        if case .creating = self { return true }
-        return false
-    }
-
-    var currentProfile: UserProfile? {
-        if case .viewing(let profile) = self { return profile }
-        return nil
-    }
-}
-
 struct MainFlowView: View {
     @EnvironmentObject private var preferences: AppPreferences
     @Environment(\.modelContext) private var modelContext
@@ -42,33 +21,12 @@ struct MainFlowView: View {
     @StateObject private var profileViewModel: UserProfileViewModel
     @State private var flowState: FlowState
     @State private var errorMessage: String?
-    @State private var isShowingLocationSearch = false
-
-    // MARK: - Profile Form State
-    // Form mode
-    @State private var formMode: ProfileFormMode = .empty
-
-    // Form field state
-    @State private var editedName: String = ""
-    @State private var editedBirthDate: Date = Date()
-    @State private var editedBirthTime: Date = Date()
-    @State private var editedLocation: String = ""
-    @State private var editedCoordinate: CLLocationCoordinate2D? = nil
-    @State private var editedTimezone: String = TimeZone.current.identifier
-
-    // UI state
-    @State private var isCalculating: Bool = false
-    @State private var validationError: String? = nil
-    @FocusState private var focusedField: ProfileField?
+    @State private var showProfileCreationSheet = false
 
     private var chartCalculator: ChartCalculator {
         ChartCalculator(modelContext: modelContext)
     }
     private let reportGenerator = AIReportGenerator()
-
-    private enum ProfileField: Hashable {
-        case name
-    }
 
     init(modelContext: ModelContext) {
         let onboardingViewModel = OnboardingViewModel()
@@ -99,29 +57,6 @@ struct MainFlowView: View {
         .onAppear {
             profileViewModel.loadProfiles()
             repositoryContext.loadActiveProfile()
-
-            // Initialize form mode based on active profile
-            if let activeProfile = repositoryContext.activeProfile {
-                handleProfileSelection(activeProfile)
-            } else if let firstProfile = profileViewModel.profiles.first {
-                handleProfileSelection(firstProfile)
-            } else {
-                formMode = .empty
-                handleCreateNewProfile()
-            }
-        }
-        .onChange(of: repositoryContext.activeProfile) { _, newValue in
-            if newValue?.id == formMode.currentProfile?.id {
-                return
-            }
-
-            if let profile = newValue {
-                handleProfileSelection(profile)
-            } else if let firstProfile = profileViewModel.profiles.first {
-                handleProfileSelection(firstProfile)
-            } else {
-                handleCreateNewProfile()
-            }
         }
     }
 
@@ -139,133 +74,43 @@ struct MainFlowView: View {
             )
 
         case .birthInput(_):
-            ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    Menu {
-                        ForEach(profileViewModel.profiles) { profile in
-                            Button {
-                                handleProfileSelection(profile)
-                            } label: {
-                                HStack {
-                                    Text(profile.name)
-                                    if profile.id == repositoryContext.activeProfile?.id {
-                                        Image(systemName: "checkmark")
-                                    }
-                                }
+            Group {
+                if profileViewModel.profiles.isEmpty {
+                    // Empty state - no profiles exist
+                    ProfileEmptyStateView(onCreateProfile: {
+                        showProfileCreationSheet = true
+                    })
+                    .navigationTitle("Початок")
+                } else {
+                    // Profile selection screen
+                    ProfileSelectionView(
+                        profiles: profileViewModel.profiles,
+                        selectedProfile: repositoryContext.activeProfile,
+                        onSelectProfile: { profile in
+                            repositoryContext.setActiveProfile(profile)
+                        },
+                        onCreateNewProfile: {
+                            showProfileCreationSheet = true
+                        },
+                        onContinue: {
+                            Task {
+                                await handleContinueWithSelectedProfile()
                             }
                         }
-
-                        Divider()
-
-                        Button {
-                            handleCreateNewProfile()
-                        } label: {
-                            Label(
-                                String(localized: "profile.selector.create_new", table: "Localizable"),
-                                systemImage: "plus.circle"
-                            )
-                        }
-                    } label: {
-                        HStack {
-                            Text(formMode.currentProfile?.name ?? String(localized: "profile.selector.new_profile", table: "Localizable"))
-                                .font(.headline)
-                            Spacer()
-                            Image(systemName: "chevron.down")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(.ultraThinMaterial)
-                        .cornerRadius(12)
-                    }
-
-                    VStack(alignment: .leading, spacing: 16) {
-                        TextField("profile.form.field.name", text: $editedName)
-                        .textInputAutocapitalization(.words)
-                        .autocorrectionDisabled()
-                        .focused($focusedField, equals: .name)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 10)
-                        .background(Color(.secondarySystemBackground))
-                        .cornerRadius(10)
-
-                        VStack(alignment: .leading, spacing: 12) {
-                            DatePicker("birth.field.date", selection: $editedBirthDate, in: birthDateRange, displayedComponents: .date)
-
-                            DatePicker("birth.field.time", selection: $editedBirthTime, displayedComponents: .hourAndMinute)
-
-                            Button {
-                                isShowingLocationSearch = true
-                            } label: {
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text("birth.field.location", tableName: "Localizable")
-                                            .font(.subheadline)
-                                            .foregroundStyle(.secondary)
-                                        Text(locationDisplayText)
-                                            .foregroundStyle(locationDisplayColor)
-                                            .lineLimit(2)
-                                    }
-                                    Spacer()
-                                    Image(systemName: "mappin.and.ellipse")
-                                        .foregroundStyle(.secondary)
-                                }
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 12)
-                                .background(Color(.secondarySystemBackground))
-                                .cornerRadius(10)
-                            }
-                        }
-                    }
-
-                    if let error = validationError {
-                        Text(error)
-                            .font(.footnote)
-                            .foregroundStyle(Color.red)
-                            .padding(.horizontal, 4)
-                    }
-
-                    Button {
-                        Task {
-                            await handleContinue()
-                        }
-                    } label: {
-                        HStack {
-                            if isCalculating {
-                                ProgressView()
-                                    .progressViewStyle(.circular)
-                            } else {
-                                Text("action.continue", tableName: "Localizable")
-                                    .font(.headline)
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 14)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(!isContinueButtonEnabled || isCalculating)
+                    )
+                    .navigationTitle("Профілі")
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 24)
             }
-            .background(Color(.systemGroupedBackground))
-            .scrollDismissesKeyboard(.interactively)
-            .navigationTitle(Text("birth.navigation.title", tableName: "Localizable"))
-            .sheet(isPresented: $isShowingLocationSearch) {
-                NavigationStack {
-                    LocationSearchView(initialQuery: editedLocation) { suggestion in
-                        applyLocationSuggestion(suggestion)
-                        isShowingLocationSearch = false
-                    }
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button(String(localized: "action.close", table: "Localizable")) {
-                                isShowingLocationSearch = false
-                            }
-                        }
-                    }
+            .sheet(isPresented: $showProfileCreationSheet) {
+                ProfileCreationSheet { name, birthDate, birthTime, location, coordinate, timezone in
+                    createNewProfile(
+                        name: name,
+                        birthDate: birthDate,
+                        birthTime: birthTime,
+                        location: location,
+                        coordinate: coordinate,
+                        timezone: timezone
+                    )
                 }
             }
 
@@ -337,247 +182,104 @@ struct MainFlowView: View {
         }
     }
 
-    // MARK: - Profile Selection Handlers
+    // MARK: - Profile Creation & Management
 
-    /// Updates form fields when user selects a profile from dropdown.
-    /// Discards any unsaved changes per FR-065 (no confirmation dialog).
-    private func handleProfileSelection(_ profile: UserProfile) {
-        formMode = .viewing(profile)
-        editedName = profile.name
-        editedBirthDate = profile.birthDate
-        editedBirthTime = profile.birthTime
-        editedLocation = profile.locationName
-        editedCoordinate = CLLocationCoordinate2D(
-            latitude: profile.latitude,
-            longitude: profile.longitude
-        )
-        editedTimezone = profile.timezone
-        if repositoryContext.activeProfile?.id != profile.id {
-            repositoryContext.setActiveProfile(profile)
+    /// Creates a new profile with the provided data
+    private func createNewProfile(
+        name: String,
+        birthDate: Date,
+        birthTime: Date,
+        location: String,
+        coordinate: CLLocationCoordinate2D,
+        timezone: String
+    ) {
+        Task {
+            do {
+                // Calculate natal chart first
+                let timeZone = TimeZone(identifier: timezone) ?? .current
+                let details = BirthDetails(
+                    name: name,
+                    birthDate: birthDate,
+                    birthTime: birthTime,
+                    location: location,
+                    timeZone: timeZone,
+                    coordinate: coordinate
+                )
+
+                let chart = try await calculateChart(for: details)
+
+                // Create profile with calculated chart
+                let created = await profileViewModel.createProfile(
+                    name: name,
+                    birthDate: birthDate,
+                    birthTime: birthTime,
+                    locationName: location,
+                    latitude: coordinate.latitude,
+                    longitude: coordinate.longitude,
+                    timezone: timezone,
+                    natalChart: chart
+                )
+
+                if created, let newProfile = profileViewModel.selectedProfile {
+                    await MainActor.run {
+                        repositoryContext.setActiveProfile(newProfile)
+                        profileViewModel.loadProfiles()
+                    }
+                } else {
+                    await MainActor.run {
+                        errorMessage = profileViewModel.errorMessage ?? "Failed to create profile"
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    errorMessage = error.localizedDescription
+                }
+            }
         }
-        validationError = nil
     }
 
-    /// Clears form fields when user selects "Create New Profile".
-    /// Discards any unsaved changes per FR-065 (no confirmation dialog).
-    private func handleCreateNewProfile() {
-        if profileViewModel.profiles.isEmpty {
-            formMode = .empty
-        } else {
-            formMode = .creating
-        }
-        editedName = ""
-        editedBirthDate = defaultBirthDate()
-        editedBirthTime = defaultBirthTime()
-        editedLocation = ""
-        editedCoordinate = nil
-        editedTimezone = TimeZone.current.identifier
-        validationError = nil
-    }
-
-    private var isContinueButtonEnabled: Bool {
-        let trimmedName = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
-        let trimmedLocation = editedLocation.trimmingCharacters(in: .whitespacesAndNewlines)
-        return trimmedName.isEmpty == false && trimmedLocation.isEmpty == false && editedCoordinate != nil
-    }
-
-    private var birthDateRange: ClosedRange<Date> {
-        let calendar = Calendar.current
-        let minDate = calendar.date(from: DateComponents(year: 1900)) ?? Date(timeIntervalSince1970: 0)
-        let maxDate = calendar.date(from: DateComponents(year: 2100)) ?? Date.distantFuture
-        return minDate...maxDate
-    }
-
-    private var locationDisplayText: String {
-        if editedLocation.isEmpty {
-            return String(localized: "profile.inline.location.placeholder", table: "Localizable")
-        }
-        return editedLocation
-    }
-
-    private var locationDisplayColor: Color {
-        editedLocation.isEmpty ? .secondary : .primary
-    }
-
-    private func validateForm() async -> Bool {
-        validationError = nil
-
-        let trimmedName = editedName.trimmingCharacters(in: .whitespacesAndNewlines)
-        let trimmedLocation = editedLocation.trimmingCharacters(in: .whitespacesAndNewlines)
-
-        guard trimmedName.isEmpty == false else {
-            validationError = String(localized: "profile.form.error.name_required", table: "Localizable")
-            return false
-        }
-
-        guard trimmedName.count <= 50 else {
-            validationError = String(localized: "profile.form.error.name_length", table: "Localizable")
-            return false
-        }
-
-        let isDuplicate = profileViewModel.profiles.contains { profile in
-            profile.name.compare(trimmedName, options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame &&
-            profile.id != formMode.currentProfile?.id
-        }
-
-        if isDuplicate {
-            validationError = String(localized: "profile.form.error.name_duplicate", table: "Localizable")
-            return false
-        }
-
-        guard trimmedLocation.isEmpty == false else {
-            validationError = String(localized: "profile.form.error.location_required", table: "Localizable")
-            return false
-        }
-
-        guard editedCoordinate != nil else {
-            validationError = String(localized: "profile.form.error.missing_coordinate", table: "Localizable")
-            return false
-        }
-
-        return true
-    }
-
-    private func makeBirthDetails() -> BirthDetails {
-        let timeZone = TimeZone(identifier: editedTimezone) ?? .current
-        return BirthDetails(
-            name: editedName,
-            birthDate: editedBirthDate,
-            birthTime: editedBirthTime,
-            location: editedLocation,
-            timeZone: timeZone,
-            coordinate: editedCoordinate
-        )
-    }
-
-    private func applyLocationSuggestion(_ suggestion: LocationSuggestion) {
-        editedLocation = suggestion.displayName
-        editedCoordinate = suggestion.coordinate
-        if let timeZone = suggestion.timeZone {
-            editedTimezone = timeZone.identifier
-        }
-        validationError = nil
-    }
-
-    private func applyBirthDetails(_ details: BirthDetails) {
-        editedName = details.name
-        editedBirthDate = details.birthDate
-        editedBirthTime = details.birthTime
-        editedLocation = details.location
-        editedCoordinate = details.coordinate
-        editedTimezone = details.timeZone.identifier
-        validationError = nil
-    }
-
-    private func defaultBirthDate() -> Date {
-        Calendar.current.date(byAdding: .year, value: -25, to: Date()) ?? Date()
-    }
-
-    private func defaultBirthTime() -> Date {
-        Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: Date()) ?? Date()
-    }
-
-    private func presentBirthInput(with details: BirthDetails?) {
-        if let details {
-            applyBirthDetails(details)
-        } else {
-            handleCreateNewProfile()
-        }
-        flowState = .birthInput(existing: details)
-    }
-
-    private func handleContinue() async {
-        validationError = nil
-
-        guard await validateForm() else { return }
-
-        let details = makeBirthDetails()
-
-        guard let coordinate = details.coordinate else {
-            validationError = String(localized: "profile.form.error.missing_coordinate", table: "Localizable")
+    /// Continues with the currently selected profile
+    private func handleContinueWithSelectedProfile() async {
+        guard let profile = repositoryContext.activeProfile else {
+            await MainActor.run {
+                errorMessage = "Please select a profile first"
+            }
             return
         }
 
+        let timeZone = TimeZone(identifier: profile.timezone) ?? .current
+        let details = BirthDetails(
+            name: profile.name,
+            birthDate: profile.birthDate,
+            birthTime: profile.birthTime,
+            location: profile.locationName,
+            timeZone: timeZone,
+            coordinate: CLLocationCoordinate2D(
+                latitude: profile.latitude,
+                longitude: profile.longitude
+            )
+        )
+
         await MainActor.run {
-            isCalculating = true
             flowState = .calculating(details)
         }
 
         do {
             let chart = try await calculateChart(for: details)
 
-            switch formMode {
-            case .creating, .empty:
-                let created = await profileViewModel.createProfile(
-                    name: details.name,
-                    birthDate: details.birthDate,
-                    birthTime: details.birthTime,
-                    locationName: details.location,
-                    latitude: coordinate.latitude,
-                    longitude: coordinate.longitude,
-                    timezone: details.timeZone.identifier,
-                    natalChart: chart
-                )
-
-                guard created, let selected = profileViewModel.selectedProfile else {
-                    await MainActor.run {
-                        isCalculating = false
-                        presentBirthInput(with: details)
-                        validationError = profileViewModel.errorMessage ?? String(localized: "profile.form.error.unknown", table: "Localizable")
-                    }
-                    return
-                }
-
-                await MainActor.run {
-                    handleProfileSelection(selected)
-                }
-
-            case .viewing(let profile):
-                let updated = await profileViewModel.updateProfile(
-                    profile,
-                    name: details.name,
-                    birthDate: details.birthDate,
-                    birthTime: details.birthTime,
-                    locationName: details.location,
-                    latitude: coordinate.latitude,
-                    longitude: coordinate.longitude,
-                    timezone: details.timeZone.identifier,
-                    natalChart: chart
-                )
-
-                guard updated else {
-                    await MainActor.run {
-                        isCalculating = false
-                        presentBirthInput(with: details)
-                        validationError = profileViewModel.errorMessage ?? String(localized: "profile.form.error.unknown", table: "Localizable")
-                    }
-                    return
-                }
-
-                let refreshedProfile = profileViewModel.selectedProfile ?? profile
-                await MainActor.run {
-                    handleProfileSelection(refreshedProfile)
-                }
-            }
-
             await MainActor.run {
-                isCalculating = false
-                validationError = nil
                 flowState = .areaSelection(details, chart)
             }
         } catch {
             await MainActor.run {
-                isCalculating = false
-                let description: String
-                if let localizedError = error as? LocalizedError, let value = localizedError.errorDescription {
-                    description = value
-                } else {
-                    description = localized("error.chart.calculation_failed", error.localizedDescription)
-                }
-                presentBirthInput(with: details)
-                validationError = description
+                errorMessage = error.localizedDescription
+                flowState = .birthInput(existing: nil)
             }
         }
+    }
+
+    private func presentBirthInput(with details: BirthDetails?) {
+        flowState = .birthInput(existing: details)
     }
 
     private func calculateChart(for details: BirthDetails) async throws -> NatalChart {

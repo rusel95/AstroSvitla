@@ -1365,6 +1365,9 @@
         }
       }
     },
+    "onboarding.back" : {
+
+    },
     "onboarding.next" : {
       "localizations" : {
         "en" : {
@@ -2949,6 +2952,16 @@
     },
     "Координати" : {
 
+    },
+    "Крок %lld з %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Крок %1$lld з %2$lld"
+          }
+        }
+      }
     },
     "Кути карти" : {
 
