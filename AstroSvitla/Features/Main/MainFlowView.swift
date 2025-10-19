@@ -311,13 +311,7 @@ struct MainFlowView: View {
             ReportDetailView(
                 birthDetails: details,
                 natalChart: chart,
-                report: report,
-                onGenerateAnother: {
-                    flowState = .areaSelection(details, chart)
-                },
-                onStartOver: {
-                    presentBirthInput(with: nil)
-                }
+                report: report
             )
         }
     }
