@@ -35,10 +35,6 @@ struct AstroSvitlaApp: App {
         let repoContext = RepositoryContext(context: sharedModelContainer.mainContext)
         repoContext.loadActiveProfile()
         _repositoryContext = StateObject(wrappedValue: repoContext)
-
-        // Initialize app language for localization
-        let prefs = AppPreferences()
-        setAppLanguage(prefs.selectedLanguageCode)
     }
 
     var body: some Scene {
@@ -47,7 +43,6 @@ struct AstroSvitlaApp: App {
                 .environmentObject(preferences)
                 .environmentObject(repositoryContext)
                 .preferredColorScheme(preferences.selectedColorScheme)
-                .environment(\.locale, preferences.selectedLocale)
                 .task {
                     // Ensure active profile is loaded when app starts
                     repositoryContext.loadActiveProfile()
