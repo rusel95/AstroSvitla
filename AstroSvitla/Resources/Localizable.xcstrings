@@ -262,6 +262,7 @@
       }
     },
     "area.action.edit_details" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
