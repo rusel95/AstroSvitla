@@ -4,7 +4,6 @@ struct AreaSelectionView: View {
     let birthDetails: BirthDetails
     let natalChart: NatalChart
     var onAreaSelected: (ReportArea) -> Void
-    var onEditDetails: (() -> Void)?
 
     @State private var showChartDetails = false
 
@@ -48,13 +47,6 @@ struct AreaSelectionView: View {
         }
         .listStyle(.insetGrouped)
         .navigationTitle(Text("area.navigation.title", tableName: "Localizable"))
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                if let onEditDetails {
-                    Button(String(localized: "area.action.edit_details", table: "Localizable"), action: onEditDetails)
-                }
-            }
-        }
         .fullScreenCover(isPresented: $showChartDetails) {
             NavigationStack {
                 ChartDetailsView(chart: natalChart, birthDetails: birthDetails)
@@ -94,8 +86,7 @@ struct AreaSelectionView: View {
                 midheaven: 215.3,
                 calculatedAt: .now
             ),
-            onAreaSelected: { _ in },
-            onEditDetails: {}
+            onAreaSelected: { _ in }
         )
     }
 }
