@@ -8,7 +8,13 @@ enum ReportArea: String, Codable, CaseIterable, Sendable {
     case general
 
     var displayName: String {
-        localized("report.area.\(rawValue)")
+        switch self {
+        case .finances: return "Фінанси"
+        case .career: return "Кар'єра"
+        case .relationships: return "Стосунки"
+        case .health: return "Здоров'я"
+        case .general: return "Загальний звіт"
+        }
     }
 
     var price: Decimal {
