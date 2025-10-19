@@ -151,8 +151,8 @@ struct ReportDetailView: View {
             .clipShape(RoundedRectangle(cornerRadius: 12))
         }
         .buttonStyle(.plain)
-        .sheet(isPresented: $isShowingKnowledgeLogs) {
-            KnowledgeSourceLogsView(knowledgeUsage: report.knowledgeUsage)
+        .fullScreenCover(isPresented: $isShowingKnowledgeLogs) {
+            ReportGenerationLogsView(report: report)
         }
     }
 
@@ -248,7 +248,19 @@ struct ReportDetailView: View {
                     "Highlight transformation stories.",
                     "Pitch a bold improvement project."
                 ],
-                knowledgeUsage: KnowledgeUsage(vectorSourceUsed: true, notes: "Used demo snippet 1.")
+                knowledgeUsage: KnowledgeUsage(vectorSourceUsed: true, notes: "Used demo snippet 1."),
+                metadata: GenerationMetadata(
+                    modelName: "gpt-4o-mini",
+                    promptTokens: 1500,
+                    completionTokens: 800,
+                    totalTokens: 2300,
+                    estimatedCost: 0.001610,
+                    processingTimeSeconds: 3.5,
+                    knowledgeSnippetsProvided: 6,
+                    totalSourcesCited: 8,
+                    vectorDatabaseSourcesCount: 5,
+                    externalSourcesCount: 3
+                )
             )
         )
     }
