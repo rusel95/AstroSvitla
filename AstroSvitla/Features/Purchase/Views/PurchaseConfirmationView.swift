@@ -25,9 +25,16 @@ struct PurchaseConfirmationView: View {
         }
         .navigationTitle(String(localized: "purchase.title", table: "Localizable"))
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
+            ToolbarItem(placement: .navigationBarLeading) {
                 if let onBack {
-                    Button(String(localized: "action.back", table: "Localizable"), action: onBack)
+                    Button {
+                        onBack()
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "chevron.left")
+                            Text("action.back", tableName: "Localizable")
+                        }
+                    }
                 }
             }
         }
