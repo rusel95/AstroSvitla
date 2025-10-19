@@ -20,24 +20,6 @@ final class AppPreferences: ObservableObject {
         }
     }
 
-    enum LanguageOption: String, CaseIterable, Identifiable {
-        case system
-        case english
-        case ukrainian
-
-        var id: String { rawValue }
-
-        var locale: Locale {
-            switch self {
-            case .system:
-                return Locale.current
-            case .english:
-                return Locale(identifier: "en")
-            case .ukrainian:
-                return Locale(identifier: "uk")
-            }
-        }
-    }
 
     enum OpenAIModel: String, CaseIterable, Identifiable {
         case gpt4oMini = "gpt-4o-mini"
@@ -98,43 +80,11 @@ final class AppPreferences: ObservableObject {
         didSet { UserDefaults.standard.set(theme.rawValue, forKey: Keys.theme) }
     }
 
-    @Published var language: LanguageOption {
-        didSet {
-            UserDefaults.standard.set(language.rawValue, forKey: Keys.language)
-            setAppLanguage(selectedLanguageCode)
-        }
-    }
-
     @Published var selectedModel: OpenAIModel {
         didSet { UserDefaults.standard.set(selectedModel.rawValue, forKey: Keys.openAIModel) }
     }
 
     var selectedColorScheme: ColorScheme? { theme.colorScheme }
-    var selectedLocale: Locale { language.locale }
-    var selectedLanguageCode: String {
-        switch language {
-        case .system:
-            if let code = Locale.current.language.languageCode?.identifier {
-                return code
-            }
-            return Locale.current.languageCode ?? "uk"
-        case .english:
-            return "en"
-        case .ukrainian:
-            return "uk"
-        }
-    }
-
-    var selectedLanguageDisplayName: String {
-        switch language {
-        case .system:
-            return Locale.current.localizedString(forLanguageCode: selectedLanguageCode) ?? "System"
-        case .english:
-            return "English"
-        case .ukrainian:
-            return "Українська"
-        }
-    }
 
     init() {
         if let raw = UserDefaults.standard.string(forKey: Keys.theme),
@@ -142,13 +92,6 @@ final class AppPreferences: ObservableObject {
             theme = stored
         } else {
             theme = .system
-        }
-
-        if let raw = UserDefaults.standard.string(forKey: Keys.language),
-           let stored = LanguageOption(rawValue: raw) {
-            language = stored
-        } else {
-            language = .system
         }
 
         if let raw = UserDefaults.standard.string(forKey: Keys.openAIModel),
@@ -161,12 +104,10 @@ final class AppPreferences: ObservableObject {
 
     func resetAppearance() {
         theme = .system
-        language = .system
     }
 }
 
 private enum Keys {
     static let theme = "app.preferences.theme"
-    static let language = "app.preferences.language"
     static let openAIModel = "app.preferences.openai_model"
 }
