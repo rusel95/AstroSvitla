@@ -4,8 +4,7 @@ struct ReportDetailView: View {
     let birthDetails: BirthDetails
     let natalChart: NatalChart
     let report: GeneratedReport
-    var onGenerateAnother: (() -> Void)?
-    var onStartOver: (() -> Void)?
+    @Environment(\.dismiss) private var dismiss
 
     @State private var isExportingPDF = false
     @State private var exportErrorMessage: String?
@@ -158,43 +157,22 @@ struct ReportDetailView: View {
     }
 
     private var actionButtons: some View {
-        VStack(spacing: 12) {
-            Button {
-                exportReport()
-            } label: {
-                if isExportingPDF {
-                    ProgressView()
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                } else {
-                    Label(localized("report.action.export_pdf"), systemImage: "square.and.arrow.up")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                }
-            }
-            .background(Color.accentColor.opacity(0.1))
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            .disabled(isExportingPDF)
-
-            if let onGenerateAnother {
-                Button(localized("report.action.generate_another")) {
-                    onGenerateAnother()
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.accentColor.opacity(0.1))
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            }
-
-            if let onStartOver {
-                Button(localized("report.action.start_over")) {
-                    onStartOver()
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .foregroundStyle(.secondary)
+        Button {
+            exportReport()
+        } label: {
+            if isExportingPDF {
+                ProgressView()
+                    .frame(maxWidth: .infinity)
+                    .padding()
+            } else {
+                Label(localized("report.action.export_pdf"), systemImage: "square.and.arrow.up")
+                    .frame(maxWidth: .infinity)
+                    .padding()
             }
         }
+        .background(Color.accentColor.opacity(0.1))
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .disabled(isExportingPDF)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
@@ -271,9 +249,7 @@ struct ReportDetailView: View {
                     "Pitch a bold improvement project."
                 ],
                 knowledgeUsage: KnowledgeUsage(vectorSourceUsed: true, notes: "Used demo snippet 1.")
-            ),
-            onGenerateAnother: {},
-            onStartOver: {}
+            )
         )
     }
 }
