@@ -55,7 +55,7 @@ struct AreaSelectionView: View {
                 }
             }
         }
-        .sheet(isPresented: $showChartDetails) {
+        .fullScreenCover(isPresented: $showChartDetails) {
             NavigationStack {
                 ChartDetailsView(chart: natalChart, birthDetails: birthDetails)
                     .toolbar {
