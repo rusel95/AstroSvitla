@@ -127,7 +127,7 @@ private extension ReportListViewModel {
         let displayName = area?.displayName ?? report.areaDisplayName
         let iconName = area?.icon ?? "doc.text"
         let purchaseText = purchaseDateFormatter.string(from: report.purchaseDate)
-        let readingTime = localized("reports.item.reading_time", report.estimatedReadingTime)
+        let readingTime = "Час читання: \(report.estimatedReadingTime) хв"
         let languageName = Locale.current.localizedString(forLanguageCode: report.language) ?? report.language.uppercased()
 
         return Item(
