@@ -420,9 +420,6 @@
         }
       }
     },
-    "birth.field.location_placeholder" : {
-
-    },
     "birth.field.name_optional" : {
       "localizations" : {
         "en" : {

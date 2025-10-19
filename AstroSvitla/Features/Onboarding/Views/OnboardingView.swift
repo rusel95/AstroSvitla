@@ -105,7 +105,7 @@ struct OnboardingView: View {
                                 viewModel.goBack()
                             }
                         }) {
-                            Text(String(localized: "onboarding.back", table: "Localizable"))
+                            Text("Назад")
                                 .font(.system(size: 16, weight: .semibold, design: .default))
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 50)
