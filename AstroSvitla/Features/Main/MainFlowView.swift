@@ -280,11 +280,20 @@ struct MainFlowView: View {
                 natalChart: chart,
                 onAreaSelected: { area in
                     flowState = .purchase(details, chart, area)
-                },
-                onEditDetails: {
-                    presentBirthInput(with: details)
                 }
             )
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        presentBirthInput(with: details)
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "chevron.left")
+                            Text("action.back", tableName: "Localizable")
+                        }
+                    }
+                }
+            }
 
         case .purchase(let details, let chart, let area):
             PurchaseConfirmationView(
@@ -307,12 +316,24 @@ struct MainFlowView: View {
                 }
             )
 
-        case .report(let details, let chart, _, let report):
+        case .report(let details, let chart, let area, let report):
             ReportDetailView(
                 birthDetails: details,
                 natalChart: chart,
                 report: report
             )
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        flowState = .areaSelection(details, chart)
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "chevron.left")
+                            Text("action.back", tableName: "Localizable")
+                        }
+                    }
+                }
+            }
         }
     }
 
