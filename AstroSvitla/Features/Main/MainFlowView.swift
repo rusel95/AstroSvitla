@@ -310,8 +310,8 @@ struct MainFlowView: View {
                     for: area,
                     birthDetails: details,
                     natalChart: chart,
-                    languageCode: preferences.selectedLanguageCode,
-                    languageDisplayName: preferences.selectedLanguageDisplayName,
+                    languageCode: "uk",
+                    languageDisplayName: "Українська",
                     repositoryContext: "AstroSvitla iOS app context",
                     selectedModel: preferences.selectedModel
                 )
@@ -323,7 +323,7 @@ struct MainFlowView: View {
                     )
                 } catch {
                     #if DEBUG
-                    print("⚠️ " + localized("log.report.persist_failed") + ": \(error)")
+                    print("⚠️ Помилка збереження звіту: \(error)")
                     #endif
                 }
                 await MainActor.run {
@@ -396,7 +396,7 @@ private extension MainFlowView {
     @MainActor
     func persistGeneratedReport(details: BirthDetails, natalChart: NatalChart, generatedReport: GeneratedReport) throws {
         let reportText = renderReportText(from: generatedReport)
-        let languageCode = preferences.selectedLanguageCode
+        let languageCode = "uk"
 
         // Extract knowledge source data for storage
         let sources = generatedReport.knowledgeUsage.sources ?? []
@@ -506,9 +506,9 @@ private extension MainFlowView {
         }
 
         lines.append("")
-        lines.append(report.knowledgeUsage.vectorSourceUsed ? localized("report.export.vector_usage_true") : localized("report.export.vector_usage_false"))
+        lines.append(report.knowledgeUsage.vectorSourceUsed ? "Джерела використано" : "Джерела не використано")
         if let notes = report.knowledgeUsage.notes, notes.isEmpty == false {
-            lines.append("\(localized("report.export.vector_note_prefix")): \(notes)")
+            lines.append("Примітка: \(notes)")
         }
 
         return lines.joined(separator: "\n")
@@ -577,7 +577,7 @@ private struct GeneratingReportView: View {
                 .scaleEffect(1.5)
 
             VStack(spacing: 8) {
-            Text(localized("generating.title", area.displayName))
+            Text("Генерування звіту: \(area.displayName)")
                     .font(.headline)
                 Text("Аналізуємо дані")
                     .multilineTextAlignment(.center)
@@ -586,7 +586,7 @@ private struct GeneratingReportView: View {
             .padding(.horizontal)
 
             if let onCancel {
-                Button(localized("action.cancel")) {
+                Button("Скасувати") {
                     onCancel()
                 }
             }
