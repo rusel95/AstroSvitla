@@ -127,7 +127,12 @@ final class NatalChartService: NatalChartServiceProtocol {
 
             // Cache the result
             do {
-                try chartCacheService.saveChart(natalChart, birthDetails: birthDetails)
+                try chartCacheService.saveChart(
+                    natalChart,
+                    birthDetails: birthDetails,
+                    imageFileID: natalChart.imageFileID,
+                    imageFormat: natalChart.imageFormat
+                )
                 log("💾 Chart cached successfully")
             } catch {
                 log("⚠️ Failed to cache chart: \(error.localizedDescription)")
