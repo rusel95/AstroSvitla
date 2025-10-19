@@ -21,7 +21,10 @@ enum AstrologyAPIDTOMapper {
         let calendar = Calendar.current
         let birthComponents = calendar.dateComponents([.year, .month, .day], from: birthDetails.birthDate)
         let timeComponents = calendar.dateComponents([.hour, .minute], from: birthDetails.birthTime)
-        
+
+        // Extract English city name and country code from location string
+        let (cityName, countryCode) = parseLocation(birthDetails.location)
+
         let birthData = AstrologyAPIBirthData(
             year: birthComponents.year ?? 1990,
             month: birthComponents.month ?? 1,
@@ -29,12 +32,12 @@ enum AstrologyAPIDTOMapper {
             hour: timeComponents.hour ?? 12,
             minute: timeComponents.minute ?? 0,
             second: 0,
-            city: birthDetails.location,
-            countryCode: extractCountryCode(from: birthDetails.location)
+            city: cityName,
+            countryCode: countryCode
         )
-        
+
         let subject = AstrologyAPISubject(name: birthDetails.name, birthData: birthData)
-        
+
         return AstrologyAPINatalChartRequest(
             subject: subject,
             options: .default
@@ -295,11 +298,27 @@ enum AstrologyAPIDTOMapper {
         return houseMap[houseString] ?? 1
     }
     
-    private static func extractCountryCode(from location: String) -> String {
-        // Simple country code extraction logic
-        // In production, this should use a proper location service
-        // For now, return a default
-        return "US"
+    /// Parse location string to extract city name and country code
+    /// Expected format from geocoding: "City, Region, Country, ISO_CODE"
+    /// Example: "London, England, United Kingdom, GB"
+    /// LocationSearchService now provides English names with ISO codes
+    private static func parseLocation(_ location: String) -> (city: String, countryCode: String) {
+        let components = location.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+
+        // Extract country code from last component (2-letter ISO code)
+        let countryCode: String
+        if let lastComponent = components.last, lastComponent.count == 2 {
+            countryCode = lastComponent.uppercased()
+        } else {
+            // Fallback if no ISO code found (shouldn't happen with LocationSearchService)
+            print("[AstrologyAPIDTOMapper] ⚠️ No ISO country code found in location: \(location)")
+            countryCode = "US"
+        }
+
+        // Get city name from first component (should be in English from LocationSearchService)
+        let cityName = components.first ?? "Unknown"
+
+        return (city: cityName, countryCode: countryCode)
     }
 }
 
