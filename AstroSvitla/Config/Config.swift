@@ -34,7 +34,7 @@ enum Config {
     static let astrologyAPIBaseURL = "https://api.astrology-api.io/api/v3"
 
     /// Bearer token used to authenticate against api.astrology-api.io. Replace the placeholder with a valid key before building.
-    static let astrologyAPIKey = ProcessInfo.processInfo.environment["ASTROLOGY_API_KEY"] ?? "YOUR_ASTROLOGY_API_KEY_HERE"
+//    static let astrologyAPIKey = ProcessInfo.processInfo.environment["ASTROLOGY_API_KEY"] ?? "YOUR_ASTROLOGY_API_KEY_HERE"
 
     /// Rate limiting configuration (requests per time window) expected by api.astrology-api.io
     static let astrologyAPIRateLimitRequests = 10
@@ -91,19 +91,19 @@ enum Config {
         openAIAPIKey != "YOUR_OPENAI_API_KEY_HERE"
     }
 
-    static var isAstrologyAPIConfigured: Bool {
-        astrologyAPIKey.isEmpty == false &&
-        astrologyAPIKey != "YOUR_ASTROLOGY_API_KEY_HERE"
-    }
+//    static var isAstrologyAPIConfigured: Bool {
+//        astrologyAPIKey.isEmpty == false &&
+//        astrologyAPIKey != "YOUR_ASTROLOGY_API_KEY_HERE"
+//    }
 
     static func validate() throws {
         guard isOpenAIConfigured else {
             throw ConfigError.missingAPIKey("OpenAI API key not configured in Config.swift")
         }
 
-        guard isAstrologyAPIConfigured else {
-            throw ConfigError.missingAPIKey("Astrology API key not configured in Config.swift")
-        }
+//        guard isAstrologyAPIConfigured else {
+//            throw ConfigError.missingAPIKey("Astrology API key not configured in Config.swift")
+//        }
     }
 }
 
