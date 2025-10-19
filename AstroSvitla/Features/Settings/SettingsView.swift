@@ -16,10 +16,9 @@ struct SettingsView: View {
         Form {
             profileSection
             appearanceSection
-            languageSection
             openAIModelSection
         }
-        .navigationTitle(Text("settings.title", tableName: "Localizable"))
+        .navigationTitle(Text("Налаштування"))
         .sheet(isPresented: $showingProfileManager) {
             UserProfileListView(viewModel: profileViewModel)
         }
@@ -31,44 +30,28 @@ struct SettingsView: View {
                 showingProfileManager = true
             } label: {
                 Label {
-                    Text("settings.action.manage_profiles", tableName: "Localizable")
+                    Text("Керувати профілями")
                 } icon: {
                     Image(systemName: "person.2")
                 }
             }
         } header: {
-            Text("settings.section.profiles", tableName: "Localizable")
+            Text("Профілі")
         }
     }
 
     private var appearanceSection: some View {
         Section {
             Picker(selection: $preferences.theme) {
-                Text("settings.theme.system", tableName: "Localizable").tag(AppPreferences.ThemeOption.system)
-                Text("settings.theme.light", tableName: "Localizable").tag(AppPreferences.ThemeOption.light)
-                Text("settings.theme.dark", tableName: "Localizable").tag(AppPreferences.ThemeOption.dark)
+                Text("Система").tag(AppPreferences.ThemeOption.system)
+                Text("Світле").tag(AppPreferences.ThemeOption.light)
+                Text("Темне").tag(AppPreferences.ThemeOption.dark)
             } label: {
-                Text("settings.picker.theme", tableName: "Localizable")
+                Text("Тема")
             }
             .pickerStyle(.segmented)
         } header: {
-            Text("settings.section.theme", tableName: "Localizable")
-        }
-    }
-
-    private var languageSection: some View {
-        Section {
-            Picker(selection: $preferences.language) {
-                Text("settings.language.system", tableName: "Localizable").tag(AppPreferences.LanguageOption.system)
-                Text("settings.language.ukrainian", tableName: "Localizable").tag(AppPreferences.LanguageOption.ukrainian)
-                Text("settings.language.english", tableName: "Localizable").tag(AppPreferences.LanguageOption.english)
-            } label: {}
-            .pickerStyle(.inline)
-            Text("settings.language.note", tableName: "Localizable")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-        } header: {
-            Text("settings.section.language", tableName: "Localizable")
+            Text("Оформлення")
         }
     }
 

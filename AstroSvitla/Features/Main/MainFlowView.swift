@@ -227,7 +227,7 @@ struct MainFlowView: View {
                     }
                 } else {
                     await MainActor.run {
-                        errorMessage = profileViewModel.errorMessage ?? "Failed to create profile"
+                        errorMessage = profileViewModel.errorMessage ?? "Помилка створення профілю"
                     }
                 }
             } catch {
@@ -242,7 +242,7 @@ struct MainFlowView: View {
     private func handleContinueWithSelectedProfile() async {
         guard let profile = repositoryContext.activeProfile else {
             await MainActor.run {
-                errorMessage = "Please select a profile first"
+                errorMessage = "Будь ласка, виберіть профіль"
             }
             return
         }

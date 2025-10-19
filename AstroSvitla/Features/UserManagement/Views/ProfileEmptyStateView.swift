@@ -66,6 +66,7 @@ struct ProfileEmptyStateView: View {
             Text("Це займе всього 30 секунд")
                 .font(.system(size: 13, weight: .regular, design: .default))
                 .foregroundStyle(.tertiary)
+                .padding(.bottom, 8)
 
             Spacer()
         }
