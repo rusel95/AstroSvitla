@@ -143,8 +143,23 @@ extension CachedNatalChart {
             coordinatesMatch = false
         }
 
-        return cached.birthDate == birthDetails.birthDate &&
-            cached.birthTime == birthDetails.birthTime &&
+        // Compare dates and times with second-level precision (ignore milliseconds)
+        let calendar = Calendar.current
+        let cachedDateComponents = calendar.dateComponents([.year, .month, .day], from: cached.birthDate)
+        let inputDateComponents = calendar.dateComponents([.year, .month, .day], from: birthDetails.birthDate)
+        let cachedTimeComponents = calendar.dateComponents([.hour, .minute, .second], from: cached.birthTime)
+        let inputTimeComponents = calendar.dateComponents([.hour, .minute, .second], from: birthDetails.birthTime)
+
+        let datesMatch = cachedDateComponents.year == inputDateComponents.year &&
+            cachedDateComponents.month == inputDateComponents.month &&
+            cachedDateComponents.day == inputDateComponents.day
+
+        let timesMatch = cachedTimeComponents.hour == inputTimeComponents.hour &&
+            cachedTimeComponents.minute == inputTimeComponents.minute &&
+            cachedTimeComponents.second == inputTimeComponents.second
+
+        return datesMatch &&
+            timesMatch &&
             cached.location.caseInsensitiveCompare(birthDetails.location) == .orderedSame &&
             cached.timeZoneIdentifier == timeZoneIdentifier &&
             coordinatesMatch
