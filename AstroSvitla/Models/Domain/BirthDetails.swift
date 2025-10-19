@@ -38,10 +38,19 @@ struct BirthDetails: Sendable {
     }
 
     var formattedBirthTime: String {
-        birthTime.formatted(.dateTime
-            .hour()
-            .minute()
-        )
+        // Use 24-hour format for Ukrainian locale, respect system settings for others
+        let formatter = DateFormatter()
+        formatter.locale = Locale.current
+
+        // For Ukrainian locale, always use 24-hour format (HH:mm)
+        // For other locales, respect system preferences
+        if Locale.current.language.languageCode?.identifier == "uk" {
+            formatter.dateFormat = "HH:mm"
+        } else {
+            formatter.timeStyle = .short
+        }
+
+        return formatter.string(from: birthTime)
     }
 
     var formattedLocation: String {
