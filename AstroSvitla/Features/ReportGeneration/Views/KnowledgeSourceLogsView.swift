@@ -186,30 +186,3 @@ struct KnowledgeSourceLogsView: View {
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
-
-#Preview {
-    KnowledgeSourceLogsView(
-        knowledgeUsage: KnowledgeUsage(
-            vectorSourceUsed: true,
-            notes: "Використано 3 джерела з векторної бази знань",
-            sources: [
-                KnowledgeSource(
-                    bookTitle: "Астрологія для початківців",
-                    author: "Джоанна Мартін Вулфолк",
-                    section: "Глава 5: Планети в домах",
-                    pageRange: "142-156",
-                    snippet: "Венера в сьомому домі вказує на гармонійні відносини та любов до партнерства. Людина з таким розташуванням часто знаходить задоволення у створенні естетичного середовища для своєї пари.",
-                    relevanceScore: 0.95
-                ),
-                KnowledgeSource(
-                    bookTitle: "Транзити та прогресії",
-                    author: "Ян Спіллер",
-                    section: "Розділ 3: Кармічні вузли",
-                    pageRange: "78-92",
-                    snippet: "Північний вузол у Близнюках закликає до розвитку комунікаційних навичок та гнучкості мислення.",
-                    relevanceScore: 0.87
-                ),
-            ]
-        )
-    )
-}
