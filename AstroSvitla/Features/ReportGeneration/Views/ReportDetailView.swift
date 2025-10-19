@@ -32,7 +32,7 @@ struct ReportDetailView: View {
             }
             .padding()
         }
-        .navigationTitle(Text(localized("report.navigation_title", report.area.displayName)))
+        .navigationTitle(Text("Звіт: \(report.area.displayName)"))
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $isPresentingShareSheet) {
             if let url = shareURL {
@@ -44,19 +44,19 @@ struct ReportDetailView: View {
                 }
             }
         }
-        .alert(localized("alert.pdf_failed.title"), isPresented: $isShowingErrorAlert, actions: {
-            Button(localized("action.close"), role: .cancel) {
+        .alert("Помилка експорту", isPresented: $isShowingErrorAlert, actions: {
+            Button("Закрити", role: .cancel) {
                 isShowingErrorAlert = false
             }
         }, message: {
-            Text(exportErrorMessage ?? localized("alert.pdf_failed.message"))
+            Text(exportErrorMessage ?? "Не вдалося експортувати PDF")
         })
-        .alert(localized("alert.pdf_saved.title"), isPresented: $isShowingSuccessAlert, actions: {
-            Button(localized("action.ok"), role: .cancel) {
+        .alert("PDF збережено", isPresented: $isShowingSuccessAlert, actions: {
+            Button("OK", role: .cancel) {
                 isShowingSuccessAlert = false
             }
         }, message: {
-            Text(localized("alert.pdf_saved.message"))
+            Text("Звіт успішно експортовано")
         })
     }
 
@@ -165,7 +165,7 @@ struct ReportDetailView: View {
                     .frame(maxWidth: .infinity)
                     .padding()
             } else {
-                Label(localized("report.action.export_pdf"), systemImage: "square.and.arrow.up")
+                Label("Експортувати PDF", systemImage: "square.and.arrow.up")
                     .frame(maxWidth: .infinity)
                     .padding()
             }
