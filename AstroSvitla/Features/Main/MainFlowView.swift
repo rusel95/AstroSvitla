@@ -610,7 +610,8 @@ struct MainFlowView: View {
                     natalChart: chart,
                     languageCode: preferences.selectedLanguageCode,
                     languageDisplayName: preferences.selectedLanguageDisplayName,
-                    repositoryContext: "AstroSvitla iOS app context"
+                    repositoryContext: "AstroSvitla iOS app context",
+                    selectedModel: preferences.selectedModel
                 )
                 do {
                     try await persistGeneratedReport(
@@ -701,6 +702,37 @@ private extension MainFlowView {
         let sourceAuthors = sources.map { $0.author ?? "" }
         let sourcePages = sources.map { $0.pageRange ?? "" }
 
+        // Encode full logging data as JSON
+        let encoder = JSONEncoder()
+        var metadataJSON: String? = nil
+        var knowledgeSourcesJSON: String? = nil
+        var availableBooksJSON: String? = nil
+
+        do {
+            let metadataData = try encoder.encode(generatedReport.metadata)
+            metadataJSON = String(data: metadataData, encoding: .utf8)
+        } catch {
+            print("[MainFlowView] ⚠️ Failed to encode metadata: \(error)")
+        }
+
+        if !sources.isEmpty {
+            do {
+                let sourcesData = try encoder.encode(sources)
+                knowledgeSourcesJSON = String(data: sourcesData, encoding: .utf8)
+            } catch {
+                print("[MainFlowView] ⚠️ Failed to encode sources: \(error)")
+            }
+        }
+
+        if let availableBooks = generatedReport.knowledgeUsage.availableBooks, !availableBooks.isEmpty {
+            do {
+                let booksData = try encoder.encode(availableBooks)
+                availableBooksJSON = String(data: booksData, encoding: .utf8)
+            } catch {
+                print("[MainFlowView] ⚠️ Failed to encode available books: \(error)")
+            }
+        }
+
         let purchase = ReportPurchase(
             area: generatedReport.area.rawValue,
             reportText: reportText,
@@ -715,7 +747,10 @@ private extension MainFlowView {
             knowledgeSourceAuthors: sourceAuthors.isEmpty ? nil : sourceAuthors,
             knowledgeSourcePages: sourcePages.isEmpty ? nil : sourcePages,
             price: generatedReport.area.price,
-            transactionId: UUID().uuidString
+            transactionId: UUID().uuidString,
+            metadataJSON: metadataJSON,
+            knowledgeSourcesJSON: knowledgeSourcesJSON,
+            availableBooksJSON: availableBooksJSON
         )
 
         // Link report to active profile
@@ -729,7 +764,7 @@ private extension MainFlowView {
         modelContext.insert(purchase)
         try modelContext.save()
 
-        print("[MainFlowView] ✅ Report saved successfully")
+        print("[MainFlowView] ✅ Report saved successfully with full logging data")
     }
 
     @MainActor
