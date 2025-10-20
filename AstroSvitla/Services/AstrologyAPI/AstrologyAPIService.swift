@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Sentry
 
 /// Service errors for AstrologyAPI communication
 enum AstrologyAPIError: LocalizedError {
@@ -207,6 +208,12 @@ final class AstrologyAPIService {
         case 500...599:
             throw AstrologyAPIError.httpError(statusCode: response.statusCode, message: "Server error")
         default:
+            SentrySDK.capture(message: "Unexpected HTTP status code from Astrology API") { scope in
+                scope.setLevel(.warning)
+                scope.setTag(value: "astrology_api", key: "service")
+                scope.setExtra(value: response.statusCode, key: "status_code")
+                scope.setExtra(value: response.url?.absoluteString ?? "unknown", key: "url")
+            }
             throw AstrologyAPIError.httpError(statusCode: response.statusCode, message: "Unexpected status code")
         }
     }

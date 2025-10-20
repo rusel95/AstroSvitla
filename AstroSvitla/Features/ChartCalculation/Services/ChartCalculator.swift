@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 import CoreLocation
+import Sentry
 
 enum ChartCalculatorError: LocalizedError, Equatable {
     case invalidTimeZone(String)
@@ -78,6 +79,11 @@ final class ChartCalculator {
 
         // Use Free Astrology API service
         guard let natalChartService = natalChartService else {
+            SentrySDK.capture(message: "Unexpected: Chart service not initialized") { scope in
+                scope.setLevel(.error)
+                scope.setTag(value: "chart_calculation", key: "service")
+                scope.setExtra(value: "natalChartService is nil", key: "error_details")
+            }
             throw ChartCalculatorError.apiError("Chart service not initialized")
         }
 
@@ -135,6 +141,11 @@ final class ChartCalculator {
         )
 
         guard let service = natalChartService else {
+            SentrySDK.capture(message: "Unexpected: Chart service not initialized (duplicate check)") { scope in
+                scope.setLevel(.error)
+                scope.setTag(value: "chart_calculation", key: "service")
+                scope.setExtra(value: "natalChartService is nil in calculateWithAPI", key: "error_details")
+            }
             throw ChartCalculatorError.apiError("Chart service not initialized")
         }
 

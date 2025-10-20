@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftData
+import Sentry
 
 // MARK: - Main Mapper
 
@@ -360,7 +361,13 @@ extension ZodiacSign {
         case "cap", "capricorn": return .capricorn
         case "aqu", "aquarius": return .aquarius
         case "pis", "pisces": return .pisces
-        default: return .aries // Default fallback
+        default: 
+            SentrySDK.capture(message: "Unknown zodiac sign from Astrology API, defaulting to Aries") { scope in
+                scope.setLevel(.warning)
+                scope.setTag(value: "astrology_api", key: "service")
+                scope.setExtra(value: apiName, key: "unknown_sign")
+            }
+            return .aries // Default fallback
         }
     }
 }

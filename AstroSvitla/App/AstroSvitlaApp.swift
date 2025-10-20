@@ -56,6 +56,11 @@ struct AstroSvitlaApp: App {
         do {
             sharedModelContainer = try ModelContainer.astroSvitlaShared()
         } catch {
+            SentrySDK.capture(message: "Critical: Could not create ModelContainer - app cannot function") { scope in
+                scope.setLevel(.fatal)
+                scope.setTag(value: "startup", key: "phase")
+                scope.setExtra(value: error.localizedDescription, key: "error_details")
+            }
             fatalError("Could not create ModelContainer: \(error)")
         }
         
