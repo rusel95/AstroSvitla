@@ -1,10 +1,7 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    ": %@" : {
-
-    },
-    ": %lld" : {
+    "" : {
 
     },
     "«%@»" : {
@@ -114,6 +111,7 @@
       }
     },
     "action.cancel" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -130,6 +128,7 @@
       }
     },
     "action.close" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -180,6 +179,7 @@
       }
     },
     "action.ok" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -196,6 +196,7 @@
       }
     },
     "alert.generic.message" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -212,6 +213,7 @@
       }
     },
     "alert.generic.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -228,6 +230,7 @@
       }
     },
     "alert.pdf_failed.message" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -244,6 +247,7 @@
       }
     },
     "alert.pdf_failed.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -260,6 +264,7 @@
       }
     },
     "alert.pdf_saved.message" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -276,6 +281,7 @@
       }
     },
     "alert.pdf_saved.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1040,6 +1046,7 @@
       }
     },
     "generating.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1348,6 +1355,7 @@
       }
     },
     "log.report.persist_failed" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1367,6 +1375,7 @@
 
     },
     "nav.reports" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1453,7 +1462,11 @@
         }
       }
     },
+    "PDF збережено" : {
+
+    },
     "pdf.generated_on" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1470,6 +1483,7 @@
       }
     },
     "pdf.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1911,6 +1925,7 @@
       }
     },
     "report.action.export_pdf" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2097,6 +2112,7 @@
       }
     },
     "report.export.vector_note_prefix" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2113,6 +2129,7 @@
       }
     },
     "report.export.vector_usage_false" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2129,6 +2146,7 @@
       }
     },
     "report.export.vector_usage_true" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2145,6 +2163,7 @@
       }
     },
     "report.knowledge.no_snippets" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2161,6 +2180,7 @@
       }
     },
     "report.knowledge.not_used" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2177,6 +2197,7 @@
       }
     },
     "report.knowledge.used" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2193,6 +2214,7 @@
       }
     },
     "report.navigation_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2378,6 +2400,7 @@
       }
     },
     "reports.item.reading_time" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2921,6 +2944,7 @@
       }
     },
     "tab.main" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2937,6 +2961,7 @@
       }
     },
     "tab.reports" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2953,6 +2978,7 @@
       }
     },
     "tab.settings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2995,6 +3021,9 @@
 
     },
     "Аспекти (%lld)" : {
+
+    },
+    "Астрологічний звіт" : {
 
     },
     "Асцендент (ASC)" : {
@@ -3045,7 +3074,16 @@
     "Всього токенів" : {
 
     },
+    "Генеровано: %@" : {
+
+    },
     "Генерування" : {
+
+    },
+    "Генерування звіту: %@" : {
+
+    },
+    "Головна" : {
 
     },
     "Готово" : {
@@ -3072,7 +3110,13 @@
     "Деталі карти" : {
 
     },
+    "Джерела использованы" : {
+
+    },
     "Джерела не були процитовані" : {
+
+    },
+    "Джерела не використано" : {
 
     },
     "Дім %lld" : {
@@ -3082,6 +3126,9 @@
 
     },
     "Доступна векторна база даних" : {
+
+    },
+    "Експортувати PDF" : {
 
     },
     "З нашої БД" : {
@@ -3094,6 +3141,15 @@
 
     },
     "Зберегти" : {
+
+    },
+    "Звіт успішно експортовано" : {
+
+    },
+    "Звіт: %@" : {
+
+    },
+    "Звіти" : {
 
     },
     "Звіти без профілю" : {
@@ -3221,6 +3277,9 @@
 
     },
     "Помилка" : {
+
+    },
+    "Помилка експорту" : {
 
     },
     "Помилка рендерингу" : {

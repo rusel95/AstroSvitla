@@ -79,7 +79,7 @@ final class OnboardingViewModel: ObservableObject {
             OnboardingPage(
                 title: "Як це працює за 3 кроки",
                 message: "Простий процес, який займе всього кілька хвилин та розкриє глибокі інсайти про ваше майбутнє.",
-                symbolName: "number.circle.1.fill",
+                symbolName: "1.circle.fill",
                 highlights: [
                     "Крок 1: Введіть дату, час та місце вашого народження",
                     "Крок 2: Виберіть сферу життя для аналізу (фінанси, кар'єра, стосунки...)",
