@@ -42,7 +42,6 @@ struct AstroSvitlaApp: App {
             // Enable experimental logging features
             options.experimental.enableLogs = true
         }
-        
         // Optional: Validate configuration
 #if DEBUG
         do {
