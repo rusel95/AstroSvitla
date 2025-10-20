@@ -46,7 +46,7 @@ private struct BirthDetailsDTO: Codable {
     let latitude: Double?
     let longitude: Double?
 
-    init(from details: BirthDetails) {
+    nonisolated init(from details: BirthDetails) {
         self.name = details.name
         self.birthDate = details.birthDate
         self.birthTime = details.birthTime
@@ -56,7 +56,7 @@ private struct BirthDetailsDTO: Codable {
         self.longitude = details.coordinate?.longitude
     }
 
-    func toBirthDetails() -> BirthDetails {
+    nonisolated func toBirthDetails() -> BirthDetails {
         let coordinate: CLLocationCoordinate2D?
         if let lat = latitude, let lon = longitude {
             coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)

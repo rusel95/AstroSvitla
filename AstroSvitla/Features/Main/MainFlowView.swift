@@ -161,7 +161,7 @@ struct MainFlowView: View {
                 }
             )
 
-        case .report(let details, let chart, let area, let report):
+        case .report(let details, let chart, _, let report):
             ReportDetailView(
                 birthDetails: details,
                 natalChart: chart,
@@ -316,7 +316,7 @@ struct MainFlowView: View {
                     selectedModel: preferences.selectedModel
                 )
                 do {
-                    try await persistGeneratedReport(
+                    try persistGeneratedReport(
                         details: details,
                         natalChart: chart,
                         generatedReport: report
@@ -471,10 +471,7 @@ private extension MainFlowView {
 
     @MainActor
     func upsertBirthChart(details: BirthDetails, natalChart: NatalChart) throws -> BirthChart {
-        let name = details.name
-        let birthDate = details.birthDate
-        let birthTime = details.birthTime
-        let timezoneID = details.timeZone.identifier
+        _ = details
 
         // TODO: This logic needs complete rewrite for UserProfile architecture
         // For now, just create a new chart each time

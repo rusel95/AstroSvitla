@@ -30,7 +30,7 @@ final class BirthChart {
         updatedAt = Date()
     }
 
-    func decodedNatalChart() -> NatalChart? {
+    nonisolated func decodedNatalChart() -> NatalChart? {
         guard chartDataJSON.isEmpty == false,
               let data = chartDataJSON.data(using: .utf8) else { return nil }
         return try? BirthChart.chartDecoder.decode(NatalChart.self, from: data)
@@ -50,12 +50,12 @@ final class BirthChart {
         )
     }
 
-    func encodedChartData(from chart: NatalChart) -> String? {
+    nonisolated func encodedChartData(from chart: NatalChart) -> String? {
         guard let data = try? BirthChart.chartEncoder.encode(chart) else { return nil }
         return String(data: data, encoding: .utf8)
     }
 
-    static func encodedChartJSON(from chart: NatalChart) -> String? {
+    nonisolated static func encodedChartJSON(from chart: NatalChart) -> String? {
         guard let data = try? chartEncoder.encode(chart) else { return nil }
         return String(data: data, encoding: .utf8)
     }

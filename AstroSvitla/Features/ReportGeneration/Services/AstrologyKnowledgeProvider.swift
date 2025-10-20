@@ -85,12 +85,12 @@ actor AstrologyKnowledgeProvider: KnowledgeSourceProvider {
             context.append("Місяць у знаку \(moon.sign.rawValue), будинок \(moon.house)")
         }
 
-        // Ascendant
-        let ascSign = ZodiacSign.from(degree: chart.ascendant)
+        // Ascendant - compute sign without crossing isolation boundary
+        let ascSign = computeZodiacSign(for: chart.ascendant)
         context.append("Асцендент у знаку \(ascSign.rawValue)")
 
-        // Midheaven
-        let mcSign = ZodiacSign.from(degree: chart.midheaven)
+        // Midheaven - compute sign without crossing isolation boundary
+        let mcSign = computeZodiacSign(for: chart.midheaven)
         context.append("МС (Середина неба) у знаку \(mcSign.rawValue)")
 
         // Major aspects (limited to first 3 for brevity)
@@ -107,6 +107,14 @@ actor AstrologyKnowledgeProvider: KnowledgeSourceProvider {
         }
 
         return context
+    }
+
+    nonisolated private func computeZodiacSign(for degree: Double) -> ZodiacSign {
+        // Normalize degree to 0-360 range
+        let normalized = degree.truncatingRemainder(dividingBy: 360)
+        // Each sign is 30 degrees
+        let signIndex = Int(normalized / 30) % 12
+        return ZodiacSign.allCases[signIndex]
     }
 }
 

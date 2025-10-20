@@ -1,5 +1,6 @@
 import Foundation
 import OpenAI
+import Sentry
 
 struct OpenAIService {
 
@@ -32,6 +33,13 @@ struct OpenAIService {
         selectedModel: AppPreferences.OpenAIModel
     ) async throws -> GeneratedReport {
         guard let client = clientProvider.client else {
+            // Log missing API key configuration
+            SentrySDK.capture(message: "Unexpected: OpenAI client not configured") { scope in
+                scope.setLevel(.error)
+                scope.setTag(value: "report_generation", key: "service")
+                scope.setTag(value: "openai", key: "provider")
+                scope.setExtra(value: "client is nil", key: "error_details")
+            }
             throw ReportGenerationError.missingAPIKey
         }
 
@@ -130,12 +138,30 @@ struct OpenAIService {
                     try await Task.sleep(nanoseconds: UInt64(backoff * 1_000_000_000))
                     continue
                 } else {
+                    // Log report generation failures
+                    SentrySDK.capture(message: "Unexpected: Report generation failed") { scope in
+                        scope.setLevel(.error)
+                        scope.setTag(value: "report_generation", key: "service")
+                        scope.setTag(value: "openai", key: "provider")
+                        scope.setTag(value: area.rawValue, key: "report_area")
+                        scope.setExtra(value: error.localizedDescription, key: "error_details")
+                        scope.setExtra(value: attempt, key: "attempt_count")
+                    }
                     throw error
                 }
             }
         }
 
-        throw lastError ?? ReportGenerationError.invalidResponse
+        let finalError = lastError ?? ReportGenerationError.invalidResponse
+        SentrySDK.capture(message: "Unexpected: Report generation exhausted retries") { scope in
+            scope.setLevel(.error)
+            scope.setTag(value: "report_generation", key: "service")
+            scope.setTag(value: "openai", key: "provider")
+            scope.setTag(value: area.rawValue, key: "report_area")
+            scope.setExtra(value: finalError.localizedDescription, key: "final_error")
+            scope.setExtra(value: maxAttempts, key: "max_attempts")
+        }
+        throw finalError
     }
 
     // MARK: - Helpers

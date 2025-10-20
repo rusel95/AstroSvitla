@@ -319,7 +319,6 @@ struct HouseNumber: View {
     let radius: CGFloat
 
     var body: some View {
-        let nextHouse = house.number % 12 + 1
         let nextCusp = house.cusp + 30 // Approximate
         let midAngle = (house.cusp + nextCusp) / 2 - 90
 

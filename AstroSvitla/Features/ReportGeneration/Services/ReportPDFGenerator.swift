@@ -1,4 +1,5 @@
 import SwiftUI
+import Sentry
 
 struct ReportPDFGenerator {
 
@@ -49,6 +50,14 @@ struct ReportPDFGenerator {
         }
 
         guard data.isEmpty == false else {
+            // Log PDF rendering failure
+            SentrySDK.capture(message: "Unexpected: PDF rendering failed") { scope in
+                scope.setLevel(.error)
+                scope.setTag(value: "report_generation", key: "service")
+                scope.setTag(value: "pdf_generation", key: "operation")
+                scope.setExtra(value: "Generated PDF data is empty", key: "error_details")
+                scope.setExtra(value: birthDetails.displayName, key: "subject")
+            }
             throw Error.renderFailed
         }
         return data

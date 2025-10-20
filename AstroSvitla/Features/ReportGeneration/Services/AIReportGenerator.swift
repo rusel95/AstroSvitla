@@ -5,10 +5,12 @@ actor AIReportGenerator {
     private let openAIService: OpenAIService
     private let knowledgeProvider: KnowledgeSourceProvider
 
-    @MainActor
+    nonisolated private static let defaultOpenAIService = OpenAIService()
+    nonisolated private static let defaultKnowledgeProvider = AstrologyKnowledgeProvider()
+
     init(
-        openAIService: OpenAIService = OpenAIService(),
-        knowledgeProvider: KnowledgeSourceProvider = AstrologyKnowledgeProvider()
+        openAIService: OpenAIService = AIReportGenerator.defaultOpenAIService,
+        knowledgeProvider: KnowledgeSourceProvider = AIReportGenerator.defaultKnowledgeProvider
     ) {
         self.openAIService = openAIService
         self.knowledgeProvider = knowledgeProvider

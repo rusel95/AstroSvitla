@@ -53,11 +53,11 @@ final class AstrologyAPIService {
     // MARK: - Initialization
     
     init(
-        baseURL: String = Config.astrologyAPIBaseURL,
+        baseURL: String? = nil,
         session: URLSession = .shared,
         rateLimiter: RateLimiter? = nil
     ) {
-        self.baseURL = baseURL
+        self.baseURL = baseURL ?? Config.astrologyAPIBaseURL
         self.session = session
         self.requestTimeout = Config.astrologyAPIRequestTimeout
         // AstrologyAPI has a limit of 10 requests per 60 seconds

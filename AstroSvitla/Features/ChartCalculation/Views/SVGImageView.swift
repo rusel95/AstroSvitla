@@ -211,8 +211,8 @@ fileprivate class SVGWebViewController: NSObject, WKNavigationDelegate {
         Task { @MainActor in
             // Give WebView time to render (important for complex SVGs)
             try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
-            
-            guard let webView = self.webView, let continuation = self.continuation else {
+
+            guard let webView = self.webView, let _ = self.continuation else {
                 return
             }
             

@@ -74,7 +74,7 @@ final class RateLimiter {
     func canMakeRequest() -> (allowed: Bool, retryAfter: TimeInterval?) {
         queue.sync {
             let now = clock.now
-            var timestamps = prune(loadTimestamps(), now: now)
+            let timestamps = prune(loadTimestamps(), now: now)
             saveTimestamps(timestamps)
             resetMonthlyUsageIfNeeded(now: now)
 

@@ -14,6 +14,7 @@
 import Foundation
 import SwiftData
 import Network
+import Sentry
 
 /// Protocol for natal chart generation service
 protocol NatalChartServiceProtocol {
@@ -121,6 +122,15 @@ final class NatalChartService: NatalChartServiceProtocol {
                     log("✅ Chart image saved (\(svgData.count) bytes)")
                 } catch {
                     log("⚠️ Failed to download chart image: \(error.localizedDescription)")
+
+                    // Log to Sentry for image download failures
+                    SentrySDK.capture(message: "Unexpected: Chart image download failed") { scope in
+                        scope.setLevel(.warning)
+                        scope.setTag(value: "chart_generation", key: "service")
+                        scope.setTag(value: "image_download", key: "operation")
+                        scope.setExtra(value: error.localizedDescription, key: "error_details")
+                        scope.setExtra(value: imageFileID, key: "file_id")
+                    }
                     // Don't throw - chart data is still valid even without image
                 }
             }
@@ -136,12 +146,31 @@ final class NatalChartService: NatalChartServiceProtocol {
                 log("💾 Chart cached successfully")
             } catch {
                 log("⚠️ Failed to cache chart: \(error.localizedDescription)")
+
+                // Log to Sentry for caching failures
+                SentrySDK.capture(message: "Unexpected: Chart caching failed") { scope in
+                    scope.setLevel(.warning)
+                    scope.setTag(value: "chart_generation", key: "service")
+                    scope.setTag(value: "chart_cache", key: "operation")
+                    scope.setExtra(value: error.localizedDescription, key: "error_details")
+                }
                 // Don't throw - chart generation succeeded even if caching failed
             }
 
             return natalChart
         } catch {
             log("❌ Chart generation failed: \(error.localizedDescription)")
+
+            // Log to Sentry for unexpected errors
+            SentrySDK.capture(message: "Unexpected: Natal chart generation failed") { scope in
+                scope.setLevel(.error)
+                scope.setTag(value: "chart_generation", key: "service")
+                scope.setTag(value: "astrology_api", key: "provider")
+                scope.setExtra(value: error.localizedDescription, key: "error_details")
+                scope.setExtra(value: birthDetails.displayName, key: "birth_subject")
+                scope.setExtra(value: birthDetails.formattedBirthDate, key: "birth_date")
+            }
+
             throw ServiceError.chartGenerationFailed(error)
         }
     }
