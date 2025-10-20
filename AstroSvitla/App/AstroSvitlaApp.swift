@@ -6,37 +6,64 @@
 //
 
 import SwiftUI
+import Sentry
+
 import SwiftData
 
 @main
 struct AstroSvitlaApp: App {
-
+    
     private let sharedModelContainer: ModelContainer
     @StateObject private var preferences = AppPreferences()
     @StateObject private var repositoryContext: RepositoryContext
-
+    
     init() {
+        SentrySDK.start { options in
+            options.dsn = "https://2663ea6169f8259819b691c586a1af16@o1271632.ingest.us.sentry.io/4510221414957056"
+            
+            // Adds IP for users.
+            // For more information, visit: https://docs.sentry.io/platforms/apple/data-management/data-collected/
+            options.sendDefaultPii = true
+            
+            // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+            // We recommend adjusting this value in production.
+            options.tracesSampleRate = 0.5
+            
+            // Configure profiling. Visit https://docs.sentry.io/platforms/apple/profiling/ to learn more.
+            options.configureProfiling = {
+                $0.sessionSampleRate = 0.5 // We recommend adjusting this value in production.
+                $0.lifecycle = .trace
+            }
+            
+            // Uncomment the following lines to add more data to your events
+            options.attachScreenshot = true // This adds a screenshot to the error events
+            options.attachViewHierarchy = true // This adds the view hierarchy to the error events
+            
+            // Enable experimental logging features
+            options.experimental.enableLogs = true
+        }
+        
         // Optional: Validate configuration
-        #if DEBUG
+#if DEBUG
         do {
             try Config.validate()
             print("✅ Configuration validated successfully")
         } catch {
             print("⚠️ Configuration warning: \(error.localizedDescription)")
         }
-        #endif
-
+#endif
+        
         do {
             sharedModelContainer = try ModelContainer.astroSvitlaShared()
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
-
+        
         let repoContext = RepositoryContext(context: sharedModelContainer.mainContext)
         repoContext.loadActiveProfile()
         _repositoryContext = StateObject(wrappedValue: repoContext)
     }
-
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

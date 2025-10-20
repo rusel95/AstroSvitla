@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		85E2C24C2E96896700349727 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 85E2C24B2E96896700349727 /* OpenAI */; };
+		8835B9A55E0643DF97FFB977 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = FFBEB15F41AE4CB39BCBE99F /* Sentry */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				85E2C24C2E96896700349727 /* OpenAI in Frameworks */,
+				8835B9A55E0643DF97FFB977 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8835B9A55E0643DF97FFB977 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8835B9A55E0643DF97FFB977 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,6 +124,7 @@
 				85F481692E805C4B0031646F /* Sources */,
 				85F4816A2E805C4B0031646F /* Frameworks */,
 				85F4816B2E805C4B0031646F /* Resources */,
+				A0EEB89CA9324175A5980FA2 /* Upload Debug Symbols to Sentry */,
 			);
 			buildRules = (
 			);
@@ -131,6 +136,7 @@
 			name = AstroSvitla;
 			packageProductDependencies = (
 				85E2C24B2E96896700349727 /* OpenAI */,
+				FFBEB15F41AE4CB39BCBE99F /* Sentry */,
 			);
 			productName = AstroSvitla;
 			productReference = 85F4816D2E805C4B0031646F /* AstroSvitla.app */;
@@ -217,6 +223,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				85E2C24A2E96896700349727 /* XCRemoteSwiftPackageReference "OpenAI" */,
+				BCBA13B7E1FA43ACBA177F44 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 85F4816E2E805C4B0031646F /* Products */;
@@ -334,6 +341,8 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 26.0;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_USER_SCRIPT_SANDBOXING = "NO";
 			};
 			name = Debug;
 		};
@@ -379,6 +388,8 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 26.0;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_USER_SCRIPT_SANDBOXING = "NO";
 			};
 			name = Release;
 		};
@@ -650,6 +661,14 @@
 				minimumVersion = 0.4.6;
 			};
 		};
+		BCBA13B7E1FA43ACBA177F44 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -658,7 +677,41 @@
 			package = 85E2C24A2E96896700349727 /* XCRemoteSwiftPackageReference "OpenAI" */;
 			productName = OpenAI;
 		};
+		FFBEB15F41AE4CB39BCBE99F /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BCBA13B7E1FA43ACBA177F44 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A0EEB89CA9324175A5980FA2 /* Upload Debug Symbols to Sentry */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This script is responsible for uploading debug symbols and source context for Sentry.
+if which sentry-cli >/dev/null; then
+  export SENTRY_ORG=ruslanpopesku
+  export SENTRY_PROJECT=astro-svitla
+  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)
+  if [ ! $? -eq 0 ]; then
+    echo \"warning: sentry-cli - $ERROR\"
+  fi
+else
+  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"
+fi
+";
+			name = "Upload Debug Symbols to Sentry";
+		};
+/* End PBXShellScriptBuildPhase section */
 	};
 	rootObject = 85F481652E805C4B0031646F /* Project object */;
 }

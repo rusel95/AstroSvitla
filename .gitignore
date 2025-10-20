@@ -115,3 +115,5 @@ AstroSvitla/Config/Config.swift
 *.swp
 *.swo
 *~
+
+.sentryclirc
