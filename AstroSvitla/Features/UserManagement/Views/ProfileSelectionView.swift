@@ -8,97 +8,71 @@ struct ProfileSelectionView: View {
     var onContinue: () -> Void
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                // Header
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Оберіть профіль")
-                        .font(.system(size: 32, weight: .bold))
+        ZStack {
+            // Animated background
+            CosmicBackgroundView()
 
-                    Text("Виберіть профіль для розрахунку натальної карти або створіть новий")
-                        .font(.system(size: 16, weight: .regular))
-                        .foregroundStyle(.secondary)
-                }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 28) {
+                    // Header with glass effect
+                    AstroSectionHeader(
+                        title: "Оберіть профіль",
+                        subtitle: "Виберіть профіль для розрахунку натальної карти або створіть новий"
+                    )
+                    .padding(.top, 8)
 
-                // Profile list
-                VStack(spacing: 12) {
-                    ForEach(profiles) { profile in
-                        ProfileCard(
-                            profile: profile,
-                            isSelected: profile.id == selectedProfile?.id,
-                            onSelect: {
-                                onSelectProfile(profile)
-                            }
-                        )
+                    // Profile list with glass cards
+                    VStack(spacing: 14) {
+                        ForEach(profiles) { profile in
+                            ProfileCard(
+                                profile: profile,
+                                isSelected: profile.id == selectedProfile?.id,
+                                onSelect: {
+                                    withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                                        onSelectProfile(profile)
+                                    }
+                                }
+                            )
+                        }
+
+                        // Create new profile button with dashed border
+                        CreateProfileButton(action: onCreateNewProfile)
                     }
 
-                    // Create new profile button
-                    Button(action: onCreateNewProfile) {
-                        HStack(spacing: 12) {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 24))
-                                .foregroundStyle(Color.accentColor)
+                    // Continue button with premium styling
+                    Button(action: onContinue) {
+                        HStack(spacing: 8) {
+                            Text("Продовжити")
 
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Створити новий профіль")
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .foregroundStyle(.primary)
-
-                                Text("Додайте дані народження для нової людини")
-                                    .font(.system(size: 13))
-                                    .foregroundStyle(.secondary)
+                            if let selected = selectedProfile {
+                                Text("з «\(selected.name)»")
+                                    .opacity(0.85)
                             }
 
-                            Spacer()
-
-                            Image(systemName: "chevron.right")
+                            Image(systemName: "arrow.right")
                                 .font(.system(size: 14, weight: .semibold))
-                                .foregroundStyle(.tertiary)
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 16)
-                        .background(Color(.secondarySystemBackground))
-                        .cornerRadius(14)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 14)
-                                .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [6, 4]))
-                                .foregroundStyle(Color.accentColor.opacity(0.2))
-                        )
-                    }
-                }
-
-                // Continue button
-                Button(action: onContinue) {
-                    HStack {
-                        Text("Продовжити з профілем")
-                            .font(.system(size: 17, weight: .semibold))
-
-                        if let selected = selectedProfile {
-                            Text("«\(selected.name)»")
-                                .font(.system(size: 17, weight: .regular))
-                                .foregroundStyle(.white.opacity(0.9))
                         }
                     }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 54)
-                    .foregroundStyle(.white)
-                    .background(Color.accentColor, in: RoundedRectangle(cornerRadius: 14))
+                    .buttonStyle(.astroPrimary)
+                    .disabled(selectedProfile == nil)
+                    .opacity(selectedProfile == nil ? 0.5 : 1.0)
+                    .padding(.top, 8)
                 }
-                .disabled(selectedProfile == nil)
-                .opacity(selectedProfile == nil ? 0.5 : 1.0)
-                .padding(.top, 8)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 24)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
         }
-        .background(Color(.systemGroupedBackground))
     }
 }
+
+// MARK: - Profile Card
 
 struct ProfileCard: View {
     let profile: UserProfile
     let isSelected: Bool
     let onSelect: () -> Void
+
+    @State private var isPressed = false
 
     private var formattedBirthDate: String {
         let formatter = DateFormatter()
@@ -116,52 +90,68 @@ struct ProfileCard: View {
 
     var body: some View {
         Button(action: onSelect) {
-            HStack(spacing: 14) {
-                // Avatar/Icon
+            HStack(spacing: 16) {
+                // Avatar with glass effect
                 ZStack {
                     Circle()
-                        .fill(isSelected ? Color.accentColor : Color.accentColor.opacity(0.12))
-                        .frame(width: 52, height: 52)
+                        .fill(
+                            isSelected ?
+                            LinearGradient(
+                                colors: [Color.accentColor, Color.accentColor.opacity(0.8)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ) :
+                            LinearGradient(
+                                colors: [Color.accentColor.opacity(0.15), Color.accentColor.opacity(0.08)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 56, height: 56)
 
-                    Image(systemName: isSelected ? "checkmark.circle.fill" : "person.circle.fill")
-                        .font(.system(size: 28, weight: isSelected ? .semibold : .regular))
+                    if isSelected {
+                        Circle()
+                            .strokeBorder(Color.white.opacity(0.3), lineWidth: 1)
+                            .frame(width: 56, height: 56)
+                    }
+
+                    Image(systemName: isSelected ? "checkmark" : "person.fill")
+                        .font(.system(size: isSelected ? 22 : 24, weight: isSelected ? .semibold : .regular))
                         .foregroundStyle(isSelected ? .white : Color.accentColor)
                 }
+                .shadow(color: isSelected ? Color.accentColor.opacity(0.3) : .clear, radius: 8, x: 0, y: 4)
 
                 // Profile info
-                VStack(alignment: .leading, spacing: 6) {
+                VStack(alignment: .leading, spacing: 8) {
                     Text(profile.name)
-                        .font(.system(size: 17, weight: .semibold))
+                        .font(.system(size: 17, weight: .semibold, design: .rounded))
                         .foregroundStyle(.primary)
 
                     HStack(spacing: 4) {
                         Image(systemName: "calendar")
-                            .font(.system(size: 11))
+                            .font(.system(size: 11, weight: .medium))
                         Text(formattedBirthDate)
-                            .font(.system(size: 13))
+                            .font(.system(size: 13, weight: .medium))
                     }
                     .foregroundStyle(.secondary)
 
-                    HStack(spacing: 8) {
+                    HStack(spacing: 12) {
                         HStack(spacing: 4) {
                             Image(systemName: "clock")
-                                .font(.system(size: 11))
+                                .font(.system(size: 11, weight: .medium))
                             Text(formattedBirthTime)
                                 .font(.system(size: 13))
                         }
 
-                        Text("•")
-                            .font(.system(size: 13))
-
                         HStack(spacing: 4) {
                             Image(systemName: "mappin")
-                                .font(.system(size: 11))
+                                .font(.system(size: 11, weight: .medium))
                             Text(profile.locationName)
                                 .font(.system(size: 13))
                                 .lineLimit(1)
                         }
                     }
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.tertiary)
                 }
 
                 Spacer()
@@ -169,23 +159,116 @@ struct ProfileCard: View {
                 // Selection indicator
                 if isSelected {
                     Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 24))
+                        .font(.system(size: 26))
+                        .foregroundStyle(Color.accentColor)
+                        .shadow(color: Color.accentColor.opacity(0.3), radius: 4, x: 0, y: 2)
+                }
+            }
+            .padding(.horizontal, 18)
+            .padding(.vertical, 16)
+            .background(
+                ZStack {
+                    if isSelected {
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .fill(.thinMaterial)
+                    } else {
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                    }
+                }
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .strokeBorder(
+                        isSelected ?
+                        LinearGradient(
+                            colors: [Color.accentColor.opacity(0.6), Color.accentColor.opacity(0.3)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ) :
+                        LinearGradient(
+                            colors: [Color.white.opacity(0.2), Color.white.opacity(0.1)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: isSelected ? 2 : 1
+                    )
+            )
+            .shadow(
+                color: isSelected ? Color.accentColor.opacity(0.15) : Color.black.opacity(0.05),
+                radius: isSelected ? 12 : 6,
+                x: 0,
+                y: isSelected ? 6 : 3
+            )
+        }
+        .buttonStyle(.plain)
+        .scaleEffect(isPressed ? 0.98 : 1)
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
+    }
+}
+
+// MARK: - Create Profile Button
+
+struct CreateProfileButton: View {
+    let action: () -> Void
+
+    @State private var isHovered = false
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 14) {
+                // Plus icon with glass effect
+                ZStack {
+                    Circle()
+                        .fill(.ultraThinMaterial)
+                        .frame(width: 48, height: 48)
+                        .overlay(
+                            Circle()
+                                .strokeBorder(
+                                    LinearGradient(
+                                        colors: [Color.accentColor.opacity(0.4), Color.accentColor.opacity(0.2)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ),
+                                    lineWidth: 1.5
+                                )
+                        )
+
+                    Image(systemName: "plus")
+                        .font(.system(size: 20, weight: .semibold))
                         .foregroundStyle(Color.accentColor)
                 }
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Створити новий профіль")
+                        .font(.system(size: 16, weight: .semibold, design: .rounded))
+                        .foregroundStyle(.primary)
+
+                    Text("Додайте дані народження для нової людини")
+                        .font(.system(size: 13, weight: .regular))
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(.tertiary)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 14)
-            .background(
-                isSelected ?
-                Color.accentColor.opacity(0.08) :
-                Color(.secondarySystemBackground)
-            )
-            .cornerRadius(14)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
             .overlay(
-                RoundedRectangle(cornerRadius: 14)
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
                     .strokeBorder(
-                        isSelected ? Color.accentColor : Color.clear,
-                        lineWidth: 2
+                        style: StrokeStyle(lineWidth: 1.5, dash: [8, 6])
+                    )
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Color.accentColor.opacity(0.4), Color.accentColor.opacity(0.2)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
                     )
             )
         }

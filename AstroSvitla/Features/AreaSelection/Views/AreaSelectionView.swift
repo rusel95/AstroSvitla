@@ -8,45 +8,95 @@ struct AreaSelectionView: View {
     @State private var showChartDetails = false
 
     var body: some View {
-        List {
-            Section {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(birthDetails.displayName)
-                        .font(.headline)
+        ZStack {
+            // Premium background
+            CosmicBackgroundView()
 
-                    Text("\(birthDetails.formattedBirthDate) • \(birthDetails.formattedBirthTime)")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    // Birth details glass card
+                    VStack(alignment: .leading, spacing: 16) {
+                        // Header with icon
+                        HStack(spacing: 12) {
+                            AstroIconContainer(systemName: "person.circle", size: .medium, style: .glass)
 
-                    Text(birthDetails.formattedLocation)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(birthDetails.displayName)
+                                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                                    .foregroundStyle(.primary)
 
-                Button {
-                    showChartDetails = true
-                } label: {
-                    Label("Переглянути деталі", systemImage: "chart.bar.doc.horizontal")
-                }
-            } header: {
-                Text("Дані народження")
-            }
+                                Text("\(birthDetails.formattedBirthDate) • \(birthDetails.formattedBirthTime)")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
 
-            Section {
-                ForEach(ReportArea.allCases, id: \.self) { area in
-                    Button {
-                        onAreaSelected(area)
-                    } label: {
-                        AreaCard(area: area)
+                        // Location row
+                        HStack(spacing: 6) {
+                            Image(systemName: "mappin.circle.fill")
+                                .font(.system(size: 14))
+                                .foregroundStyle(Color.accentColor.opacity(0.8))
+
+                            Text(birthDetails.formattedLocation)
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundStyle(.secondary)
+                        }
+
+                        // View chart button
+                        Button {
+                            showChartDetails = true
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "chart.pie.fill")
+                                    .font(.system(size: 14, weight: .medium))
+
+                                Text("Переглянути натальну карту")
+                                    .font(.system(size: 14, weight: .semibold))
+
+                                Spacer()
+
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundStyle(.tertiary)
+                            }
+                            .foregroundStyle(Color.accentColor)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                            .background(Color.accentColor.opacity(0.1), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                        }
+                    }
+                    .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
+
+                    // Section header
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Оберіть сферу аналізу")
+                            .font(.system(size: 22, weight: .bold, design: .rounded))
+                            .foregroundStyle(.primary)
+
+                        Text("Виберіть область життя для детального астрологічного звіту")
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.top, 8)
+
+                    // Area cards
+                    VStack(spacing: 12) {
+                        ForEach(ReportArea.allCases, id: \.self) { area in
+                            Button {
+                                onAreaSelected(area)
+                            } label: {
+                                AreaCard(area: area)
+                            }
+                            .buttonStyle(.plain)
+                        }
                     }
                 }
-            } header: {
-                Text("Оберіть сферу")
+                .padding(.horizontal, 20)
+                .padding(.vertical, 24)
             }
         }
-        .listStyle(.insetGrouped)
         .navigationTitle(Text("Вибір сфери"))
+        .navigationBarTitleDisplayMode(.inline)
         .fullScreenCover(isPresented: $showChartDetails) {
             NavigationStack {
                 ChartDetailsView(chart: natalChart, birthDetails: birthDetails)

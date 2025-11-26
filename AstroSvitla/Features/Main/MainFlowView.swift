@@ -541,24 +541,111 @@ private enum FlowState {
 private struct CalculatingChartView: View {
     let birthDetails: BirthDetails
 
-    var body: some View {
-        VStack(spacing: 24) {
-            ProgressView()
-                .progressViewStyle(.circular)
-                .scaleEffect(1.5)
+    @State private var animateRing = false
+    @State private var animatePulse = false
 
-            VStack(spacing: 8) {
-                Text("Розрахунок")
-                    .font(.headline)
-                Text("Будь ласка, почекайте")
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.secondary)
+    var body: some View {
+        ZStack {
+            // Premium cosmic background
+            CosmicBackgroundView()
+
+            VStack(spacing: 40) {
+                Spacer()
+
+                // Animated calculation visualization
+                ZStack {
+                    // Outer rotating ring
+                    Circle()
+                        .strokeBorder(
+                            AngularGradient(
+                                colors: [
+                                    Color.accentColor.opacity(0.1),
+                                    Color.accentColor.opacity(0.5),
+                                    Color.accentColor,
+                                    Color.accentColor.opacity(0.5),
+                                    Color.accentColor.opacity(0.1)
+                                ],
+                                center: .center
+                            ),
+                            lineWidth: 3
+                        )
+                        .frame(width: 140, height: 140)
+                        .rotationEffect(.degrees(animateRing ? 360 : 0))
+
+                    // Middle pulsing circle
+                    Circle()
+                        .fill(Color.accentColor.opacity(0.1))
+                        .frame(width: 100, height: 100)
+                        .scaleEffect(animatePulse ? 1.1 : 0.95)
+
+                    // Inner glass circle
+                    Circle()
+                        .fill(.ultraThinMaterial)
+                        .frame(width: 80, height: 80)
+                        .overlay(
+                            Circle()
+                                .strokeBorder(Color.white.opacity(0.3), lineWidth: 1)
+                        )
+
+                    // Center icon
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 32, weight: .light))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [Color.accentColor, Color.accentColor.opacity(0.6)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                }
+                .shadow(color: Color.accentColor.opacity(0.2), radius: 20, x: 0, y: 10)
+
+                // Text content
+                VStack(spacing: 12) {
+                    Text("Розраховуємо карту")
+                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                        .foregroundStyle(.primary)
+
+                    Text("Аналізуємо позиції планет та аспекти для \(birthDetails.displayName)")
+                        .font(.system(size: 15, weight: .regular))
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal, 32)
+                }
+
+                Spacer()
+
+                // Progress indicators
+                HStack(spacing: 8) {
+                    ForEach(0..<3, id: \.self) { index in
+                        Circle()
+                            .fill(Color.accentColor)
+                            .frame(width: 8, height: 8)
+                            .scaleEffect(animatePulse && index == 0 ? 1.3 :
+                                        animatePulse && index == 1 ? 1.0 : 0.7)
+                            .opacity(animatePulse && index == 0 ? 1.0 :
+                                    animatePulse && index == 1 ? 0.7 : 0.4)
+                    }
+                }
+                .padding(.bottom, 60)
             }
-            .padding(.horizontal)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemGroupedBackground))
         .navigationTitle(Text("Розрахунок"))
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            withAnimation(
+                .linear(duration: 2)
+                .repeatForever(autoreverses: false)
+            ) {
+                animateRing = true
+            }
+            withAnimation(
+                .easeInOut(duration: 1)
+                .repeatForever(autoreverses: true)
+            ) {
+                animatePulse = true
+            }
+        }
     }
 }
 
@@ -567,30 +654,122 @@ private struct GeneratingReportView: View {
     let area: ReportArea
     var onCancel: (() -> Void)?
 
+    @State private var animateWave = false
+    @State private var progress: CGFloat = 0
+
     var body: some View {
-        VStack(spacing: 24) {
-            ProgressView()
-                .progressViewStyle(.circular)
-                .scaleEffect(1.5)
+        ZStack {
+            // Premium cosmic background
+            CosmicBackgroundView()
 
-            VStack(spacing: 8) {
-            Text("Генерування звіту: \(area.displayName)")
-                    .font(.headline)
-                Text("Аналізуємо дані")
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.secondary)
-            }
-            .padding(.horizontal)
+            VStack(spacing: 36) {
+                Spacer()
 
-            if let onCancel {
-                Button("Скасувати") {
-                    onCancel()
+                // Animated generation visualization
+                ZStack {
+                    // Wave circles
+                    ForEach(0..<3, id: \.self) { index in
+                        Circle()
+                            .stroke(
+                                Color.accentColor.opacity(0.3 - Double(index) * 0.1),
+                                lineWidth: 2
+                            )
+                            .frame(width: 100 + CGFloat(index) * 40)
+                            .scaleEffect(animateWave ? 1.2 : 1.0)
+                            .opacity(animateWave ? 0 : 1)
+                            .animation(
+                                .easeOut(duration: 2)
+                                .repeatForever(autoreverses: false)
+                                .delay(Double(index) * 0.5),
+                                value: animateWave
+                            )
+                    }
+
+                    // Center glass container
+                    Circle()
+                        .fill(.ultraThinMaterial)
+                        .frame(width: 100, height: 100)
+                        .overlay(
+                            Circle()
+                                .strokeBorder(Color.white.opacity(0.3), lineWidth: 1)
+                        )
+                        .shadow(color: Color.accentColor.opacity(0.2), radius: 16, x: 0, y: 8)
+
+                    // Area icon
+                    Image(systemName: area.icon)
+                        .font(.system(size: 40, weight: .light))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [Color.accentColor, Color.accentColor.opacity(0.6)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                }
+
+                // Text content
+                VStack(spacing: 12) {
+                    Text("Генеруємо звіт")
+                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                        .foregroundStyle(.primary)
+
+                    Text("Аналізуємо сферу «\(area.displayName)» на основі вашої натальної карти")
+                        .font(.system(size: 15, weight: .regular))
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(.secondary)
+                        .padding(.horizontal, 32)
+                }
+
+                // Progress bar
+                VStack(spacing: 12) {
+                    GeometryReader { geometry in
+                        ZStack(alignment: .leading) {
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Color.accentColor.opacity(0.15))
+
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(
+                                    LinearGradient(
+                                        colors: [Color.accentColor, Color.accentColor.opacity(0.7)],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .frame(width: geometry.size.width * progress)
+                                .shadow(color: Color.accentColor.opacity(0.5), radius: 4, x: 0, y: 0)
+                        }
+                    }
+                    .frame(height: 6)
+                    .padding(.horizontal, 48)
+
+                    Text("AI-аналіз в процесі...")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(.tertiary)
+                }
+
+                Spacer()
+
+                // Cancel button
+                if let onCancel {
+                    Button(action: onCancel) {
+                        Text("Скасувати")
+                    }
+                    .buttonStyle(.astroSecondary)
+                    .padding(.horizontal, 48)
+                    .padding(.bottom, 40)
                 }
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemGroupedBackground))
         .navigationTitle(Text("Генерування"))
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            animateWave = true
+
+            // Simulate progress (will be replaced by actual progress if available)
+            withAnimation(.linear(duration: 30)) {
+                progress = 0.85
+            }
+        }
     }
 }
 

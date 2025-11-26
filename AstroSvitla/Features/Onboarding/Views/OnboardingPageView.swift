@@ -3,105 +3,161 @@ import SwiftUI
 struct OnboardingPageView: View {
     let page: OnboardingPage
 
+    @State private var animateIcon = false
+    @State private var animateRing = false
+
     var body: some View {
-        ZStack {
-            // Subtle gradient background
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color(.systemBackground),
-                    Color(.systemBackground).opacity(0.98)
-                ]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+        VStack(spacing: 0) {
+            // Premium icon area with layered effects
+            ZStack {
+                // Outer animated marble ring
+                Circle()
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: [
+                                Color.marbleWhite.opacity(0.3),
+                                Color.marbleVein.opacity(0.15),
+                                Color.marbleWhite.opacity(0.2)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1
+                    )
+                    .frame(width: 240, height: 240)
+                    .rotationEffect(.degrees(animateRing ? 360 : 0))
 
-            VStack(spacing: 0) {
-                // Icon area with enhanced styling
-                ZStack {
-                    // Decorative circles in background
-                    Circle()
-                        .fill(Color.accentColor.opacity(0.08))
-                        .frame(width: 280, height: 280)
-
-                    Circle()
-                        .fill(Color.accentColor.opacity(0.04))
-                        .frame(width: 360, height: 360)
-
-                    // Main icon
-                    Image(systemName: page.symbolName)
-                        .font(.system(size: 72, weight: .light))
-                        .foregroundStyle(
-                            LinearGradient(
-                                gradient: Gradient(colors: [
-                                    Color.accentColor,
-                                    Color.accentColor.opacity(0.7)
-                                ]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
+                // Decorative circles with gradient fill
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [
+                                Color.accentColor.opacity(0.12),
+                                Color.accentColor.opacity(0.04),
+                                Color.clear
+                            ],
+                            center: .center,
+                            startRadius: 0,
+                            endRadius: 140
                         )
-                }
-                .frame(height: 240)
-                .padding(.bottom, 16)
+                    )
+                    .frame(width: 280, height: 280)
+                    .scaleEffect(animateIcon ? 1.05 : 1.0)
 
-                // Content area
-                VStack(spacing: 20) {
-                    // Title - More prominent
-                    Text(page.title)
-                        .font(.system(size: 32, weight: .bold, design: .default))
-                        .tracking(0.3)
-                        .lineLimit(3)
-                        .multilineTextAlignment(.center)
-                        .foregroundStyle(.primary)
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [
+                                Color.accentColor.opacity(0.08),
+                                Color.clear
+                            ],
+                            center: .center,
+                            startRadius: 0,
+                            endRadius: 100
+                        )
+                    )
+                    .frame(width: 200, height: 200)
 
-                    // Description
-                    Text(page.message)
-                        .font(.system(size: 16, weight: .regular, design: .default))
-                        .lineHeight(1.5)
-                        .multilineTextAlignment(.center)
-                        .foregroundStyle(.secondary)
+                // Glass inner circle
+                Circle()
+                    .fill(.ultraThinMaterial)
+                    .frame(width: 130, height: 130)
+                    .overlay(
+                        Circle()
+                            .strokeBorder(Color.white.opacity(0.25), lineWidth: 1)
+                    )
+                    .shadow(color: Color.accentColor.opacity(0.15), radius: 16, x: 0, y: 8)
 
-                    // Highlights/Features
-                    if page.highlights.isEmpty == false {
-                        VStack(alignment: .leading, spacing: 12) {
-                            ForEach(page.highlights, id: \.self) { highlight in
-                                HStack(alignment: .top, spacing: 12) {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .font(.system(size: 18, weight: .semibold))
+                // Main icon with gradient
+                Image(systemName: page.symbolName)
+                    .font(.system(size: 52, weight: .light))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [
+                                Color.accentColor,
+                                Color.accentColor.opacity(0.7)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .shadow(color: Color.accentColor.opacity(0.3), radius: 8, x: 0, y: 4)
+                    .scaleEffect(animateIcon ? 1.03 : 1.0)
+            }
+            .frame(height: 260)
+            .padding(.bottom, 20)
+
+            // Content area with improved typography
+            VStack(spacing: 20) {
+                // Title with better styling
+                Text(page.title)
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .tracking(0.2)
+                    .lineLimit(3)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.primary)
+
+                // Description
+                Text(page.message)
+                    .font(.system(size: 15, weight: .regular))
+                    .lineSpacing(4)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.secondary)
+
+                // Highlights/Features with glass cards
+                if page.highlights.isEmpty == false {
+                    VStack(alignment: .leading, spacing: 10) {
+                        ForEach(page.highlights, id: \.self) { highlight in
+                            HStack(alignment: .top, spacing: 14) {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.accentColor.opacity(0.12))
+                                        .frame(width: 26, height: 26)
+
+                                    Image(systemName: "checkmark")
+                                        .font(.system(size: 12, weight: .bold))
                                         .foregroundStyle(Color.accentColor)
-                                        .frame(width: 24)
-                                        .padding(.top, 2)
-
-                                    Text(highlight)
-                                        .font(.system(size: 14, weight: .regular, design: .default))
-                                        .lineHeight(1.4)
-                                        .foregroundStyle(.primary)
-
-                                    Spacer()
                                 }
+
+                                Text(highlight)
+                                    .font(.system(size: 14, weight: .regular))
+                                    .lineSpacing(2)
+                                    .foregroundStyle(.primary)
+
+                                Spacer()
                             }
                         }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 16)
-                        .background(Color.accentColor.opacity(0.06), in: RoundedRectangle(cornerRadius: 12))
-                        .padding(.top, 8)
                     }
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 18)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .strokeBorder(Color.white.opacity(0.15), lineWidth: 1)
+                    )
+                    .padding(.top, 8)
                 }
-                .padding(.horizontal, 24)
-
-                Spacer()
             }
-            .padding(.vertical, 32)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-}
+            .padding(.horizontal, 24)
 
-// Helper for line height
-extension Text {
-    func lineHeight(_ height: CGFloat) -> Text {
-        self
+            Spacer()
+        }
+        .padding(.vertical, 32)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onAppear {
+            withAnimation(
+                .easeInOut(duration: 2.5)
+                .repeatForever(autoreverses: true)
+            ) {
+                animateIcon = true
+            }
+            withAnimation(
+                .linear(duration: 20)
+                .repeatForever(autoreverses: false)
+            ) {
+                animateRing = true
+            }
+        }
     }
 }
 
