@@ -42,32 +42,16 @@ struct AreaCard: View {
                     )
                     .frame(width: 56, height: 56)
 
-                // Main area icon (keep original icon even when purchased)
+                // Main area icon (always show original icon)
                 Image(systemName: area.icon)
                     .font(.system(size: 24, weight: .medium))
                     .foregroundStyle(
                         LinearGradient(
-                            colors: isPurchased 
-                                ? [Color.green, Color.green.opacity(0.7)]
-                                : [areaColor, areaColor.opacity(0.7)],
+                            colors: [areaColor, areaColor.opacity(0.7)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
                     )
-
-                // Checkmark badge overlay for purchased (bottom-right corner)
-                if isPurchased {
-                    ZStack {
-                        Circle()
-                            .fill(Color.green)
-                            .frame(width: 20, height: 20)
-                        
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundStyle(.white)
-                    }
-                    .offset(x: 20, y: 20)
-                }
             }
 
             VStack(alignment: .leading, spacing: 6) {

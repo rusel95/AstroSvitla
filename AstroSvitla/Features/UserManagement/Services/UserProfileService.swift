@@ -32,6 +32,7 @@ class UserProfileService {
 
     // MARK: - Create Profile
 
+    /// Creates a profile with birth data and natal chart
     func createProfile(
         name: String,
         birthDate: Date,
@@ -74,6 +75,60 @@ class UserProfileService {
         try context.save()
 
         return profile
+    }
+
+    /// Creates a profile with birth data only (without natal chart - for offline/error cases)
+    func createProfileWithoutChart(
+        name: String,
+        birthDate: Date,
+        birthTime: Date,
+        locationName: String,
+        latitude: Double,
+        longitude: Double,
+        timezone: String
+    ) throws -> UserProfile {
+        // Validate name uniqueness
+        guard isProfileNameUnique(name) else {
+            throw UserProfileError.duplicateName
+        }
+
+        // Create profile
+        let profile = UserProfile(
+            name: name,
+            birthDate: birthDate,
+            birthTime: birthTime,
+            locationName: locationName,
+            latitude: latitude,
+            longitude: longitude,
+            timezone: timezone
+        )
+
+        context.insert(profile)
+
+        // Link to device owner
+        if let user = fetchDeviceOwner() {
+            profile.user = user
+        }
+
+        try context.save()
+
+        return profile
+    }
+
+    /// Adds or updates natal chart for an existing profile
+    func attachChart(to profile: UserProfile, natalChart: NatalChart) throws {
+        let chartJSON = BirthChart.encodedChartJSON(from: natalChart) ?? ""
+        
+        if let existingChart = profile.chart {
+            existingChart.updateChartData(chartJSON)
+        } else {
+            let birthChart = BirthChart(chartDataJSON: chartJSON)
+            birthChart.profile = profile
+            context.insert(birthChart)
+        }
+        
+        profile.updatedAt = Date()
+        try context.save()
     }
 
     // MARK: - Update Profile

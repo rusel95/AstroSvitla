@@ -198,6 +198,7 @@ struct MainFlowView: View {
     // MARK: - Profile Creation & Management
 
     /// Creates a new profile with the provided data
+    /// Profile is saved first, then natal chart is fetched (so data isn't lost on network errors)
     private func createNewProfile(
         name: String,
         birthDate: Date,
@@ -206,47 +207,53 @@ struct MainFlowView: View {
         coordinate: CLLocationCoordinate2D,
         timezone: String
     ) {
-        Task {
-            do {
-                // Calculate natal chart first
-                let timeZone = TimeZone(identifier: timezone) ?? .current
-                let details = BirthDetails(
-                    name: name,
-                    birthDate: birthDate,
-                    birthTime: birthTime,
-                    location: location,
-                    timeZone: timeZone,
-                    coordinate: coordinate
-                )
+        Task { @MainActor in
+            let timeZone = TimeZone(identifier: timezone) ?? .current
+            let details = BirthDetails(
+                name: name,
+                birthDate: birthDate,
+                birthTime: birthTime,
+                location: location,
+                timeZone: timeZone,
+                coordinate: coordinate
+            )
 
+            // Step 1: Save profile FIRST (so user data is never lost)
+            guard let newProfile = profileViewModel.createProfileWithoutChart(
+                name: name,
+                birthDate: birthDate,
+                birthTime: birthTime,
+                locationName: location,
+                latitude: coordinate.latitude,
+                longitude: coordinate.longitude,
+                timezone: timezone
+            ) else {
+                errorMessage = profileViewModel.errorMessage ?? "Помилка створення профілю"
+                return
+            }
+
+            // Profile saved - set as active
+            repositoryContext.setActiveProfile(newProfile)
+            profileViewModel.loadProfiles()
+
+            // Step 2: Try to fetch natal chart (can fail - profile already saved)
+            do {
                 let chart = try await calculateChart(for: details)
 
-                // Create profile with calculated chart
-                let created = await profileViewModel.createProfile(
-                    name: name,
-                    birthDate: birthDate,
-                    birthTime: birthTime,
-                    locationName: location,
-                    latitude: coordinate.latitude,
-                    longitude: coordinate.longitude,
-                    timezone: timezone,
-                    natalChart: chart
-                )
+                // Attach chart to profile
+                let attached = profileViewModel.attachChart(to: newProfile, natalChart: chart)
 
-                if created, let newProfile = profileViewModel.selectedProfile {
-                    await MainActor.run {
-                        repositoryContext.setActiveProfile(newProfile)
-                        profileViewModel.loadProfiles()
-                    }
-                } else {
-                    await MainActor.run {
-                        errorMessage = profileViewModel.errorMessage ?? "Помилка створення профілю"
-                    }
+                if attached {
+                    #if DEBUG
+                    print("[MainFlowView] ✅ Chart attached to profile: \(name)")
+                    #endif
                 }
             } catch {
-                await MainActor.run {
-                    errorMessage = error.localizedDescription
-                }
+                // Chart fetch failed but profile is saved!
+                errorMessage = "Профіль збережено, але не вдалося отримати натальну карту: \(error.localizedDescription). Спробуйте пізніше."
+                #if DEBUG
+                print("[MainFlowView] ⚠️ Profile saved but chart fetch failed: \(error)")
+                #endif
             }
         }
     }
@@ -273,6 +280,18 @@ struct MainFlowView: View {
             )
         )
 
+        // Check if profile already has a cached chart
+        if let existingChart = profile.chart, let natalChart = existingChart.decodedNatalChart() {
+            #if DEBUG
+            print("[MainFlowView] ✅ Using existing chart from profile")
+            #endif
+            await MainActor.run {
+                flowState = .areaSelection(details, natalChart)
+            }
+            return
+        }
+
+        // No cached chart - need to fetch from API
         await MainActor.run {
             flowState = .calculating(details)
         }
@@ -280,12 +299,17 @@ struct MainFlowView: View {
         do {
             let chart = try await calculateChart(for: details)
 
+            // Save chart to profile for future use
+            _ = await MainActor.run {
+                profileViewModel.attachChart(to: profile, natalChart: chart)
+            }
+
             await MainActor.run {
                 flowState = .areaSelection(details, chart)
             }
         } catch {
             await MainActor.run {
-                errorMessage = error.localizedDescription
+                errorMessage = "Не вдалося отримати натальну карту: \(error.localizedDescription). Перевірте з'єднання з інтернетом."
                 flowState = .birthInput(existing: nil)
             }
         }

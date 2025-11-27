@@ -41,7 +41,7 @@ enum AstrologyAPIError: LocalizedError {
 
 /// Main service for communicating with api.astrology-api.io
 @MainActor
-final class AstrologyAPIService {
+final class AstrologyAPIService: NSObject {
     
     // MARK: - Properties
     
@@ -54,11 +54,10 @@ final class AstrologyAPIService {
     
     init(
         baseURL: String? = nil,
-        session: URLSession = .shared,
+        session: URLSession? = nil,
         rateLimiter: RateLimiter? = nil
     ) {
         self.baseURL = baseURL ?? Config.astrologyAPIBaseURL
-        self.session = session
         self.requestTimeout = Config.astrologyAPIRequestTimeout
         // AstrologyAPI has a limit of 10 requests per 60 seconds
         self.rateLimiter = rateLimiter ?? RateLimiter(
@@ -66,6 +65,24 @@ final class AstrologyAPIService {
             windowInterval: 60,
             requestsPerChart: 1  // Single endpoint for natal chart
         )
+        
+        // Use provided session or create one with SSL bypass for DEBUG in corporate networks
+        if let providedSession = session {
+            self.session = providedSession
+        } else {
+            #if DEBUG
+            // In DEBUG mode, allow self-signed/corporate proxy certificates
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = Config.astrologyAPIRequestTimeout
+            // Create a delegate that bypasses SSL validation in DEBUG
+            let delegate = SSLBypassDelegate()
+            self.session = URLSession(configuration: config, delegate: delegate, delegateQueue: nil)
+            #else
+            self.session = .shared
+            #endif
+        }
+        
+        super.init()
     }
     
     // MARK: - Public API
@@ -218,3 +235,56 @@ final class AstrologyAPIService {
         }
     }
 }
+
+// MARK: - SSL Bypass Delegate (DEBUG only)
+
+#if DEBUG
+/// URLSession delegate that bypasses SSL certificate validation
+/// ⚠️ WARNING: This is for DEBUG builds only to work around corporate proxy/firewall SSL inspection
+/// This should NEVER be used in production builds
+final class SSLBypassDelegate: NSObject, URLSessionDelegate, URLSessionTaskDelegate, @unchecked Sendable {
+    
+    // Session-level challenge handler
+    func urlSession(
+        _ session: URLSession,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
+        handleChallenge(challenge, completionHandler: completionHandler)
+    }
+    
+    // Task-level challenge handler (needed for some iOS versions)
+    func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
+        handleChallenge(challenge, completionHandler: completionHandler)
+    }
+    
+    private func handleChallenge(
+        _ challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
+        let host = challenge.protectionSpace.host
+        
+        // Only bypass for server trust challenges (SSL)
+        if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+           let serverTrust = challenge.protectionSpace.serverTrust {
+            
+            // Disable all SSL validation for this trust
+            SecTrustSetAnchorCertificates(serverTrust, [] as CFArray)
+            SecTrustSetAnchorCertificatesOnly(serverTrust, false)
+            
+            // Accept the server's certificate regardless of validation
+            let credential = URLCredential(trust: serverTrust)
+            completionHandler(.useCredential, credential)
+            print("[SSLBypassDelegate] ⚠️ Bypassing SSL validation for: \(host)")
+        } else {
+            // For other challenges, use default handling
+            completionHandler(.performDefaultHandling, nil)
+        }
+    }
+}
+#endif

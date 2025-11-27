@@ -1,19 +1,17 @@
 import Foundation
 
-actor AIReportGenerator {
+final class AIReportGenerator: @unchecked Sendable {
 
     private let openAIService: OpenAIService
     private let knowledgeProvider: KnowledgeSourceProvider
 
-    nonisolated private static let defaultOpenAIService = OpenAIService()
-    nonisolated private static let defaultKnowledgeProvider = AstrologyKnowledgeProvider()
-
+    @MainActor
     init(
-        openAIService: OpenAIService = AIReportGenerator.defaultOpenAIService,
-        knowledgeProvider: KnowledgeSourceProvider = AIReportGenerator.defaultKnowledgeProvider
+        openAIService: OpenAIService? = nil,
+        knowledgeProvider: KnowledgeSourceProvider? = nil
     ) {
-        self.openAIService = openAIService
-        self.knowledgeProvider = knowledgeProvider
+        self.openAIService = openAIService ?? OpenAIService()
+        self.knowledgeProvider = knowledgeProvider ?? AstrologyKnowledgeProvider()
     }
 
     func generateReport(

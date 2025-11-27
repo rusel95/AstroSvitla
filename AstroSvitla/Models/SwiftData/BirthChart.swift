@@ -2,6 +2,19 @@ import Foundation
 import CoreLocation
 import SwiftData
 
+// File-level encoders to avoid @MainActor isolation issues
+private let birthChartDecoder: JSONDecoder = {
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .iso8601
+    return decoder
+}()
+
+private let birthChartEncoder: JSONEncoder = {
+    let encoder = JSONEncoder()
+    encoder.dateEncodingStrategy = .iso8601
+    return encoder
+}()
+
 @Model
 final class BirthChart {
     @Attribute(.unique)
@@ -30,10 +43,10 @@ final class BirthChart {
         updatedAt = Date()
     }
 
-    nonisolated func decodedNatalChart() -> NatalChart? {
+    func decodedNatalChart() -> NatalChart? {
         guard chartDataJSON.isEmpty == false,
               let data = chartDataJSON.data(using: .utf8) else { return nil }
-        return try? BirthChart.chartDecoder.decode(NatalChart.self, from: data)
+        return try? birthChartDecoder.decode(NatalChart.self, from: data)
     }
 
     func makeBirthDetails() -> BirthDetails? {
@@ -50,13 +63,13 @@ final class BirthChart {
         )
     }
 
-    nonisolated func encodedChartData(from chart: NatalChart) -> String? {
-        guard let data = try? BirthChart.chartEncoder.encode(chart) else { return nil }
+    func encodedChartData(from chart: NatalChart) -> String? {
+        guard let data = try? birthChartEncoder.encode(chart) else { return nil }
         return String(data: data, encoding: .utf8)
     }
 
-    nonisolated static func encodedChartJSON(from chart: NatalChart) -> String? {
-        guard let data = try? chartEncoder.encode(chart) else { return nil }
+    static func encodedChartJSON(from chart: NatalChart) -> String? {
+        guard let data = try? birthChartEncoder.encode(chart) else { return nil }
         return String(data: data, encoding: .utf8)
     }
 }
@@ -74,17 +87,5 @@ private extension BirthChart {
         formatter.dateStyle = .none
         formatter.timeStyle = .short
         return formatter
-    }()
-
-    static let chartDecoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        return decoder
-    }()
-
-    static let chartEncoder: JSONEncoder = {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
-        return encoder
     }()
 }

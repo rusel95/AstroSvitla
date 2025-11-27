@@ -17,11 +17,16 @@ struct ReportListView: View {
 
     var body: some View {
         NavigationStack {
-            Group {
-                if viewModel.sections.isEmpty {
-                    emptyState
-                } else {
-                    listView
+            ZStack {
+                // Premium cosmic background
+                CosmicBackgroundView()
+                
+                Group {
+                    if viewModel.sections.isEmpty {
+                        emptyState
+                    } else {
+                        listView
+                    }
                 }
             }
             .overlay {
@@ -29,7 +34,7 @@ struct ReportListView: View {
                     ProgressView()
                         .controlSize(.large)
                         .padding()
-                        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                 }
             }
             .navigationTitle(showsTitle ? "Звіти" : "")
@@ -62,41 +67,92 @@ struct ReportListView: View {
     }
 
     private var listView: some View {
-        List {
-            ForEach(viewModel.sections) { section in
-                Section {
-                    ForEach(section.reports) { item in
-                        NavigationLink {
-                            SavedReportDetailView(item: item)
-                        } label: {
-                            ReportListRow(item: item)
+        ScrollView {
+            VStack(spacing: 24) {
+                ForEach(viewModel.sections) { section in
+                    // Glass card for each profile section
+                    VStack(alignment: .leading, spacing: 16) {
+                        // Section header
+                        ReportSectionHeader(
+                            title: section.chartName,
+                            subtitle: section.chartSubtitle,
+                            isOrphan: section.isOrphan
+                        )
+                        
+                        // Report cards
+                        VStack(spacing: 12) {
+                            ForEach(section.reports) { item in
+                                NavigationLink {
+                                    SavedReportDetailView(item: item)
+                                } label: {
+                                    ReportListRow(item: item)
+                                }
+                                .buttonStyle(.plain)
+                            }
                         }
                     }
-                    .onDelete { indexSet in
-                        deleteReports(at: indexSet, in: section)
-                    }
-                } header: {
-                    ReportSectionHeader(title: section.chartName, subtitle: section.chartSubtitle, isOrphan: section.isOrphan)
+                    .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
                 }
             }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
         }
-        .listStyle(.insetGrouped)
     }
 
     private var emptyState: some View {
-        ContentUnavailableView(
-            "reports.empty.title",
-            systemImage: "doc.text.magnifyingglass",
-            description: Text("Немає збережених звітів")
-        )
-        .padding()
-    }
-
-    private func deleteReports(at offsets: IndexSet, in section: ReportListViewModel.Section) {
-        for index in offsets {
-            let item = section.reports[index]
-            viewModel.deleteReport(item.report)
+        VStack(spacing: 20) {
+            // Glass icon container
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [Color.accentColor.opacity(0.2), Color.accentColor.opacity(0.08)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 80, height: 80)
+                
+                Circle()
+                    .fill(.ultraThinMaterial.opacity(0.5))
+                    .frame(width: 80, height: 80)
+                
+                Circle()
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: [Color.accentColor.opacity(0.4), Color.accentColor.opacity(0.15)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1.5
+                    )
+                    .frame(width: 80, height: 80)
+                
+                Image(systemName: "doc.text.magnifyingglass")
+                    .font(.system(size: 32, weight: .medium))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Color.accentColor, Color.accentColor.opacity(0.7)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+            }
+            
+            VStack(spacing: 8) {
+                Text("Немає звітів")
+                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                    .foregroundStyle(.primary)
+                
+                Text("Придбайте астрологічний звіт, щоб побачити його тут")
+                    .font(.system(size: 15, weight: .regular))
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
         }
+        .padding(40)
+        .glassCard(cornerRadius: 24, padding: 0, intensity: .regular)
+        .padding(.horizontal, 20)
     }
 }
 
@@ -106,32 +162,121 @@ private struct ReportListRow: View {
     let item: ReportListViewModel.Item
 
     var body: some View {
-        HStack(spacing: 16) {
-            Image(systemName: item.areaIconName)
-                .font(.title2)
-                .foregroundStyle(Color.accentColor)
-                .frame(width: 32, height: 32)
+        HStack(spacing: 18) {
+            // Premium icon container with glass effect
+            ZStack {
+                // Gradient background
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                areaColor.opacity(0.2),
+                                areaColor.opacity(0.08)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 56, height: 56)
 
-            VStack(alignment: .leading, spacing: 4) {
+                // Glass overlay
+                Circle()
+                    .fill(.ultraThinMaterial.opacity(0.5))
+                    .frame(width: 56, height: 56)
+
+                // Border
+                Circle()
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: [areaColor.opacity(0.4), areaColor.opacity(0.15)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1.5
+                    )
+                    .frame(width: 56, height: 56)
+
+                // Icon
+                Image(systemName: item.areaIconName)
+                    .font(.system(size: 24, weight: .medium))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [areaColor, areaColor.opacity(0.7)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+            }
+
+            VStack(alignment: .leading, spacing: 6) {
                 Text(item.areaDisplayName)
-                    .font(.headline)
-                Text(item.purchaseDateText)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 17, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.primary)
+
+                HStack(spacing: 6) {
+                    Text(item.purchaseDateText)
+                        .font(.system(size: 13, weight: .regular))
+                        .foregroundStyle(.secondary)
+                    
+                    Circle()
+                        .fill(areaColor.opacity(0.5))
+                        .frame(width: 4, height: 4)
+                    
+                    Text(item.languageDisplay)
+                        .font(.system(size: 13, weight: .regular))
+                        .foregroundStyle(.tertiary)
+                }
             }
 
             Spacer()
 
-            VStack(alignment: .trailing, spacing: 4) {
-                Text(item.readingTimeText)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                Text(item.languageDisplay)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
+            // Action indicator - eye to view
+            ZStack {
+                Circle()
+                    .fill(Color.accentColor.opacity(0.08))
+                    .frame(width: 32, height: 32)
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(Color.accentColor)
             }
         }
+        .padding(.vertical, 14)
+        .padding(.horizontal, 16)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .strokeBorder(
+                    LinearGradient(
+                        colors: [Color.white.opacity(0.2), Color.white.opacity(0.08)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1
+                )
+        )
+        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 4)
         .contentShape(Rectangle())
+    }
+    
+    // Color coding for each area
+    private var areaColor: Color {
+        guard let area = ReportArea(rawValue: item.report.area) else {
+            return Color.accentColor
+        }
+        
+        switch area {
+        case .finances:
+            return Color(red: 0.3, green: 0.7, blue: 0.4)
+        case .career:
+            return Color(red: 0.4, green: 0.5, blue: 0.9)
+        case .relationships:
+            return Color(red: 0.9, green: 0.4, blue: 0.5)
+        case .health:
+            return Color(red: 0.4, green: 0.8, blue: 0.8)
+        case .general:
+            return Color.accentColor
+        }
     }
 }
 
@@ -141,20 +286,63 @@ private struct ReportSectionHeader: View {
     let isOrphan: Bool
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(title)
-                .font(.callout.weight(.semibold))
-            Text(subtitle)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            if isOrphan {
-                Text("Звіти без профілю")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
+        HStack(spacing: 12) {
+            // Profile icon
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [Color.accentColor.opacity(0.2), Color.accentColor.opacity(0.08)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 44, height: 44)
+                
+                Circle()
+                    .fill(.ultraThinMaterial.opacity(0.5))
+                    .frame(width: 44, height: 44)
+                
+                Circle()
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: [Color.accentColor.opacity(0.4), Color.accentColor.opacity(0.15)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1
+                    )
+                    .frame(width: 44, height: 44)
+                
+                Image(systemName: isOrphan ? "person.crop.circle.badge.questionmark" : "person.circle.fill")
+                    .font(.system(size: 20, weight: .medium))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Color.accentColor, Color.accentColor.opacity(0.7)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
             }
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundStyle(.primary)
+                
+                Text(subtitle)
+                    .font(.system(size: 13, weight: .regular))
+                    .foregroundStyle(.secondary)
+                
+                if isOrphan {
+                    Text("Звіти без профілю")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(.orange)
+                }
+            }
+            
+            Spacer()
         }
-        .padding(.vertical, 8)
-        .textCase(nil)
     }
 }
 

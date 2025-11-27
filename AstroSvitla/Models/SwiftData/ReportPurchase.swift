@@ -1,6 +1,11 @@
 import Foundation
 import SwiftData
 
+private let reportDecoder: JSONDecoder = {
+    let decoder = JSONDecoder()
+    return decoder
+}()
+
 @Model
 final class ReportPurchase {
     @Attribute(.unique)
@@ -109,13 +114,11 @@ final class ReportPurchase {
     var generatedReport: GeneratedReport? {
         guard let reportArea = ReportArea(rawValue: area) else { return nil }
 
-        let decoder = JSONDecoder()
-
         // Try to decode full sources from JSON
         var sources: [KnowledgeSource]? = nil
         if let sourcesJSON = knowledgeSourcesJSON,
            let data = sourcesJSON.data(using: .utf8) {
-            sources = try? decoder.decode([KnowledgeSource].self, from: data)
+            sources = try? reportDecoder.decode([KnowledgeSource].self, from: data)
         }
 
         // Fallback to legacy stored arrays if JSON not available
@@ -155,7 +158,7 @@ final class ReportPurchase {
 
         if let metadataJSON = metadataJSON,
            let data = metadataJSON.data(using: .utf8) {
-            if let decodedMetadata = try? decoder.decode(GenerationMetadata.self, from: data) {
+            if let decodedMetadata = try? reportDecoder.decode(GenerationMetadata.self, from: data) {
                 metadata = decodedMetadata
             }
         }
@@ -164,7 +167,7 @@ final class ReportPurchase {
         var availableBooks: [BookMetadata]? = nil
         if let booksJSON = availableBooksJSON,
            let data = booksJSON.data(using: .utf8) {
-            availableBooks = try? decoder.decode([BookMetadata].self, from: data)
+            availableBooks = try? reportDecoder.decode([BookMetadata].self, from: data)
         }
 
         return GeneratedReport(

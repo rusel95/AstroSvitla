@@ -78,7 +78,7 @@ final class ChartCalculator {
     ) async throws -> NatalChart {
 
         // Use Free Astrology API service
-        guard let service = natalChartService else {
+        guard natalChartService != nil else {
             SentrySDK.capture(message: "Unexpected: Chart service not initialized") { scope in
                 scope.setLevel(.error)
                 scope.setTag(value: "chart_calculation", key: "service")

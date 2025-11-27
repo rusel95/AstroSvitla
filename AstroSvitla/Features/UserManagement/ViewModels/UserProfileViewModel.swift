@@ -108,6 +108,68 @@ class UserProfileViewModel: ObservableObject {
         }
     }
 
+    /// Creates a profile without natal chart (for offline/error scenarios)
+    /// The chart can be fetched later when network is available
+    func createProfileWithoutChart(
+        name: String,
+        birthDate: Date,
+        birthTime: Date,
+        locationName: String,
+        latitude: Double,
+        longitude: Double,
+        timezone: String
+    ) -> UserProfile? {
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // Validate
+        guard validateProfileName(trimmedName) else {
+            return nil
+        }
+
+        guard service.validateProfileData(
+            name: trimmedName,
+            birthDate: birthDate,
+            latitude: latitude,
+            longitude: longitude
+        ) else {
+            errorMessage = "Invalid profile data"
+            return nil
+        }
+
+        do {
+            let profile = try service.createProfileWithoutChart(
+                name: trimmedName,
+                birthDate: birthDate,
+                birthTime: birthTime,
+                locationName: locationName,
+                latitude: latitude,
+                longitude: longitude,
+                timezone: timezone
+            )
+
+            // Reload and set as active
+            loadProfiles()
+            selectProfile(profile)
+
+            return profile
+        } catch {
+            errorMessage = error.localizedDescription
+            return nil
+        }
+    }
+
+    /// Attaches a natal chart to an existing profile
+    func attachChart(to profile: UserProfile, natalChart: NatalChart) -> Bool {
+        do {
+            try service.attachChart(to: profile, natalChart: natalChart)
+            loadProfiles()
+            return true
+        } catch {
+            errorMessage = error.localizedDescription
+            return false
+        }
+    }
+
     // MARK: - Update Profile
 
     func updateProfile(

@@ -2,7 +2,8 @@ import Foundation
 import OpenAI
 import Sentry
 
-struct OpenAIService {
+@MainActor
+struct OpenAIService: Sendable {
 
     private let clientProvider: OpenAIClientProviding
     private let promptBuilder: AIPromptBuilder

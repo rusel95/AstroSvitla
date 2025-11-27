@@ -7,6 +7,60 @@ import CoreLocation
 import Foundation
 import SwiftData
 
+// MARK: - File-level Codable Helpers
+
+/// Birth details DTO for caching - defined at file level to avoid @MainActor isolation issues
+struct CachedBirthDetails: Codable, Equatable, Sendable {
+    let name: String
+    let birthDate: Date
+    let birthTime: Date
+    let location: String
+    let timeZoneIdentifier: String
+    let latitude: Double?
+    let longitude: Double?
+
+    init(from details: BirthDetails) {
+        name = details.name
+        birthDate = details.birthDate
+        birthTime = details.birthTime
+        location = details.location
+        timeZoneIdentifier = details.timeZone.identifier
+        latitude = details.coordinate?.latitude
+        longitude = details.coordinate?.longitude
+    }
+
+    func makeBirthDetails() -> BirthDetails {
+        let timeZone = TimeZone(identifier: timeZoneIdentifier) ?? .current
+        let coordinate: CLLocationCoordinate2D?
+        if let latitude, let longitude {
+            coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        } else {
+            coordinate = nil
+        }
+
+        return BirthDetails(
+            name: name,
+            birthDate: birthDate,
+            birthTime: birthTime,
+            location: location,
+            timeZone: timeZone,
+            coordinate: coordinate
+        )
+    }
+}
+
+private let cachedChartEncoder: JSONEncoder = {
+    let encoder = JSONEncoder()
+    return encoder
+}()
+
+private let cachedChartDecoder: JSONDecoder = {
+    let decoder = JSONDecoder()
+    return decoder
+}()
+
+// MARK: - SwiftData Model
+
 @Model
 final class CachedNatalChart {
     @Attribute(.unique) var id: UUID
@@ -48,58 +102,9 @@ final class CachedNatalChart {
     }
 }
 
-// MARK: - Codable Helpers
+// MARK: - Extension Methods
 
 extension CachedNatalChart {
-
-    struct CachedBirthDetails: Codable, Equatable {
-        let name: String
-        let birthDate: Date
-        let birthTime: Date
-        let location: String
-        let timeZoneIdentifier: String
-        let latitude: Double?
-        let longitude: Double?
-
-        init(from details: BirthDetails) {
-            name = details.name
-            birthDate = details.birthDate
-            birthTime = details.birthTime
-            location = details.location
-            timeZoneIdentifier = details.timeZone.identifier
-            latitude = details.coordinate?.latitude
-            longitude = details.coordinate?.longitude
-        }
-
-        func makeBirthDetails() -> BirthDetails {
-            let timeZone = TimeZone(identifier: timeZoneIdentifier) ?? .current
-            let coordinate: CLLocationCoordinate2D?
-            if let latitude, let longitude {
-                coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-            } else {
-                coordinate = nil
-            }
-
-            return BirthDetails(
-                name: name,
-                birthDate: birthDate,
-                birthTime: birthTime,
-                location: location,
-                timeZone: timeZone,
-                coordinate: coordinate
-            )
-        }
-    }
-
-    private static let encoder: JSONEncoder = {
-        let encoder = JSONEncoder()
-        return encoder
-    }()
-
-    private static let decoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        return decoder
-    }()
 
     func apply(
         chart: NatalChart,
@@ -109,10 +114,10 @@ extension CachedNatalChart {
         imageFormat: String?
     ) throws {
         let detailsPayload = CachedBirthDetails(from: birthDetails)
-        birthDataJSON = try Self.encoder.encode(detailsPayload)
-        planetsJSON = try Self.encoder.encode(chart.planets)
-        housesJSON = try Self.encoder.encode(chart.houses)
-        aspectsJSON = try Self.encoder.encode(chart.aspects)
+        birthDataJSON = try cachedChartEncoder.encode(detailsPayload)
+        planetsJSON = try cachedChartEncoder.encode(chart.planets)
+        housesJSON = try cachedChartEncoder.encode(chart.houses)
+        aspectsJSON = try cachedChartEncoder.encode(chart.aspects)
         ascendant = chart.ascendant
         midheaven = chart.midheaven
         self.houseSystem = houseSystem
@@ -122,7 +127,7 @@ extension CachedNatalChart {
     }
 
     func cachedBirthDetails() throws -> CachedBirthDetails {
-        try Self.decoder.decode(CachedBirthDetails.self, from: birthDataJSON)
+        try cachedChartDecoder.decode(CachedBirthDetails.self, from: birthDataJSON)
     }
 
     func matches(_ birthDetails: BirthDetails) -> Bool {
@@ -171,9 +176,9 @@ extension CachedNatalChart {
 
     func toNatalChart() throws -> NatalChart {
         let birthDetails = try toBirthDetails()
-        let planets = try Self.decoder.decode([Planet].self, from: planetsJSON)
-        let houses = try Self.decoder.decode([House].self, from: housesJSON)
-        let aspects = try Self.decoder.decode([Aspect].self, from: aspectsJSON)
+        let planets = try cachedChartDecoder.decode([Planet].self, from: planetsJSON)
+        let houses = try cachedChartDecoder.decode([House].self, from: housesJSON)
+        let aspects = try cachedChartDecoder.decode([Aspect].self, from: aspectsJSON)
         
         // Calculate house rulers from houses and planets
         let houseRulers = houses.compactMap { house -> HouseRuler? in

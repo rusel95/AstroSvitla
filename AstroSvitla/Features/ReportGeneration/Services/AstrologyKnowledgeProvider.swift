@@ -2,7 +2,7 @@ import Foundation
 
 /// Protocol for astrology knowledge source providers
 /// Enables dependency injection and testing of different knowledge backends
-protocol KnowledgeSourceProvider {
+protocol KnowledgeSourceProvider: Sendable {
     func loadSnippets(
         for area: ReportArea,
         birthDetails: BirthDetails,
@@ -18,7 +18,7 @@ protocol KnowledgeSourceProvider {
 
 /// Default implementation using stub data
 /// Future: Replace with OpenAI Vector Store integration
-actor AstrologyKnowledgeProvider: KnowledgeSourceProvider {
+final class AstrologyKnowledgeProvider: KnowledgeSourceProvider, @unchecked Sendable {
 
     func loadSnippets(
         for area: ReportArea,
@@ -72,7 +72,7 @@ actor AstrologyKnowledgeProvider: KnowledgeSourceProvider {
         )
     }
 
-    nonisolated private func buildChartContext(from chart: NatalChart) -> [String] {
+    private func buildChartContext(from chart: NatalChart) -> [String] {
         var context: [String] = []
 
         // Sun position
@@ -109,7 +109,7 @@ actor AstrologyKnowledgeProvider: KnowledgeSourceProvider {
         return context
     }
 
-    nonisolated private func computeZodiacSign(for degree: Double) -> ZodiacSign {
+    private func computeZodiacSign(for degree: Double) -> ZodiacSign {
         // Normalize degree to 0-360 range
         let normalized = degree.truncatingRemainder(dividingBy: 360)
         // Each sign is 30 degrees
@@ -120,7 +120,7 @@ actor AstrologyKnowledgeProvider: KnowledgeSourceProvider {
 
 /// Stub implementation for testing transparency when vector store is unavailable
 /// Returns empty sources with a user-friendly transparency notice
-actor StubKnowledgeSourceProvider: KnowledgeSourceProvider {
+final class StubKnowledgeSourceProvider: KnowledgeSourceProvider, @unchecked Sendable {
 
     func loadSnippets(
         for area: ReportArea,
