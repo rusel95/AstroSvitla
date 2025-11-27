@@ -20,6 +20,7 @@ struct MainFlowView: View {
     @StateObject private var onboardingViewModel: OnboardingViewModel
     @StateObject private var profileViewModel: UserProfileViewModel
     @State private var flowState: FlowState
+    @State private var navigationPath = NavigationPath()
     @State private var errorMessage: String?
     @State private var showProfileCreationSheet = false
 
@@ -37,14 +38,17 @@ struct MainFlowView: View {
         let profileVM = UserProfileViewModel(service: service, repositoryContext: repoContext)
         _profileViewModel = StateObject(wrappedValue: profileVM)
 
-        let initialFlow: FlowState = onboardingViewModel.isCompleted ? .birthInput(existing: nil) : .onboarding
+        let initialFlow: FlowState = onboardingViewModel.isCompleted ? .birthInput : .onboarding
         _flowState = State(initialValue: initialFlow)
     }
 
     var body: some View {
-        NavigationStack {
-            content
+        NavigationStack(path: $navigationPath) {
+            rootContent
                 .animation(.default, value: flowState.animationID)
+                .navigationDestination(for: MainNavDestination.self) { destination in
+                    destinationView(for: destination)
+                }
         }
         .alert("Помилка", isPresented: Binding(
             get: { errorMessage != nil },
@@ -60,29 +64,29 @@ struct MainFlowView: View {
         }
     }
 
+    // MARK: - Root Content (non-navigable states)
+
     @ViewBuilder
-    private var content: some View {
+    private var rootContent: some View {
         switch flowState {
         case .onboarding:
             OnboardingView(
                 viewModel: onboardingViewModel,
                 onFinish: {
                     withAnimation {
-                        presentBirthInput(with: nil)
+                        flowState = .birthInput
                     }
                 }
             )
 
-        case .birthInput(_):
+        case .birthInput:
             Group {
                 if profileViewModel.profiles.isEmpty {
-                    // Empty state - no profiles exist
                     ProfileEmptyStateView(onCreateProfile: {
                         showProfileCreationSheet = true
                     })
                     .navigationTitle("Початок")
                 } else {
-                    // Profile selection screen
                     ProfileSelectionView(
                         profiles: profileViewModel.profiles,
                         selectedProfile: repositoryContext.activeProfile,
@@ -115,40 +119,40 @@ struct MainFlowView: View {
             }
 
         case .calculating(let details):
-            CalculatingChartView(
-                birthDetails: details
-            )
+            CalculatingChartView(birthDetails: details)
 
+        case .generating(let details, _, let area):
+            GeneratingReportView(
+                birthDetails: details,
+                area: area,
+                onCancel: {
+                    navigationPath.removeLast()
+                }
+            )
+        }
+    }
+
+    // MARK: - Navigation Destinations (navigable states with native back)
+
+    @ViewBuilder
+    private func destinationView(for destination: MainNavDestination) -> some View {
+        switch destination {
         case .areaSelection(let details, let chart):
             AreaSelectionView(
                 birthDetails: details,
                 natalChart: chart,
                 purchasedAreas: getPurchasedAreas(),
                 onAreaSelected: { area in
-                    flowState = .purchase(details, chart, area)
+                    navigationPath.append(MainNavDestination.purchase(details, chart, area))
                 },
                 onViewExistingReport: { area in
                     viewExistingReport(for: area, details: details, chart: chart)
                 }
             )
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        presentBirthInput(with: details)
-                    } label: {
-                        HStack(spacing: 4) {
-                            Image(systemName: "chevron.left")
-                            Text("Назад")
-                        }
-                    }
-                }
-            }
 
         case .purchase(let details, let chart, let area):
-            // Safety check: if report already exists, redirect to view it
             if let profile = repositoryContext.activeProfile,
                profile.reports.contains(where: { $0.isForArea(area) }) {
-                // This shouldn't happen normally, but handle gracefully
                 Color.clear.onAppear {
                     viewExistingReport(for: area, details: details, chart: chart)
                 }
@@ -156,23 +160,12 @@ struct MainFlowView: View {
                 PurchaseConfirmationView(
                     birthDetails: details,
                     area: area,
-                    onBack: {
-                        flowState = .areaSelection(details, chart)
-                    },
+                    onBack: nil, // Native back button handles this
                     onGenerateReport: {
                         generateReport(details: details, chart: chart, area: area)
                     }
                 )
             }
-
-        case .generating(let details, let chart, let area):
-            GeneratingReportView(
-                birthDetails: details,
-                area: area,
-                onCancel: {
-                    flowState = .purchase(details, chart, area)
-                }
-            )
 
         case .report(let details, let chart, _, let report):
             ReportDetailView(
@@ -180,18 +173,6 @@ struct MainFlowView: View {
                 natalChart: chart,
                 report: report
             )
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        flowState = .areaSelection(details, chart)
-                    } label: {
-                        HStack(spacing: 4) {
-                            Image(systemName: "chevron.left")
-                            Text("Назад")
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -286,7 +267,7 @@ struct MainFlowView: View {
             print("[MainFlowView] ✅ Using existing chart from profile")
             #endif
             await MainActor.run {
-                flowState = .areaSelection(details, natalChart)
+                navigationPath.append(MainNavDestination.areaSelection(details, natalChart))
             }
             return
         }
@@ -305,18 +286,15 @@ struct MainFlowView: View {
             }
 
             await MainActor.run {
-                flowState = .areaSelection(details, chart)
+                flowState = .birthInput
+                navigationPath.append(MainNavDestination.areaSelection(details, chart))
             }
         } catch {
             await MainActor.run {
                 errorMessage = "Не вдалося отримати натальну карту: \(error.localizedDescription). Перевірте з'єднання з інтернетом."
-                flowState = .birthInput(existing: nil)
+                flowState = .birthInput
             }
         }
-    }
-
-    private func presentBirthInput(with details: BirthDetails?) {
-        flowState = .birthInput(existing: details)
     }
 
     private func calculateChart(for details: BirthDetails) async throws -> NatalChart {
@@ -358,7 +336,7 @@ struct MainFlowView: View {
             return
         }
 
-        flowState = .report(details, chart, area, generatedReport)
+        navigationPath.append(MainNavDestination.report(details, chart, area, generatedReport))
     }
 
     private func generateReport(details: BirthDetails, chart: NatalChart, area: ReportArea) {
@@ -387,12 +365,19 @@ struct MainFlowView: View {
                     #endif
                 }
                 await MainActor.run {
-                    flowState = .report(details, chart, area, report)
+                    // Pop generating state, push report
+                    flowState = .birthInput
+                    // Replace the purchase destination with report
+                    if !navigationPath.isEmpty {
+                        navigationPath.removeLast() // Remove purchase
+                    }
+                    navigationPath.append(MainNavDestination.report(details, chart, area, report))
                 }
             } catch {
                 await MainActor.run {
                     errorMessage = error.localizedDescription
-                    flowState = .purchase(details, chart, area)
+                    // Return to purchase screen
+                    flowState = .birthInput
                 }
             }
         }
@@ -572,26 +557,68 @@ private extension MainFlowView {
     }
 }
 
-// MARK: - Flow State
+// MARK: - Flow State (kept for non-navigation state tracking)
 
-private enum FlowState {
+private enum FlowState: Equatable {
     case onboarding
-    case birthInput(existing: BirthDetails?)
+    case birthInput
     case calculating(BirthDetails)
-    case areaSelection(BirthDetails, NatalChart)
-    case purchase(BirthDetails, NatalChart, ReportArea)
     case generating(BirthDetails, NatalChart, ReportArea)
-    case report(BirthDetails, NatalChart, ReportArea, GeneratedReport)
+
+    static func == (lhs: FlowState, rhs: FlowState) -> Bool {
+        switch (lhs, rhs) {
+        case (.onboarding, .onboarding): return true
+        case (.birthInput, .birthInput): return true
+        case (.calculating(let l), .calculating(let r)): return l.displayName == r.displayName
+        case (.generating(let ld, _, let la), .generating(let rd, _, let ra)):
+            return ld.displayName == rd.displayName && la == ra
+        default: return false
+        }
+    }
 
     var animationID: String {
         switch self {
         case .onboarding: return "onboarding"
         case .birthInput: return "birthInput"
         case .calculating: return "calculating"
-        case .areaSelection: return "areaSelection"
-        case .purchase: return "purchase"
         case .generating: return "generating"
-        case .report: return "report"
+        }
+    }
+}
+
+// MARK: - Navigation Destination
+
+enum MainNavDestination: Hashable {
+    case areaSelection(BirthDetails, NatalChart)
+    case purchase(BirthDetails, NatalChart, ReportArea)
+    case report(BirthDetails, NatalChart, ReportArea, GeneratedReport)
+
+    func hash(into hasher: inout Hasher) {
+        switch self {
+        case .areaSelection(let details, _):
+            hasher.combine("areaSelection")
+            hasher.combine(details.displayName)
+        case .purchase(let details, _, let area):
+            hasher.combine("purchase")
+            hasher.combine(details.displayName)
+            hasher.combine(area)
+        case .report(let details, _, let area, _):
+            hasher.combine("report")
+            hasher.combine(details.displayName)
+            hasher.combine(area)
+        }
+    }
+
+    static func == (lhs: MainNavDestination, rhs: MainNavDestination) -> Bool {
+        switch (lhs, rhs) {
+        case (.areaSelection(let ld, _), .areaSelection(let rd, _)):
+            return ld.displayName == rd.displayName
+        case (.purchase(let ld, _, let la), .purchase(let rd, _, let ra)):
+            return ld.displayName == rd.displayName && la == ra
+        case (.report(let ld, _, let la, _), .report(let rd, _, let ra, _)):
+            return ld.displayName == rd.displayName && la == ra
+        default:
+            return false
         }
     }
 }
