@@ -3,9 +3,25 @@ import SwiftUI
 struct AreaSelectionView: View {
     let birthDetails: BirthDetails
     let natalChart: NatalChart
+    let purchasedAreas: Set<ReportArea>
     var onAreaSelected: (ReportArea) -> Void
+    var onViewExistingReport: ((ReportArea) -> Void)? = nil
 
     @State private var showChartDetails = false
+
+    init(
+        birthDetails: BirthDetails,
+        natalChart: NatalChart,
+        purchasedAreas: Set<ReportArea> = [],
+        onAreaSelected: @escaping (ReportArea) -> Void,
+        onViewExistingReport: ((ReportArea) -> Void)? = nil
+    ) {
+        self.birthDetails = birthDetails
+        self.natalChart = natalChart
+        self.purchasedAreas = purchasedAreas
+        self.onAreaSelected = onAreaSelected
+        self.onViewExistingReport = onViewExistingReport
+    }
 
     var body: some View {
         ZStack {
@@ -82,10 +98,18 @@ struct AreaSelectionView: View {
                     // Area cards
                     VStack(spacing: 12) {
                         ForEach(ReportArea.allCases, id: \.self) { area in
+                            let isPurchased = purchasedAreas.contains(area)
+                            
                             Button {
-                                onAreaSelected(area)
+                                if isPurchased {
+                                    // View existing report
+                                    onViewExistingReport?(area)
+                                } else {
+                                    // Go to purchase flow
+                                    onAreaSelected(area)
+                                }
                             } label: {
-                                AreaCard(area: area)
+                                AreaCard(area: area, isPurchased: isPurchased)
                             }
                             .buttonStyle(.plain)
                         }
@@ -136,7 +160,9 @@ struct AreaSelectionView: View {
                 midheaven: 215.3,
                 calculatedAt: .now
             ),
-            onAreaSelected: { _ in }
+            purchasedAreas: [.relationships, .health],
+            onAreaSelected: { _ in },
+            onViewExistingReport: { _ in }
         )
     }
 }

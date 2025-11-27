@@ -206,6 +206,21 @@ class UserProfileService {
         return !profile.reports.isEmpty
     }
 
+    /// Checks if a specific report area has already been purchased for this profile
+    func hasReport(for area: ReportArea, profile: UserProfile) -> Bool {
+        return profile.reports.contains { $0.isForArea(area) }
+    }
+
+    /// Returns the existing report for a specific area if it exists
+    func getExistingReport(for area: ReportArea, profile: UserProfile) -> ReportPurchase? {
+        return profile.reports.first { $0.isForArea(area) }
+    }
+
+    /// Returns all purchased areas for a profile
+    func purchasedAreas(for profile: UserProfile) -> Set<ReportArea> {
+        Set(profile.reports.compactMap { ReportArea(rawValue: $0.area) })
+    }
+
     // MARK: - Helper Methods
 
     private func fetchDeviceOwner() -> User? {

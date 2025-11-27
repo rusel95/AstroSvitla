@@ -123,8 +123,12 @@ struct MainFlowView: View {
             AreaSelectionView(
                 birthDetails: details,
                 natalChart: chart,
+                purchasedAreas: getPurchasedAreas(),
                 onAreaSelected: { area in
                     flowState = .purchase(details, chart, area)
+                },
+                onViewExistingReport: { area in
+                    viewExistingReport(for: area, details: details, chart: chart)
                 }
             )
             .toolbar {
@@ -141,16 +145,25 @@ struct MainFlowView: View {
             }
 
         case .purchase(let details, let chart, let area):
-            PurchaseConfirmationView(
-                birthDetails: details,
-                area: area,
-                onBack: {
-                    flowState = .areaSelection(details, chart)
-                },
-                onGenerateReport: {
-                    generateReport(details: details, chart: chart, area: area)
+            // Safety check: if report already exists, redirect to view it
+            if let profile = repositoryContext.activeProfile,
+               profile.reports.contains(where: { $0.isForArea(area) }) {
+                // This shouldn't happen normally, but handle gracefully
+                Color.clear.onAppear {
+                    viewExistingReport(for: area, details: details, chart: chart)
                 }
-            )
+            } else {
+                PurchaseConfirmationView(
+                    birthDetails: details,
+                    area: area,
+                    onBack: {
+                        flowState = .areaSelection(details, chart)
+                    },
+                    onGenerateReport: {
+                        generateReport(details: details, chart: chart, area: area)
+                    }
+                )
+            }
 
         case .generating(let details, let chart, let area):
             GeneratingReportView(
@@ -299,6 +312,29 @@ struct MainFlowView: View {
         printChartData(chart)
 
         return chart
+    }
+
+    // MARK: - Duplicate Report Prevention
+
+    /// Returns the set of areas that have already been purchased for the active profile
+    private func getPurchasedAreas() -> Set<ReportArea> {
+        guard let profile = repositoryContext.activeProfile else {
+            return []
+        }
+        return Set(profile.reports.compactMap { ReportArea(rawValue: $0.area) })
+    }
+
+    /// Navigates to view an existing report for the given area
+    private func viewExistingReport(for area: ReportArea, details: BirthDetails, chart: NatalChart) {
+        guard let profile = repositoryContext.activeProfile,
+              let existingReport = profile.reports.first(where: { $0.isForArea(area) }),
+              let generatedReport = existingReport.generatedReport else {
+            // Fallback: if we can't find the report, show error
+            errorMessage = "Не вдалося знайти збережений звіт"
+            return
+        }
+
+        flowState = .report(details, chart, area, generatedReport)
     }
 
     private func generateReport(details: BirthDetails, chart: NatalChart, area: ReportArea) {

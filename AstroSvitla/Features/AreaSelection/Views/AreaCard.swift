@@ -2,6 +2,8 @@ import SwiftUI
 
 struct AreaCard: View {
     let area: ReportArea
+    var isPurchased: Bool = false
+    var onViewReport: (() -> Void)? = nil
 
     @State private var isPressed = false
 
@@ -14,8 +16,8 @@ struct AreaCard: View {
                     .fill(
                         LinearGradient(
                             colors: [
-                                areaColor.opacity(0.2),
-                                areaColor.opacity(0.08)
+                                iconColor.opacity(0.2),
+                                iconColor.opacity(0.08)
                             ],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -32,7 +34,7 @@ struct AreaCard: View {
                 Circle()
                     .strokeBorder(
                         LinearGradient(
-                            colors: [areaColor.opacity(0.4), areaColor.opacity(0.15)],
+                            colors: [iconColor.opacity(0.4), iconColor.opacity(0.15)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         ),
@@ -40,15 +42,32 @@ struct AreaCard: View {
                     )
                     .frame(width: 56, height: 56)
 
+                // Main area icon (keep original icon even when purchased)
                 Image(systemName: area.icon)
                     .font(.system(size: 24, weight: .medium))
                     .foregroundStyle(
                         LinearGradient(
-                            colors: [areaColor, areaColor.opacity(0.7)],
+                            colors: isPurchased 
+                                ? [Color.green, Color.green.opacity(0.7)]
+                                : [areaColor, areaColor.opacity(0.7)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
                     )
+
+                // Checkmark badge overlay for purchased (bottom-right corner)
+                if isPurchased {
+                    ZStack {
+                        Circle()
+                            .fill(Color.green)
+                            .frame(width: 20, height: 20)
+                        
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundStyle(.white)
+                    }
+                    .offset(x: 20, y: 20)
+                }
             }
 
             VStack(alignment: .leading, spacing: 6) {
@@ -57,33 +76,44 @@ struct AreaCard: View {
                     .foregroundStyle(.primary)
 
                 HStack(spacing: 6) {
-                    Text(priceString)
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundStyle(.secondary)
+                    if isPurchased {
+                        // Show "Already purchased" badge
+                        HStack(spacing: 4) {
+                            Image(systemName: "checkmark.seal.fill")
+                                .font(.system(size: 11))
+                            Text("Вже придбано")
+                                .font(.system(size: 13, weight: .medium))
+                        }
+                        .foregroundStyle(Color.green)
+                    } else {
+                        Text(priceString)
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundStyle(.secondary)
 
-                    // Small decorative dot
-                    Circle()
-                        .fill(areaColor.opacity(0.5))
-                        .frame(width: 4, height: 4)
+                        // Small decorative dot
+                        Circle()
+                            .fill(areaColor.opacity(0.5))
+                            .frame(width: 4, height: 4)
 
-                    Text(area.shortDescription)
-                        .font(.system(size: 13, weight: .regular))
-                        .foregroundStyle(.tertiary)
-                        .lineLimit(1)
+                        Text(area.shortDescription)
+                            .font(.system(size: 13, weight: .regular))
+                            .foregroundStyle(.tertiary)
+                            .lineLimit(1)
+                    }
                 }
             }
 
             Spacer()
 
-            // Premium chevron with glow
+            // Action indicator
             ZStack {
                 Circle()
-                    .fill(Color.accentColor.opacity(0.08))
+                    .fill(isPurchased ? Color.green.opacity(0.1) : Color.accentColor.opacity(0.08))
                     .frame(width: 32, height: 32)
 
-                Image(systemName: "chevron.right")
+                Image(systemName: isPurchased ? "eye.fill" : "chevron.right")
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(Color.accentColor)
+                    .foregroundStyle(isPurchased ? Color.green : Color.accentColor)
             }
         }
         .padding(.vertical, 14)
@@ -93,7 +123,9 @@ struct AreaCard: View {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .strokeBorder(
                     LinearGradient(
-                        colors: [Color.white.opacity(0.2), Color.white.opacity(0.08)],
+                        colors: isPurchased 
+                            ? [Color.green.opacity(0.3), Color.green.opacity(0.1)]
+                            : [Color.white.opacity(0.2), Color.white.opacity(0.08)],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     ),
@@ -109,6 +141,11 @@ struct AreaCard: View {
         formatter.numberStyle = .currency
         formatter.currencyCode = "USD"
         return formatter.string(from: area.price as NSNumber) ?? "$0.00"
+    }
+
+    // Color for the icon - green if purchased
+    private var iconColor: Color {
+        isPurchased ? .green : areaColor
     }
 
     // Color coding for each area
@@ -149,9 +186,15 @@ extension ReportArea {
 
 #Preview(traits: .sizeThatFitsLayout) {
     VStack(spacing: 12) {
-        ForEach(ReportArea.allCases, id: \.self) { area in
-            AreaCard(area: area)
-        }
+        // Not purchased
+        AreaCard(area: .finances, isPurchased: false)
+        AreaCard(area: .career, isPurchased: false)
+        
+        // Already purchased
+        AreaCard(area: .relationships, isPurchased: true)
+        AreaCard(area: .health, isPurchased: true)
+        
+        AreaCard(area: .general, isPurchased: false)
     }
     .padding()
     .background(CosmicBackgroundView())
