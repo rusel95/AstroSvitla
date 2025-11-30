@@ -176,15 +176,15 @@ struct PurchaseConfirmationView: View {
 
             VStack(spacing: 14) {
                 FeatureRow(
-                    icon: "sparkles",
-                    title: "AI-аналіз натальної карти",
-                    subtitle: "Глибокий аналіз на основі ваших даних"
+                    icon: "books.vertical.fill",
+                    title: "Аналіз на основі астролітератури",
+                    subtitle: "Інтерпретації з класичних та сучасних джерел"
                 )
 
                 FeatureRow(
                     icon: "doc.text.fill",
-                    title: "Детальний звіт",
-                    subtitle: "Персоналізовані рекомендації та інсайти"
+                    title: "Детальний персоналізований звіт",
+                    subtitle: "Унікальні рекомендації для вашої карти"
                 )
 
                 FeatureRow(

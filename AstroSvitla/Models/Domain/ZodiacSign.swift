@@ -46,6 +46,24 @@ enum ZodiacSign: String, Codable, CaseIterable, Sendable {
         return start...(start + 30.0)
     }
 
+    /// Astrological symbol for the zodiac sign
+    var symbol: String {
+        switch self {
+        case .aries: return "♈"
+        case .taurus: return "♉"
+        case .gemini: return "♊"
+        case .cancer: return "♋"
+        case .leo: return "♌"
+        case .virgo: return "♍"
+        case .libra: return "♎"
+        case .scorpio: return "♏"
+        case .sagittarius: return "♐"
+        case .capricorn: return "♑"
+        case .aquarius: return "♒"
+        case .pisces: return "♓"
+        }
+    }
+
     /// Convert an ecliptic longitude degree (0-360) to zodiac sign
     static func from(degree: Double) -> ZodiacSign {
         let normalizedDegree = degree.truncatingRemainder(dividingBy: 360)

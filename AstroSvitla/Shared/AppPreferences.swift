@@ -4,6 +4,8 @@ import Combine
 @MainActor
 final class AppPreferences: ObservableObject {
 
+    static let shared = AppPreferences()
+
     enum ThemeOption: String, CaseIterable, Identifiable {
         case system
         case light
@@ -84,6 +86,12 @@ final class AppPreferences: ObservableObject {
         didSet { UserDefaults.standard.set(selectedModel.rawValue, forKey: Keys.openAIModel) }
     }
 
+    /// Developer mode - enables debug features like knowledge logs, AI model selection, etc.
+    /// Toggled by long-pressing "About" section in Settings
+    @Published var isDevModeEnabled: Bool {
+        didSet { UserDefaults.standard.set(isDevModeEnabled, forKey: Keys.devMode) }
+    }
+
     var selectedColorScheme: ColorScheme? { theme.colorScheme }
 
     init() {
@@ -100,14 +108,21 @@ final class AppPreferences: ObservableObject {
         } else {
             selectedModel = .gpt4oMini  // Default to cheapest/fastest
         }
+
+        isDevModeEnabled = UserDefaults.standard.bool(forKey: Keys.devMode)
     }
 
     func resetAppearance() {
         theme = .system
+    }
+
+    func toggleDevMode() {
+        isDevModeEnabled.toggle()
     }
 }
 
 private enum Keys {
     static let theme = "app.preferences.theme"
     static let openAIModel = "app.preferences.openai_model"
+    static let devMode = "app.preferences.dev_mode"
 }

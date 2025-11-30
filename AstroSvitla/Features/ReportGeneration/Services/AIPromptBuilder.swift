@@ -15,16 +15,28 @@ struct AIPromptBuilder {
         knowledgeSnippets: [String],
         languageCode: String,
         languageDisplayName: String,
-        repositoryContext: String
+        repositoryContext: String,
+        includeSourceCitations: Bool = true
     ) -> Prompt {
+        let citationRequirement: String
+        if includeSourceCitations {
+            citationRequirement = """
+            CRITICAL REQUIREMENT: ALL facts, interpretations, and statements MUST come from established astrological literature. NO speculation or made-up information.
+            - PRIORITIZE the knowledge snippets provided from the vector database (when available)
+            - For aspects and house interpretations, be HIGHLY ACCURATE and cite specific sources
+            - If vector database knowledge is unavailable, cite classical astrological texts or modern psychological astrology authorities
+            - NEVER make general statements without a source citation
+            """
+        } else {
+            citationRequirement = """
+            Base your interpretations on established astrological knowledge. Provide professional, accurate analysis without inline source citations.
+            """
+        }
+
         let systemMessage = """
         You are a professional astrologer with 20+ years of experience. Always respond with warm, practical, motivating interpretations tailored to the user's natal chart. Avoid daily horoscope clichés.
 
-        CRITICAL REQUIREMENT: ALL facts, interpretations, and statements MUST come from established astrological literature. NO speculation or made-up information.
-        - PRIORITIZE the knowledge snippets provided from the vector database (when available)
-        - For aspects and house interpretations, be HIGHLY ACCURATE and cite specific sources
-        - If vector database knowledge is unavailable, cite classical astrological texts or modern psychological astrology authorities
-        - NEVER make general statements without a source citation
+        \(citationRequirement)
 
         Always answer in language: \(languageDisplayName) (language code: \(languageCode)).
         Project repository context:
@@ -43,15 +55,140 @@ struct AIPromptBuilder {
 
         let vectorInstruction: String
         if knowledgeSnippets.isEmpty {
-            vectorInstruction = """
-            Vector knowledge snippets were NOT provided. Set knowledge_usage.vector_source_used to false and explain why in notes.
-            IMPORTANT: Still cite classical astrological authorities for ALL interpretations. Never speculate.
+            vectorInstruction = includeSourceCitations
+                ? """
+                Vector knowledge snippets were NOT provided. Set knowledge_usage.vector_source_used to false and explain why in notes.
+                IMPORTANT: Still cite classical astrological authorities for ALL interpretations. Never speculate.
+                """
+                : "Vector knowledge snippets were NOT provided. Set knowledge_usage.vector_source_used to false."
+        } else {
+            vectorInstruction = includeSourceCitations
+                ? """
+                Vector knowledge snippets WERE provided. Use them as PRIMARY sources for your interpretations.
+                CRITICAL: For aspect and house interpretations, base your analysis STRICTLY on the provided knowledge snippets.
+                Set knowledge_usage.vector_source_used to true and cite specific snippets with chunk IDs in the sources array.
+                """
+                : "Vector knowledge snippets WERE provided. Use them for your interpretations. Set knowledge_usage.vector_source_used to true."
+        }
+
+        // Dynamic key_influences instruction based on citation mode
+        let keyInfluencesInstruction = includeSourceCitations
+            ? "\"key_influences\": [\"10 марковані пунктів з ключовими впливами (ОБОВ'ЯЗКОВО для всіх планет: Сонце, Місяць, Меркурій, Венера, Марс, Юпітер, Сатурн, Уран, Нептун, Плутон). Кожен пункт має містити посилання на джерело в квадратних дужках, наприклад: '...це вказує на креативність [Роберт Хенд, Планети в транзиту, стор. 45-48]'\"],"
+            : "\"key_influences\": [\"10 марковані пунктів з ключовими впливами (ОБОВ'ЯЗКОВО для всіх планет: Сонце, Місяць, Меркурій, Венера, Марс, Юпітер, Сатурн, Уран, Нептун, Плутон)\"],"
+
+        // Dynamic detailed_analysis instruction based on citation mode
+        let detailedAnalysisInstruction: String
+        if includeSourceCitations {
+            detailedAnalysisInstruction = """
+            "detailed_analysis": "Розгорнутий аналіз 6-8 абзаців українською, який ОБОВ'ЯЗКОВО містить:\\n1. Пояснення Асцендента (знак і значення для особистості та підходу до життя)\\n2. Пояснення Середини Неба/MC (знак і значення для кар'єри, репутації та життєвого напрямку)\\n3. Роз'яснення про розташування кармічних вузлів (Північний вузол - куди йти, Південний вузол - що залишити позаду), їх дома та осі домів\\n4. Роз'яснення про існуючі аспекти між кармічними вузлами та іншими планетами\\n5. Роз'яснення про розміщення і значення Ліліт/Чорної Місяць (знак, дім, тіньові теми)\\n6. Аналіз управителів домів (особливо Асцендента, 7-го та 10-го домів): де вони знаходяться і що це означає\\n7. Детальний аналіз мінімум 20 найтісніших аспектів між планетами (з посиланням на конкретні кути та орби)\\n\\nВАЖЛИВО: Після КОЖНОГО твердження, висновку або інтерпретації додавай inline-посилання на джерело в квадратних дужках, наприклад:\\n- 'Венера у Тільці створює сильну потребу у стабільності [Ліз Грін, Астрологія долі, стор. 123-126]'\\n- 'Тригон Місяця до Юпітера дарує оптимізм [Стівен Арройо, Астрологія, психологія і чотири стихії, Розділ 5]'\\n- 'Сатурн у 10-му домі вказує на кар'єрні амбіції [Говард Саспортас, Боги змін, стор. 89-92]'\\nЯкщо використовуєш інформацію НЕ з бази даних, а з загальних астрологічних знань, вкажи [Класична астрологія] або [Сучасна психологічна астрологія].",
             """
         } else {
-            vectorInstruction = """
-            Vector knowledge snippets WERE provided. Use them as PRIMARY sources for your interpretations.
-            CRITICAL: For aspect and house interpretations, base your analysis STRICTLY on the provided knowledge snippets.
-            Set knowledge_usage.vector_source_used to true and cite specific snippets with chunk IDs in the sources array.
+            detailedAnalysisInstruction = """
+            "detailed_analysis": "Розгорнутий аналіз 6-8 абзаців українською, який ОБОВ'ЯЗКОВО містить:\\n1. Пояснення Асцендента (знак і значення для особистості та підходу до життя)\\n2. Пояснення Середини Неба/MC (знак і значення для кар'єри, репутації та життєвого напрямку)\\n3. Роз'яснення про розташування кармічних вузлів (Північний вузол - куди йти, Південний вузол - що залишити позаду), їх дома та осі домів\\n4. Роз'яснення про існуючі аспекти між кармічними вузлами та іншими планетами\\n5. Роз'яснення про розміщення і значення Ліліт/Чорної Місяць (знак, дім, тіньові теми)\\n6. Аналіз управителів домів (особливо Асцендента, 7-го та 10-го домів): де вони знаходяться і що це означає\\n7. Детальний аналіз мінімум 20 найтісніших аспектів між планетами (з посиланням на конкретні кути та орби)",
+            """
+        }
+
+        // Dynamic recommendations instruction based on citation mode
+        let recommendationsInstruction = includeSourceCitations
+            ? "\"recommendations\": [\"3-4 практичні поради українською, починай з дієслова. Кожна порада також має містити посилання на джерело в квадратних дужках.\"],"
+            : "\"recommendations\": [\"3-4 практичні поради українською, починай з дієслова.\"],"
+
+        // Dynamic knowledge usage section
+        let knowledgeUsageSection: String
+        if includeSourceCitations {
+            knowledgeUsageSection = """
+            "knowledge_usage": {
+                "vector_source_used": true або false,
+                "notes": "Коротке пояснення українською",
+                "sources": [
+                  {
+                    "book_title": "Назва книги/джерела з векторної бази",
+                    "author": "Автор книги (якщо відомо)",
+                    "section": "Розділ/секція (якщо відомо)",
+                    "page_range": "Сторінки (якщо відомо)",
+                    "snippet": "Короткий уривок/цитата з джерела, що була використана",
+                    "relevance_score": 0.95,
+                    "chunk_id": "унікальний ID чанку з бази"
+                  }
+                ],
+                "available_books": [
+                  {
+                    "book_title": "Назва книги в базі даних",
+                    "author": "Автор книги",
+                    "total_chunks": 42,
+                    "used_chunks": ["chunk_id_1", "chunk_id_5"],
+                    "available_chunks": [
+                      {
+                        "chunk_id": "chunk_id_1",
+                        "section": "Розділ 3: Аспекти",
+                        "page_range": "стор. 45-48",
+                        "preview": "Перші 100 символів тексту чанку...",
+                        "full_text": "ПОВНИЙ текст цього чанку з векторної бази. Включи весь текст чанку, який є в базі даних.",
+                        "was_used": true
+                      },
+                      {
+                        "chunk_id": "chunk_id_2",
+                        "section": "Розділ 4: Планети",
+                        "page_range": "стор. 52-55",
+                        "preview": "Інші 100 символів тексту чанку...",
+                        "full_text": "ПОВНИЙ текст іншого чанку з векторної бази. Включи весь текст чанку, який є в базі даних.",
+                        "was_used": false
+                      }
+                    ]
+                  }
+                ]
+              }
+            """
+        } else {
+            knowledgeUsageSection = """
+            "knowledge_usage": {
+                "vector_source_used": true або false,
+                "notes": "Коротке пояснення українською"
+              }
+            """
+        }
+
+        // Dynamic sources instructions
+        let sourcesInstructions: String
+        if includeSourceCitations {
+            sourcesInstructions = """
+
+            ВАЖЛИВО ПРО ДЖЕРЕЛА:
+            1. Якщо ти використовуєш знання з векторної бази, обов'язково заповни масив "sources" з конкретними джерелами, які ти використав. Вкажи назву книги, автора, розділ, chunk_id і короткий уривок тексту.
+            2. ОБОВ'ЯЗКОВО заповни масив "available_books" з ПОВНИМ списком усіх книг у твоїй векторній базі знань з астрології. Для кожної книги вкажи:
+               - Назву книги та автора
+               - Загальну кількість чанків (total_chunks)
+               - Список ID чанків, які ти використав для цієї відповіді (used_chunks)
+               - Список усіх доступних чанків з цієї книги (available_chunks) - мінімум 5-10 варіантів на книгу, включаючи:
+                 * chunk_id - унікальний ідентифікатор
+                 * section - назва розділу/теми
+                 * page_range - сторінки
+                 * preview - перші 80-120 символів тексту чанку
+                 * full_text - ПОВНИЙ текст чанку з векторної бази (весь текст, без скорочень)
+                 * was_used - чи був використаний цей чанк в аналізі (true/false)
+            3. Це дозволить користувачу побачити ВСЮ доступну базу знань і які саме фрагменти були використані для генерації його звіту.
+            """
+        } else {
+            sourcesInstructions = ""
+        }
+
+        // Dynamic accuracy requirements
+        let accuracyRequirements: String
+        if includeSourceCitations {
+            accuracyRequirements = """
+            КРИТИЧНО ВАЖЛИВІ ВИМОГИ ЩОДО ТОЧНОСТІ:
+            • НЕ ДОДУМУЙ факти. Кожне твердження має базуватися на літературі з астрології.
+            • ПРІОРИТЕТ: використовуй надану векторну базу знань (якщо доступна).
+            • Аналіз АСПЕКТІВ і ДОМІВ має бути максимально точним і ґрунтуватися на конкретних джерелах.
+            • Якщо надана база знань НЕ містить інформації про конкретний аспект або дім - цитуй класичні астрологічні тексти (Ліз Грін, Роберт Хенд, Стівен Арройо, Говард Саспортас, тощо).
+            • ЗАВЖДИ вказуй джерело після кожного речення/абзацу в квадратних дужках [Автор, Книга, сторінки].
+            """
+        } else {
+            accuracyRequirements = """
+            ВИМОГИ ЩОДО ТОЧНОСТІ:
+            • Базуйся на встановлених астрологічних знаннях.
+            • Аналіз АСПЕКТІВ і ДОМІВ має бути максимально точним та професійним.
+            • НЕ додавай посилання на джерела у тексті відповіді.
             """
         }
 
@@ -60,67 +197,12 @@ struct AIPromptBuilder {
 
         {
           "summary": "1-2 речення короткого підсумку українською.",
-          "key_influences": ["10 марковані пунктів з ключовими впливами (ОБОВ'ЯЗКОВО для всіх планет: Сонце, Місяць, Меркурій, Венера, Марс, Юпітер, Сатурн, Уран, Нептун, Плутон). Кожен пункт має містити посилання на джерело в квадратних дужках, наприклад: '...це вказує на креативність [Роберт Хенд, Планети в транзиті, стор. 45-48]'"],
-          "detailed_analysis": "Розгорнутий аналіз 6-8 абзаців українською, який ОБОВ'ЯЗКОВО містить:\n1. Пояснення Асцендента (знак і значення для особистості та підходу до життя)\n2. Пояснення Середини Неба/MC (знак і значення для кар'єри, репутації та життєвого напрямку)\n3. Роз'яснення про розташування кармічних вузлів (Північний вузол - куди йти, Південний вузол - що залишити позаду), їх дома та осі домів\n4. Роз'яснення про існуючі аспекти між кармічними вузлами та іншими планетами\n5. Роз'яснення про розміщення і значення Ліліт/Чорної Місяць (знак, дім, тіньові теми)\n6. Аналіз управителів домів (особливо Асцендента, 7-го та 10-го домів): де вони знаходяться і що це означає\n7. Детальний аналіз мінімум 20 найтісніших аспектів між планетами (з посиланням на конкретні кути та орби)\n\nВАЖЛИВО: Після КОЖНОГО твердження, висновку або інтерпретації додавай inline-посилання на джерело в квадратних дужках, наприклад:\n- 'Венера у Тільці створює сильну потребу у стабільності [Ліз Грін, Астрологія долі, стор. 123-126]'\n- 'Тригон Місяця до Юпітера дарує оптимізм [Стівен Арройо, Астрологія, психологія і чотири стихії, Розділ 5]'\n- 'Сатурн у 10-му домі вказує на кар'єрні амбіції [Говард Саспортас, Боги змін, стор. 89-92]'\nЯкщо використовуєш інформацію НЕ з бази даних, а з загальних астрологічних знань, вкажи [Класична астрологія] або [Сучасна психологічна астрологія].",
-          "recommendations": ["3-4 практичні поради українською, починай з дієслова. Кожна порада також має містити посилання на джерело в квадратних дужках."],
-          "knowledge_usage": {
-            "vector_source_used": true або false,
-            "notes": "Коротке пояснення українською",
-            "sources": [
-              {
-                "book_title": "Назва книги/джерела з векторної бази",
-                "author": "Автор книги (якщо відомо)",
-                "section": "Розділ/секція (якщо відомо)",
-                "page_range": "Сторінки (якщо відомо)",
-                "snippet": "Короткий уривок/цитата з джерела, що була використана",
-                "relevance_score": 0.95,
-                "chunk_id": "унікальний ID чанку з бази"
-              }
-            ],
-            "available_books": [
-              {
-                "book_title": "Назва книги в базі даних",
-                "author": "Автор книги",
-                "total_chunks": 42,
-                "used_chunks": ["chunk_id_1", "chunk_id_5"],
-                "available_chunks": [
-                  {
-                    "chunk_id": "chunk_id_1",
-                    "section": "Розділ 3: Аспекти",
-                    "page_range": "стор. 45-48",
-                    "preview": "Перші 100 символів тексту чанку...",
-                    "full_text": "ПОВНИЙ текст цього чанку з векторної бази. Включи весь текст чанку, який є в базі даних.",
-                    "was_used": true
-                  },
-                  {
-                    "chunk_id": "chunk_id_2",
-                    "section": "Розділ 4: Планети",
-                    "page_range": "стор. 52-55",
-                    "preview": "Інші 100 символів тексту чанку...",
-                    "full_text": "ПОВНИЙ текст іншого чанку з векторної бази. Включи весь текст чанку, який є в базі даних.",
-                    "was_used": false
-                  }
-                ]
-              }
-            ]
-          }
+          \(keyInfluencesInstruction)
+          \(detailedAnalysisInstruction)
+          \(recommendationsInstruction)
+          \(knowledgeUsageSection)
         }
-
-        ВАЖЛИВО ПРО ДЖЕРЕЛА:
-        1. Якщо ти використовуєш знання з векторної бази, обов'язково заповни масив "sources" з конкретними джерелами, які ти використав. Вкажи назву книги, автора, розділ, chunk_id і короткий уривок тексту.
-        2. ОБОВ'ЯЗКОВО заповни масив "available_books" з ПОВНИМ списком усіх книг у твоїй векторній базі знань з астрології. Для кожної книги вкажи:
-           - Назву книги та автора
-           - Загальну кількість чанків (total_chunks)
-           - Список ID чанків, які ти використав для цієї відповіді (used_chunks)
-           - Список усіх доступних чанків з цієї книги (available_chunks) - мінімум 5-10 варіантів на книгу, включаючи:
-             * chunk_id - унікальний ідентифікатор
-             * section - назва розділу/теми
-             * page_range - сторінки
-             * preview - перші 80-120 символів тексту чанку
-             * full_text - ПОВНИЙ текст чанку з векторної бази (весь текст, без скорочень)
-             * was_used - чи був використаний цей чанк в аналізі (true/false)
-        3. Це дозволить користувачу побачити ВСЮ доступну базу знань і які саме фрагменти були використані для генерації його звіту.
-
+        \(sourcesInstructions)
         Вихідні дані:
         • Ім'я/позначення: \(birthDetails.displayName)
         • Дата народження: \(birthDetails.formattedBirthDate)
@@ -141,12 +223,7 @@ struct AIPromptBuilder {
 
         \(vectorInstruction)
 
-        КРИТИЧНО ВАЖЛИВІ ВИМОГИ ЩОДО ТОЧНОСТІ:
-        • НЕ ДОДУМУЙ факти. Кожне твердження має базуватися на літературі з астрології.
-        • ПРІОРИТЕТ: використовуй надану векторну базу знань (якщо доступна).
-        • Аналіз АСПЕКТІВ і ДОМІВ має бути максимально точним і ґрунтуватися на конкретних джерелах.
-        • Якщо надана база знань НЕ містить інформації про конкретний аспект або дім - цитуй класичні астрологічні тексти (Ліз Грін, Роберт Хенд, Стівен Арройо, Говард Саспортас, тощо).
-        • ЗАВЖДИ вказуй джерело після кожного речення/абзацу в квадратних дужках [Автор, Книга, сторінки].
+        \(accuracyRequirements)
 
         Вимоги:
         • Поверни відповідь мовою \(languageDisplayName) (код \(languageCode)).

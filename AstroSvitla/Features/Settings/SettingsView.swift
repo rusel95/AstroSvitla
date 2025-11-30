@@ -6,6 +6,7 @@ struct SettingsView: View {
     @EnvironmentObject private var repositoryContext: RepositoryContext
     @Environment(\.modelContext) private var modelContext
     @State private var showingProfileManager = false
+    @State private var showDevModeToast = false
 
     private var profileViewModel: UserProfileViewModel {
         let service = UserProfileService(context: modelContext)
@@ -21,17 +22,53 @@ struct SettingsView: View {
                 VStack(spacing: 24) {
                     profileSection
                     appearanceSection
-                    openAIModelSection
+                    if preferences.isDevModeEnabled {
+                        openAIModelSection
+                    }
                     appInfoSection
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 24)
+            }
+
+            // Dev mode toast
+            if showDevModeToast {
+                VStack {
+                    Spacer()
+                    devModeToast
+                        .padding(.bottom, 40)
+                }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showDevModeToast)
             }
         }
         .navigationTitle(Text("Налаштування"))
         .sheet(isPresented: $showingProfileManager) {
             UserProfileListView(viewModel: profileViewModel)
         }
+    }
+
+    private var devModeToast: some View {
+        HStack(spacing: 12) {
+            Image(systemName: preferences.isDevModeEnabled ? "hammer.fill" : "hammer")
+                .font(.system(size: 18, weight: .medium))
+                .foregroundStyle(preferences.isDevModeEnabled ? .green : .orange)
+
+            Text(preferences.isDevModeEnabled ? "Dev Mode увімкнено" : "Dev Mode вимкнено")
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(.primary)
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 14)
+        .background(.ultraThinMaterial, in: Capsule())
+        .overlay(
+            Capsule()
+                .strokeBorder(
+                    preferences.isDevModeEnabled ? Color.green.opacity(0.4) : Color.orange.opacity(0.4),
+                    lineWidth: 1
+                )
+        )
+        .shadow(color: .black.opacity(0.2), radius: 10, y: 5)
     }
 
     // MARK: - Profile Section
@@ -134,8 +171,24 @@ struct SettingsView: View {
     
     private var appInfoSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // Section header
+            // Section header with long press for dev mode
             SettingsSectionHeader(title: "Про додаток", icon: "sparkles")
+                .contentShape(Rectangle())
+                .onLongPressGesture(minimumDuration: 1.5) {
+                    withAnimation {
+                        preferences.toggleDevMode()
+                        showDevModeToast = true
+                    }
+                    // Hide toast after 2 seconds
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        withAnimation {
+                            showDevModeToast = false
+                        }
+                    }
+                    // Haptic feedback
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(preferences.isDevModeEnabled ? .success : .warning)
+                }
             
             VStack(spacing: 12) {
                 // App version
@@ -162,6 +215,20 @@ struct SettingsView: View {
                     }
                     
                     Spacer()
+
+                    // Dev mode indicator
+                    if preferences.isDevModeEnabled {
+                        HStack(spacing: 4) {
+                            Image(systemName: "hammer.fill")
+                                .font(.system(size: 10))
+                            Text("DEV")
+                                .font(.system(size: 10, weight: .bold))
+                        }
+                        .foregroundStyle(.green)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color.green.opacity(0.15), in: Capsule())
+                    }
                 }
                 
                 Divider()

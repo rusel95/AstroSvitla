@@ -132,7 +132,7 @@ struct SVGImageView: View {
 
 /// Helper class to render SVG using WKWebView and capture as image
 @MainActor
-fileprivate class SVGWebViewController: NSObject, WKNavigationDelegate {
+class SVGWebViewController: NSObject, WKNavigationDelegate {
     private var webView: WKWebView?
     private var continuation: CheckedContinuation<UIImage, Error>?
     

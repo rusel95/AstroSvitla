@@ -51,7 +51,8 @@ struct OpenAIService: Sendable {
             knowledgeSnippets: knowledgeSnippets,
             languageCode: languageCode,
             languageDisplayName: languageDisplayName,
-            repositoryContext: repositoryContext
+            repositoryContext: repositoryContext,
+            includeSourceCitations: AppPreferences.shared.isDevModeEnabled
         )
         let query = makeChatQuery(systemPrompt: prompt.system, userPrompt: prompt.user, model: selectedModel)
 

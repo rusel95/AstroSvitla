@@ -340,6 +340,8 @@ struct MainFlowView: View {
     }
 
     private func generateReport(details: BirthDetails, chart: NatalChart, area: ReportArea) {
+        // Clear navigation stack to show generating view as root content
+        navigationPath.removeLast(navigationPath.count)
         flowState = .generating(details, chart, area)
 
         Task {
@@ -742,7 +744,7 @@ private struct GeneratingReportView: View {
     var onCancel: (() -> Void)?
 
     @State private var animateWave = false
-    @State private var progress: CGFloat = 0
+    @State private var pulsate = false
 
     var body: some View {
         ZStack {
@@ -752,8 +754,20 @@ private struct GeneratingReportView: View {
             VStack(spacing: 36) {
                 Spacer()
 
-                // Animated generation visualization
+                // Animated generation visualization - bubble style
                 ZStack {
+                    // Outer pulsating glow
+                    Circle()
+                        .fill(Color.accentColor.opacity(0.15))
+                        .frame(width: 180, height: 180)
+                        .scaleEffect(pulsate ? 1.1 : 0.95)
+                        .blur(radius: 20)
+                        .animation(
+                            .easeInOut(duration: 2)
+                            .repeatForever(autoreverses: true),
+                            value: pulsate
+                        )
+
                     // Wave circles
                     ForEach(0..<3, id: \.self) { index in
                         Circle()
@@ -772,19 +786,32 @@ private struct GeneratingReportView: View {
                             )
                     }
 
-                    // Center glass container
+                    // Center glass container - main bubble
                     Circle()
                         .fill(.ultraThinMaterial)
-                        .frame(width: 100, height: 100)
+                        .frame(width: 120, height: 120)
                         .overlay(
                             Circle()
-                                .strokeBorder(Color.white.opacity(0.3), lineWidth: 1)
+                                .strokeBorder(
+                                    LinearGradient(
+                                        colors: [Color.white.opacity(0.5), Color.white.opacity(0.1)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ),
+                                    lineWidth: 2
+                                )
                         )
-                        .shadow(color: Color.accentColor.opacity(0.2), radius: 16, x: 0, y: 8)
+                        .shadow(color: Color.accentColor.opacity(0.3), radius: 20, x: 0, y: 10)
+                        .scaleEffect(pulsate ? 1.05 : 1.0)
+                        .animation(
+                            .easeInOut(duration: 1.5)
+                            .repeatForever(autoreverses: true),
+                            value: pulsate
+                        )
 
                     // Area icon
                     Image(systemName: area.icon)
-                        .font(.system(size: 40, weight: .light))
+                        .font(.system(size: 44, weight: .light))
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [Color.accentColor, Color.accentColor.opacity(0.6)],
@@ -795,43 +822,36 @@ private struct GeneratingReportView: View {
                 }
 
                 // Text content
-                VStack(spacing: 12) {
-                    Text("Генеруємо звіт")
-                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                VStack(spacing: 16) {
+                    Text("Аналізуємо вашу карту")
+                        .font(.system(size: 26, weight: .bold, design: .rounded))
                         .foregroundStyle(.primary)
 
-                    Text("Аналізуємо сферу «\(area.displayName)» на основі вашої натальної карти")
-                        .font(.system(size: 15, weight: .regular))
+                    Text("Досліджуємо сферу «\(area.displayName)» на основі класичної та сучасної астрологічної літератури")
+                        .font(.system(size: 16, weight: .regular))
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
                         .padding(.horizontal, 32)
+                        .lineSpacing(4)
                 }
 
-                // Progress bar
-                VStack(spacing: 12) {
-                    GeometryReader { geometry in
-                        ZStack(alignment: .leading) {
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(Color.accentColor.opacity(0.15))
-
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(
-                                    LinearGradient(
-                                        colors: [Color.accentColor, Color.accentColor.opacity(0.7)],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                )
-                                .frame(width: geometry.size.width * progress)
-                                .shadow(color: Color.accentColor.opacity(0.5), radius: 4, x: 0, y: 0)
-                        }
+                // Time estimate bubble
+                VStack(spacing: 8) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "clock")
+                            .font(.system(size: 14, weight: .medium))
+                        Text("Зазвичай займає 30-60 секунд")
+                            .font(.system(size: 14, weight: .medium))
                     }
-                    .frame(height: 6)
-                    .padding(.horizontal, 48)
-
-                    Text("AI-аналіз в процесі...")
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundStyle(.tertiary)
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(.ultraThinMaterial)
+                    .clipShape(Capsule())
+                    .overlay(
+                        Capsule()
+                            .strokeBorder(Color.white.opacity(0.2), lineWidth: 1)
+                    )
                 }
 
                 Spacer()
@@ -847,15 +867,11 @@ private struct GeneratingReportView: View {
                 }
             }
         }
-        .navigationTitle(Text("Генерування"))
+        .navigationTitle(Text("Аналіз"))
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             animateWave = true
-
-            // Simulate progress (will be replaced by actual progress if available)
-            withAnimation(.linear(duration: 30)) {
-                progress = 0.85
-            }
+            pulsate = true
         }
     }
 }

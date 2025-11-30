@@ -13,11 +13,30 @@ enum Config {
 
     // MARK: - OpenAI Configuration
 
-    /// Replace with your project-specific OpenAI project identifier before distributing the app.
-    static let openAIProjectID = ProcessInfo.processInfo.environment["OPENAI_PROJECT_ID"] ?? "YOUR_OPENAI_PROJECT_ID_HERE"
+    /// OpenAI project identifier - loaded from environment or Info.plist
+    static let openAIProjectID: String = {
+        if let envValue = ProcessInfo.processInfo.environment["OPENAI_PROJECT_ID"], !envValue.isEmpty {
+            return envValue
+        }
+        if let plistValue = Bundle.main.infoDictionary?["OPENAI_PROJECT_ID"] as? String, !plistValue.isEmpty {
+            return plistValue
+        }
+        // Fallback for local development only - replace with your key
+        return "proj_0Okcswia9PZrXTqsS4JkfsnN"
+    }()
 
-    /// Replace with your project-specific OpenAI API key before running the app.
-    static let openAIAPIKey = ProcessInfo.processInfo.environment["OPENAI_API_KEY"] ?? "YOUR_OPENAI_API_KEY_HERE"
+    /// OpenAI API key - loaded from environment or Info.plist
+    /// ⚠️ NEVER commit real API keys to version control!
+    static let openAIAPIKey: String = {
+        if let envValue = ProcessInfo.processInfo.environment["OPENAI_API_KEY"], !envValue.isEmpty {
+            return envValue
+        }
+        if let plistValue = Bundle.main.infoDictionary?["OPENAI_API_KEY"] as? String, !plistValue.isEmpty {
+            return plistValue
+        }
+        // Fallback for local development only - replace with your key
+        return "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"
+    }()
 
     /// OpenAI model to use for report generation
     static let openAIModel = "gpt-4o"
@@ -26,7 +45,15 @@ enum Config {
     static let openAIBaseURL = "https://api.openai.com/v1"
 
     /// Identifier of the OpenAI vector store that contains the astrology knowledge base
-    static let openAIVectorStoreID = ProcessInfo.processInfo.environment["OPENAI_VECTOR_STORE_ID"] ?? "YOUR_OPENAI_VECTOR_STORE_ID_HERE"
+    static let openAIVectorStoreID: String = {
+        if let envValue = ProcessInfo.processInfo.environment["OPENAI_VECTOR_STORE_ID"], !envValue.isEmpty {
+            return envValue
+        }
+        if let plistValue = Bundle.main.infoDictionary?["OPENAI_VECTOR_STORE_ID"] as? String, !plistValue.isEmpty {
+            return plistValue
+        }
+        return "vs_68c18fef3df48191810b0d2584b3e507"
+    }()
 
     // MARK: - Astrology API Configuration (api.astrology-api.io)
 
@@ -91,19 +118,10 @@ enum Config {
         openAIAPIKey != "YOUR_OPENAI_API_KEY_HERE"
     }
 
-//    static var isAstrologyAPIConfigured: Bool {
-//        astrologyAPIKey.isEmpty == false &&
-//        astrologyAPIKey != "YOUR_ASTROLOGY_API_KEY_HERE"
-//    }
-
     static func validate() throws {
         guard isOpenAIConfigured else {
             throw ConfigError.missingAPIKey("OpenAI API key not configured in Config.swift")
         }
-
-//        guard isAstrologyAPIConfigured else {
-//            throw ConfigError.missingAPIKey("Astrology API key not configured in Config.swift")
-//        }
     }
 }
 

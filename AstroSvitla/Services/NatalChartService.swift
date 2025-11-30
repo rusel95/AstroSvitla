@@ -120,6 +120,9 @@ final class NatalChartService: NatalChartServiceProtocol {
                     let imageCacheService = ImageCacheService()
                     try imageCacheService.saveImage(data: svgData, fileID: imageFileID, format: imageFormat)
                     log("✅ Chart image saved (\(svgData.count) bytes)")
+
+                    // Also render and save PNG version for PDF export
+                    await savePNGVersionForPDF(svgString: svgString, imageFileID: imageFileID, imageCacheService: imageCacheService)
                 } catch {
                     log("⚠️ Failed to download chart image: \(error.localizedDescription)")
 
@@ -197,5 +200,124 @@ final class NatalChartService: NatalChartServiceProtocol {
 
     private func log(_ message: String) {
         print("[NatalChartService] \(message)")
+    }
+
+    // MARK: - PNG Generation for PDF Export
+
+    /// Saves a PNG version of the chart for use in PDF export
+    /// This is needed because ImageRenderer can't handle async SVG rendering
+    @MainActor
+    private func savePNGVersionForPDF(svgString: String, imageFileID: String, imageCacheService: ImageCacheService) async {
+        do {
+            let pngImage = try await renderSVGToPNG(svg: svgString, size: CGSize(width: 800, height: 800))
+            if let pngData = pngImage.pngData() {
+                try imageCacheService.saveImage(data: pngData, fileID: imageFileID, format: "png")
+                log("📷 PNG version saved for PDF export (\(pngData.count) bytes)")
+            }
+        } catch {
+            log("⚠️ Failed to save PNG version: \(error.localizedDescription)")
+            // Non-critical - PDF will show fallback chart info
+        }
+    }
+
+    /// Render SVG to PNG using WKWebView
+    @MainActor
+    private func renderSVGToPNG(svg: String, size: CGSize) async throws -> UIImage {
+        return try await withCheckedThrowingContinuation { continuation in
+            let html = """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    * { margin: 0; padding: 0; }
+                    html, body {
+                        width: \(Int(size.width))px;
+                        height: \(Int(size.height))px;
+                        overflow: hidden;
+                        background: white;
+                    }
+                    svg {
+                        width: 100%;
+                        height: 100%;
+                        display: block;
+                    }
+                </style>
+            </head>
+            <body>
+                \(svg)
+            </body>
+            </html>
+            """
+
+            let config = WKWebViewConfiguration()
+            let webView = WKWebView(frame: CGRect(origin: .zero, size: size), configuration: config)
+
+            // Create a coordinator to handle navigation delegate
+            let coordinator = SVGRenderCoordinator(continuation: continuation, webView: webView)
+            webView.navigationDelegate = coordinator
+
+            // Keep a strong reference to coordinator
+            objc_setAssociatedObject(webView, "coordinator", coordinator, .OBJC_ASSOCIATION_RETAIN)
+
+            webView.loadHTMLString(html, baseURL: nil)
+
+            // Timeout after 10 seconds
+            Task {
+                try? await Task.sleep(nanoseconds: 10_000_000_000)
+                if !coordinator.didComplete {
+                    coordinator.didComplete = true
+                    continuation.resume(throwing: ServiceError.chartGenerationFailed(
+                        NSError(domain: "NatalChartService", code: -1, userInfo: [NSLocalizedDescriptionKey: "SVG render timeout"])
+                    ))
+                }
+            }
+        }
+    }
+}
+
+// MARK: - SVG Render Coordinator
+
+import WebKit
+
+private class SVGRenderCoordinator: NSObject, WKNavigationDelegate {
+    var continuation: CheckedContinuation<UIImage, Error>?
+    var webView: WKWebView
+    var didComplete = false
+
+    init(continuation: CheckedContinuation<UIImage, Error>, webView: WKWebView) {
+        self.continuation = continuation
+        self.webView = webView
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        guard !didComplete else { return }
+
+        // Delay to allow rendering
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self = self, !self.didComplete else { return }
+            self.didComplete = true
+
+            let config = WKSnapshotConfiguration()
+            config.rect = webView.frame
+
+            webView.takeSnapshot(with: config) { [weak self] image, error in
+                guard let continuation = self?.continuation else { return }
+
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else if let image = image {
+                    continuation.resume(returning: image)
+                } else {
+                    continuation.resume(throwing: NSError(domain: "NatalChartService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Snapshot failed"]))
+                }
+            }
+        }
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        guard !didComplete else { return }
+        didComplete = true
+        continuation?.resume(throwing: error)
     }
 }

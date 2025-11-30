@@ -4,22 +4,19 @@ import SwiftData
 
 struct NatalChartWheelView: View {
     let chart: NatalChart
+    var allowsZoom: Bool = false
     @Environment(\.modelContext) private var modelContext
 
     @State private var chartImageData: Data?
     @State private var imageLoadingFailed = false
     @State private var isLoadingImage = false
+    @State private var showFullScreenChart = false
 
     var body: some View {
         Group {
             if let imageData = chartImageData {
-                if chartImageFormat == "svg" {
-                    SVGImageView(svgData: imageData)
-                } else if let uiImage = UIImage(data: imageData) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxWidth: .infinity)
+                if let uiImage = UIImage(data: imageData) {
+                    chartImageView(uiImage: uiImage)
                 } else {
                     // Image data is corrupted
                     errorPlaceholder
@@ -36,6 +33,42 @@ struct NatalChartWheelView: View {
         .frame(maxWidth: .infinity)
         .task {
             await loadChartImage()
+        }
+        .fullScreenCover(isPresented: $showFullScreenChart) {
+            if let imageData = chartImageData, let uiImage = UIImage(data: imageData) {
+                ZoomableChartView(image: uiImage) {
+                    showFullScreenChart = false
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func chartImageView(uiImage: UIImage) -> some View {
+        if allowsZoom {
+            Image(uiImage: uiImage)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: .infinity)
+                .background(Color(.systemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .onTapGesture {
+                    showFullScreenChart = true
+                }
+                .overlay(alignment: .bottomTrailing) {
+                    Image(systemName: "arrow.up.left.and.arrow.down.right")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(.white)
+                        .padding(6)
+                        .background(Color.black.opacity(0.5))
+                        .clipShape(Circle())
+                        .padding(8)
+                }
+        } else {
+            Image(uiImage: uiImage)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(maxWidth: .infinity)
         }
     }
     
@@ -62,32 +95,57 @@ struct NatalChartWheelView: View {
         .padding()
     }
 
-    private var chartImageFormat: String {
-        chart.imageFormat?.lowercased() ?? ""
-    }
-
     // MARK: - Image Loading
 
     private func loadChartImage() async {
         // Check if chart has image information
-        guard let imageFileID = chart.imageFileID,
-              let imageFormat = chart.imageFormat else {
-            // No image available, keep using fallback rendering
+        guard let imageFileID = chart.imageFileID else {
             print("[NatalChartWheelView] No cached image metadata found")
             return
         }
 
         isLoadingImage = true
         imageLoadingFailed = false
-        print("[NatalChartWheelView] Loading cached image id=\(imageFileID) format=\(imageFormat)")
 
+        let imageCacheService = ImageCacheService()
+
+        // Prefer PNG (faster rendering, better for display)
+        if imageCacheService.imageExists(fileID: imageFileID, format: "png") {
+            print("[NatalChartWheelView] Loading PNG image id=\(imageFileID)")
+            do {
+                let imageData = try imageCacheService.loadImage(fileID: imageFileID, format: "png")
+                await MainActor.run {
+                    self.chartImageData = imageData
+                    self.isLoadingImage = false
+                }
+                print("[NatalChartWheelView] ✅ PNG loaded successfully (\(imageData.count) bytes)")
+                return
+            } catch {
+                print("[NatalChartWheelView] Failed to load PNG: \(error)")
+            }
+        }
+
+        // Fallback to SVG if PNG not available
+        guard let imageFormat = chart.imageFormat else {
+            await MainActor.run {
+                self.imageLoadingFailed = true
+                self.isLoadingImage = false
+            }
+            return
+        }
+
+        print("[NatalChartWheelView] Loading \(imageFormat) image id=\(imageFileID)")
         do {
-            let imageCacheService = ImageCacheService()
             let imageData = try imageCacheService.loadImage(fileID: imageFileID, format: imageFormat)
 
-            await MainActor.run {
-                self.chartImageData = imageData
-                self.isLoadingImage = false
+            // For SVG, convert to PNG using the existing SVGWebViewController
+            if imageFormat.lowercased() == "svg" {
+                await renderSVGToPNG(svgData: imageData, imageFileID: imageFileID, imageCacheService: imageCacheService)
+            } else {
+                await MainActor.run {
+                    self.chartImageData = imageData
+                    self.isLoadingImage = false
+                }
             }
             print("[NatalChartWheelView] Image loaded successfully (\(imageData.count) bytes)")
         } catch {
@@ -95,9 +153,81 @@ struct NatalChartWheelView: View {
                 self.imageLoadingFailed = true
                 self.isLoadingImage = false
             }
-            print("Failed to load chart image: \(error)")
             print("[NatalChartWheelView] Image load failed: \(error.localizedDescription)")
         }
+    }
+
+    /// Render SVG to PNG and cache it for future use
+    @MainActor
+    private func renderSVGToPNG(svgData: Data, imageFileID: String, imageCacheService: ImageCacheService) async {
+        guard let svgString = String(data: svgData, encoding: .utf8) else {
+            self.imageLoadingFailed = true
+            self.isLoadingImage = false
+            return
+        }
+
+        do {
+            let controller = SVGWebViewController()
+            // Extract actual SVG dimensions to preserve aspect ratio
+            let dimensions = extractSVGDimensions(from: svgString)
+            let renderSize = CGSize(width: 1200, height: 1200 * (dimensions.height / dimensions.width))
+            
+            let pngImage = try await controller.renderSVGToImage(svg: svgString, size: renderSize)
+
+            // Cache PNG for future use
+            if let pngData = pngImage.pngData() {
+                try? imageCacheService.saveImage(data: pngData, fileID: imageFileID, format: "png")
+                print("[NatalChartWheelView] ✅ PNG cached for future use")
+                self.chartImageData = pngData
+            }
+
+            self.isLoadingImage = false
+        } catch {
+            print("[NatalChartWheelView] SVG to PNG conversion failed: \(error)")
+            self.imageLoadingFailed = true
+            self.isLoadingImage = false
+        }
+    }
+    
+    /// Extract dimensions from SVG viewBox or width/height attributes
+    private func extractSVGDimensions(from svg: String) -> CGSize {
+        // Try to extract viewBox first (e.g., viewBox="0 0 800 800")
+        if let viewBoxRegex = try? NSRegularExpression(pattern: #"viewBox\s*=\s*"([^"]+)""#),
+           let match = viewBoxRegex.firstMatch(in: svg, range: NSRange(svg.startIndex..., in: svg)),
+           let viewBoxRange = Range(match.range(at: 1), in: svg) {
+            let viewBoxString = String(svg[viewBoxRange])
+            let values = viewBoxString.split(separator: " ").compactMap { Double($0) }
+            if values.count == 4 {
+                let width = values[2]
+                let height = values[3]
+                return CGSize(width: width, height: height)
+            }
+        }
+        
+        // Try to extract width and height attributes
+        var width: Double?
+        var height: Double?
+        
+        if let widthRegex = try? NSRegularExpression(pattern: #"width\s*=\s*"([^"]+)""#),
+           let match = widthRegex.firstMatch(in: svg, range: NSRange(svg.startIndex..., in: svg)),
+           let widthRange = Range(match.range(at: 1), in: svg) {
+            let widthString = String(svg[widthRange]).replacingOccurrences(of: "px", with: "")
+            width = Double(widthString)
+        }
+        
+        if let heightRegex = try? NSRegularExpression(pattern: #"height\s*=\s*"([^"]+)""#),
+           let match = heightRegex.firstMatch(in: svg, range: NSRange(svg.startIndex..., in: svg)),
+           let heightRange = Range(match.range(at: 1), in: svg) {
+            let heightString = String(svg[heightRange]).replacingOccurrences(of: "px", with: "")
+            height = Double(heightString)
+        }
+        
+        if let w = width, let h = height {
+            return CGSize(width: w, height: h)
+        }
+        
+        // Default to square if dimensions can't be extracted
+        return CGSize(width: 800, height: 800)
     }
 }
 
