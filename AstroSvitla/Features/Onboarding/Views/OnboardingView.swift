@@ -62,7 +62,7 @@ struct OnboardingView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         VStack(alignment: .leading, spacing: 6) {
-                            Text("Крок \(viewModel.currentIndex + 1) з \(viewModel.pages.count)")
+                            Text("onboarding.step_counter \(viewModel.currentIndex + 1) \(viewModel.pages.count)")
                                 .font(.system(size: 13, weight: .semibold, design: .rounded))
                                 .tracking(0.3)
                                 .foregroundStyle(.secondary)
@@ -97,7 +97,7 @@ struct OnboardingView: View {
                                 onFinish()
                             }
                         }) {
-                            Text("Пропустити")
+                            Text("onboarding.skip")
                                 .font(.system(size: 14, weight: .semibold, design: .rounded))
                                 .foregroundStyle(.secondary)
                                 .padding(.horizontal, 14)
@@ -159,7 +159,7 @@ struct OnboardingView: View {
                         HStack(spacing: 6) {
                             Image(systemName: "clock")
                                 .font(.system(size: 11, weight: .medium))
-                            Text("Перший аналіз за 2 хвилини")
+                            Text("onboarding.first_analysis_hint")
                                 .font(.system(size: 12, weight: .medium, design: .rounded))
                         }
                         .foregroundStyle(.secondary)
@@ -174,7 +174,7 @@ struct OnboardingView: View {
                                 viewModel.goBack()
                             }
                         }) {
-                            Text("Назад")
+                            Text("action.back")
                         }
                         .buttonStyle(.astroSecondary)
                         .transition(.asymmetric(
@@ -214,13 +214,13 @@ struct OnboardingView: View {
         viewModel.currentIndex == viewModel.pages.count - 1
     }
 
-    private var primaryButtonTitle: String {
+    private var primaryButtonTitle: LocalizedStringKey {
         if isLastPage {
-            return "Створити профіль"
+            return "onboarding.button.create_profile"
         } else if viewModel.currentIndex == 0 {
-            return "Почати"
+            return "onboarding.button.start"
         } else {
-            return "Далі"
+            return "onboarding.button.next"
         }
     }
 

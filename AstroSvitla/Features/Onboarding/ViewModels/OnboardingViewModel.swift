@@ -53,12 +53,12 @@ final class OnboardingViewModel: ObservableObject {
         [
             // Page 1: Hero Welcome - Hook with time promise
             OnboardingPage(
-                title: "Ваш перший астрологічний аналіз за 2 хвилини",
-                message: "Дізнайтесь, що зірки кажуть про вашу кар'єру, стосунки та фінанси — без реєстрації, без підписок.",
+                title: String(localized: "onboarding.page1.title"),
+                message: String(localized: "onboarding.page1.message"),
                 symbolName: "sparkles",
                 highlights: [],
                 badge: OnboardingPage.Badge(
-                    text: "Займе лише 2 хвилини",
+                    text: String(localized: "onboarding.page1.badge"),
                     icon: "clock.fill",
                     style: .time
                 ),
@@ -68,37 +68,37 @@ final class OnboardingViewModel: ObservableObject {
 
             // Page 2: Simple 3-Step Process with time breakdown
             OnboardingPage(
-                title: "Три простих кроки до інсайтів",
-                message: "Ми зробили процес максимально швидким і зрозумілим.",
+                title: String(localized: "onboarding.page2.title"),
+                message: String(localized: "onboarding.page2.message"),
                 symbolName: "list.number",
                 highlights: [
-                    "📝 Введіть дату народження — 30 сек",
-                    "🎯 Виберіть сферу для аналізу — 10 сек",
-                    "✨ Отримайте персональний звіт — 60 сек"
+                    String(localized: "onboarding.page2.step1"),
+                    String(localized: "onboarding.page2.step2"),
+                    String(localized: "onboarding.page2.step3")
                 ],
                 badge: OnboardingPage.Badge(
-                    text: "Без реєстрації",
+                    text: String(localized: "onboarding.page2.badge"),
                     icon: "person.badge.shield.checkmark.fill",
                     style: .trust
                 ),
-                timeEstimate: "~2 хв загалом",
+                timeEstimate: String(localized: "onboarding.page2.time_estimate"),
                 accentColor: .primary
             ),
 
             // Page 3: What You Get - Value proposition
             OnboardingPage(
-                title: "5 сфер вашого життя під контролем",
-                message: "Кожен звіт — це глибокий AI-аналіз вашої натальної карти з практичними порадами.",
+                title: String(localized: "onboarding.page3.title"),
+                message: String(localized: "onboarding.page3.message"),
                 symbolName: "chart.pie.fill",
                 highlights: [
-                    "💰 Фінанси та матеріальний потенціал",
-                    "💼 Кар'єра та професійний розвиток",
-                    "❤️ Стосунки та партнерство",
-                    "🏥 Здоров'я та енергія",
-                    "⭐️ Загальний портрет особистості"
+                    String(localized: "onboarding.page3.area1"),
+                    String(localized: "onboarding.page3.area2"),
+                    String(localized: "onboarding.page3.area3"),
+                    String(localized: "onboarding.page3.area4"),
+                    String(localized: "onboarding.page3.area5")
                 ],
                 badge: OnboardingPage.Badge(
-                    text: "від $5.99 за звіт",
+                    text: String(localized: "onboarding.page3.badge"),
                     icon: "tag.fill",
                     style: .value
                 ),
@@ -108,16 +108,16 @@ final class OnboardingViewModel: ObservableObject {
 
             // Page 4: Trust & Ready - Final CTA
             OnboardingPage(
-                title: "Готові побачити свою карту?",
-                message: "Ваші дані зберігаються лише на вашому пристрої. Почніть прямо зараз — перший профіль безкоштовний.",
+                title: String(localized: "onboarding.page4.title"),
+                message: String(localized: "onboarding.page4.message"),
                 symbolName: "rocket.fill",
                 highlights: [
-                    "🔒 100% приватність — дані не покидають пристрій",
-                    "⚡️ Миттєвий розрахунок натальної карти",
-                    "📚 Аналіз на основі класичної астрології"
+                    String(localized: "onboarding.page4.feature1"),
+                    String(localized: "onboarding.page4.feature2"),
+                    String(localized: "onboarding.page4.feature3")
                 ],
                 badge: OnboardingPage.Badge(
-                    text: "Почніть безкоштовно",
+                    text: String(localized: "onboarding.page4.badge"),
                     icon: "gift.fill",
                     style: .action
                 ),
