@@ -108,6 +108,9 @@
         }
       }
     },
+    "•" : {
+
+    },
     "• %@" : {
 
     },
@@ -119,6 +122,9 @@
     },
     "$%@/1K" : {
 
+    },
+    "5 images will be shared. Create a carousel post in Instagram." : {
+      "comment" : "Carousel info"
     },
     "action.back" : {
       "extractionState" : "stale",
@@ -323,6 +329,9 @@
           }
         }
       }
+    },
+    "Analysis" : {
+      "comment" : "Slide title"
     },
     "area.action.edit_details" : {
       "extractionState" : "stale",
@@ -615,6 +624,86 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Розраховуємо вашу натальну карту…"
+          }
+        }
+      }
+    },
+    "carousel_title_analysis" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deep Analysis"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Глибокий аналіз"
+          }
+        }
+      }
+    },
+    "carousel_title_cover" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cover"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обкладинка"
+          }
+        }
+      }
+    },
+    "carousel_title_cta" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Your Full Report"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отримай повний звіт"
+          }
+        }
+      }
+    },
+    "carousel_title_influences" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Key Influences"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ключові впливи"
+          }
+        }
+      }
+    },
+    "carousel_title_recommendations" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recommendations"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Рекомендації"
           }
         }
       }
@@ -1010,6 +1099,9 @@
         }
       }
     },
+    "Close" : {
+      "comment" : "Close button"
+    },
     "DEV" : {
 
     },
@@ -1104,11 +1196,20 @@
         }
       }
     },
+    "Get your full report" : {
+      "comment" : "CTA text"
+    },
+    "Get Your Report" : {
+      "comment" : "CTA button text"
+    },
     "GPT-4o Mini рекомендовано для оптимального співвідношення ціни та якості" : {
 
     },
     "ID: %@" : {
 
+    },
+    "Key Influences" : {
+      "comment" : "Section header\nSlide title"
     },
     "knowledge_logs.button.title" : {
       "extractionState" : "stale",
@@ -1453,6 +1554,9 @@
         }
       }
     },
+    "No preview available" : {
+      "comment" : "Empty state"
+    },
     "OK" : {
 
     },
@@ -1543,6 +1647,9 @@
           }
         }
       }
+    },
+    "Preparing templates..." : {
+      "comment" : "Loading state"
     },
     "profile.badge.active" : {
       "extractionState" : "stale",
@@ -1968,6 +2075,9 @@
           }
         }
       }
+    },
+    "Recommendations" : {
+      "comment" : "Slide title\nTemplate header"
     },
     "report.action.export_pdf" : {
       "extractionState" : "stale",
@@ -2955,6 +3065,221 @@
         }
       }
     },
+    "Share to Instagram" : {
+      "comment" : "Share button\nShare sheet title"
+    },
+    "share_button_title" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share to Instagram"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поділитись в Instagram"
+          }
+        }
+      }
+    },
+    "share_carousel_info" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 images will be shared. Create a carousel post in Instagram."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Буде надіслано 5 зображень. Створіть пост-карусель в Instagram."
+          }
+        }
+      }
+    },
+    "share_desc_carousel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 slides for maximum impact"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 слайдів для максимального впливу"
+          }
+        }
+      }
+    },
+    "share_desc_chart_only" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perfect for Stories"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ідеально для сторіз"
+          }
+        }
+      }
+    },
+    "share_desc_key_insights" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Summary and top 3 influences"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Резюме та 3 ключові впливи"
+          }
+        }
+      }
+    },
+    "share_desc_recommendations" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 personalized tips"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 персональні поради"
+          }
+        }
+      }
+    },
+    "share_no_preview" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No preview available"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Попередній перегляд недоступний"
+          }
+        }
+      }
+    },
+    "share_preparing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing templates..."
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Готуємо шаблони..."
+          }
+        }
+      }
+    },
+    "share_template_carousel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full Carousel"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повна каруселька"
+          }
+        }
+      }
+    },
+    "share_template_chart_only" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chart Only"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тільки карта"
+          }
+        }
+      }
+    },
+    "share_template_key_insights" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Key Insights"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ключові інсайти"
+          }
+        }
+      }
+    },
+    "share_template_recommendations" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recommendations"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Рекомендації"
+          }
+        }
+      }
+    },
+    "share_unavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share not available for this report"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поділитись недоступно для цього звіту"
+          }
+        }
+      }
+    },
     "svg.failed" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2988,6 +3313,9 @@
           }
         }
       }
+    },
+    "Swipe for insights" : {
+      "comment" : "Carousel hint"
     },
     "tab.main" : {
       "extractionState" : "stale",
@@ -3053,6 +3381,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Збережені звіти"
+          }
+        }
+      }
+    },
+    "Your Natal Chart" : {
+      "comment" : "Placeholder text"
+    },
+    "zorya_tagline" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discover your cosmic path"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Відкрий свій космічний шлях"
+          }
+        }
+      }
+    },
+    "zorya_watermark" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generated with Zorya"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Створено за допомогою Zorya"
           }
         }
       }
@@ -3326,6 +3689,9 @@
 
     },
     "Повторити" : {
+
+    },
+    "Поділитись в Instagram" : {
 
     },
     "Помилка" : {

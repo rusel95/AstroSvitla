@@ -192,7 +192,9 @@ struct ProfileCreationSheet: View {
             .sheet(isPresented: $showLocationSearch) {
                 NavigationStack {
                     LocationSearchView(initialQuery: location) { suggestion in
-                        location = suggestion.title
+                        // Use displayName to include city, region, country, and ISO code
+                        // This ensures the API can properly geocode the location
+                        location = suggestion.displayName
                         coordinate = suggestion.coordinate
                         if let timeZone = suggestion.timeZone {
                             timezone = timeZone.identifier
