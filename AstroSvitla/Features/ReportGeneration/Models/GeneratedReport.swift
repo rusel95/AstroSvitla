@@ -9,9 +9,33 @@ struct GeneratedReport: Identifiable, Sendable, Codable {
     let recommendations: [String]
     let knowledgeUsage: KnowledgeUsage
     let metadata: GenerationMetadata
+    
+    // Feature: 006-instagram-share-templates
+    /// AI-generated content optimized for social sharing (nil for legacy reports)
+    var shareContent: ShareContent?
 
     enum CodingKeys: String, CodingKey {
-        case area, summary, keyInfluences, detailedAnalysis, recommendations, knowledgeUsage, metadata
+        case area, summary, keyInfluences, detailedAnalysis, recommendations, knowledgeUsage, metadata, shareContent
+    }
+    
+    init(
+        area: ReportArea,
+        summary: String,
+        keyInfluences: [String],
+        detailedAnalysis: String,
+        recommendations: [String],
+        knowledgeUsage: KnowledgeUsage,
+        metadata: GenerationMetadata,
+        shareContent: ShareContent? = nil
+    ) {
+        self.area = area
+        self.summary = summary
+        self.keyInfluences = keyInfluences
+        self.detailedAnalysis = detailedAnalysis
+        self.recommendations = recommendations
+        self.knowledgeUsage = knowledgeUsage
+        self.metadata = metadata
+        self.shareContent = shareContent
     }
 }
 

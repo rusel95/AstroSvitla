@@ -62,7 +62,7 @@ struct OnboardingView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         VStack(alignment: .leading, spacing: 6) {
-                            Text("Крок \(viewModel.currentIndex + 1) з \(viewModel.pages.count)")
+                            Text("onboarding.step_counter \(viewModel.currentIndex + 1) \(viewModel.pages.count)")
                                 .font(.system(size: 13, weight: .semibold, design: .rounded))
                                 .tracking(0.3)
                                 .foregroundStyle(.secondary)
@@ -97,7 +97,7 @@ struct OnboardingView: View {
                                 onFinish()
                             }
                         }) {
-                            Text("Пропустити")
+                            Text("onboarding.skip")
                                 .font(.system(size: 14, weight: .semibold, design: .rounded))
                                 .foregroundStyle(.secondary)
                                 .padding(.horizontal, 14)
@@ -132,7 +132,7 @@ struct OnboardingView: View {
 
                 // Premium action buttons with glass container
                 VStack(spacing: 14) {
-                    // Primary button
+                    // Primary CTA button with dynamic text
                     Button(action: {
                         withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
                             let didFinish = viewModel.advance()
@@ -141,23 +141,31 @@ struct OnboardingView: View {
                             }
                         }
                     }) {
-                        HStack(spacing: 8) {
+                        HStack(spacing: 10) {
                             Text(primaryButtonTitle)
 
-                            if viewModel.currentIndex < viewModel.pages.count - 1 {
-                                Image(systemName: "arrow.right")
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .transition(.asymmetric(
-                                        insertion: .scale.combined(with: .opacity),
-                                        removal: .scale.combined(with: .opacity)
-                                    ))
-                            } else {
-                                Image(systemName: "sparkles")
-                                    .font(.system(size: 14, weight: .semibold))
-                            }
+                            Image(systemName: primaryButtonIcon)
+                                .font(.system(size: 14, weight: .semibold))
+                                .transition(.asymmetric(
+                                    insertion: .scale.combined(with: .opacity),
+                                    removal: .scale.combined(with: .opacity)
+                                ))
                         }
                     }
                     .buttonStyle(.astroPrimary)
+
+                    // Contextual hint below button on last page
+                    if isLastPage {
+                        HStack(spacing: 6) {
+                            Image(systemName: "clock")
+                                .font(.system(size: 11, weight: .medium))
+                            Text("onboarding.first_analysis_hint")
+                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                        }
+                        .foregroundStyle(.secondary)
+                        .padding(.top, 4)
+                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+                    }
 
                     // Back button (appears after first page)
                     if viewModel.currentIndex > 0 {
@@ -166,7 +174,7 @@ struct OnboardingView: View {
                                 viewModel.goBack()
                             }
                         }) {
-                            Text("Назад")
+                            Text("action.back")
                         }
                         .buttonStyle(.astroSecondary)
                         .transition(.asymmetric(
@@ -183,6 +191,7 @@ struct OnboardingView: View {
                         .fill(.ultraThinMaterial.opacity(0.5))
                         .ignoresSafeArea()
                 )
+                .animation(.spring(response: 0.4, dampingFraction: 0.8), value: viewModel.currentIndex)
             }
         }
         .onAppear {
@@ -199,12 +208,27 @@ struct OnboardingView: View {
         }
     }
 
-    private var primaryButtonTitle: String {
-        let lastIndex = viewModel.pages.count - 1
-        if viewModel.currentIndex == lastIndex {
-            return "Розпочати"
+    // MARK: - Computed Properties
+
+    private var isLastPage: Bool {
+        viewModel.currentIndex == viewModel.pages.count - 1
+    }
+
+    private var primaryButtonTitle: LocalizedStringKey {
+        if isLastPage {
+            return "onboarding.button.create_profile"
+        } else if viewModel.currentIndex == 0 {
+            return "onboarding.button.start"
         } else {
-            return "Далі"
+            return "onboarding.button.next"
+        }
+    }
+
+    private var primaryButtonIcon: String {
+        if isLastPage {
+            return "sparkles"
+        } else {
+            return "arrow.right"
         }
     }
 }

@@ -119,6 +119,16 @@ struct OpenAIService: Sendable {
                     externalSourcesCount: externalSourcesCount
                 )
 
+                // Map share content if available
+                let shareContent: ShareContent? = payload.shareContent.map { sharePayload in
+                    ShareContent(
+                        condensedSummary: sharePayload.condensedSummary,
+                        topInfluences: Array(sharePayload.topInfluences.prefix(3)),
+                        topRecommendations: Array(sharePayload.topRecommendations.prefix(3)),
+                        analysisHighlights: Array(sharePayload.analysisHighlights.prefix(4))
+                    )
+                }
+
                 return GeneratedReport(
                     area: area,
                     summary: payload.summary,
@@ -131,7 +141,8 @@ struct OpenAIService: Sendable {
                         sources: sources,
                         availableBooks: availableBooks
                     ),
-                    metadata: metadata
+                    metadata: metadata,
+                    shareContent: shareContent
                 )
             } catch let error as ReportGenerationError {
                 lastError = error
@@ -327,6 +338,7 @@ private struct OpenAIReportPayload: Decodable {
     let detailedAnalysis: String
     let recommendations: [String]
     let knowledgeUsage: KnowledgeUsagePayload?
+    let shareContent: ShareContentPayload?
 
     private enum CodingKeys: String, CodingKey {
         case summary
@@ -334,6 +346,21 @@ private struct OpenAIReportPayload: Decodable {
         case detailedAnalysis = "detailed_analysis"
         case recommendations
         case knowledgeUsage = "knowledge_usage"
+        case shareContent = "share_content"
+    }
+
+    struct ShareContentPayload: Decodable {
+        let condensedSummary: String
+        let topInfluences: [String]
+        let topRecommendations: [String]
+        let analysisHighlights: [String]
+
+        private enum CodingKeys: String, CodingKey {
+            case condensedSummary = "condensed_summary"
+            case topInfluences = "top_influences"
+            case topRecommendations = "top_recommendations"
+            case analysisHighlights = "analysis_highlights"
+        }
     }
 
     struct KnowledgeUsagePayload: Decodable {

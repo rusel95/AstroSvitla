@@ -179,7 +179,7 @@ struct MainFlowView: View {
     // MARK: - Profile Creation & Management
 
     /// Creates a new profile with the provided data
-    /// Profile is saved first, then natal chart is fetched (so data isn't lost on network errors)
+    /// Profile is saved first. Chart will be fetched lazily when user clicks "Continue"
     private func createNewProfile(
         name: String,
         birthDate: Date,
@@ -188,55 +188,28 @@ struct MainFlowView: View {
         coordinate: CLLocationCoordinate2D,
         timezone: String
     ) {
-        Task { @MainActor in
-            let timeZone = TimeZone(identifier: timezone) ?? .current
-            let details = BirthDetails(
-                name: name,
-                birthDate: birthDate,
-                birthTime: birthTime,
-                location: location,
-                timeZone: timeZone,
-                coordinate: coordinate
-            )
-
-            // Step 1: Save profile FIRST (so user data is never lost)
-            guard let newProfile = profileViewModel.createProfileWithoutChart(
-                name: name,
-                birthDate: birthDate,
-                birthTime: birthTime,
-                locationName: location,
-                latitude: coordinate.latitude,
-                longitude: coordinate.longitude,
-                timezone: timezone
-            ) else {
-                errorMessage = profileViewModel.errorMessage ?? "Помилка створення профілю"
-                return
-            }
-
-            // Profile saved - set as active
-            repositoryContext.setActiveProfile(newProfile)
-            profileViewModel.loadProfiles()
-
-            // Step 2: Try to fetch natal chart (can fail - profile already saved)
-            do {
-                let chart = try await calculateChart(for: details)
-
-                // Attach chart to profile
-                let attached = profileViewModel.attachChart(to: newProfile, natalChart: chart)
-
-                if attached {
-                    #if DEBUG
-                    print("[MainFlowView] ✅ Chart attached to profile: \(name)")
-                    #endif
-                }
-            } catch {
-                // Chart fetch failed but profile is saved!
-                errorMessage = "Профіль збережено, але не вдалося отримати натальну карту: \(error.localizedDescription). Спробуйте пізніше."
-                #if DEBUG
-                print("[MainFlowView] ⚠️ Profile saved but chart fetch failed: \(error)")
-                #endif
-            }
+        // Save profile FIRST (so user data is never lost)
+        // Chart will be fetched when user clicks "Continue" button
+        guard let newProfile = profileViewModel.createProfileWithoutChart(
+            name: name,
+            birthDate: birthDate,
+            birthTime: birthTime,
+            locationName: location,
+            latitude: coordinate.latitude,
+            longitude: coordinate.longitude,
+            timezone: timezone
+        ) else {
+            errorMessage = profileViewModel.errorMessage ?? "Помилка створення профілю"
+            return
         }
+
+        // Profile saved - set as active
+        repositoryContext.setActiveProfile(newProfile)
+        profileViewModel.loadProfiles()
+
+        #if DEBUG
+        print("[MainFlowView] ✅ Profile saved: \(name). Chart will be fetched on Continue.")
+        #endif
     }
 
     /// Continues with the currently selected profile

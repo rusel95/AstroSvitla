@@ -7,6 +7,7 @@ struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var showingProfileManager = false
     @State private var showDevModeToast = false
+    @State private var showOnboarding = false
 
     private var profileViewModel: UserProfileViewModel {
         let service = UserProfileService(context: modelContext)
@@ -24,6 +25,7 @@ struct SettingsView: View {
                     appearanceSection
                     if preferences.isDevModeEnabled {
                         openAIModelSection
+                        devToolsSection
                     }
                     appInfoSection
                 }
@@ -45,6 +47,14 @@ struct SettingsView: View {
         .navigationTitle(Text("Налаштування"))
         .sheet(isPresented: $showingProfileManager) {
             UserProfileListView(viewModel: profileViewModel)
+        }
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingView(
+                viewModel: OnboardingViewModel(),
+                onFinish: {
+                    showOnboarding = false
+                }
+            )
         }
     }
 
@@ -163,6 +173,46 @@ struct SettingsView: View {
                     .foregroundStyle(.secondary)
             }
             .padding(.top, 4)
+        }
+        .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
+    }
+
+    // MARK: - Dev Tools Section
+
+    private var devToolsSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Section header
+            SettingsSectionHeader(title: "Dev Tools", icon: "hammer.fill")
+
+            VStack(spacing: 12) {
+                // Preview Onboarding button
+                Button {
+                    showOnboarding = true
+                } label: {
+                    SettingsRow(
+                        icon: "play.rectangle.fill",
+                        iconColor: Color.purple,
+                        title: "Переглянути Onboarding",
+                        subtitle: "Тестування нового онбордингу"
+                    )
+                }
+                .buttonStyle(.plain)
+
+                // Reset Onboarding button
+                Button {
+                    OnboardingViewModel.resetStoredProgress()
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.success)
+                } label: {
+                    SettingsRow(
+                        icon: "arrow.counterclockwise.circle.fill",
+                        iconColor: Color.orange,
+                        title: "Скинути Onboarding",
+                        subtitle: "При наступному запуску покаже онбординг"
+                    )
+                }
+                .buttonStyle(.plain)
+            }
         }
         .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
     }

@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct ReportDetailView: View {
     let birthDetails: BirthDetails
@@ -14,6 +15,13 @@ struct ReportDetailView: View {
     @State private var isPresentingShareSheet = false
     @State private var isShowingSuccessAlert = false
     @State private var isShowingKnowledgeLogs = false
+    
+    // Instagram Share State
+    @State private var isShowingInstagramShareSheet = false
+    @State private var selectedTemplateType: ShareTemplateType?
+    @State private var isShowingTemplatePreview = false
+    @State private var instagramShareImages: [GeneratedShareImage] = []
+    @State private var chartImage: UIImage?
 
     private let pdfGenerator = ReportPDFGenerator()
 
@@ -350,38 +358,101 @@ struct ReportDetailView: View {
     // MARK: - Action Buttons
 
     private var actionButtons: some View {
-        Button {
-            exportReport()
-        } label: {
-            HStack(spacing: 12) {
-                if isExportingPDF {
-                    ProgressView()
-                        .tint(.white)
-                } else {
-                    Image(systemName: "square.and.arrow.up")
+        VStack(spacing: 12) {
+            // PDF Export Button
+            Button {
+                exportReport()
+            } label: {
+                HStack(spacing: 12) {
+                    if isExportingPDF {
+                        ProgressView()
+                            .tint(.white)
+                    } else {
+                        Image(systemName: "square.and.arrow.up")
+                            .font(.system(size: 16, weight: .semibold))
+                    }
+
+                    Text(isExportingPDF ? "Генерування PDF..." : "Експортувати PDF")
                         .font(.system(size: 16, weight: .semibold))
                 }
-
-                Text(isExportingPDF ? "Генерування PDF..." : "Експортувати PDF")
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(
+                    LinearGradient(
+                        colors: isExportingPDF
+                            ? [Color.accentColor.opacity(0.6), Color.accentColor.opacity(0.4)]
+                            : [Color.accentColor, Color.accentColor.opacity(0.8)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .shadow(color: Color.accentColor.opacity(0.3), radius: 8, x: 0, y: 4)
+            }
+            .disabled(isExportingPDF)
+            .animation(.easeInOut(duration: 0.2), value: isExportingPDF)
+            
+            // Instagram Share Button
+            if report.shareContent != nil {
+                instagramShareButton
+            }
+        }
+    }
+    
+    private var instagramShareButton: some View {
+        Button {
+            openInstagramShareSheet()
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: "camera.fill")
+                    .font(.system(size: 16, weight: .semibold))
+                
+                Text("Поділитись в Instagram")
                     .font(.system(size: 16, weight: .semibold))
             }
-            .foregroundStyle(.white)
+            .foregroundStyle(primaryTextColor)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(
-                LinearGradient(
-                    colors: isExportingPDF
-                        ? [Color.accentColor.opacity(0.6), Color.accentColor.opacity(0.4)]
-                        : [Color.accentColor, Color.accentColor.opacity(0.8)],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
+            .background(cardBackground)
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            .shadow(color: Color.accentColor.opacity(0.3), radius: 8, x: 0, y: 4)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .strokeBorder(borderColor, lineWidth: 1)
+            )
         }
-        .disabled(isExportingPDF)
-        .animation(.easeInOut(duration: 0.2), value: isExportingPDF)
+        .sheet(isPresented: $isShowingInstagramShareSheet) {
+            InstagramShareSheet(
+                report: report,
+                birthDetails: birthDetails,
+                chartImage: chartImage,
+                onSelectTemplate: { templateType, images in
+                    selectedTemplateType = templateType
+                    instagramShareImages = images
+                    isShowingInstagramShareSheet = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        isShowingTemplatePreview = true
+                    }
+                },
+                onDismiss: {
+                    isShowingInstagramShareSheet = false
+                }
+            )
+        }
+        .sheet(isPresented: $isShowingTemplatePreview) {
+            if let templateType = selectedTemplateType {
+                InstagramTemplatePreview(
+                    templateType: templateType,
+                    images: instagramShareImages,
+                    onShare: {
+                        shareInstagramImages()
+                    },
+                    onDismiss: {
+                        isShowingTemplatePreview = false
+                    }
+                )
+            }
+        }
     }
 
     // MARK: - Footer
@@ -481,6 +552,50 @@ struct ReportDetailView: View {
             try? FileManager.default.removeItem(at: url)
         }
         shareURL = nil
+    }
+    
+    // MARK: - Instagram Share Actions
+    
+    private func openInstagramShareSheet() {
+        guard report.shareContent != nil else { return }
+        isShowingInstagramShareSheet = true
+    }
+    
+    private func shareInstagramImages() {
+        let imagesToShare = instagramShareImages.map { $0.image }
+        guard !imagesToShare.isEmpty else { return }
+        
+        let activityVC = UIActivityViewController(
+            activityItems: imagesToShare,
+            applicationActivities: nil
+        )
+        
+        // Present the share sheet
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootViewController = windowScene.windows.first?.rootViewController {
+            // Find the topmost presented view controller
+            var topController = rootViewController
+            while let presented = topController.presentedViewController {
+                topController = presented
+            }
+            
+            // Configure for iPad
+            if let popover = activityVC.popoverPresentationController {
+                popover.sourceView = topController.view
+                popover.sourceRect = CGRect(
+                    x: topController.view.bounds.midX,
+                    y: topController.view.bounds.midY,
+                    width: 0,
+                    height: 0
+                )
+                popover.permittedArrowDirections = []
+            }
+            
+            topController.present(activityVC, animated: true) {
+                // Close the preview after presenting share sheet
+                self.isShowingTemplatePreview = false
+            }
+        }
     }
 }
 
