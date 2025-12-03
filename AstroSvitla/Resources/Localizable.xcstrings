@@ -68,18 +68,6 @@
             "state": "translated",
             "value": ""
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": ""
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": ""
-          }
         }
       }
     },
@@ -146,18 +134,6 @@
           }
         },
         "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "(%lld)"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "(%lld)"
-          }
-        },
-        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "(%lld)"
@@ -232,18 +208,6 @@
             "state": "translated",
             "value": "%1$.4f°, %2$.4f°"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$.4f°, %2$.4f°"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$.4f°, %2$.4f°"
-          }
         }
       }
     },
@@ -310,18 +274,6 @@
           }
         },
         "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@"
-          }
-        },
-        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "%@"
@@ -396,18 +348,6 @@
             "state": "translated",
             "value": "%1$@ %2$@"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ %2$@"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ %2$@"
-          }
         }
       }
     },
@@ -474,18 +414,6 @@
           }
         },
         "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ • %2$@"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ • %2$@"
-          }
-        },
-        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "%1$@ • %2$@"
@@ -560,18 +488,6 @@
             "state": "translated",
             "value": "%1$@ • %2$@ • %3$@"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ • %2$@ • %3$@"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$@ • %2$@ • %3$@"
-          }
         }
       }
     },
@@ -638,18 +554,6 @@
           }
         },
         "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld"
-          }
-        },
-        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld"
@@ -724,18 +628,6 @@
             "state": "translated",
             "value": "%lld%%"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld%%"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld%%"
-          }
         }
       }
     },
@@ -802,18 +694,6 @@
           }
         },
         "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld°%2$@'"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld°%2$@'"
-          }
-        },
-        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld°%2$@'"
@@ -888,18 +768,6 @@
             "state": "translated",
             "value": "•"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "•"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "•"
-          }
         }
       }
     },
@@ -966,18 +834,6 @@
           }
         },
         "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "• %@"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "• %@"
-          }
-        },
-        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "• %@"
@@ -1052,18 +908,6 @@
             "state": "translated",
             "value": "℞"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "℞"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "℞"
-          }
         }
       }
     },
@@ -1134,18 +978,6 @@
             "state": "translated",
             "value": "$%@"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "$%@"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "$%@"
-          }
         }
       }
     },
@@ -1212,18 +1044,6 @@
           }
         },
         "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "$%@/1K"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "$%@/1K"
-          }
-        },
-        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "$%@/1K"
@@ -1299,18 +1119,6 @@
             "state": "translated",
             "value": "Назад"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "返回"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "返回"
-          }
         }
       }
     },
@@ -1380,18 +1188,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Скасувати"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "取消"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "取消"
           }
         }
       }
@@ -1463,18 +1259,6 @@
             "state": "translated",
             "value": "Закрити"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "关闭"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "關閉"
-          }
         }
       }
     },
@@ -1544,18 +1328,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Продовжити"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "继续"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "繼續"
           }
         }
       }
@@ -1637,18 +1409,6 @@
             "state": "translated",
             "value": "Готово"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "完成"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "完成"
-          }
         }
       }
     },
@@ -1718,18 +1478,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Гаразд"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "好"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "好"
           }
         }
       }
@@ -1822,18 +1570,6 @@
             "state": "translated",
             "value": "Переглянути натальну карту"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "查看出生图"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "查看出生圖"
-          }
         }
       }
     },
@@ -1904,18 +1640,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Вже придбано"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "已购买"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "已購買"
           }
         }
       }
@@ -1998,18 +1722,6 @@
             "state": "translated",
             "value": "Професія та успіх"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "职业与成功"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "職業與成功"
-          }
         }
       }
     },
@@ -2090,18 +1802,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Гроші та достаток"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "金钱与丰盛"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "金錢與豐盛"
           }
         }
       }
@@ -2184,18 +1884,6 @@
             "state": "translated",
             "value": "Загальний огляд"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "总体概览"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "總體概覽"
-          }
         }
       }
     },
@@ -2277,18 +1965,6 @@
             "state": "translated",
             "value": "Здоров'я та енергія"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "健康与能量"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "健康與能量"
-          }
         }
       }
     },
@@ -2358,18 +2034,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Оберіть сферу"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "区域选择"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "區域選擇"
           }
         }
       }
@@ -2452,18 +2116,6 @@
             "state": "translated",
             "value": "Любов та партнерство"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "爱情与伴侣"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "愛情與伴侶"
-          }
         }
       }
     },
@@ -2534,18 +2186,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Виберіть область життя для детального астрологічного звіту"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "选择一个生活领域以获取详细的占星报告"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "選擇一個生活領域以獲取詳細的占星報告"
           }
         }
       }
@@ -2618,18 +2258,6 @@
             "state": "translated",
             "value": "Оберіть сферу аналізу"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "选择分析领域"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "選擇分析領域"
-          }
         }
       }
     },
@@ -2700,18 +2328,6 @@
             "state": "translated",
             "value": "ASC"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上升"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上升"
-          }
         }
       }
     },
@@ -2778,18 +2394,6 @@
           }
         },
         "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "AstroSvitla"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "AstroSvitla"
-          }
-        },
-        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "AstroSvitla"
@@ -2864,18 +2468,6 @@
             "state": "translated",
             "value": "Команда AstroSvitla 🇺🇦"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "AstroSvitla团队 🇺🇦"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "AstroSvitla團隊 🇺🇦"
-          }
         }
       }
     },
@@ -2945,18 +2537,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Очистити збережені дані"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "清除已保存"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "清除已儲存"
           }
         }
       }
@@ -3028,18 +2608,6 @@
             "state": "translated",
             "value": "Дата"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "日期"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "日期"
-          }
         }
       }
     },
@@ -3109,18 +2677,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Місце"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "地点"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "地點"
           }
         }
       }
@@ -3192,18 +2748,6 @@
             "state": "translated",
             "value": "Ім'я (необов'язково)"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "姓名（可选）"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "姓名（選填）"
-          }
         }
       }
     },
@@ -3274,18 +2818,6 @@
             "state": "translated",
             "value": "Час"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "时间"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "時間"
-          }
         }
       }
     },
@@ -3355,18 +2887,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Введіть точні дані народження для розрахунку натальної карти. Час має бути максимально точним для коректного визначення будинків."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "为获得最佳结果，请输入准确的出生时间"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "為獲得最佳結果，請輸入準確的出生時間"
           }
         }
       }
@@ -3439,18 +2959,6 @@
             "state": "translated",
             "value": "Виберіть місце"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "选择地点"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "選擇地點"
-          }
         }
       }
     },
@@ -3520,18 +3028,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Дані народження"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "出生详情"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "出生詳情"
           }
         }
       }
@@ -3603,18 +3099,6 @@
             "state": "translated",
             "value": "Дані народження"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "详情"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "詳情"
-          }
         }
       }
     },
@@ -3684,18 +3168,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Особа"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "人员"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "人員"
           }
         }
       }
@@ -3777,18 +3249,6 @@
             "state": "translated",
             "value": "Глибокий аналіз"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分析"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分析"
-          }
         }
       }
     },
@@ -3858,18 +3318,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Обкладинка"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "您的本命盘"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "您的本命盤"
           }
         }
       }
@@ -3941,18 +3389,6 @@
             "state": "translated",
             "value": "Отримай повний звіт"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "获取报告"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "取得報告"
-          }
         }
       }
     },
@@ -4023,18 +3459,6 @@
             "state": "translated",
             "value": "Ключові впливи"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "关键影响"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "關鍵影響"
-          }
         }
       }
     },
@@ -4104,18 +3528,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Рекомендації"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "建议"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "建議"
           }
         }
       }
@@ -4188,18 +3600,6 @@
             "state": "translated",
             "value": "Аналіз"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分析"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分析"
-          }
         }
       }
     },
@@ -4270,18 +3670,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Гортайте для деталей"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "滑动查看详情"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "滑動查看詳情"
           }
         }
       }
@@ -4354,18 +3742,6 @@
             "state": "translated",
             "value": "Отримати звіт"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "获取您的报告"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "獲取您的報告"
-          }
         }
       }
     },
@@ -4437,18 +3813,6 @@
             "state": "translated",
             "value": "Ключові впливи"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "关键影响"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "關鍵影響"
-          }
         }
       }
     },
@@ -4519,18 +3883,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Рекомендації"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "建议"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "建議"
           }
         }
       }
@@ -4671,18 +4023,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Завантаження карти..."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "加载星盘中..."
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "載入星盤中..."
           }
         }
       }
@@ -4904,18 +4244,6 @@
             "state": "translated",
             "value": "Візуалізація карти недоступна"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "星盘不可用"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "星盤不可用"
-          }
         }
       }
     },
@@ -4982,18 +4310,6 @@
           }
         },
         "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "DEV"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "DEV"
-          }
-        },
-        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "DEV"
@@ -5208,18 +4524,6 @@
             "state": "translated",
             "value": "ID: %@"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ID: %@"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ID: %@"
-          }
         }
       }
     },
@@ -5360,18 +4664,6 @@
             "state": "translated",
             "value": "Почніть вводити місто та країну. Мінімум 3 символи."
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "搜索城市"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "搜尋城市"
-          }
         }
       }
     },
@@ -5441,18 +4733,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Пошук…"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "搜索中..."
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "搜尋中..."
           }
         }
       }
@@ -5524,18 +4804,6 @@
             "state": "translated",
             "value": "Збігів не знайдено. Спробуйте інший варіант написання."
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "未找到结果"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "未找到結果"
-          }
         }
       }
     },
@@ -5605,18 +4873,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Пошук місця"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "搜索位置"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "搜尋位置"
           }
         }
       }
@@ -5938,18 +5194,6 @@
             "state": "translated",
             "value": "MC"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "天顶"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "天頂"
-          }
         }
       }
     },
@@ -6030,18 +5274,6 @@
             "state": "translated",
             "value": "OK"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "好"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "好"
-          }
         }
       }
     },
@@ -6112,18 +5344,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Створити профіль"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "创建配置文件"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "創建配置文件"
           }
         }
       }
@@ -6196,18 +5416,6 @@
             "state": "translated",
             "value": "Далі"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "下一步"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "下一步"
-          }
         }
       }
     },
@@ -6278,18 +5486,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Почати"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "开始"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "開始"
           }
         }
       }
@@ -6362,18 +5558,6 @@
             "state": "translated",
             "value": "Перший аналіз за 2 хвилини"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "2分钟内完成首次分析"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "2分鐘內完成首次分析"
-          }
         }
       }
     },
@@ -6444,18 +5628,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Займе лише 2 хвилини"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "仅需2分钟"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "僅需2分鐘"
           }
         }
       }
@@ -6528,18 +5700,6 @@
             "state": "translated",
             "value": "Дізнайтесь, що зірки кажуть про вашу кар'єру, стосунки та фінанси — без реєстрації, без підписок."
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "了解星星对您的职业、感情和财务的预示 — 无需注册，无需订阅。"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "了解星星對您的職業、感情和財務的預示 — 無需註冊，無需訂閱。"
-          }
         }
       }
     },
@@ -6610,18 +5770,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ваш перший астрологічний аналіз за 2 хвилини"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "2分钟内获得您的第一份占星分析"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "2分鐘內獲得您的第一份占星分析"
           }
         }
       }
@@ -6694,18 +5842,6 @@
             "state": "translated",
             "value": "Без реєстрації"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "无需注册"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "無需註冊"
-          }
         }
       }
     },
@@ -6776,18 +5912,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ми зробили процес максимально швидким і зрозумілим."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "我们使流程尽可能快速简单。"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "我們使流程盡可能快速簡單。"
           }
         }
       }
@@ -6860,18 +5984,6 @@
             "state": "translated",
             "value": "📝 Введіть дату народження — 30 сек"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "📝 输入出生日期 — 30秒"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "📝 輸入出生日期 — 30秒"
-          }
         }
       }
     },
@@ -6942,18 +6054,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "🎯 Виберіть сферу для аналізу — 10 сек"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "🎯 选择分析领域 — 10秒"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "🎯 選擇分析領域 — 10秒"
           }
         }
       }
@@ -7026,18 +6126,6 @@
             "state": "translated",
             "value": "✨ Отримайте персональний звіт — 60 сек"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "✨ 获取您的个人报告 — 60秒"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "✨ 獲取您的個人報告 — 60秒"
-          }
         }
       }
     },
@@ -7108,18 +6196,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "~2 хв загалом"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "总共约2分钟"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "總共約2分鐘"
           }
         }
       }
@@ -7192,18 +6268,6 @@
             "state": "translated",
             "value": "Три простих кроки до інсайтів"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "三个简单步骤获得洞察"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "三個簡單步驟獲得洞察"
-          }
         }
       }
     },
@@ -7274,18 +6338,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "💰 Фінанси та матеріальний потенціал"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "💰 财务和物质潜力"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "💰 財務和物質潛力"
           }
         }
       }
@@ -7358,18 +6410,6 @@
             "state": "translated",
             "value": "💼 Кар'єра та професійний розвиток"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "💼 职业和专业发展"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "💼 職業和專業發展"
-          }
         }
       }
     },
@@ -7440,18 +6480,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "❤️ Стосунки та партнерство"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "❤️ 感情和伴侣关系"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "❤️ 感情和伴侶關係"
           }
         }
       }
@@ -7524,18 +6552,6 @@
             "state": "translated",
             "value": "🏥 Здоров'я та енергія"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "🏥 健康和能量"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "🏥 健康和能量"
-          }
         }
       }
     },
@@ -7606,18 +6622,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "⭐️ Загальний портрет особистості"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "⭐️ 整体人格画像"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "⭐️ 整體人格畫像"
           }
         }
       }
@@ -7690,18 +6694,6 @@
             "state": "translated",
             "value": "від $5.99 за звіт"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "每份报告$5.99起"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "每份報告$5.99起"
-          }
         }
       }
     },
@@ -7772,18 +6764,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Кожен звіт — це глибокий AI-аналіз вашої натальної карти з практичними порадами."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "每份报告都是对您出生星盘的深度AI分析，附带实用建议。"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "每份報告都是對您出生星盤的深度AI分析，附帶實用建議。"
           }
         }
       }
@@ -7856,18 +6836,6 @@
             "state": "translated",
             "value": "5 сфер вашого життя під контролем"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "掌控您生活的5个领域"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "掌控您生活的5個領域"
-          }
         }
       }
     },
@@ -7938,18 +6906,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Почніть безкоштовно"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "免费开始"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "免費開始"
           }
         }
       }
@@ -8022,18 +6978,6 @@
             "state": "translated",
             "value": "🔒 100% приватність — дані не покидають пристрій"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "🔒 100%隐私 — 数据不会离开设备"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "🔒 100%隱私 — 數據不會離開設備"
-          }
         }
       }
     },
@@ -8104,18 +7048,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "⚡️ Миттєвий розрахунок натальної карти"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "⚡️ 即时计算出生星盘"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "⚡️ 即時計算出生星盤"
           }
         }
       }
@@ -8188,18 +7120,6 @@
             "state": "translated",
             "value": "📚 Аналіз на основі класичної астрології"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "📚 基于古典占星术的分析"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "📚 基於古典占星術的分析"
-          }
         }
       }
     },
@@ -8270,18 +7190,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ваші дані зберігаються лише на вашому пристрої. Почніть прямо зараз — перший профіль безкоштовний."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "您的数据仅保存在您的设备上。立即开始 — 第一个配置文件免费。"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "您的數據僅保存在您的設備上。立即開始 — 第一個配置文件免費。"
           }
         }
       }
@@ -8354,18 +7262,6 @@
             "state": "translated",
             "value": "Готові побачити свою карту?"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "准备好查看您的星盘了吗？"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "準備好查看您的星盤了嗎？"
-          }
         }
       }
     },
@@ -8436,18 +7332,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Пропустити"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "跳过"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "跳過"
           }
         }
       }
@@ -8520,18 +7404,6 @@
             "state": "translated",
             "value": "Крок %1$lld з %2$lld"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "第 %1$lld 步，共 %2$lld 步"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "第 %1$lld 步，共 %2$lld 步"
-          }
         }
       }
     },
@@ -8602,18 +7474,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld планет • %lld аспектів"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld行星 • %lld相位"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld行星 • %lld相位"
           }
         }
       }
@@ -8694,18 +7554,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Активний"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "活跃"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "活躍"
           }
         }
       }
@@ -8807,18 +7655,6 @@
             "state": "translated",
             "value": "Видалити профіль"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "删除档案"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "刪除檔案"
-          }
         }
       }
     },
@@ -8899,18 +7735,6 @@
             "state": "translated",
             "value": "Створіть профілі на вкладці «Головна», щоб розпочати роботу з персоналізованими натальними картами та звітами"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "添加档案以开始"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "新增檔案以開始"
-          }
         }
       }
     },
@@ -8990,18 +7814,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ще немає профілів"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "没有档案"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "沒有檔案"
           }
         }
       }
@@ -9142,18 +7954,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Керувати профілями"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "管理档案"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "管理檔案"
           }
         }
       }
@@ -9305,18 +8105,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ о %@"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ %@"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ %@"
           }
         }
       }
@@ -9497,18 +8285,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Підтвердження покупки"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "购买报告"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "購買報告"
           }
         }
       }
@@ -9740,18 +8516,6 @@
             "state": "translated",
             "value": "Детальний аналіз"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分析"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分析"
-          }
         }
       }
     },
@@ -9852,18 +8616,6 @@
             "state": "translated",
             "value": "Рекомендації"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "建议"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "建議"
-          }
         }
       }
     },
@@ -9933,18 +8685,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Короткий огляд"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "摘要"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "摘要"
           }
         }
       }
@@ -10056,18 +8796,6 @@
             "state": "translated",
             "value": "Не вдалося видалити звіт."
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "删除报告失败"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "刪除報告失敗"
-          }
         }
       }
     },
@@ -10137,18 +8865,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Не вдалося завантажити збережені звіти."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "加载报告失败"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "載入報告失敗"
           }
         }
       }
@@ -10220,18 +8936,6 @@
             "state": "translated",
             "value": "≈%1$d хв"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分钟阅读"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分鐘閱讀"
-          }
         }
       }
     },
@@ -10302,18 +9006,6 @@
             "state": "translated",
             "value": "Без прив'язки до карти"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "无可用星盘"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "無可用星盤"
-          }
         }
       }
     },
@@ -10383,18 +9075,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Невідомий профіль"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "未知档案"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "未知檔案"
           }
         }
       }
@@ -10467,18 +9147,6 @@
             "state": "translated",
             "value": "Зроблено з ❤️ в Україні"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "在乌克兰用❤️制作"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "在烏克蘭用❤️製作"
-          }
         }
       }
     },
@@ -10549,18 +9217,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Версія"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "版本"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "版本"
           }
         }
       }
@@ -10633,18 +9289,6 @@
             "state": "translated",
             "value": "Рекомендація"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "推荐"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "推薦"
-          }
         }
       }
     },
@@ -10715,18 +9359,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Рекомендовано"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "推荐"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "推薦"
           }
         }
       }
@@ -10799,18 +9431,6 @@
             "state": "translated",
             "value": "токенів"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "代币"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "代幣"
-          }
         }
       }
     },
@@ -10880,18 +9500,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld токенів"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld 个令牌"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld 個令牌"
           }
         }
       }
@@ -10964,18 +9572,6 @@
             "state": "translated",
             "value": "Dev Mode вимкнено"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "开发模式已禁用"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "開發模式已停用"
-          }
         }
       }
     },
@@ -11046,18 +9642,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dev Mode увімкнено"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "开发模式已启用"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "開發模式已啟用"
           }
         }
       }
@@ -11130,18 +9714,6 @@
             "state": "translated",
             "value": "Попередній перегляд онбордингу"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "预览引导"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "預覽導覽"
-          }
         }
       }
     },
@@ -11212,18 +9784,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Показати онбординг без скидання стану"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "显示引导流程不重置状态"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "顯示導覽流程不重設狀態"
           }
         }
       }
@@ -11296,18 +9856,6 @@
             "state": "translated",
             "value": "Скинути онбординг"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "重置引导"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "重設導覽"
-          }
         }
       }
     },
@@ -11378,18 +9926,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Очистити завершений стан та перезапустити"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "清除已完成状态并重启应用"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "清除已完成狀態並重新啟動"
           }
         }
       }
@@ -11462,18 +9998,6 @@
             "state": "translated",
             "value": "Змінити в налаштуваннях"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "在设置中更改"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "在設定中更改"
-          }
         }
       }
     },
@@ -11544,18 +10068,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Керувати профілями"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "管理资料"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "管理個人資料"
           }
         }
       }
@@ -11628,18 +10140,6 @@
             "state": "translated",
             "value": "Додати, редагувати або видалити профілі"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "添加、编辑或删除资料"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "新增、編輯或刪除個人資料"
-          }
         }
       }
     },
@@ -11710,18 +10210,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Про додаток"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "关于"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "關於"
           }
         }
       }
@@ -11794,18 +10282,6 @@
             "state": "translated",
             "value": "Модель AI"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "AI模型"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "AI模型"
-          }
         }
       }
     },
@@ -11876,18 +10352,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Оформлення"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "外观"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "外觀"
           }
         }
       }
@@ -11960,18 +10424,6 @@
             "state": "translated",
             "value": "Дані"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "数据"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "資料"
-          }
         }
       }
     },
@@ -12042,18 +10494,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Інструменти розробника"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "开发工具"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "開發工具"
           }
         }
       }
@@ -12126,18 +10566,6 @@
             "state": "translated",
             "value": "Мова інтерфейсу"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "语言"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "語言"
-          }
         }
       }
     },
@@ -12208,18 +10636,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Онбординг"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "引导"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "導覽"
           }
         }
       }
@@ -12292,18 +10708,6 @@
             "state": "translated",
             "value": "Профілі"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "个人资料"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "個人資料"
-          }
         }
       }
     },
@@ -12374,18 +10778,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Тема"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "外观"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "外觀"
           }
         }
       }
@@ -12458,18 +10850,6 @@
             "state": "translated",
             "value": "Темна"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "深色"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "深色"
-          }
         }
       }
     },
@@ -12540,18 +10920,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Світла"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "浅色"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "淺色"
           }
         }
       }
@@ -12624,18 +10992,6 @@
             "state": "translated",
             "value": "Системна"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "系统"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "系統"
-          }
         }
       }
     },
@@ -12706,18 +11062,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Тема додатку"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "应用主题"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "應用程式主題"
           }
         }
       }
@@ -12790,18 +11134,6 @@
             "state": "translated",
             "value": "Налаштування"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "设置"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "設定"
-          }
         }
       }
     },
@@ -12871,18 +11203,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "5 слайдів для максимального впливу"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分享为轮播"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分享為輪播"
           }
         }
       }
@@ -12954,18 +11274,6 @@
             "state": "translated",
             "value": "Ідеально для сторіз"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "仅分享星盘"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "僅分享星盤"
-          }
         }
       }
     },
@@ -13035,18 +11343,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Резюме та 3 ключові впливи"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分享关键洞察"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分享關鍵洞察"
           }
         }
       }
@@ -13118,18 +11414,6 @@
             "state": "translated",
             "value": "3 персональні поради"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分享建议"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分享建議"
-          }
         }
       }
     },
@@ -13199,18 +11483,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Повна каруселька"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "轮播"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "輪播"
           }
         }
       }
@@ -13282,18 +11554,6 @@
             "state": "translated",
             "value": "Тільки карта"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "仅星盘"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "僅星盤"
-          }
         }
       }
     },
@@ -13363,18 +11623,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ключові інсайти"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "关键洞察"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "關鍵洞察"
           }
         }
       }
@@ -13446,18 +11694,6 @@
             "state": "translated",
             "value": "Рекомендації"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "建议"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "建議"
-          }
         }
       }
     },
@@ -13527,18 +11763,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Поділитись недоступно для цього звіту"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分享不可用"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分享不可用"
           }
         }
       }
@@ -13611,18 +11835,6 @@
             "state": "translated",
             "value": "5 зображень буде надіслано. Створіть каруселі в Instagram."
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "将分享5张图片。在Instagram中创建轮播帖子。"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "將分享5張圖片。在Instagram中創建輪播帖子。"
-          }
         }
       }
     },
@@ -13693,18 +11905,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ваша натальна карта"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "您的出生星图"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "您的出生星圖"
           }
         }
       }
@@ -13777,18 +11977,6 @@
             "state": "translated",
             "value": "Отримати повний звіт"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "获取完整报告"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "獲取完整報告"
-          }
         }
       }
     },
@@ -13859,18 +12047,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Поділитися в Instagram"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分享到Instagram"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分享到Instagram"
           }
         }
       }
@@ -13943,18 +12119,6 @@
             "state": "translated",
             "value": "Підготовка шаблонів..."
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "正在准备模板..."
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "正在準備模板..."
-          }
         }
       }
     },
@@ -14025,18 +12189,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Поділитися в Instagram"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分享到Instagram"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "分享到Instagram"
           }
         }
       }
@@ -14109,18 +12261,6 @@
             "state": "translated",
             "value": "КЛЮЧОВІ ВПЛИВИ"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "关键影响"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "關鍵影響"
-          }
         }
       }
     },
@@ -14191,18 +12331,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Попередній перегляд недоступний"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "无预览"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "無預覽"
           }
         }
       }
@@ -14275,18 +12403,6 @@
             "state": "translated",
             "value": "Рекомендації"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "建议"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "建議"
-          }
         }
       }
     },
@@ -14356,18 +12472,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Головна"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "首页"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "首頁"
           }
         }
       }
@@ -14439,18 +12543,6 @@
             "state": "translated",
             "value": "Звіти"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "报告"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "報告"
-          }
         }
       }
     },
@@ -14520,18 +12612,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Налаштування"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "设置"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "設定"
           }
         }
       }
@@ -14603,18 +12683,6 @@
             "state": "translated",
             "value": "Відкрий свій космічний шлях"
           }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "发现你的星星"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "發現你的星星"
-          }
         }
       }
     },
@@ -14684,18 +12752,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Створено за допомогою Zorya"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "AstroSvitla"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "AstroSvitla"
           }
         }
       }
