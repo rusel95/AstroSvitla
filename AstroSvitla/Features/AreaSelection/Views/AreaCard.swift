@@ -65,7 +65,7 @@ struct AreaCard: View {
                         HStack(spacing: 4) {
                             Image(systemName: "checkmark.seal.fill")
                                 .font(.system(size: 11))
-                            Text("Вже придбано")
+                            Text("area.badge.purchased")
                                 .font(.system(size: 13, weight: .medium))
                         }
                         .foregroundStyle(Color.green)
@@ -155,15 +155,15 @@ extension ReportArea {
     var shortDescription: String {
         switch self {
         case .finances:
-            return "Гроші та достаток"
+            return String(localized: "area.finances.description")
         case .career:
-            return "Професія та успіх"
+            return String(localized: "area.career.description")
         case .relationships:
-            return "Любов та партнерство"
+            return String(localized: "area.relationships.description")
         case .health:
-            return "Здоров'я та енергія"
+            return String(localized: "area.health.description")
         case .general:
-            return "Загальний огляд"
+            return String(localized: "area.general.description")
         }
     }
 }

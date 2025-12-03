@@ -16,8 +16,8 @@ struct ProfileSelectionView: View {
                 VStack(alignment: .leading, spacing: 28) {
                     // Header with glass effect
                     AstroSectionHeader(
-                        title: "Оберіть профіль",
-                        subtitle: "Виберіть профіль для розрахунку натальної карти або створіть новий"
+                        title: String(localized: "profile.select.title"),
+                        subtitle: String(localized: "profile.select.subtitle")
                     )
                     .padding(.top, 8)
 
@@ -42,10 +42,10 @@ struct ProfileSelectionView: View {
                     // Continue button with premium styling
                     Button(action: onContinue) {
                         HStack(spacing: 8) {
-                            Text("Продовжити")
+                            Text("action.continue", bundle: .main)
 
                             if let selected = selectedProfile {
-                                Text("з «\(selected.name)»")
+                                Text("profile.continue.with \(selected.name)", bundle: .main)
                                     .opacity(0.85)
                             }
 
@@ -240,11 +240,11 @@ struct CreateProfileButton: View {
                 }
 
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("Створити новий профіль")
+                    Text("profile.create.new", bundle: .main)
                         .font(.system(size: 16, weight: .semibold, design: .rounded))
                         .foregroundStyle(.primary)
 
-                    Text("Додайте дані народження для нової людини")
+                    Text("profile.create.hint", bundle: .main)
                         .font(.system(size: 13, weight: .regular))
                         .foregroundStyle(.secondary)
                 }
@@ -281,19 +281,19 @@ struct CreateProfileButton: View {
         ProfileSelectionView(
             profiles: [
                 UserProfile(
-                    name: "Олександра",
+                    name: "Alexandra",
                     birthDate: Date(),
                     birthTime: Date(),
-                    locationName: "Київ, Україна",
+                    locationName: "Kyiv, Ukraine",
                     latitude: 50.4501,
                     longitude: 30.5234,
                     timezone: "Europe/Kyiv"
                 ),
                 UserProfile(
-                    name: "Іван",
+                    name: "Ivan",
                     birthDate: Date(),
                     birthTime: Date(),
-                    locationName: "Львів, Україна",
+                    locationName: "Lviv, Ukraine",
                     latitude: 49.8397,
                     longitude: 24.0297,
                     timezone: "Europe/Kyiv"
@@ -304,6 +304,6 @@ struct CreateProfileButton: View {
             onCreateNewProfile: {},
             onContinue: {}
         )
-        .navigationTitle("Профілі")
+        .navigationTitle(Text("profile.navigation.title", bundle: .main))
     }
 }

@@ -20,11 +20,11 @@ struct ReportGenerationLogsView: View {
                 }
             }
             .listStyle(.insetGrouped)
-            .navigationTitle("Логи генерації")
+            .navigationTitle(Text("logs.title", bundle: .main))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Закрити") {
+                    Button("action.close", bundle: .main) {
                         dismiss()
                     }
                 }

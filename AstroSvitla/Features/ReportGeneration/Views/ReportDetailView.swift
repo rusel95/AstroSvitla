@@ -78,7 +78,7 @@ struct ReportDetailView: View {
             .padding(.top, 16)
         }
         .background(Color(.systemBackground))
-        .navigationTitle(Text("Звіт: \(report.area.displayName)"))
+        .navigationTitle(Text("report.title.with_area \(report.area.displayName)"))
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $isPresentingShareSheet) {
             if let url = shareURL {
@@ -90,19 +90,19 @@ struct ReportDetailView: View {
                 }
             }
         }
-        .alert("Помилка експорту", isPresented: $isShowingErrorAlert, actions: {
-            Button("Закрити", role: .cancel) {
+        .alert(String(localized: "report.export.error.title"), isPresented: $isShowingErrorAlert, actions: {
+            Button(String(localized: "action.close"), role: .cancel) {
                 isShowingErrorAlert = false
             }
         }, message: {
-            Text(exportErrorMessage ?? "Не вдалося експортувати PDF")
+            Text(exportErrorMessage ?? String(localized: "report.export.error.default"))
         })
-        .alert("PDF збережено", isPresented: $isShowingSuccessAlert, actions: {
+        .alert(String(localized: "report.export.success.title"), isPresented: $isShowingSuccessAlert, actions: {
             Button("OK", role: .cancel) {
                 isShowingSuccessAlert = false
             }
         }, message: {
-            Text("Звіт успішно експортовано")
+            Text("report.export.success.message")
         })
     }
 
@@ -129,12 +129,12 @@ struct ReportDetailView: View {
                         .foregroundStyle(.white)
                 }
 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text("AstroSvitla")
                         .font(.system(size: 20, weight: .bold, design: .rounded))
                         .foregroundStyle(primaryTextColor)
 
-                    Text("Астрологічний звіт")
+                    Text("report.header.subtitle")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(Color.accentColor)
                 }
@@ -183,7 +183,7 @@ struct ReportDetailView: View {
 
     private var chartSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Натальна карта", icon: "circle.hexagongrid.fill", hint: "Натисніть для збільшення")
+            sectionHeader(title: String(localized: "report.section.natal_chart"), icon: "circle.hexagongrid.fill", hint: String(localized: "report.chart.zoom_hint"))
 
             NatalChartWheelView(chart: natalChart, allowsZoom: true)
                 .background(colorScheme == .dark ? Color.white.opacity(0.05) : Color.white)
@@ -199,7 +199,7 @@ struct ReportDetailView: View {
 
     private var summarySection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Резюме", icon: "text.alignleft")
+            sectionHeader(title: String(localized: "report.section.summary"), icon: "text.alignleft")
 
             Text(report.summary)
                 .font(.system(size: 15, weight: .regular))

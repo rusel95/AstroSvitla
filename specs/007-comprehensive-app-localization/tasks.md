@@ -31,7 +31,7 @@ Tasks organized by user story for implementing comprehensive localization across
 
 ### Tasks
 
-**T001** [Setup] Create LocaleHelper utility
+- [x] **T001** [Setup] Create LocaleHelper utility
 - **File**: `AstroSvitla/Shared/Utilities/LocaleHelper.swift`
 - **Action**: Create new file with `LocaleHelper` enum
 - **Details**:
@@ -42,7 +42,7 @@ Tasks organized by user story for implementing comprehensive localization across
   - Handle regional variants (zh-Hans, zh-Hant, pt-BR)
 - **Acceptance**: `LocaleHelper.currentLanguageCode` returns valid code
 
-**T002** [Setup] Add languageCode to ReportPurchase model
+- [x] **T002** [Setup] Add languageCode to ReportPurchase model
 - **File**: `AstroSvitla/Models/SwiftData/ReportPurchase.swift`
 - **Action**: Add new field to existing model
 - **Details**:
@@ -50,7 +50,7 @@ Tasks organized by user story for implementing comprehensive localization across
   - Add documentation comment referencing FR-021
 - **Acceptance**: Model compiles, SwiftData migration works automatically
 
-**T003** [Setup] [P] Create LocaleHelperTests
+- [x] **T003** [Setup] [P] Create LocaleHelperTests
 - **File**: `AstroSvitlaTests/Shared/Utilities/LocaleHelperTests.swift`
 - **Action**: Create unit tests for LocaleHelper
 - **Details**:
@@ -60,7 +60,7 @@ Tasks organized by user story for implementing comprehensive localization across
   - Test English fallback for unsupported languages
 - **Acceptance**: All tests pass
 
-**T004** [Setup] [P] Verify Info.plist localizations
+- [x] **T004** [Setup] [P] Verify Info.plist localizations
 - **File**: `AstroSvitla/Info.plist`
 - **Action**: Verify CFBundleLocalizations includes all 13 languages
 - **Details**:
@@ -79,7 +79,8 @@ Tasks organized by user story for implementing comprehensive localization across
 
 ### Tasks
 
-**T005** [US1] Audit and extract Settings screen strings
+### ✅ T005 [US1] Audit and extract Settings screen strings
+- **Status**: COMPLETE
 - **File**: `AstroSvitla/Features/Settings/SettingsView.swift`
 - **Action**: Replace hardcoded Ukrainian strings with localized keys
 - **Details**:
@@ -94,8 +95,10 @@ Tasks organized by user story for implementing comprehensive localization across
   - Replace `"Зроблено з любов'ю"` → `String(localized: "settings.about.made_with_love")`
   - Replace Dev Mode toast messages
 - **Acceptance**: No hardcoded Ukrainian strings remain in file
+- **Completed**: Replaced 15+ hardcoded strings with localized keys
 
-**T006** [US1] [P] Add Settings strings to Localizable.xcstrings
+### ✅ T006 [US1] [P] Add Settings strings to Localizable.xcstrings
+- **Status**: COMPLETE
 - **File**: `AstroSvitla/Resources/Localizable.xcstrings`
 - **Action**: Add new keys with translations for all 13 languages
 - **Details**:
@@ -106,30 +109,36 @@ Tasks organized by user story for implementing comprehensive localization across
   - Add `settings.devmode.enabled`, `settings.devmode.disabled`
   - Ensure all keys have state "translated" for all languages
 - **Acceptance**: All Settings keys exist with 13 language translations
+- **Completed**: Added 25+ settings keys with all 13 translations
 
-**T007** [US1] Audit and extract Chart Input screen strings
+### ✅ T007 [US1] Audit and extract Chart Input screen strings
+- **Status**: COMPLETE
 - **Files**: `AstroSvitla/Features/ChartInput/**/*.swift`
 - **Action**: Find and replace hardcoded strings
 - **Details**:
-  - Run `grep -r "Text(\"" AstroSvitla/Features/ChartInput/` to identify
-  - Replace each with appropriate localized key
-  - Use `birth.*` and `location.*` key prefixes
+  - Replaced 7 Ukrainian strings in BirthDataInputView.swift
+  - Replaced 3 Ukrainian strings in LocationSearchView.swift
+  - Replaced 1 Ukrainian string in BirthDataInputViewModel.swift
+  - Added `birth.location.placeholder` key with 13 translations
 - **Acceptance**: No hardcoded strings in ChartInput feature
+- **Completed**: All ChartInput files now use localized keys
 
-**T008** [US1] [P] Audit and extract Area Selection screen strings
+### ✅ T008 [US1] [P] Audit and extract Area Selection screen strings
+- **Status**: COMPLETE
 - **Files**: `AstroSvitla/Features/AreaSelection/**/*.swift`
 - **Action**: Find and replace hardcoded strings
 - **Details**:
-  - Use `area.*` key prefix
-  - Include area names (Career, Relationships, Health, etc.)
+  - Replaced 5 Ukrainian strings in AreaSelectionView.swift
+  - Replaced 6 Ukrainian strings in AreaCard.swift
+  - Added 10 new area.* keys with 13 translations
 - **Acceptance**: No hardcoded strings in AreaSelection feature
+- **Completed**: All AreaSelection files now use localized keys
 
-**T009** [US1] [P] Audit and extract Chart Visualization strings
+### ✅ T009 [US1] [P] Audit and extract Chart Visualization strings
+- **Status**: COMPLETE (NO CHANGES NEEDED)
 - **Files**: `AstroSvitla/Features/ChartVisualization/**/*.swift`
 - **Action**: Find and replace hardcoded strings
-- **Details**:
-  - Use `chart.*` and `chart_details.*` key prefixes
-  - Include planet names, zodiac signs, aspect names, house labels
+- **Note**: No hardcoded Ukrainian strings found - feature already uses localized keys or English-only labels from AstrologyAPI
 - **Acceptance**: No hardcoded strings in ChartVisualization feature
 
 **T010** [US1] Audit and extract common components strings

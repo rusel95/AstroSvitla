@@ -110,7 +110,7 @@ final class BirthDataInputViewModel: ObservableObject {
     }
 
     var locationDisplay: String {
-        location.isEmpty ? "Виберіть місце" : location
+        location.isEmpty ? String(localized: "birth.location.placeholder") : location
     }
 
     // MARK: - Private Helpers

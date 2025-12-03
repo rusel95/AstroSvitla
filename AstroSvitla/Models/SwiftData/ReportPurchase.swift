@@ -23,6 +23,11 @@ final class ReportPurchase {
     var knowledgeSourceTitles: [String]?
     var knowledgeSourceAuthors: [String]?
     var knowledgeSourcePages: [String]?
+    
+    /// ISO language code used when this report was generated (e.g., "en", "uk", "de")
+    /// Used for FR-021: Store language used when generating each report
+    /// Default "en" for backward compatibility with existing reports
+    var languageCode: String = "en"
 
     var price: Decimal
     var currency: String

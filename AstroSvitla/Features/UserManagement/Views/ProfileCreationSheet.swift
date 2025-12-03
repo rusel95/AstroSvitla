@@ -32,7 +32,7 @@ struct ProfileCreationSheet: View {
     }
 
     private var locationDisplay: String {
-        location.isEmpty ? "Виберіть місце народження" : location
+        location.isEmpty ? String(localized: "profile.location.placeholder") : location
     }
 
     var body: some View {
@@ -41,10 +41,10 @@ struct ProfileCreationSheet: View {
                 VStack(alignment: .leading, spacing: 24) {
                     // Header
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Новий профіль")
+                        Text("profile.new.title", bundle: .main)
                             .font(.system(size: 28, weight: .bold))
 
-                        Text("Введіть дані про народження для розрахунку натальної карти")
+                        Text("profile.new.description", bundle: .main)
                             .font(.system(size: 15, weight: .regular))
                             .foregroundStyle(.secondary)
                     }
@@ -54,13 +54,13 @@ struct ProfileCreationSheet: View {
                     VStack(alignment: .leading, spacing: 20) {
                         // Name field
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Ім'я")
+                            Text("profile.field.name", bundle: .main)
                                 .font(.system(size: 13, weight: .semibold))
                                 .foregroundStyle(.secondary)
                                 .textCase(.uppercase)
                                 .tracking(0.5)
 
-                            TextField("Наприклад: Олександра", text: $name)
+                            TextField(String(localized: "profile.name.placeholder"), text: $name)
                                 .textInputAutocapitalization(.words)
                                 .autocorrectionDisabled()
                                 .focused($focusedField, equals: .name)
@@ -75,7 +75,7 @@ struct ProfileCreationSheet: View {
 
                         // Birth date
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Дата народження")
+                            Text("profile.field.birthdate", bundle: .main)
                                 .font(.system(size: 13, weight: .semibold))
                                 .foregroundStyle(.secondary)
                                 .textCase(.uppercase)
@@ -97,7 +97,7 @@ struct ProfileCreationSheet: View {
 
                         // Birth time
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Час народження")
+                            Text("profile.field.birthtime", bundle: .main)
                                 .font(.system(size: 13, weight: .semibold))
                                 .foregroundStyle(.secondary)
                                 .textCase(.uppercase)
@@ -121,7 +121,7 @@ struct ProfileCreationSheet: View {
 
                         // Location
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Місце народження")
+                            Text("profile.field.location", bundle: .main)
                                 .font(.system(size: 13, weight: .semibold))
                                 .foregroundStyle(.secondary)
                                 .textCase(.uppercase)
@@ -158,7 +158,7 @@ struct ProfileCreationSheet: View {
                                 .font(.system(size: 14))
                                 .foregroundStyle(Color.accentColor)
 
-                            Text("Точний час і місце народження необхідні для коректного розрахунку натальної карти")
+                            Text("profile.help.precision", bundle: .main)
                                 .font(.system(size: 13))
                                 .foregroundStyle(.secondary)
                         }
@@ -174,13 +174,13 @@ struct ProfileCreationSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Скасувати") {
+                    Button("action.cancel", bundle: .main) {
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Зберегти") {
+                    Button("action.save", bundle: .main) {
                         guard isFormValid, let coord = coordinate else { return }
                         onSave(name, birthDate, birthTime, location, coord, timezone)
                         dismiss()
@@ -203,7 +203,7 @@ struct ProfileCreationSheet: View {
                     }
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
-                            Button("Закрити") {
+                            Button("action.close", bundle: .main) {
                                 showLocationSearch = false
                             }
                         }

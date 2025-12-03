@@ -15,11 +15,11 @@ struct UserProfileListView: View {
                     profileListView
                 }
             }
-            .navigationTitle("Керувати профілями")
+            .navigationTitle(Text("profile.manage.title", bundle: .main))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Готово") {
+                    Button("action.done", bundle: .main) {
                         dismiss()
                     }
                 }
@@ -27,11 +27,11 @@ struct UserProfileListView: View {
                 // NOTE: Profile creation now happens inline on Home tab
                 // Remove the "Create Profile" button from Settings for simplified UX
             }
-            .alert("Видалити профіль", isPresented: $viewModel.showDeleteConfirmation) {
-                Button("Скасувати", role: .cancel) {
+            .alert(Text("profile.delete.title", bundle: .main), isPresented: $viewModel.showDeleteConfirmation) {
+                Button("action.cancel", bundle: .main, role: .cancel) {
                     viewModel.cancelDelete()
                 }
-                Button("Видалити", role: .destructive) {
+                Button("action.delete", bundle: .main, role: .destructive) {
                     Task {
                         await viewModel.confirmDeleteProfile()
                     }
@@ -63,11 +63,11 @@ struct UserProfileListView: View {
                 .font(.system(size: 80))
                 .foregroundColor(.secondary)
 
-            Text("Немає профілів")
+            Text("profile.empty.none", bundle: .main)
                 .font(.title2)
                 .fontWeight(.semibold)
 
-            Text("Створіть перший профіль")
+            Text("profile.empty.create_first", bundle: .main)
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -117,7 +117,7 @@ private struct ProfileRowView: View {
                             .font(.headline)
 
                         if isActive {
-                            Text("Активний")
+                            Text("profile.badge.active", bundle: .main)
                                 .font(.caption)
                                 .fontWeight(.medium)
                                 .foregroundColor(.white)
@@ -152,7 +152,7 @@ private struct ProfileRowView: View {
                 Button(role: .destructive) {
                     onDelete()
                 } label: {
-                    Label("Видалити", systemImage: "trash")
+                    Label("action.delete", bundle: .main, systemImage: "trash")
                         .font(.caption)
                         .foregroundColor(.red)
                 }
@@ -189,7 +189,7 @@ private struct ProfileRowView: View {
         HStack(spacing: 4) {
             Image(systemName: "doc.text.fill")
                 .font(.caption2)
-            Text("\(profile.reports.count) " + (profile.reports.count == 1 ? "звіт" : "звітів"))
+            Text("profile.reports.count \(profile.reports.count)", bundle: .main)
                 .font(.caption)
         }
         .foregroundColor(.secondary)
