@@ -148,7 +148,7 @@ struct ReportDetailView: View {
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(secondaryTextColor)
                         .padding(.horizontal, 10)
-                        .padding(.vertical: 6)
+                        .padding(.vertical, 6)
                         .background(cardBackground)
                         .clipShape(Capsule())
                         .overlay(
