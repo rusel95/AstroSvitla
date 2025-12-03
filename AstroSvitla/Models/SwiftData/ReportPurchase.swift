@@ -1,10 +1,24 @@
 import Foundation
 import SwiftData
 
+// File-level decoder and helper functions to avoid @MainActor isolation issues
 private let reportDecoder: JSONDecoder = {
     let decoder = JSONDecoder()
     return decoder
 }()
+
+// File-level helper functions - these are nonisolated by default
+private func decodeKnowledgeSources(from data: Data) -> [KnowledgeSource]? {
+    try? reportDecoder.decode([KnowledgeSource].self, from: data)
+}
+
+private func decodeGenerationMetadata(from data: Data) -> GenerationMetadata? {
+    try? reportDecoder.decode(GenerationMetadata.self, from: data)
+}
+
+private func decodeBookMetadata(from data: Data) -> [BookMetadata]? {
+    try? reportDecoder.decode([BookMetadata].self, from: data)
+}
 
 @Model
 final class ReportPurchase {
@@ -123,7 +137,7 @@ final class ReportPurchase {
         var sources: [KnowledgeSource]? = nil
         if let sourcesJSON = knowledgeSourcesJSON,
            let data = sourcesJSON.data(using: .utf8) {
-            sources = try? reportDecoder.decode([KnowledgeSource].self, from: data)
+            sources = decodeKnowledgeSources(from: data)
         }
 
         // Fallback to legacy stored arrays if JSON not available
@@ -163,7 +177,7 @@ final class ReportPurchase {
 
         if let metadataJSON = metadataJSON,
            let data = metadataJSON.data(using: .utf8) {
-            if let decodedMetadata = try? reportDecoder.decode(GenerationMetadata.self, from: data) {
+            if let decodedMetadata = decodeGenerationMetadata(from: data) {
                 metadata = decodedMetadata
             }
         }
@@ -172,7 +186,7 @@ final class ReportPurchase {
         var availableBooks: [BookMetadata]? = nil
         if let booksJSON = availableBooksJSON,
            let data = booksJSON.data(using: .utf8) {
-            availableBooks = try? reportDecoder.decode([BookMetadata].self, from: data)
+            availableBooks = decodeBookMetadata(from: data)
         }
 
         return GeneratedReport(

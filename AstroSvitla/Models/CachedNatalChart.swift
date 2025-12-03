@@ -49,6 +49,7 @@ struct CachedBirthDetails: Codable, Equatable, Sendable {
     }
 }
 
+// Use nonisolated(unsafe) to allow use from @Model classes
 private let cachedChartEncoder: JSONEncoder = {
     let encoder = JSONEncoder()
     return encoder
@@ -58,6 +59,39 @@ private let cachedChartDecoder: JSONDecoder = {
     let decoder = JSONDecoder()
     return decoder
 }()
+
+// File-level helper functions - these are nonisolated by default
+private func encodeCachedBirthDetails(_ details: CachedBirthDetails) throws -> Data {
+    try cachedChartEncoder.encode(details)
+}
+
+private func decodeCachedBirthDetails(from data: Data) throws -> CachedBirthDetails {
+    try cachedChartDecoder.decode(CachedBirthDetails.self, from: data)
+}
+
+private func encodePlanets(_ planets: [Planet]) throws -> Data {
+    try cachedChartEncoder.encode(planets)
+}
+
+private func encodeHouses(_ houses: [House]) throws -> Data {
+    try cachedChartEncoder.encode(houses)
+}
+
+private func encodeAspects(_ aspects: [Aspect]) throws -> Data {
+    try cachedChartEncoder.encode(aspects)
+}
+
+private func decodePlanets(from data: Data) throws -> [Planet] {
+    try cachedChartDecoder.decode([Planet].self, from: data)
+}
+
+private func decodeHouses(from data: Data) throws -> [House] {
+    try cachedChartDecoder.decode([House].self, from: data)
+}
+
+private func decodeAspects(from data: Data) throws -> [Aspect] {
+    try cachedChartDecoder.decode([Aspect].self, from: data)
+}
 
 // MARK: - SwiftData Model
 
@@ -114,10 +148,10 @@ extension CachedNatalChart {
         imageFormat: String?
     ) throws {
         let detailsPayload = CachedBirthDetails(from: birthDetails)
-        birthDataJSON = try cachedChartEncoder.encode(detailsPayload)
-        planetsJSON = try cachedChartEncoder.encode(chart.planets)
-        housesJSON = try cachedChartEncoder.encode(chart.houses)
-        aspectsJSON = try cachedChartEncoder.encode(chart.aspects)
+        birthDataJSON = try encodeCachedBirthDetails(detailsPayload)
+        planetsJSON = try encodePlanets(chart.planets)
+        housesJSON = try encodeHouses(chart.houses)
+        aspectsJSON = try encodeAspects(chart.aspects)
         ascendant = chart.ascendant
         midheaven = chart.midheaven
         self.houseSystem = houseSystem
@@ -127,7 +161,7 @@ extension CachedNatalChart {
     }
 
     func cachedBirthDetails() throws -> CachedBirthDetails {
-        try cachedChartDecoder.decode(CachedBirthDetails.self, from: birthDataJSON)
+        try decodeCachedBirthDetails(from: birthDataJSON)
     }
 
     func matches(_ birthDetails: BirthDetails) -> Bool {
@@ -176,9 +210,9 @@ extension CachedNatalChart {
 
     func toNatalChart() throws -> NatalChart {
         let birthDetails = try toBirthDetails()
-        let planets = try cachedChartDecoder.decode([Planet].self, from: planetsJSON)
-        let houses = try cachedChartDecoder.decode([House].self, from: housesJSON)
-        let aspects = try cachedChartDecoder.decode([Aspect].self, from: aspectsJSON)
+        let planets = try decodePlanets(from: planetsJSON)
+        let houses = try decodeHouses(from: housesJSON)
+        let aspects = try decodeAspects(from: aspectsJSON)
         
         // Calculate house rulers from houses and planets
         let houseRulers = houses.compactMap { house -> HouseRuler? in
