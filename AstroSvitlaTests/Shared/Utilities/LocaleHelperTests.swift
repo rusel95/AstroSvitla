@@ -2,14 +2,14 @@ import Testing
 @testable import AstroSvitla
 
 /// Unit tests for LocaleHelper utility
-/// Validates FR-024, FR-025, FR-026: 13 supported languages
+/// Validates FR-024, FR-025, FR-026: 11 supported languages
 struct LocaleHelperTests {
     
     // MARK: - Supported Languages Tests
     
-    @Test("Supported languages count is exactly 13")
+    @Test("Supported languages count is exactly 11")
     func supportedLanguagesCount() {
-        #expect(LocaleHelper.supportedLanguageCodes.count == 13)
+        #expect(LocaleHelper.supportedLanguageCodes.count == 11)
     }
     
     @Test("English is supported as base language")
@@ -26,7 +26,7 @@ struct LocaleHelperTests {
     func allRequiredLanguagesSupported() {
         let requiredLanguages = [
             "en", "uk", "de", "fr", "es", "pt-BR",
-            "it", "ja", "ko", "zh-Hans", "zh-Hant", "ru", "tr"
+            "it", "ja", "ko", "ru", "tr"
         ]
         
         for language in requiredLanguages {
@@ -41,6 +41,8 @@ struct LocaleHelperTests {
         #expect(!LocaleHelper.isSupported("ar"))  // Arabic
         #expect(!LocaleHelper.isSupported("he"))  // Hebrew
         #expect(!LocaleHelper.isSupported("pl"))  // Polish
+        #expect(!LocaleHelper.isSupported("zh-Hans"))  // Chinese Simplified (removed)
+        #expect(!LocaleHelper.isSupported("zh-Hant"))  // Chinese Traditional (removed)
         #expect(!LocaleHelper.isSupported("xyz")) // Invalid
     }
     
@@ -69,8 +71,6 @@ struct LocaleHelperTests {
     
     @Test("Display name for regional variants returns valid string")
     func displayNameForRegionalVariants() {
-        #expect(!LocaleHelper.displayName(for: "zh-Hans").isEmpty)
-        #expect(!LocaleHelper.displayName(for: "zh-Hant").isEmpty)
         #expect(!LocaleHelper.displayName(for: "pt-BR").isEmpty)
     }
     

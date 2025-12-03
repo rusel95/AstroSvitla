@@ -1,14 +1,14 @@
 import Foundation
 
 /// Centralized helper for locale and language operations
-/// Supporting FR-024, FR-025, FR-026: 13 languages at launch
+/// Supporting FR-024, FR-025, FR-026: 11 languages at launch
 enum LocaleHelper {
     
     // MARK: - Supported Languages
     
     /// Supported language codes matching spec requirements
     /// - English (base), Ukrainian, German, French, Spanish, Portuguese-Brazil
-    /// - Italian, Japanese, Korean, Simplified Chinese, Traditional Chinese, Russian, Turkish
+    /// - Italian, Japanese, Korean, Russian, Turkish
     static let supportedLanguageCodes: [String] = [
         "en",       // English (base/fallback)
         "uk",       // Ukrainian
@@ -19,8 +19,6 @@ enum LocaleHelper {
         "it",       // Italian
         "ja",       // Japanese
         "ko",       // Korean
-        "zh-Hans",  // Simplified Chinese
-        "zh-Hant",  // Traditional Chinese
         "ru",       // Russian
         "tr"        // Turkish
     ]
@@ -33,8 +31,6 @@ enum LocaleHelper {
         let preferred = Locale.preferredLanguages.first ?? "en"
         
         // Handle regional variants first (before extracting base code)
-        if preferred.hasPrefix("zh-Hans") { return "zh-Hans" }
-        if preferred.hasPrefix("zh-Hant") { return "zh-Hant" }
         if preferred.hasPrefix("pt-BR") { return "pt-BR" }
         
         // Extract base language code (e.g., "en-US" -> "en", "uk-UA" -> "uk")

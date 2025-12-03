@@ -478,6 +478,9 @@ private extension MainFlowView {
             knowledgeSourcesJSON: knowledgeSourcesJSON,
             availableBooksJSON: availableBooksJSON
         )
+        
+        // Set the ISO language code for the report
+        purchase.languageCode = languageCode
 
         // Link report to active profile
         if let activeProfile = repositoryContext.activeProfile {

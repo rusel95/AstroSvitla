@@ -358,7 +358,7 @@ private struct SavedReportDetailView: View {
                     birthDetails: prepared.birthDetails,
                     natalChart: prepared.natalChart,
                     report: prepared.generatedReport,
-                    languageCode: item.report.language
+                    languageCode: item.report.languageCode
                 )
                 .background(Color(.systemBackground))
             } else {

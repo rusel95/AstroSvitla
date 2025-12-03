@@ -52,7 +52,7 @@ struct ChartDetailsView: View {
             }
 
             // Planets
-            Section("chart.section.planets \(chart.planets.count)") {
+            Section {
                 ForEach(chart.planets) { planet in
                     LabeledContent {
                         VStack(alignment: .trailing, spacing: 4) {
@@ -64,10 +64,10 @@ struct ChartDetailsView: View {
                                         .foregroundStyle(.orange)
                                 }
                             }
-                            Text("chart.planet.position \(planet.sign.rawValue) \(planet.house)")
+                            Text(String(localized: "chart.planet.position \(planet.sign.rawValue) \(planet.house)"))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            Text("chart.planet.speed \(String(format: "%.4f", planet.speed))")
+                            Text(String(localized: "chart.planet.speed \(String(format: "%.4f", planet.speed))"))
                                 .font(.caption2)
                                 .foregroundStyle(.tertiary)
                         }
@@ -83,12 +83,14 @@ struct ChartDetailsView: View {
                         }
                     }
                 }
+            } header: {
+                Text("chart.section.planets \(chart.planets.count)")
             }
 
             // Houses
-            Section("chart.section.houses \(chart.houses.count)") {
+            Section {
                 ForEach(chart.houses.sorted(by: { $0.number < $1.number })) { house in
-                    LabeledContent("chart.house \(house.number)") {
+                    LabeledContent(String(localized: "chart.house \(house.number)")) {
                         VStack(alignment: .trailing) {
                             Text(formatDegree(house.cusp))
                                 .font(.caption.monospaced())
@@ -98,10 +100,12 @@ struct ChartDetailsView: View {
                         }
                     }
                 }
+            } header: {
+                Text("chart.section.houses \(chart.houses.count)")
             }
 
             // Aspects
-            Section("chart.section.aspects \(chart.aspects.count)") {
+            Section {
                 ForEach(chart.aspects) { aspect in
                     VStack(alignment: .leading, spacing: 4) {
                         HStack {
@@ -119,13 +123,15 @@ struct ChartDetailsView: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text("chart.aspect.orb \(String(format: "%.2f", aspect.orb))")
+                            Text(String(localized: "chart.aspect.orb \(String(format: "%.2f", aspect.orb))"))
                                 .font(.caption.monospaced())
                                 .foregroundStyle(.tertiary)
                         }
                     }
                     .padding(.vertical, 4)
                 }
+            } header: {
+                Text("chart.section.aspects \(chart.aspects.count)")
             }
 
             // Calculation Metadata

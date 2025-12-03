@@ -146,7 +146,7 @@ All localization keys follow a hierarchical naming pattern:
 
 ## Relationships
 
-```
+```text
 ┌─────────────────┐         ┌─────────────────┐
 │  ReportPurchase │────────▶│  LocaleHelper   │
 │                 │  uses   │   (utility)     │
@@ -180,7 +180,7 @@ All localization keys follow a hierarchical naming pattern:
 
 ### Report Language Assignment
 
-```
+```text
 ┌──────────────────┐
 │ User initiates   │
 │ report generation│
