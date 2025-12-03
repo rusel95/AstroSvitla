@@ -148,7 +148,7 @@ struct PurchaseConfirmationView: View {
                         .foregroundStyle(.secondary)
                         .frame(width: 20)
 
-                    Text("\(birthDetails.formattedBirthDate) о \(birthDetails.formattedBirthTime)")
+                    Text("purchase.datetime \(birthDetails.formattedBirthDate) \(birthDetails.formattedBirthTime)")
                         .font(.system(size: 14, weight: .regular))
                         .foregroundStyle(.secondary)
                 }

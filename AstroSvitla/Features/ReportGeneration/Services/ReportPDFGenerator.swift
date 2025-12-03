@@ -299,7 +299,7 @@ private struct ReportPDFContentView: View {
                             chartInfoItem(label: "MC", value: formatDegree(natalChart.midheaven), sign: ZodiacSign.from(degree: natalChart.midheaven))
                         }
 
-                        Text("\(natalChart.planets.count) планет • \(natalChart.aspects.count) аспектів")
+                        Text("pdf.chart.stats \(natalChart.planets.count) \(natalChart.aspects.count)")
                             .font(.system(size: 11, weight: .medium))
                             .foregroundStyle(secondaryTextColor)
                     }
