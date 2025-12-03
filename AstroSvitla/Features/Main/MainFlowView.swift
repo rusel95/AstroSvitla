@@ -419,7 +419,7 @@ private extension MainFlowView {
     @MainActor
     func persistGeneratedReport(details: BirthDetails, natalChart: NatalChart, generatedReport: GeneratedReport) throws {
         let reportText = renderReportText(from: generatedReport)
-        let languageCode = "uk"
+        let languageCode = LocaleHelper.currentLanguageCode
 
         // Extract knowledge source data for storage
         let sources = generatedReport.knowledgeUsage.sources ?? []
@@ -511,24 +511,24 @@ private extension MainFlowView {
 
         if report.keyInfluences.isEmpty == false {
             lines.append("")
-            lines.append("Ключові впливи")
+            lines.append(String(localized: "report.section.key_influences"))
             report.keyInfluences.forEach { lines.append("• \($0)") }
         }
 
         lines.append("")
-        lines.append("Аналіз")
+        lines.append(String(localized: "report.section.analysis"))
         lines.append(report.detailedAnalysis)
 
         if report.recommendations.isEmpty == false {
             lines.append("")
-            lines.append("Рекомендації")
+            lines.append(String(localized: "report.section.recommendations"))
             report.recommendations.forEach { lines.append("• \($0)") }
         }
 
         lines.append("")
-        lines.append(report.knowledgeUsage.vectorSourceUsed ? "Джерела використано" : "Джерела не використано")
+        lines.append(report.knowledgeUsage.vectorSourceUsed ? String(localized: "report.sources.used") : String(localized: "report.sources.not_used"))
         if let notes = report.knowledgeUsage.notes, notes.isEmpty == false {
-            lines.append("Примітка: \(notes)")
+            lines.append(String(localized: "report.note_prefix \(notes)"))
         }
 
         return lines.joined(separator: "\n")

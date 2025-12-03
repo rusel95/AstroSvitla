@@ -109,7 +109,7 @@ struct KeyInsightsTemplate: View {
     private var influencesSection: some View {
         VStack(spacing: 20) {
             // Section header
-            Text("Key Influences", comment: "Section header")
+            Text("share.key_influences.title")
                 .font(.system(size: 22, weight: .bold))
                 .foregroundStyle(ZoryaBranding.textTertiary)
                 .textCase(.uppercase)

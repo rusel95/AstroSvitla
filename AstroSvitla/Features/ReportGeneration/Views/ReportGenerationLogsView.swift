@@ -39,7 +39,7 @@ struct ReportGenerationLogsView: View {
             VStack(spacing: 12) {
                 // Model info
                 HStack {
-                    Label("Модель", systemImage: "cpu")
+                    Label("logs.model", systemImage: "cpu")
                         .foregroundStyle(.secondary)
                     Spacer()
                     Text(report.metadata.modelName)
@@ -51,7 +51,7 @@ struct ReportGenerationLogsView: View {
                 // Token usage
                 VStack(spacing: 8) {
                     HStack {
-                        Text("Токени (prompt)")
+                        Text("logs.tokens.prompt")
                             .foregroundStyle(.secondary)
                         Spacer()
                         Text("\(report.metadata.promptTokens)")
@@ -59,7 +59,7 @@ struct ReportGenerationLogsView: View {
                     }
 
                     HStack {
-                        Text("Токени (completion)")
+                        Text("logs.tokens.completion")
                             .foregroundStyle(.secondary)
                         Spacer()
                         Text("\(report.metadata.completionTokens)")
@@ -67,7 +67,7 @@ struct ReportGenerationLogsView: View {
                     }
 
                     HStack {
-                        Text("Всього токенів")
+                        Text("logs.tokens.total")
                             .foregroundStyle(.secondary)
                         Spacer()
                         Text("\(report.metadata.totalTokens)")
@@ -79,7 +79,7 @@ struct ReportGenerationLogsView: View {
 
                 // Cost & Time
                 HStack {
-                    Label("Вартість", systemImage: "dollarsign.circle")
+                    Label("logs.cost", systemImage: "dollarsign.circle")
                         .foregroundStyle(.secondary)
                     Spacer()
                     Text("$\(String(format: "%.6f", report.metadata.estimatedCost))")
@@ -88,15 +88,15 @@ struct ReportGenerationLogsView: View {
                 }
 
                 HStack {
-                    Label("Час обробки", systemImage: "clock")
+                    Label("logs.processing_time", systemImage: "clock")
                         .foregroundStyle(.secondary)
                     Spacer()
-                    Text(String(format: "%.2f сек", report.metadata.processingTimeSeconds))
+                    Text("logs.seconds \(String(format: "%.2f", report.metadata.processingTimeSeconds))")
                         .fontWeight(.medium)
                 }
 
                 HStack {
-                    Label("Дата генерації", systemImage: "calendar")
+                    Label("logs.generation_date", systemImage: "calendar")
                         .foregroundStyle(.secondary)
                     Spacer()
                     Text(report.metadata.generationDate, style: .date)
@@ -105,7 +105,7 @@ struct ReportGenerationLogsView: View {
             }
             .font(.subheadline)
         } header: {
-            Text("Метадані генерації")
+            Text("logs.section.metadata")
         }
     }
 
@@ -118,7 +118,7 @@ struct ReportGenerationLogsView: View {
                     Text("\(report.metadata.knowledgeSnippetsProvided)")
                         .font(.title2)
                         .fontWeight(.bold)
-                    Text("Надано фрагментів")
+                    Text("logs.snippets_provided")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -130,7 +130,7 @@ struct ReportGenerationLogsView: View {
                     Text("\(report.metadata.totalSourcesCited)")
                         .font(.title2)
                         .fontWeight(.bold)
-                    Text("Цитовано джерел")
+                    Text("logs.sources_cited")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -147,7 +147,7 @@ struct ReportGenerationLogsView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("\(report.metadata.vectorDatabaseSourcesCount)")
                             .fontWeight(.semibold)
-                        Text("З нашої БД")
+                        Text("logs.from_our_db")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
@@ -159,7 +159,7 @@ struct ReportGenerationLogsView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("\(report.metadata.externalSourcesCount)")
                             .fontWeight(.semibold)
-                        Text("Зовнішні книги")
+                        Text("logs.external_books")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
@@ -167,7 +167,7 @@ struct ReportGenerationLogsView: View {
             }
             .font(.subheadline)
         } header: {
-            Text("Огляд джерел")
+            Text("logs.section.sources_overview")
         }
     }
 
@@ -180,13 +180,13 @@ struct ReportGenerationLogsView: View {
                     citedSourceRow(source)
                 }
             } else {
-                Text("Джерела не були процитовані")
+                Text("logs.no_sources_cited")
                     .foregroundStyle(.secondary)
                     .font(.subheadline)
             }
         } header: {
             HStack {
-                Text("Процитовані джерела")
+                Text("logs.section.cited_sources")
                 Spacer()
                 if let sources = report.knowledgeUsage.sources {
                     Text("(\(sources.count))")
@@ -256,7 +256,7 @@ struct ReportGenerationLogsView: View {
                                 Image(systemName: "star.fill")
                                     .foregroundStyle(.yellow)
                                     .font(.caption2)
-                                Text("Релевантність: \(String(format: "%.0f%%", score * 100))")
+                                Text("logs.relevance \(String(format: "%.0f", score * 100))")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -316,12 +316,12 @@ struct ReportGenerationLogsView: View {
                                     }
 
                                     HStack(spacing: 12) {
-                                        Label("\(book.totalChunks) chunks", systemImage: "square.stack.3d.up")
+                                        Label("logs.chunks \(book.totalChunks)", systemImage: "square.stack.3d.up")
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
 
                                         if !book.usedChunks.isEmpty {
-                                            Label("\(book.usedChunks.count) використано", systemImage: "checkmark.circle.fill")
+                                            Label("logs.chunks_used \(book.usedChunks.count)", systemImage: "checkmark.circle.fill")
                                                 .font(.caption)
                                                 .foregroundStyle(.green)
                                         }
@@ -353,11 +353,11 @@ struct ReportGenerationLogsView: View {
                         .font(.largeTitle)
                         .foregroundStyle(.secondary)
 
-                    Text("База даних порожня")
+                    Text("logs.database_empty")
                         .font(.headline)
                         .foregroundStyle(.secondary)
 
-                    Text("Векторна база знань не містить книг")
+                    Text("logs.database_empty.subtitle")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -367,10 +367,10 @@ struct ReportGenerationLogsView: View {
             }
         } header: {
             HStack {
-                Text("Доступна векторна база даних")
+                Text("logs.section.vector_database")
                 Spacer()
                 if let books = report.knowledgeUsage.availableBooks {
-                    Text("(\(books.count) книг)")
+                    Text("logs.books_count \(books.count)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -460,7 +460,7 @@ struct ReportGenerationLogsView: View {
                 .font(.body)
                 .foregroundStyle(.secondary)
         } header: {
-            Text("Примітки")
+            Text("logs.section.notes")
         }
     }
 }

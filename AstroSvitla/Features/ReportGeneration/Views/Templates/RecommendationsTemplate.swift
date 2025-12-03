@@ -83,7 +83,7 @@ struct RecommendationsTemplate: View {
             }
             
             // Title
-            Text("Recommendations", comment: "Template header")
+            Text("share.recommendations.title")
                 .font(.system(size: 48, weight: .bold, design: .rounded))
                 .foregroundStyle(ZoryaBranding.textPrimary)
             
@@ -151,7 +151,7 @@ struct RecommendationsTemplate: View {
     
     private var ctaSection: some View {
         VStack(spacing: 16) {
-            Text("Get your full report", comment: "CTA text")
+            Text("share.cta.get_full_report")
                 .font(.system(size: 26, weight: .semibold))
                 .foregroundStyle(ZoryaBranding.textSecondary)
             

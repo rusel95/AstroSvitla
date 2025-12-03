@@ -50,7 +50,7 @@ struct CarouselCoverSlide: View {
                 
                 // Swipe indicator
                 VStack(spacing: 8) {
-                    Text("Swipe for insights", comment: "Carousel hint")
+                    Text("carousel.cover.swipe_hint")
                         .font(.system(size: 24, weight: .medium))
                         .foregroundStyle(ZoryaBranding.textSecondary)
                     
@@ -128,7 +128,7 @@ struct CarouselInfluencesSlide: View {
                         .font(.system(size: 48, weight: .medium))
                         .foregroundStyle(ZoryaBranding.accentGold)
                     
-                    Text("Key Influences", comment: "Slide title")
+                    Text("carousel.influences.title")
                         .font(.system(size: 44, weight: .bold, design: .rounded))
                         .foregroundStyle(ZoryaBranding.textPrimary)
                 }
@@ -202,7 +202,7 @@ struct CarouselRecommendationsSlide: View {
                         .font(.system(size: 48, weight: .medium))
                         .foregroundStyle(ZoryaBranding.accentGold)
                     
-                    Text("Recommendations", comment: "Slide title")
+                    Text("carousel.recommendations.title")
                         .font(.system(size: 44, weight: .bold, design: .rounded))
                         .foregroundStyle(ZoryaBranding.textPrimary)
                 }
@@ -277,7 +277,7 @@ struct CarouselAnalysisSlide: View {
                         .font(.system(size: 48, weight: .medium))
                         .foregroundStyle(ZoryaBranding.accentGold)
                     
-                    Text("Analysis", comment: "Slide title")
+                    Text("carousel.analysis.title")
                         .font(.system(size: 44, weight: .bold, design: .rounded))
                         .foregroundStyle(ZoryaBranding.textPrimary)
                 }
@@ -383,7 +383,7 @@ struct CarouselCTASlide: View {
                     
                     // CTA button
                     VStack(spacing: 16) {
-                        Text("Get Your Report", comment: "CTA button text")
+                        Text("carousel.cta.button")
                             .font(.system(size: 32, weight: .bold))
                             .foregroundStyle(.white)
                             .padding(.horizontal, 48)

@@ -23,6 +23,7 @@ struct SettingsView: View {
                 VStack(spacing: 24) {
                     profileSection
                     appearanceSection
+                    languageSection
                     if preferences.isDevModeEnabled {
                         openAIModelSection
                         devToolsSection
@@ -137,6 +138,31 @@ struct SettingsView: View {
                 }
             }
             .padding(.vertical, 4)
+        }
+        .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
+    }
+
+    // MARK: - Language Section
+    
+    private var languageSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Section header
+            SettingsSectionHeader(title: String(localized: "settings.section.language"), icon: "globe")
+            
+            // Language settings button
+            Button {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            } label: {
+                SettingsRow(
+                    icon: "character.bubble",
+                    iconColor: Color(red: 0.3, green: 0.5, blue: 0.9),
+                    title: String(localized: "settings.language.change"),
+                    subtitle: LocaleHelper.currentLanguageDisplayName
+                )
+            }
+            .buttonStyle(.plain)
         }
         .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
     }

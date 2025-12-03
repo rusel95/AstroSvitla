@@ -23,7 +23,7 @@ struct SVGImageView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: .infinity)
             } else if isLoading {
-                ProgressView("Рендеринг")
+                ProgressView("chart.rendering")
                     .frame(maxWidth: .infinity)
                     .frame(height: 400)  // Placeholder height while loading
             } else {
@@ -32,7 +32,7 @@ struct SVGImageView: View {
                         .font(.system(size: 40))
                         .foregroundStyle(.orange)
                     
-                    Text("Помилка рендерингу")
+                    Text("chart.rendering_error")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

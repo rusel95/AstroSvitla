@@ -14,23 +14,23 @@ struct ChartDetailsView: View {
             }
 
             // Birth Info Section
-            Section("Дані народження") {
-                LabeledContent("Ім'я", value: birthDetails.displayName)
-                LabeledContent("Дата", value: birthDetails.formattedBirthDate)
-                LabeledContent("Час", value: birthDetails.formattedBirthTime)
-                LabeledContent("Місце", value: birthDetails.location)
-                LabeledContent("Координати") {
+            Section("chart.section.birth_data") {
+                LabeledContent("chart.name", value: birthDetails.displayName)
+                LabeledContent("chart.date", value: birthDetails.formattedBirthDate)
+                LabeledContent("chart.time", value: birthDetails.formattedBirthTime)
+                LabeledContent("chart.location", value: birthDetails.location)
+                LabeledContent("chart.coordinates") {
                     if let coord = birthDetails.coordinate {
                         Text("\(coord.latitude, specifier: "%.4f")°, \(coord.longitude, specifier: "%.4f")°")
                             .font(.caption.monospaced())
                     }
                 }
-                LabeledContent("Часовий пояс", value: birthDetails.timeZone.identifier)
+                LabeledContent("chart.timezone", value: birthDetails.timeZone.identifier)
             }
 
             // Ascendant & Midheaven
-            Section("Кути карти") {
-                LabeledContent("Асцендент (ASC)") {
+            Section("chart.section.angles") {
+                LabeledContent("chart.ascendant") {
                     VStack(alignment: .trailing) {
                         Text(formatDegree(chart.ascendant))
                             .font(.caption.monospaced())
@@ -40,7 +40,7 @@ struct ChartDetailsView: View {
                     }
                 }
 
-                LabeledContent("Середина неба (MC)") {
+                LabeledContent("chart.midheaven") {
                     VStack(alignment: .trailing) {
                         Text(formatDegree(chart.midheaven))
                             .font(.caption.monospaced())
@@ -52,7 +52,7 @@ struct ChartDetailsView: View {
             }
 
             // Planets
-            Section("Планети (\(chart.planets.count))") {
+            Section("chart.section.planets \(chart.planets.count)") {
                 ForEach(chart.planets) { planet in
                     LabeledContent {
                         VStack(alignment: .trailing, spacing: 4) {
@@ -64,10 +64,10 @@ struct ChartDetailsView: View {
                                         .foregroundStyle(.orange)
                                 }
                             }
-                            Text("\(planet.sign.rawValue), дім \(planet.house)")
+                            Text("chart.planet.position \(planet.sign.rawValue) \(planet.house)")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
-                            Text("Швидкість: \(planet.speed, specifier: "%.4f")°/день")
+                            Text("chart.planet.speed \(String(format: "%.4f", planet.speed))")
                                 .font(.caption2)
                                 .foregroundStyle(.tertiary)
                         }
@@ -86,9 +86,9 @@ struct ChartDetailsView: View {
             }
 
             // Houses
-            Section("Будинки (\(chart.houses.count))") {
+            Section("chart.section.houses \(chart.houses.count)") {
                 ForEach(chart.houses.sorted(by: { $0.number < $1.number })) { house in
-                    LabeledContent("Дім \(house.number)") {
+                    LabeledContent("chart.house \(house.number)") {
                         VStack(alignment: .trailing) {
                             Text(formatDegree(house.cusp))
                                 .font(.caption.monospaced())
@@ -101,7 +101,7 @@ struct ChartDetailsView: View {
             }
 
             // Aspects
-            Section("Аспекти (\(chart.aspects.count))") {
+            Section("chart.section.aspects \(chart.aspects.count)") {
                 ForEach(chart.aspects) { aspect in
                     VStack(alignment: .leading, spacing: 4) {
                         HStack {
@@ -119,7 +119,7 @@ struct ChartDetailsView: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text("Орб: \(aspect.orb, specifier: "%.2f")°")
+                            Text("chart.aspect.orb \(String(format: "%.2f", aspect.orb))")
                                 .font(.caption.monospaced())
                                 .foregroundStyle(.tertiary)
                         }
@@ -129,11 +129,11 @@ struct ChartDetailsView: View {
             }
 
             // Calculation Metadata
-            Section("Метадані") {
-                LabeledContent("Дата розрахунку", value: chart.calculatedAt.formatted(date: .abbreviated, time: .shortened))
+            Section("chart.section.metadata") {
+                LabeledContent("chart.calculation_date", value: chart.calculatedAt.formatted(date: .abbreviated, time: .shortened))
             }
         }
-        .navigationTitle("Деталі карти")
+        .navigationTitle("chart.details.title")
         .navigationBarTitleDisplayMode(.inline)
     }
 

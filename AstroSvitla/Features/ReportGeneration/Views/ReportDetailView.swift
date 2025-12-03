@@ -141,14 +141,30 @@ struct ReportDetailView: View {
 
                 Spacer()
 
-                // Report type badge
-                Text(report.area.displayName)
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(Color.accentColor)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Color.accentColor.opacity(0.12))
-                    .clipShape(Capsule())
+                // Language and Report type badges
+                HStack(spacing: 8) {
+                    // Language indicator
+                    Label(LocaleHelper.currentLanguageCode.uppercased(), systemImage: "globe")
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(secondaryTextColor)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical: 6)
+                        .background(cardBackground)
+                        .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .strokeBorder(borderColor, lineWidth: 1)
+                        )
+
+                    // Report type badge
+                    Text(report.area.displayName)
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(Color.accentColor)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.accentColor.opacity(0.12))
+                        .clipShape(Capsule())
+                }
             }
 
             // User info card
@@ -220,7 +236,7 @@ struct ReportDetailView: View {
 
     private var influencesSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Ключові впливи", icon: "sparkle")
+            sectionHeader(title: String(localized: "report.section.key_influences"), icon: "sparkle")
 
             VStack(alignment: .leading, spacing: 12) {
                 ForEach(Array(report.keyInfluences.enumerated()), id: \.offset) { index, influence in
@@ -256,7 +272,7 @@ struct ReportDetailView: View {
 
     private var analysisSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Детальний аналіз", icon: "doc.text.magnifyingglass")
+            sectionHeader(title: String(localized: "report.section.detailed_analysis"), icon: "doc.text.magnifyingglass")
 
             Text(report.detailedAnalysis)
                 .font(.system(size: 14, weight: .regular))
@@ -277,7 +293,7 @@ struct ReportDetailView: View {
 
     private var recommendationsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Рекомендації", icon: "checkmark.seal.fill")
+            sectionHeader(title: String(localized: "report.section.recommendations"), icon: "checkmark.seal.fill")
 
             VStack(alignment: .leading, spacing: 14) {
                 ForEach(Array(report.recommendations.enumerated()), id: \.offset) { index, recommendation in
@@ -326,7 +342,7 @@ struct ReportDetailView: View {
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(Color.accentColor)
 
-                Text("Логи генерування")
+                Text("report.generation_logs")
                     .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(primaryTextColor)
 
@@ -372,7 +388,7 @@ struct ReportDetailView: View {
                             .font(.system(size: 16, weight: .semibold))
                     }
 
-                    Text(isExportingPDF ? "Генерування PDF..." : "Експортувати PDF")
+                    Text(isExportingPDF ? String(localized: "report.export.generating") : String(localized: "report.export.button"))
                         .font(.system(size: 16, weight: .semibold))
                 }
                 .foregroundStyle(.white)
@@ -408,7 +424,7 @@ struct ReportDetailView: View {
                 Image(systemName: "camera.fill")
                     .font(.system(size: 16, weight: .semibold))
                 
-                Text("Поділитись в Instagram")
+                Text("report.share.instagram")
                     .font(.system(size: 16, weight: .semibold))
             }
             .foregroundStyle(primaryTextColor)
@@ -465,7 +481,7 @@ struct ReportDetailView: View {
 
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Згенеровано за допомогою AstroSvitla")
+                    Text("report.footer.generated_with")
                         .font(.system(size: 11, weight: .medium))
                         .foregroundStyle(secondaryTextColor)
 
