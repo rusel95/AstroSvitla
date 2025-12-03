@@ -57,20 +57,7 @@ enum LocaleHelper {
     /// - Parameter languageCode: ISO language code (e.g., "en", "uk", "zh-Hans")
     /// - Returns: Localized language name or the code itself as fallback
     static func displayName(for languageCode: String) -> String {
-        // Handle regional variants
-        let lookupCode: String
-        switch languageCode {
-        case "zh-Hans":
-            lookupCode = "zh-Hans"
-        case "zh-Hant":
-            lookupCode = "zh-Hant"
-        case "pt-BR":
-            lookupCode = "pt-BR"
-        default:
-            lookupCode = languageCode
-        }
-        
-        return Locale.current.localizedString(forLanguageCode: lookupCode) ?? languageCode
+        return Locale.current.localizedString(forLanguageCode: languageCode) ?? languageCode
     }
     
     // MARK: - Validation

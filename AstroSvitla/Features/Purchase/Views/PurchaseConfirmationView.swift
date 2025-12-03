@@ -25,7 +25,7 @@ struct PurchaseConfirmationView: View {
                             Image(systemName: "sparkles")
                                 .font(.system(size: 16, weight: .semibold))
 
-                            Text("purchase.action.create \(area.displayName)", bundle: .main)
+                            Text(String(localized: "purchase.action.create \(area.displayName)"))
                         }
                     }
                     .buttonStyle(.astroPrimary)

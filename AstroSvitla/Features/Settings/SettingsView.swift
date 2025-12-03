@@ -114,7 +114,7 @@ struct SettingsView: View {
             
             // Theme picker
             VStack(alignment: .leading, spacing: 12) {
-                Text("settings.theme.title")
+                Text(String(localized: "settings.theme.title"))
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(.secondary)
                 

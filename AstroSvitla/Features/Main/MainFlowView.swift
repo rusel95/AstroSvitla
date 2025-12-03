@@ -264,7 +264,8 @@ struct MainFlowView: View {
             }
         } catch {
             await MainActor.run {
-                errorMessage = String(localized: "error.chart.fetch \(error.localizedDescription)")
+                let baseError = String(localized: "error.chart.fetch")
+                errorMessage = "\(baseError): \(error.localizedDescription)"
                 flowState = .birthInput
             }
         }

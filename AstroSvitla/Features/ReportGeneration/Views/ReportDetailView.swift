@@ -100,7 +100,7 @@ struct ReportDetailView: View {
             Text(exportErrorMessage ?? String(localized: "report.export.error.default"))
         })
         .alert(String(localized: "report.export.success.title"), isPresented: $isShowingSuccessAlert, actions: {
-            Button("OK", role: .cancel) {
+            Button(String(localized: "action.ok"), role: .cancel) {
                 isShowingSuccessAlert = false
             }
         }, message: {
