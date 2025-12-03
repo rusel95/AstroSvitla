@@ -15,11 +15,11 @@ struct UserProfileListView: View {
                     profileListView
                 }
             }
-            .navigationTitle(Text("profile.manage.title", bundle: .main))
+            .navigationTitle(Text("profile.manage.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("action.done", bundle: .main) {
+                    Button("action.done") {
                         dismiss()
                     }
                 }
@@ -27,11 +27,11 @@ struct UserProfileListView: View {
                 // NOTE: Profile creation now happens inline on Home tab
                 // Remove the "Create Profile" button from Settings for simplified UX
             }
-            .alert(Text("profile.delete.title", bundle: .main), isPresented: $viewModel.showDeleteConfirmation) {
-                Button("action.cancel", bundle: .main, role: .cancel) {
+            .alert(Text("profile.delete.title"), isPresented: $viewModel.showDeleteConfirmation) {
+                Button("action.cancel", role: .cancel) {
                     viewModel.cancelDelete()
                 }
-                Button("action.delete", bundle: .main, role: .destructive) {
+                Button("action.delete", role: .destructive) {
                     Task {
                         await viewModel.confirmDeleteProfile()
                     }
@@ -152,7 +152,7 @@ private struct ProfileRowView: View {
                 Button(role: .destructive) {
                     onDelete()
                 } label: {
-                    Label("action.delete", bundle: .main, systemImage: "trash")
+                    Label("action.delete", systemImage: "trash")
                         .font(.caption)
                         .foregroundColor(.red)
                 }

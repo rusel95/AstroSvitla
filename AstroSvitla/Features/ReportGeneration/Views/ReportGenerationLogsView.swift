@@ -24,7 +24,7 @@ struct ReportGenerationLogsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("action.close", bundle: .main) {
+                    Button("action.close") {
                         dismiss()
                     }
                 }

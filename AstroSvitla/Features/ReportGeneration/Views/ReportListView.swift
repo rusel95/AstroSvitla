@@ -37,11 +37,11 @@ struct ReportListView: View {
                         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                 }
             }
-            .navigationTitle(showsTitle ? Text("report.list.title", bundle: .main) : Text(""))
+            .navigationTitle(showsTitle ? Text("report.list.title") : Text(""))
             .toolbar {
                 if allowsDismiss {
                     ToolbarItem(placement: .topBarLeading) {
-                        Button("action.close", bundle: .main) {
+                        Button("action.close") {
                             dismiss()
                         }
                     }
@@ -56,8 +56,8 @@ struct ReportListView: View {
             .onChange(of: viewModel.errorMessage) { _, newValue in
                 isShowingErrorAlert = newValue != nil
             }
-            .alert(Text("error.title", bundle: .main), isPresented: $isShowingErrorAlert, actions: {
-                Button("action.close", bundle: .main, role: .cancel) {
+            .alert(Text("error.title"), isPresented: $isShowingErrorAlert, actions: {
+                Button("action.close", role: .cancel) {
                     isShowingErrorAlert = false
                 }
             }, message: {
@@ -357,7 +357,8 @@ private struct SavedReportDetailView: View {
                 ReportDetailView(
                     birthDetails: prepared.birthDetails,
                     natalChart: prepared.natalChart,
-                    report: prepared.generatedReport
+                    report: prepared.generatedReport,
+                    languageCode: item.report.language
                 )
                 .background(Color(.systemBackground))
             } else {

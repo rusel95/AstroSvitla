@@ -5,6 +5,8 @@ struct ReportDetailView: View {
     let birthDetails: BirthDetails
     let natalChart: NatalChart
     let report: GeneratedReport
+    /// Language code for the report (defaults to current device language for live reports)
+    var languageCode: String = LocaleHelper.currentLanguageCode
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
 
@@ -144,7 +146,7 @@ struct ReportDetailView: View {
                 // Language and Report type badges
                 HStack(spacing: 8) {
                     // Language indicator
-                    Label(LocaleHelper.currentLanguageCode.uppercased(), systemImage: "globe")
+                    Label(languageCode.uppercased(), systemImage: "globe")
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(secondaryTextColor)
                         .padding(.horizontal, 10)

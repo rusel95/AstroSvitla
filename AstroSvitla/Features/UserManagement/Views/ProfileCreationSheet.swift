@@ -174,13 +174,13 @@ struct ProfileCreationSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("action.cancel", bundle: .main) {
+                    Button("action.cancel") {
                         dismiss()
                     }
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("action.save", bundle: .main) {
+                    Button("action.save") {
                         guard isFormValid, let coord = coordinate else { return }
                         onSave(name, birthDate, birthTime, location, coord, timezone)
                         dismiss()
@@ -203,7 +203,7 @@ struct ProfileCreationSheet: View {
                     }
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
-                            Button("action.close", bundle: .main) {
+                            Button("action.close") {
                                 showLocationSearch = false
                             }
                         }
