@@ -10,13 +10,13 @@ struct OpenAIService: Sendable {
     private let jsonDecoder: JSONDecoder
 
     init(
-        clientProvider: OpenAIClientProviding = OpenAIClientProvider.shared,
-        promptBuilder: AIPromptBuilder = AIPromptBuilder(),
-        jsonDecoder: JSONDecoder = JSONDecoder()
+        clientProvider: OpenAIClientProviding? = nil,
+        promptBuilder: AIPromptBuilder? = nil,
+        jsonDecoder: JSONDecoder? = nil
     ) {
-        self.clientProvider = clientProvider
-        self.promptBuilder = promptBuilder
-        self.jsonDecoder = jsonDecoder
+        self.clientProvider = clientProvider ?? OpenAIClientProvider.shared
+        self.promptBuilder = promptBuilder ?? AIPromptBuilder()
+        self.jsonDecoder = jsonDecoder ?? JSONDecoder()
     }
 
     var isConfigured: Bool {

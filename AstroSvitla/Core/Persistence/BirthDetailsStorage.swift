@@ -1,6 +1,10 @@
 import Foundation
 import CoreLocation
 
+// File-level encoder/decoder to avoid @MainActor isolation issues with Codable
+private let birthDetailsEncoder = JSONEncoder()
+private let birthDetailsDecoder = JSONDecoder()
+
 /// Handles persistence of birth details using UserDefaults
 actor BirthDetailsStorage {
 
@@ -14,7 +18,7 @@ actor BirthDetailsStorage {
     /// Save birth details to persistent storage
     func save(_ details: BirthDetails) {
         let dto = BirthDetailsDTO(from: details)
-        if let encoded = try? JSONEncoder().encode(dto) {
+        if let encoded = try? birthDetailsEncoder.encode(dto) {
             userDefaults.set(encoded, forKey: storageKey)
         }
     }
@@ -22,7 +26,7 @@ actor BirthDetailsStorage {
     /// Load the last saved birth details from storage
     func load() -> BirthDetails? {
         guard let data = userDefaults.data(forKey: storageKey),
-              let dto = try? JSONDecoder().decode(BirthDetailsDTO.self, from: data) else {
+              let dto = try? birthDetailsDecoder.decode(BirthDetailsDTO.self, from: data) else {
             return nil
         }
         return dto.toBirthDetails()
@@ -37,7 +41,7 @@ actor BirthDetailsStorage {
 // MARK: - Data Transfer Object
 
 /// Codable DTO for BirthDetails since CLLocationCoordinate2D is not Codable
-private struct BirthDetailsDTO: Codable {
+private struct BirthDetailsDTO: Codable, Sendable {
     let name: String
     let birthDate: Date
     let birthTime: Date
@@ -46,7 +50,7 @@ private struct BirthDetailsDTO: Codable {
     let latitude: Double?
     let longitude: Double?
 
-    nonisolated init(from details: BirthDetails) {
+    init(from details: BirthDetails) {
         self.name = details.name
         self.birthDate = details.birthDate
         self.birthTime = details.birthTime
@@ -56,7 +60,7 @@ private struct BirthDetailsDTO: Codable {
         self.longitude = details.coordinate?.longitude
     }
 
-    nonisolated func toBirthDetails() -> BirthDetails {
+    func toBirthDetails() -> BirthDetails {
         let coordinate: CLLocationCoordinate2D?
         if let lat = latitude, let lon = longitude {
             coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)

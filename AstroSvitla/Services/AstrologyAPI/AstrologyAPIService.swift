@@ -247,26 +247,23 @@ final class SSLBypassDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
     // Session-level challenge handler
     func urlSession(
         _ session: URLSession,
-        didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
-    ) {
-        handleChallenge(challenge, completionHandler: completionHandler)
+        didReceive challenge: URLAuthenticationChallenge
+    ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+        return handleChallenge(challenge)
     }
     
     // Task-level challenge handler (needed for some iOS versions)
     func urlSession(
         _ session: URLSession,
         task: URLSessionTask,
-        didReceive challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
-    ) {
-        handleChallenge(challenge, completionHandler: completionHandler)
+        didReceive challenge: URLAuthenticationChallenge
+    ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+        return handleChallenge(challenge)
     }
     
     private func handleChallenge(
-        _ challenge: URLAuthenticationChallenge,
-        completionHandler: @escaping @Sendable (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
-    ) {
+        _ challenge: URLAuthenticationChallenge
+    ) -> (URLSession.AuthChallengeDisposition, URLCredential?) {
         let host = challenge.protectionSpace.host
         
         // Only bypass for server trust challenges (SSL)
@@ -279,11 +276,11 @@ final class SSLBypassDelegate: NSObject, URLSessionDelegate, URLSessionTaskDeleg
             
             // Accept the server's certificate regardless of validation
             let credential = URLCredential(trust: serverTrust)
-            completionHandler(.useCredential, credential)
             print("[SSLBypassDelegate] ⚠️ Bypassing SSL validation for: \(host)")
+            return (.useCredential, credential)
         } else {
             // For other challenges, use default handling
-            completionHandler(.performDefaultHandling, nil)
+            return (.performDefaultHandling, nil)
         }
     }
 }
