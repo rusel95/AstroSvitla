@@ -68,6 +68,7 @@ final class ReportPurchase {
         detailedAnalysis: String,
         recommendations: [String] = [],
         language: String,
+        languageCode: String = "en",
         knowledgeVectorUsed: Bool = false,
         knowledgeNotes: String? = nil,
         knowledgeSourceTitles: [String]? = nil,
@@ -88,6 +89,7 @@ final class ReportPurchase {
         self.detailedAnalysis = detailedAnalysis
         self.recommendations = recommendations
         self.language = language
+        self.languageCode = languageCode
         self.knowledgeVectorUsed = knowledgeVectorUsed
         self.knowledgeNotes = knowledgeNotes
         self.knowledgeSourceTitles = knowledgeSourceTitles

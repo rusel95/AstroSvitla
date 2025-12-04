@@ -406,7 +406,7 @@ Tasks organized by user story for implementing comprehensive localization across
 
 ## Dependencies
 
-```
+```text
 T001 (LocaleHelper) ──┬──▶ T005-T012 (US1: UI Localization)
                       ├──▶ T013-T016 (US2: Settings Button)
                       ├──▶ T017-T022 (US3: Reports)

@@ -5201,8 +5201,8 @@
       "localizations": {
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "chart.planet.position %1$@ %2$lld"
+            "state": "translated",
+            "value": "%1$@ House %2$lld"
           }
         },
         "uk": {

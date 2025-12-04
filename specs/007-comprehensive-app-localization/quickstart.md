@@ -46,7 +46,15 @@ enum LocaleHelper {
     }
     
     static var currentLanguageDisplayName: String {
-        Locale.current.localizedString(forLanguageCode: currentLanguageCode) ?? "English"
+        displayName(for: currentLanguageCode)
+    }
+    
+    static func isSupported(_ code: String) -> Bool {
+        supportedLanguageCodes.contains(code)
+    }
+    
+    static func displayName(for code: String) -> String {
+        Locale.current.localizedString(forLanguageCode: code) ?? code
     }
 }
 ```

@@ -104,12 +104,12 @@ enum LocaleHelper {
 ## 4. Report Generation Language
 
 ### Decision
-Pass device language to existing `languageCode` / `languageDisplayName` parameters in `OpenAIService` and `AstrologyAPIService`.
+Pass device language to existing `languageCode` / `languageDisplayName` parameters in `OpenAIService`. Note: AstrologyAPI does not currently support a language parameter for chart rendering (chart labels remain in English).
 
 ### Rationale
-- Services already accept language parameters (confirmed in codebase)
+- OpenAI service already accepts language parameters (confirmed in codebase)
 - AI prompt builder already includes language instruction
-- No architectural changes needed
+- No architectural changes needed for report text generation
 
 ### Current Implementation (AIPromptBuilder.swift)
 ```swift
@@ -117,8 +117,9 @@ Always answer in language: \(languageDisplayName) (language code: \(languageCode
 ```
 
 ### Changes Needed
-- Update call sites to pass `LocaleHelper.currentLanguageCode` instead of hardcoded values
+- Update OpenAI service call sites to pass `LocaleHelper.currentLanguageCode` instead of hardcoded values
 - Store language code in `ReportPurchase` SwiftData model for reference
+- Note: AstrologyAPI natal chart SVG labels remain English-only (API limitation)
 
 ---
 

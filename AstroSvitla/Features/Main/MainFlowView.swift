@@ -467,6 +467,7 @@ private extension MainFlowView {
             detailedAnalysis: generatedReport.detailedAnalysis,
             recommendations: generatedReport.recommendations,
             language: languageCode,
+            languageCode: languageCode,
             knowledgeVectorUsed: generatedReport.knowledgeUsage.vectorSourceUsed,
             knowledgeNotes: generatedReport.knowledgeUsage.notes,
             knowledgeSourceTitles: sourceTitles.isEmpty ? nil : sourceTitles,
@@ -478,9 +479,6 @@ private extension MainFlowView {
             knowledgeSourcesJSON: knowledgeSourcesJSON,
             availableBooksJSON: availableBooksJSON
         )
-        
-        // Set the ISO language code for the report
-        purchase.languageCode = languageCode
 
         // Link report to active profile
         if let activeProfile = repositoryContext.activeProfile {
