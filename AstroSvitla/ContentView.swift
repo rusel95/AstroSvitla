@@ -17,7 +17,7 @@ struct ContentView: View {
             MainFlowView(modelContext: modelContext)
                 .tabItem {
                     Label {
-                        Text("Головна")
+                        Text("tab.main")
                     } icon: {
                         Image(systemName: "sparkles")
                     }
@@ -29,7 +29,7 @@ struct ContentView: View {
             }
             .tabItem {
                 Label {
-                    Text("Звіти")
+                    Text("tab.reports")
                 } icon: {
                     Image(systemName: "doc.richtext")
                 }
@@ -41,7 +41,7 @@ struct ContentView: View {
             }
             .tabItem {
                 Label {
-                    Text("Налаштування")
+                    Text("tab.settings")
                 } icon: {
                     Image(systemName: "gearshape")
                 }

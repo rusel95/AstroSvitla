@@ -1,10 +1,24 @@
 import Foundation
 import SwiftData
 
+// File-level decoder and helper functions to avoid @MainActor isolation issues
 private let reportDecoder: JSONDecoder = {
     let decoder = JSONDecoder()
     return decoder
 }()
+
+// File-level helper functions - these are nonisolated by default
+private func decodeKnowledgeSources(from data: Data) -> [KnowledgeSource]? {
+    try? reportDecoder.decode([KnowledgeSource].self, from: data)
+}
+
+private func decodeGenerationMetadata(from data: Data) -> GenerationMetadata? {
+    try? reportDecoder.decode(GenerationMetadata.self, from: data)
+}
+
+private func decodeBookMetadata(from data: Data) -> [BookMetadata]? {
+    try? reportDecoder.decode([BookMetadata].self, from: data)
+}
 
 @Model
 final class ReportPurchase {
@@ -23,6 +37,11 @@ final class ReportPurchase {
     var knowledgeSourceTitles: [String]?
     var knowledgeSourceAuthors: [String]?
     var knowledgeSourcePages: [String]?
+    
+    /// ISO language code used when this report was generated (e.g., "en", "uk", "de")
+    /// Used for FR-021: Store language used when generating each report
+    /// Default "en" for backward compatibility with existing reports
+    var languageCode: String = "en"
 
     var price: Decimal
     var currency: String
@@ -49,6 +68,7 @@ final class ReportPurchase {
         detailedAnalysis: String,
         recommendations: [String] = [],
         language: String,
+        languageCode: String = "en",
         knowledgeVectorUsed: Bool = false,
         knowledgeNotes: String? = nil,
         knowledgeSourceTitles: [String]? = nil,
@@ -69,6 +89,7 @@ final class ReportPurchase {
         self.detailedAnalysis = detailedAnalysis
         self.recommendations = recommendations
         self.language = language
+        self.languageCode = languageCode
         self.knowledgeVectorUsed = knowledgeVectorUsed
         self.knowledgeNotes = knowledgeNotes
         self.knowledgeSourceTitles = knowledgeSourceTitles
@@ -118,7 +139,7 @@ final class ReportPurchase {
         var sources: [KnowledgeSource]? = nil
         if let sourcesJSON = knowledgeSourcesJSON,
            let data = sourcesJSON.data(using: .utf8) {
-            sources = try? reportDecoder.decode([KnowledgeSource].self, from: data)
+            sources = decodeKnowledgeSources(from: data)
         }
 
         // Fallback to legacy stored arrays if JSON not available
@@ -158,7 +179,7 @@ final class ReportPurchase {
 
         if let metadataJSON = metadataJSON,
            let data = metadataJSON.data(using: .utf8) {
-            if let decodedMetadata = try? reportDecoder.decode(GenerationMetadata.self, from: data) {
+            if let decodedMetadata = decodeGenerationMetadata(from: data) {
                 metadata = decodedMetadata
             }
         }
@@ -167,7 +188,7 @@ final class ReportPurchase {
         var availableBooks: [BookMetadata]? = nil
         if let booksJSON = availableBooksJSON,
            let data = booksJSON.data(using: .utf8) {
-            availableBooks = try? reportDecoder.decode([BookMetadata].self, from: data)
+            availableBooks = decodeBookMetadata(from: data)
         }
 
         return GeneratedReport(

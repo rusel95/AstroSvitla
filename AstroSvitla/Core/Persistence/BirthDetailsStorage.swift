@@ -2,19 +2,31 @@ import Foundation
 import CoreLocation
 
 /// Handles persistence of birth details using UserDefaults
-actor BirthDetailsStorage {
+/// Uses @MainActor to avoid concurrency issues with Codable
+@MainActor
+final class BirthDetailsStorage {
 
     static let shared = BirthDetailsStorage()
 
     private let userDefaults = UserDefaults.standard
     private let storageKey = "lastBirthDetails"
+    private let encoder = JSONEncoder()
+    private let decoder = JSONDecoder()
 
     private init() {}
 
     /// Save birth details to persistent storage
     func save(_ details: BirthDetails) {
-        let dto = BirthDetailsDTO(from: details)
-        if let encoded = try? JSONEncoder().encode(dto) {
+        let dto = BirthDetailsDTO(
+            name: details.name,
+            birthDate: details.birthDate,
+            birthTime: details.birthTime,
+            location: details.location,
+            timeZoneIdentifier: details.timeZone.identifier,
+            latitude: details.coordinate?.latitude,
+            longitude: details.coordinate?.longitude
+        )
+        if let encoded = try? encoder.encode(dto) {
             userDefaults.set(encoded, forKey: storageKey)
         }
     }
@@ -22,10 +34,27 @@ actor BirthDetailsStorage {
     /// Load the last saved birth details from storage
     func load() -> BirthDetails? {
         guard let data = userDefaults.data(forKey: storageKey),
-              let dto = try? JSONDecoder().decode(BirthDetailsDTO.self, from: data) else {
+              let dto = try? decoder.decode(BirthDetailsDTO.self, from: data) else {
             return nil
         }
-        return dto.toBirthDetails()
+        
+        let coordinate: CLLocationCoordinate2D?
+        if let lat = dto.latitude, let lon = dto.longitude {
+            coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        } else {
+            coordinate = nil
+        }
+        
+        let timeZone = TimeZone(identifier: dto.timeZoneIdentifier) ?? .current
+        
+        return BirthDetails(
+            name: dto.name,
+            birthDate: dto.birthDate,
+            birthTime: dto.birthTime,
+            location: dto.location,
+            timeZone: timeZone,
+            coordinate: coordinate
+        )
     }
 
     /// Clear saved birth details
@@ -36,7 +65,7 @@ actor BirthDetailsStorage {
 
 // MARK: - Data Transfer Object
 
-/// Codable DTO for BirthDetails since CLLocationCoordinate2D is not Codable
+/// Pure Codable DTO for BirthDetails - no methods that cross actor boundaries
 private struct BirthDetailsDTO: Codable {
     let name: String
     let birthDate: Date
@@ -45,34 +74,4 @@ private struct BirthDetailsDTO: Codable {
     let timeZoneIdentifier: String
     let latitude: Double?
     let longitude: Double?
-
-    nonisolated init(from details: BirthDetails) {
-        self.name = details.name
-        self.birthDate = details.birthDate
-        self.birthTime = details.birthTime
-        self.location = details.location
-        self.timeZoneIdentifier = details.timeZone.identifier
-        self.latitude = details.coordinate?.latitude
-        self.longitude = details.coordinate?.longitude
-    }
-
-    nonisolated func toBirthDetails() -> BirthDetails {
-        let coordinate: CLLocationCoordinate2D?
-        if let lat = latitude, let lon = longitude {
-            coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-        } else {
-            coordinate = nil
-        }
-
-        let timeZone = TimeZone(identifier: timeZoneIdentifier) ?? .current
-
-        return BirthDetails(
-            name: name,
-            birthDate: birthDate,
-            birthTime: birthTime,
-            location: location,
-            timeZone: timeZone,
-            coordinate: coordinate
-        )
-    }
 }

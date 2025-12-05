@@ -146,7 +146,7 @@ struct InstagramTemplatePreview: View {
                 .font(.system(size: 48, weight: .light))
                 .foregroundStyle(secondaryTextColor.opacity(0.5))
             
-            Text("No preview available", comment: "Empty state")
+            Text("share.preview.unavailable")
                 .font(.system(size: 16, weight: .medium))
                 .foregroundStyle(secondaryTextColor)
         }
@@ -170,7 +170,7 @@ struct InstagramTemplatePreview: View {
                     Image(systemName: "square.and.arrow.up")
                         .font(.system(size: 18, weight: .semibold))
                     
-                    Text("Share to Instagram", comment: "Share button")
+                    Text("share.instagram.button")
                         .font(.system(size: 18, weight: .semibold))
                 }
                 .foregroundStyle(.white)
@@ -196,7 +196,7 @@ struct InstagramTemplatePreview: View {
             Image(systemName: "info.circle")
                 .font(.system(size: 14, weight: .medium))
             
-            Text("5 images will be shared. Create a carousel post in Instagram.", comment: "Carousel info")
+            Text("share.carousel.info")
                 .font(.system(size: 14, weight: .regular))
         }
         .foregroundStyle(secondaryTextColor)

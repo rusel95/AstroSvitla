@@ -80,12 +80,12 @@ struct ProfileEmptyStateView: View {
 
                 // Glass content card
                 VStack(spacing: 16) {
-                    Text("Створіть свій перший профіль")
+                    Text("profile.empty.title", bundle: .main)
                         .font(.system(size: 26, weight: .bold, design: .rounded))
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.primary)
 
-                    Text("Введіть дані про народження, щоб розрахувати вашу натальну карту та отримати персоналізовані астрологічні прогнози")
+                    Text("profile.empty.description", bundle: .main)
                         .font(.system(size: 15, weight: .regular))
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
@@ -99,7 +99,7 @@ struct ProfileEmptyStateView: View {
                         HStack(spacing: 10) {
                             Image(systemName: "plus.circle.fill")
                                 .font(.system(size: 18, weight: .semibold))
-                            Text("Створити профіль")
+                            Text("profile.action.create", bundle: .main)
                         }
                     }
                     .buttonStyle(.astroPrimary)
@@ -109,7 +109,7 @@ struct ProfileEmptyStateView: View {
                     HStack(spacing: 6) {
                         Image(systemName: "clock")
                             .font(.system(size: 11, weight: .medium))
-                        Text("Це займе всього 30 секунд")
+                        Text("profile.hint.time", bundle: .main)
                             .font(.system(size: 13, weight: .medium))
                     }
                     .foregroundStyle(.tertiary)
@@ -141,6 +141,6 @@ struct ProfileEmptyStateView: View {
 #Preview {
     NavigationStack {
         ProfileEmptyStateView(onCreateProfile: {})
-            .navigationTitle("Початок")
+            .navigationTitle(Text("navigation.start", bundle: .main))
     }
 }

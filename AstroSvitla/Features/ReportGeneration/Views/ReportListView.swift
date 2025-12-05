@@ -37,11 +37,11 @@ struct ReportListView: View {
                         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                 }
             }
-            .navigationTitle(showsTitle ? "Звіти" : "")
+            .navigationTitle(showsTitle ? Text("report.list.title") : Text(""))
             .toolbar {
                 if allowsDismiss {
                     ToolbarItem(placement: .topBarLeading) {
-                        Button("Закрити") {
+                        Button("action.close") {
                             dismiss()
                         }
                     }
@@ -56,12 +56,12 @@ struct ReportListView: View {
             .onChange(of: viewModel.errorMessage) { _, newValue in
                 isShowingErrorAlert = newValue != nil
             }
-            .alert("Помилка", isPresented: $isShowingErrorAlert, actions: {
-                Button("Закрити", role: .cancel) {
+            .alert(Text("error.title"), isPresented: $isShowingErrorAlert, actions: {
+                Button("action.close", role: .cancel) {
                     isShowingErrorAlert = false
                 }
             }, message: {
-                Text(viewModel.errorMessage ?? "Щось пішло не так")
+                Text(viewModel.errorMessage ?? String(localized: "error.generic"))
             })
         }
     }
@@ -140,11 +140,11 @@ struct ReportListView: View {
             }
             
             VStack(spacing: 8) {
-                Text("Немає звітів")
+                Text("report.empty.title", bundle: .main)
                     .font(.system(size: 22, weight: .bold, design: .rounded))
                     .foregroundStyle(.primary)
                 
-                Text("Придбайте астрологічний звіт, щоб побачити його тут")
+                Text("report.empty.description", bundle: .main)
                     .font(.system(size: 15, weight: .regular))
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -335,7 +335,7 @@ private struct ReportSectionHeader: View {
                     .foregroundStyle(.secondary)
                 
                 if isOrphan {
-                    Text("Звіти без профілю")
+                    Text("report.orphan.label", bundle: .main)
                         .font(.system(size: 11, weight: .medium))
                         .foregroundStyle(.orange)
                 }
@@ -357,7 +357,8 @@ private struct SavedReportDetailView: View {
                 ReportDetailView(
                     birthDetails: prepared.birthDetails,
                     natalChart: prepared.natalChart,
-                    report: prepared.generatedReport
+                    report: prepared.generatedReport,
+                    languageCode: item.report.languageCode
                 )
                 .background(Color(.systemBackground))
             } else {

@@ -2,7 +2,7 @@ import Foundation
 import CoreLocation
 import SwiftData
 
-// File-level encoders to avoid @MainActor isolation issues
+// File-level encoders/decoders and helper functions to avoid @MainActor isolation issues
 private let birthChartDecoder: JSONDecoder = {
     let decoder = JSONDecoder()
     decoder.dateDecodingStrategy = .iso8601
@@ -14,6 +14,15 @@ private let birthChartEncoder: JSONEncoder = {
     encoder.dateEncodingStrategy = .iso8601
     return encoder
 }()
+
+// File-level helper functions - these are nonisolated by default
+private func decodeNatalChart(from data: Data) -> NatalChart? {
+    try? birthChartDecoder.decode(NatalChart.self, from: data)
+}
+
+private func encodeNatalChart(_ chart: NatalChart) -> Data? {
+    try? birthChartEncoder.encode(chart)
+}
 
 @Model
 final class BirthChart {
@@ -46,7 +55,7 @@ final class BirthChart {
     func decodedNatalChart() -> NatalChart? {
         guard chartDataJSON.isEmpty == false,
               let data = chartDataJSON.data(using: .utf8) else { return nil }
-        return try? birthChartDecoder.decode(NatalChart.self, from: data)
+        return decodeNatalChart(from: data)
     }
 
     func makeBirthDetails() -> BirthDetails? {
@@ -64,12 +73,12 @@ final class BirthChart {
     }
 
     func encodedChartData(from chart: NatalChart) -> String? {
-        guard let data = try? birthChartEncoder.encode(chart) else { return nil }
+        guard let data = encodeNatalChart(chart) else { return nil }
         return String(data: data, encoding: .utf8)
     }
 
     static func encodedChartJSON(from chart: NatalChart) -> String? {
-        guard let data = try? birthChartEncoder.encode(chart) else { return nil }
+        guard let data = encodeNatalChart(chart) else { return nil }
         return String(data: data, encoding: .utf8)
     }
 }

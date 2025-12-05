@@ -18,17 +18,17 @@ struct BirthDataInputView: View {
                 TextField("birth.field.name_optional", text: $viewModel.name)
                     .focused($focusedField, equals: .name)
             } header: {
-                Text("Персона")
+                Text("birth.section.person")
             }
 
             Section {
-                DatePicker("Дата", selection: $viewModel.birthDate, in: viewModel.dateRange, displayedComponents: .date)
-                DatePicker("Час", selection: $viewModel.birthTime, displayedComponents: .hourAndMinute)
+                DatePicker("birth.field.date", selection: $viewModel.birthDate, in: viewModel.dateRange, displayedComponents: .date)
+                DatePicker("birth.field.time", selection: $viewModel.birthTime, displayedComponents: .hourAndMinute)
                 Button {
                     showLocationSearch = true
                 } label: {
                     HStack {
-                        Text("Місце")
+                        Text("birth.field.location")
                             .foregroundStyle(.primary)
                         Spacer()
                         Text(viewModel.locationDisplay)
@@ -40,11 +40,11 @@ struct BirthDataInputView: View {
                     }
                 }
             } header: {
-                Text("Деталі")
+                Text("birth.section.details")
             }
 
             Section {
-                Text("Точніший час дає кращі результати")
+                Text("birth.help.precision")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -54,16 +54,16 @@ struct BirthDataInputView: View {
                     Button(role: .destructive) {
                         viewModel.clearData()
                     } label: {
-                        Label("Видалити збережені дані", systemImage: "trash")
+                        Label("birth.action.clear_saved", systemImage: "trash")
                     }
                 }
             }
         }
-        .navigationTitle(Text("Дані народження"))
+        .navigationTitle(Text("birth.navigation.title"))
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 if let onCancel {
-                    Button("Назад", action: onCancel)
+                    Button("action.back", action: onCancel)
                 }
             }
         }
@@ -75,7 +75,7 @@ struct BirthDataInputView: View {
                 }
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
-                        Button("Закрити") {
+                        Button("action.close") {
                             showLocationSearch = false
                         }
                     }
@@ -88,7 +88,7 @@ struct BirthDataInputView: View {
                 Button(action: {
                     onContinue(viewModel.makeDetails())
                 }) {
-                    Text("Продовжити")
+                    Text("action.continue")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)

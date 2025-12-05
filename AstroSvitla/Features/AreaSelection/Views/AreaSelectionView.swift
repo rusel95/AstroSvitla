@@ -66,7 +66,7 @@ struct AreaSelectionView: View {
                                 Image(systemName: "chart.pie.fill")
                                     .font(.system(size: 14, weight: .medium))
 
-                                Text("Переглянути натальну карту")
+                                Text("area.action.view_chart")
                                     .font(.system(size: 14, weight: .semibold))
 
                                 Spacer()
@@ -85,11 +85,11 @@ struct AreaSelectionView: View {
 
                     // Section header
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Оберіть сферу аналізу")
+                        Text("area.title.choose")
                             .font(.system(size: 22, weight: .bold, design: .rounded))
                             .foregroundStyle(.primary)
 
-                        Text("Виберіть область життя для детального астрологічного звіту")
+                        Text("area.subtitle.choose")
                             .font(.system(size: 14, weight: .regular))
                             .foregroundStyle(.secondary)
                     }
@@ -119,14 +119,14 @@ struct AreaSelectionView: View {
                 .padding(.vertical, 24)
             }
         }
-        .navigationTitle(Text("Вибір сфери"))
+        .navigationTitle(Text("area.navigation.title"))
         .navigationBarTitleDisplayMode(.inline)
         .fullScreenCover(isPresented: $showChartDetails) {
             NavigationStack {
                 ChartDetailsView(chart: natalChart, birthDetails: birthDetails)
                     .toolbar {
                         ToolbarItem(placement: .confirmationAction) {
-                            Button("Готово") {
+                            Button("action.done") {
                                 showChartDetails = false
                             }
                         }

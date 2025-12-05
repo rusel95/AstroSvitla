@@ -50,32 +50,26 @@ final class BirthDataInputViewModel: ObservableObject {
     }
 
     private func loadSavedData() {
-        Task { @MainActor in
-            if let savedDetails = await storage.load() {
-                self.name = savedDetails.name
-                self.birthDate = savedDetails.birthDate
-                self.birthTime = savedDetails.birthTime
-                self.location = savedDetails.location
-                self.timeZone = savedDetails.timeZone
-                self.coordinate = savedDetails.coordinate
-                self.hasSavedData = true
-            }
+        if let savedDetails = storage.load() {
+            self.name = savedDetails.name
+            self.birthDate = savedDetails.birthDate
+            self.birthTime = savedDetails.birthTime
+            self.location = savedDetails.location
+            self.timeZone = savedDetails.timeZone
+            self.coordinate = savedDetails.coordinate
+            self.hasSavedData = true
         }
     }
 
     func clearData() {
-        Task {
-            await storage.clear()
-            await MainActor.run {
-                self.name = ""
-                self.birthDate = Calendar.current.date(byAdding: .year, value: -25, to: Date()) ?? Date()
-                self.birthTime = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: Date()) ?? Date()
-                self.location = ""
-                self.timeZone = .current
-                self.coordinate = nil
-                self.hasSavedData = false
-            }
-        }
+        storage.clear()
+        self.name = ""
+        self.birthDate = Calendar.current.date(byAdding: .year, value: -25, to: Date()) ?? Date()
+        self.birthTime = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: Date()) ?? Date()
+        self.location = ""
+        self.timeZone = .current
+        self.coordinate = nil
+        self.hasSavedData = false
     }
 
     // MARK: - Derived Values
@@ -110,7 +104,7 @@ final class BirthDataInputViewModel: ObservableObject {
     }
 
     var locationDisplay: String {
-        location.isEmpty ? "Виберіть місце" : location
+        location.isEmpty ? String(localized: "birth.location.placeholder") : location
     }
 
     // MARK: - Private Helpers
@@ -136,12 +130,8 @@ final class BirthDataInputViewModel: ObservableObject {
         .sink { [weak self] _ in
             guard let self = self else { return }
             let details = self.makeDetails()
-            Task {
-                await self.storage.save(details)
-                await MainActor.run {
-                    self.hasSavedData = true
-                }
-            }
+            self.storage.save(details)
+            self.hasSavedData = true
         }
         .store(in: &cancellables)
     }
