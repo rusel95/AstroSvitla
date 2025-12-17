@@ -3,6 +3,8 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
+    @StateObject private var onboardingViewModel = OnboardingViewModel()
+    @State private var showOnboarding = false
 
     enum Tab: Hashable {
         case main
@@ -47,6 +49,20 @@ struct ContentView: View {
                 }
             }
             .tag(Tab.settings)
+        }
+        .onAppear {
+            // Show onboarding modally if not completed
+            if !onboardingViewModel.isCompleted {
+                showOnboarding = true
+            }
+        }
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingView(
+                viewModel: onboardingViewModel,
+                onFinish: {
+                    showOnboarding = false
+                }
+            )
         }
     }
 }

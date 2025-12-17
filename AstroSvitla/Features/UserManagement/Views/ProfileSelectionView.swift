@@ -12,54 +12,58 @@ struct ProfileSelectionView: View {
             // Animated background
             CosmicBackgroundView()
 
-            ScrollView {
-                VStack(alignment: .leading, spacing: 28) {
-                    // Header with glass effect
-                    AstroSectionHeader(
-                        title: String(localized: "profile.select.title"),
-                        subtitle: String(localized: "profile.select.subtitle")
-                    )
-                    .padding(.top, 8)
+            VStack(spacing: 0) {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 28) {
+                        // Header with glass effect
+                        AstroSectionHeader(
+                            title: String(localized: "profile.select.title"),
+                            subtitle: String(localized: "profile.select.subtitle")
+                        )
+                        .padding(.top, 8)
 
-                    // Profile list with glass cards
-                    VStack(spacing: 14) {
-                        ForEach(profiles) { profile in
-                            ProfileCard(
-                                profile: profile,
-                                isSelected: profile.id == selectedProfile?.id,
-                                onSelect: {
-                                    withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
-                                        onSelectProfile(profile)
+                        // Profile list with glass cards
+                        VStack(spacing: 14) {
+                            ForEach(profiles) { profile in
+                                ProfileCard(
+                                    profile: profile,
+                                    isSelected: profile.id == selectedProfile?.id,
+                                    onSelect: {
+                                        withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                                            onSelectProfile(profile)
+                                        }
                                     }
-                                }
-                            )
-                        }
-
-                        // Create new profile button with dashed border
-                        CreateProfileButton(action: onCreateNewProfile)
-                    }
-
-                    // Continue button with premium styling
-                    Button(action: onContinue) {
-                        HStack(spacing: 8) {
-                            Text("action.continue", bundle: .main)
-
-                            if let selected = selectedProfile {
-                                Text(String(localized: "profile.continue.with") + " \(selected.name)")
-                                    .opacity(0.85)
+                                )
                             }
 
-                            Image(systemName: "arrow.right")
-                                .font(.system(size: 14, weight: .semibold))
+                            // Create new profile button with dashed border
+                            CreateProfileButton(action: onCreateNewProfile)
                         }
                     }
-                    .buttonStyle(.astroPrimary)
-                    .disabled(selectedProfile == nil)
-                    .opacity(selectedProfile == nil ? 0.5 : 1.0)
-                    .padding(.top, 8)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 24)
                 }
+
+                // Continue button pinned to bottom
+                Button(action: onContinue) {
+                    HStack(spacing: 8) {
+                        Text("action.continue", bundle: .main)
+
+                        if let selected = selectedProfile {
+                            Text(String(localized: "profile.continue.with") + " \(selected.name)")
+                                .opacity(0.85)
+                        }
+
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 14, weight: .semibold))
+                    }
+                }
+                .buttonStyle(.astroPrimary)
+                .disabled(selectedProfile == nil)
+                .opacity(selectedProfile == nil ? 0.5 : 1.0)
                 .padding(.horizontal, 20)
-                .padding(.vertical, 24)
+                .padding(.vertical, 16)
+                .background(.ultraThinMaterial.opacity(0.8))
             }
         }
     }

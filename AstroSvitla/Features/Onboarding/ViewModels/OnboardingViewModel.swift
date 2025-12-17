@@ -110,7 +110,7 @@ final class OnboardingViewModel: ObservableObject {
             OnboardingPage(
                 title: String(localized: "onboarding.page4.title"),
                 message: String(localized: "onboarding.page4.message"),
-                symbolName: "rocket.fill",
+                symbolName: "paperplane.fill",
                 highlights: [
                     String(localized: "onboarding.page4.feature1"),
                     String(localized: "onboarding.page4.feature2"),

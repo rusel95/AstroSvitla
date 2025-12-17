@@ -21,51 +21,24 @@ struct OnboardingPageView: View {
 
             // Premium icon area with layered effects
             ZStack {
-                    // Outer animated ring with accent color
+                    // Subtle outer glow (no ring/circle stroke)
                     Circle()
-                        .strokeBorder(
-                            AngularGradient(
-                                colors: accentGradientColors,
-                                center: .center
-                            ),
-                            lineWidth: 2
+                        .fill(
+                            RadialGradient(
+                                colors: [
+                                    accentColor.opacity(0.12),
+                                    accentColor.opacity(0.04),
+                                    Color.clear
+                                ],
+                                center: .center,
+                                startRadius: 0,
+                                endRadius: 100
+                            )
                         )
                         .frame(width: 200, height: 200)
-                        .rotationEffect(.degrees(animateRing ? 360 : 0))
-                        .opacity(0.6)
+                        .scaleEffect(animateIcon ? 1.05 : 1.0)
 
-                    // Decorative circles with gradient fill
-                    Circle()
-                        .fill(
-                            RadialGradient(
-                                colors: [
-                                    accentColor.opacity(0.15),
-                                    accentColor.opacity(0.05),
-                                    Color.clear
-                                ],
-                                center: .center,
-                                startRadius: 0,
-                                endRadius: 120
-                            )
-                        )
-                        .frame(width: 240, height: 240)
-                        .scaleEffect(animateIcon ? 1.08 : 1.0)
-
-                    Circle()
-                        .fill(
-                            RadialGradient(
-                                colors: [
-                                    accentColor.opacity(0.1),
-                                    Color.clear
-                                ],
-                                center: .center,
-                                startRadius: 0,
-                                endRadius: 80
-                            )
-                        )
-                        .frame(width: 160, height: 160)
-
-                    // Glass inner circle
+                    // Glass inner circle (main icon container)
                     Circle()
                         .fill(.ultraThinMaterial)
                         .frame(width: 110, height: 110)

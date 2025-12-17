@@ -17,9 +17,8 @@ struct MainFlowView: View {
     @EnvironmentObject private var preferences: AppPreferences
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var repositoryContext: RepositoryContext
-    @StateObject private var onboardingViewModel: OnboardingViewModel
     @StateObject private var profileViewModel: UserProfileViewModel
-    @State private var flowState: FlowState
+    @State private var flowState: FlowState = .birthInput
     @State private var navigationPath = NavigationPath()
     @State private var errorMessage: String?
     @State private var showProfileCreationSheet = false
@@ -30,16 +29,10 @@ struct MainFlowView: View {
     private let reportGenerator = AIReportGenerator()
 
     init(modelContext: ModelContext) {
-        let onboardingViewModel = OnboardingViewModel()
-        _onboardingViewModel = StateObject(wrappedValue: onboardingViewModel)
-
         let service = UserProfileService(context: modelContext)
         let repoContext = RepositoryContext(context: modelContext)
         let profileVM = UserProfileViewModel(service: service, repositoryContext: repoContext)
         _profileViewModel = StateObject(wrappedValue: profileVM)
-
-        let initialFlow: FlowState = onboardingViewModel.isCompleted ? .birthInput : .onboarding
-        _flowState = State(initialValue: initialFlow)
     }
 
     var body: some View {
@@ -69,16 +62,6 @@ struct MainFlowView: View {
     @ViewBuilder
     private var rootContent: some View {
         switch flowState {
-        case .onboarding:
-            OnboardingView(
-                viewModel: onboardingViewModel,
-                onFinish: {
-                    withAnimation {
-                        flowState = .birthInput
-                    }
-                }
-            )
-
         case .birthInput:
             Group {
                 if profileViewModel.profiles.isEmpty {
@@ -540,14 +523,12 @@ private extension MainFlowView {
 // MARK: - Flow State (kept for non-navigation state tracking)
 
 private enum FlowState: Equatable {
-    case onboarding
     case birthInput
     case calculating(BirthDetails)
     case generating(BirthDetails, NatalChart, ReportArea)
 
     static func == (lhs: FlowState, rhs: FlowState) -> Bool {
         switch (lhs, rhs) {
-        case (.onboarding, .onboarding): return true
         case (.birthInput, .birthInput): return true
         case (.calculating(let l), .calculating(let r)): return l.displayName == r.displayName
         case (.generating(let ld, _, let la), .generating(let rd, _, let ra)):
@@ -558,7 +539,6 @@ private enum FlowState: Equatable {
 
     var animationID: String {
         switch self {
-        case .onboarding: return "onboarding"
         case .birthInput: return "birthInput"
         case .calculating: return "calculating"
         case .generating: return "generating"
