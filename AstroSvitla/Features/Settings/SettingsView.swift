@@ -26,7 +26,6 @@ struct SettingsView: View {
                     languageSection
                     if preferences.isDevModeEnabled {
                         openAIModelSection
-                        devToolsSection
                     }
                     appInfoSection
                 }
@@ -202,46 +201,6 @@ struct SettingsView: View {
         }
         .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
     }
-
-    // MARK: - Dev Tools Section
-
-    private var devToolsSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            // Section header
-            SettingsSectionHeader(title: String(localized: "settings.section.devtools"), icon: "hammer.fill")
-
-            VStack(spacing: 12) {
-                // Preview Onboarding button
-                Button {
-                    showOnboarding = true
-                } label: {
-                    SettingsRow(
-                        icon: "play.rectangle.fill",
-                        iconColor: Color.purple,
-                        title: String(localized: "settings.devtools.preview_onboarding"),
-                        subtitle: String(localized: "settings.devtools.preview_onboarding.subtitle")
-                    )
-                }
-                .buttonStyle(.plain)
-
-                // Reset Onboarding button
-                Button {
-                    OnboardingViewModel.resetStoredProgress()
-                    let generator = UINotificationFeedbackGenerator()
-                    generator.notificationOccurred(.success)
-                } label: {
-                    SettingsRow(
-                        icon: "arrow.counterclockwise.circle.fill",
-                        iconColor: Color.orange,
-                        title: String(localized: "settings.devtools.reset_onboarding"),
-                        subtitle: String(localized: "settings.devtools.reset_onboarding.subtitle")
-                    )
-                }
-                .buttonStyle(.plain)
-            }
-        }
-        .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
-    }
     
     // MARK: - App Info Section
     
@@ -335,6 +294,22 @@ struct SettingsView: View {
                     
                     Spacer()
                 }
+                
+                Divider()
+                    .background(Color.white.opacity(0.1))
+                
+                // How It Works button
+                Button {
+                    showOnboarding = true
+                } label: {
+                    SettingsRow(
+                        icon: "questionmark.circle.fill",
+                        iconColor: Color.purple,
+                        title: String(localized: "settings.about.how_it_works"),
+                        subtitle: String(localized: "settings.about.how_it_works.subtitle")
+                    )
+                }
+                .buttonStyle(.plain)
             }
         }
         .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)

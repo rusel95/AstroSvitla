@@ -74022,6 +74022,12 @@
         }
       }
     },
+    "settings.about.how_it_works" : {
+
+    },
+    "settings.about.how_it_works.subtitle" : {
+
+    },
     "settings.about.made_with_love" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -74323,6 +74329,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Made with ❤️ in Ukraine"
+          }
+        }
+      }
+    },
+    "settings.about.how_it_works" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How It Works"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Як це працює"
+          }
+        }
+      }
+    },
+    "settings.about.how_it_works.subtitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Learn about app features"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дізнайтеся про функції додатку"
           }
         }
       }
