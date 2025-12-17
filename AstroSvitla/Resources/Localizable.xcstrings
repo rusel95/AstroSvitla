@@ -32242,7 +32242,20 @@
       }
     },
     "loading.generating.description" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Creating your personalized report for"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Створюємо персоналізований звіт для"
+          }
+        }
+      }
     },
     "loading.generating.description %@" : {
       "extractionState" : "stale",
@@ -53253,7 +53266,20 @@
       }
     },
     "profile.continue.with" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "with"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "з"
+          }
+        }
+      }
     },
     "profile.continue.with %@" : {
       "extractionState" : "stale",
@@ -59337,7 +59363,20 @@
       }
     },
     "profile.reports.count" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reports:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Звітів:"
+          }
+        }
+      }
     },
     "profile.reports.count %lld" : {
       "extractionState" : "stale",
@@ -60253,7 +60292,20 @@
       }
     },
     "purchase.action.create" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Створити"
+          }
+        }
+      }
     },
     "purchase.action.create %@" : {
       "extractionState" : "stale",
@@ -60561,7 +60613,20 @@
       }
     },
     "purchase.datetime" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date & Time:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дата і час:"
+          }
+        }
+      }
     },
     "purchase.datetime %@ %@" : {
       "extractionState" : "manual",
@@ -72117,7 +72182,20 @@
       }
     },
     "report.title.with_area" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Report:"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Звіт:"
+          }
+        }
+      }
     },
     "report.title.with_area %@" : {
       "extractionState" : "stale",
