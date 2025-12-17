@@ -64,6 +64,9 @@ struct ReportDetailView: View {
                     .padding(.bottom, 20)
 
                 recommendationsSection
+                    .padding(.bottom, 20)
+
+                disclaimerSection
                     .padding(.bottom, 24)
 
                 if AppPreferences.shared.isDevModeEnabled {
@@ -331,6 +334,30 @@ struct ReportDetailView: View {
                     .strokeBorder(Color.accentColor.opacity(0.2), lineWidth: 1)
             )
         }
+    }
+
+    // MARK: - Disclaimer Section
+
+    private var disclaimerSection: some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: "info.circle")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(secondaryTextColor.opacity(0.8))
+
+            Text("report.disclaimer")
+                .font(.system(size: 12, weight: .regular))
+                .foregroundStyle(secondaryTextColor.opacity(0.8))
+                .italic()
+                .lineSpacing(3)
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(colorScheme == .dark ? Color.white.opacity(0.03) : Color.black.opacity(0.02))
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .strokeBorder(borderColor.opacity(0.5), lineWidth: 0.5)
+        )
     }
 
     // MARK: - Knowledge Logs Button
