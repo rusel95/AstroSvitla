@@ -189,7 +189,7 @@ private struct ProfileRowView: View {
         HStack(spacing: 4) {
             Image(systemName: "doc.text.fill")
                 .font(.caption2)
-            Text(String(localized: "profile.reports.count \(profile.reports.count)"))
+            Text(String(localized: "profile.reports.count") + " \(profile.reports.count)")
                 .font(.caption)
         }
         .foregroundColor(.secondary)

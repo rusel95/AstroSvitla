@@ -1,4 +1,5 @@
 import Testing
+import UIKit
 @testable import AstroSvitla
 
 /// Unit tests for Settings language functionality

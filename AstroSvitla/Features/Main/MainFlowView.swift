@@ -801,11 +801,11 @@ private struct GeneratingReportView: View {
 
                 // Text content
                 VStack(spacing: 16) {
-                    Text("loading.generating.title", bundle: .main)
+                    Text(String(localized: "loading.generating.title"))
                         .font(.system(size: 26, weight: .bold, design: .rounded))
                         .foregroundStyle(.primary)
 
-                    Text("loading.generating.description \(area.displayName)", bundle: .main)
+                    Text(String(localized: "loading.generating.description") + " \(area.displayName)")
                         .font(.system(size: 16, weight: .regular))
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)

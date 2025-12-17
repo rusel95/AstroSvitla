@@ -80,7 +80,7 @@ struct ReportDetailView: View {
             .padding(.top, 16)
         }
         .background(Color(.systemBackground))
-        .navigationTitle(Text("report.title.with_area \(report.area.displayName)"))
+        .navigationTitle(Text(String(localized: "report.title.with_area") + " \(report.area.displayName)"))
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $isPresentingShareSheet) {
             if let url = shareURL {

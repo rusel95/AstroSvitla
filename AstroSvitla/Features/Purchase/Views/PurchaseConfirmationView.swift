@@ -25,7 +25,7 @@ struct PurchaseConfirmationView: View {
                             Image(systemName: "sparkles")
                                 .font(.system(size: 16, weight: .semibold))
 
-                            Text(String(localized: "purchase.action.create \(area.displayName)"))
+                            Text(String(localized: "purchase.action.create") + " \(area.displayName)")
                         }
                     }
                     .buttonStyle(.astroPrimary)
@@ -148,7 +148,7 @@ struct PurchaseConfirmationView: View {
                         .foregroundStyle(.secondary)
                         .frame(width: 20)
 
-                    Text("purchase.datetime \(birthDetails.formattedBirthDate) \(birthDetails.formattedBirthTime)")
+                    Text(String(localized: "purchase.datetime") + " \(birthDetails.formattedBirthDate) \(birthDetails.formattedBirthTime)")
                         .font(.system(size: 14, weight: .regular))
                         .foregroundStyle(.secondary)
                 }

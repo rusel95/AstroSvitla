@@ -8,19 +8,19 @@ struct OnboardingPageView: View {
     @State private var showContent = false
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 0) {
-                // Badge (if present) - appears at top
-                if let badge = page.badge {
-                    OnboardingBadgeView(badge: badge)
-                        .padding(.top, 8)
-                        .padding(.bottom, 16)
-                        .opacity(showContent ? 1 : 0)
-                        .offset(y: showContent ? 0 : -10)
-                }
+        VStack(spacing: 0) {
+            Spacer(minLength: 16)
 
-                // Premium icon area with layered effects
-                ZStack {
+            // Badge (if present) - appears at top
+            if let badge = page.badge {
+                OnboardingBadgeView(badge: badge)
+                    .padding(.bottom, 12)
+                    .opacity(showContent ? 1 : 0)
+                    .offset(y: showContent ? 0 : -10)
+            }
+
+            // Premium icon area with layered effects
+            ZStack {
                     // Outer animated ring with accent color
                     Circle()
                         .strokeBorder(
@@ -95,18 +95,19 @@ struct OnboardingPageView: View {
                         .shadow(color: accentColor.opacity(0.4), radius: 10, x: 0, y: 5)
                         .scaleEffect(animateIcon ? 1.05 : 1.0)
                 }
-                .frame(height: 220)
-                .padding(.bottom, 24)
+                .frame(height: 180)
+                .padding(.bottom, 16)
                 .opacity(showContent ? 1 : 0)
                 .scaleEffect(showContent ? 1 : 0.9)
 
                 // Content area with improved typography
-                VStack(spacing: 16) {
+                VStack(spacing: 12) {
                     // Title with better styling
                     Text(page.title)
-                        .font(.system(size: 26, weight: .bold, design: .rounded))
+                        .font(.system(size: 24, weight: .bold, design: .rounded))
                         .tracking(0.2)
                         .lineLimit(3)
+                        .minimumScaleFactor(0.8)
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.primary)
                         .opacity(showContent ? 1 : 0)
@@ -114,8 +115,10 @@ struct OnboardingPageView: View {
 
                     // Description
                     Text(page.message)
-                        .font(.system(size: 15, weight: .regular))
-                        .lineSpacing(5)
+                        .font(.system(size: 14, weight: .regular))
+                        .lineSpacing(4)
+                        .lineLimit(3)
+                        .minimumScaleFactor(0.8)
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
                         .opacity(showContent ? 1 : 0)
@@ -139,29 +142,30 @@ struct OnboardingPageView: View {
 
                     // Highlights/Features with enhanced glass cards
                     if page.highlights.isEmpty == false {
-                        VStack(alignment: .leading, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 8) {
                             ForEach(Array(page.highlights.enumerated()), id: \.element) { index, highlight in
-                                HStack(alignment: .center, spacing: 14) {
+                                HStack(alignment: .center, spacing: 12) {
                                     // Animated checkmark or number
                                     ZStack {
                                         Circle()
                                             .fill(accentColor.opacity(0.15))
-                                            .frame(width: 28, height: 28)
+                                            .frame(width: 24, height: 24)
 
                                         if highlight.hasPrefix("📝") || highlight.hasPrefix("🎯") || highlight.hasPrefix("✨") {
                                             // Show emoji as-is for step indicators
                                             Text(String(highlight.prefix(2)))
-                                                .font(.system(size: 14))
+                                                .font(.system(size: 12))
                                         } else {
                                             Image(systemName: "checkmark")
-                                                .font(.system(size: 12, weight: .bold))
+                                                .font(.system(size: 10, weight: .bold))
                                                 .foregroundStyle(accentColor)
                                         }
                                     }
 
                                     Text(cleanHighlightText(highlight))
-                                        .font(.system(size: 14, weight: .medium))
-                                        .lineSpacing(3)
+                                        .font(.system(size: 13, weight: .medium))
+                                        .lineSpacing(2)
+                                        .lineLimit(2)
                                         .foregroundStyle(.primary.opacity(0.9))
 
                                     Spacer(minLength: 0)
@@ -175,11 +179,11 @@ struct OnboardingPageView: View {
                                 )
                             }
                         }
-                        .padding(.horizontal, 18)
-                        .padding(.vertical, 18)
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 14)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            RoundedRectangle(cornerRadius: 16, style: .continuous)
                                 .strokeBorder(
                                     LinearGradient(
                                         colors: [Color.white.opacity(0.2), Color.white.opacity(0.05)],
@@ -190,15 +194,13 @@ struct OnboardingPageView: View {
                                 )
                         )
                         .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
-                        .padding(.top, 12)
+                        .padding(.top, 8)
                     }
                 }
                 .padding(.horizontal, 24)
 
-                Spacer(minLength: 40)
+                Spacer(minLength: 16)
             }
-            .padding(.vertical, 24)
-        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
             // Staggered content appearance
