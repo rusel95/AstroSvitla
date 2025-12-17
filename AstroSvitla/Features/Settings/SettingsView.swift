@@ -50,7 +50,7 @@ struct SettingsView: View {
         }
         .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingView(
-                viewModel: OnboardingViewModel(),
+                viewModel: OnboardingViewModel(isPreviewMode: true),
                 onFinish: {
                     showOnboarding = false
                 }

@@ -9,12 +9,15 @@ final class OnboardingViewModel: ObservableObject {
     @Published private(set) var isCompleted: Bool
 
     private let storage: UserDefaults
+    private let isPreviewMode: Bool
     private static let completionKey = "com.astrosvitla.onboarding.completed"
 
-    init(storage: UserDefaults = .standard) {
+    init(storage: UserDefaults = .standard, isPreviewMode: Bool = false) {
         self.storage = storage
+        self.isPreviewMode = isPreviewMode
         self.pages = OnboardingViewModel.makePages()
-        self.isCompleted = storage.bool(forKey: Self.completionKey)
+        // In preview mode, always show onboarding regardless of stored completion status
+        self.isCompleted = isPreviewMode ? false : storage.bool(forKey: Self.completionKey)
     }
 
     func advance() -> Bool {
@@ -46,7 +49,10 @@ final class OnboardingViewModel: ObservableObject {
     private func completeOnboarding() {
         guard isCompleted == false else { return }
         isCompleted = true
-        storage.set(true, forKey: Self.completionKey)
+        // Don't persist completion status in preview mode
+        if !isPreviewMode {
+            storage.set(true, forKey: Self.completionKey)
+        }
     }
 
     private static func makePages() -> [OnboardingPage] {
