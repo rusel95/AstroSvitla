@@ -10,13 +10,13 @@ struct OpenAIService: Sendable {
     private let jsonDecoder: JSONDecoder
 
     init(
-        clientProvider: OpenAIClientProviding = OpenAIClientProvider.shared,
-        promptBuilder: AIPromptBuilder = AIPromptBuilder(),
-        jsonDecoder: JSONDecoder = JSONDecoder()
+        clientProvider: OpenAIClientProviding? = nil,
+        promptBuilder: AIPromptBuilder? = nil,
+        jsonDecoder: JSONDecoder? = nil
     ) {
-        self.clientProvider = clientProvider
-        self.promptBuilder = promptBuilder
-        self.jsonDecoder = jsonDecoder
+        self.clientProvider = clientProvider ?? OpenAIClientProvider.shared
+        self.promptBuilder = promptBuilder ?? AIPromptBuilder()
+        self.jsonDecoder = jsonDecoder ?? JSONDecoder()
     }
 
     var isConfigured: Bool {
@@ -66,7 +66,7 @@ struct OpenAIService: Sendable {
                 logUsage(usage)
                 let processingTime = Date().timeIntervalSince(startTime)
 
-                let fallbackNotes = knowledgeSnippets.isEmpty ? "Фрагменти знань не знайдені" : nil
+                let fallbackNotes = knowledgeSnippets.isEmpty ? String(localized: "report.knowledge_snippets_not_found") : nil
                 let usagePayload = payload.knowledgeUsage ?? OpenAIReportPayload.KnowledgeUsagePayload(vectorSourceUsed: knowledgeSnippets.isEmpty == false, notes: fallbackNotes, sources: nil, availableBooks: nil)
 
                 let sources = usagePayload.sources?.map { sourcePayload in

@@ -23,9 +23,9 @@ struct SettingsView: View {
                 VStack(spacing: 24) {
                     profileSection
                     appearanceSection
+                    languageSection
                     if preferences.isDevModeEnabled {
                         openAIModelSection
-                        devToolsSection
                     }
                     appInfoSection
                 }
@@ -44,13 +44,13 @@ struct SettingsView: View {
                 .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showDevModeToast)
             }
         }
-        .navigationTitle(Text("Налаштування"))
+        .navigationTitle(Text("settings.title"))
         .sheet(isPresented: $showingProfileManager) {
             UserProfileListView(viewModel: profileViewModel)
         }
         .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingView(
-                viewModel: OnboardingViewModel(),
+                viewModel: OnboardingViewModel(isPreviewMode: true),
                 onFinish: {
                     showOnboarding = false
                 }
@@ -64,7 +64,7 @@ struct SettingsView: View {
                 .font(.system(size: 18, weight: .medium))
                 .foregroundStyle(preferences.isDevModeEnabled ? .green : .orange)
 
-            Text(preferences.isDevModeEnabled ? "Dev Mode увімкнено" : "Dev Mode вимкнено")
+            Text(preferences.isDevModeEnabled ? String(localized: "settings.devmode.enabled") : String(localized: "settings.devmode.disabled"))
                 .font(.system(size: 15, weight: .semibold))
                 .foregroundStyle(.primary)
         }
@@ -86,7 +86,7 @@ struct SettingsView: View {
     private var profileSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             // Section header
-            SettingsSectionHeader(title: "Профілі", icon: "person.2.fill")
+            SettingsSectionHeader(title: String(localized: "settings.section.profiles"), icon: "person.2.fill")
             
             // Profile management button
             Button {
@@ -95,8 +95,8 @@ struct SettingsView: View {
                 SettingsRow(
                     icon: "person.crop.circle.badge.plus",
                     iconColor: Color(red: 0.4, green: 0.6, blue: 0.9),
-                    title: "Керувати профілями",
-                    subtitle: "Додати, редагувати або видалити профілі"
+                    title: String(localized: "settings.profiles.manage"),
+                    subtitle: String(localized: "settings.profiles.manage.subtitle")
                 )
             }
             .buttonStyle(.plain)
@@ -109,20 +109,20 @@ struct SettingsView: View {
     private var appearanceSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             // Section header
-            SettingsSectionHeader(title: "Оформлення", icon: "paintbrush.fill")
+            SettingsSectionHeader(title: String(localized: "settings.section.appearance"), icon: "paintbrush.fill")
             
             // Theme picker
             VStack(alignment: .leading, spacing: 12) {
-                Text("Тема додатку")
+                Text(String(localized: "settings.theme.title"))
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(.secondary)
                 
                 // Custom segmented control with glass style
                 HStack(spacing: 8) {
                     ForEach([
-                        (AppPreferences.ThemeOption.system, "Система", "iphone"),
-                        (AppPreferences.ThemeOption.light, "Світле", "sun.max.fill"),
-                        (AppPreferences.ThemeOption.dark, "Темне", "moon.fill")
+                        (AppPreferences.ThemeOption.system, String(localized: "settings.theme.system"), "iphone"),
+                        (AppPreferences.ThemeOption.light, String(localized: "settings.theme.light"), "sun.max.fill"),
+                        (AppPreferences.ThemeOption.dark, String(localized: "settings.theme.dark"), "moon.fill")
                     ], id: \.0) { option, title, icon in
                         ThemeOptionButton(
                             isSelected: preferences.theme == option,
@@ -141,12 +141,37 @@ struct SettingsView: View {
         .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
     }
 
+    // MARK: - Language Section
+    
+    private var languageSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Section header
+            SettingsSectionHeader(title: String(localized: "settings.section.language"), icon: "globe")
+            
+            // Language settings button
+            Button {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            } label: {
+                SettingsRow(
+                    icon: "character.bubble",
+                    iconColor: Color(red: 0.3, green: 0.5, blue: 0.9),
+                    title: String(localized: "settings.language.change"),
+                    subtitle: LocaleHelper.currentLanguageDisplayName
+                )
+            }
+            .buttonStyle(.plain)
+        }
+        .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
+    }
+
     // MARK: - OpenAI Model Section
     
     private var openAIModelSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             // Section header
-            SettingsSectionHeader(title: "Модель AI", icon: "brain.head.profile")
+            SettingsSectionHeader(title: String(localized: "settings.section.ai_model"), icon: "brain.head.profile")
             
             // Model options
             VStack(spacing: 10) {
@@ -168,51 +193,11 @@ struct SettingsView: View {
                     .font(.system(size: 14))
                     .foregroundStyle(Color.accentColor.opacity(0.7))
                 
-                Text("GPT-4o Mini рекомендовано для оптимального співвідношення ціни та якості")
+                Text("settings.ai_model.recommendation")
                     .font(.system(size: 12, weight: .regular))
                     .foregroundStyle(.secondary)
             }
             .padding(.top, 4)
-        }
-        .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
-    }
-
-    // MARK: - Dev Tools Section
-
-    private var devToolsSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            // Section header
-            SettingsSectionHeader(title: "Dev Tools", icon: "hammer.fill")
-
-            VStack(spacing: 12) {
-                // Preview Onboarding button
-                Button {
-                    showOnboarding = true
-                } label: {
-                    SettingsRow(
-                        icon: "play.rectangle.fill",
-                        iconColor: Color.purple,
-                        title: "Переглянути Onboarding",
-                        subtitle: "Тестування нового онбордингу"
-                    )
-                }
-                .buttonStyle(.plain)
-
-                // Reset Onboarding button
-                Button {
-                    OnboardingViewModel.resetStoredProgress()
-                    let generator = UINotificationFeedbackGenerator()
-                    generator.notificationOccurred(.success)
-                } label: {
-                    SettingsRow(
-                        icon: "arrow.counterclockwise.circle.fill",
-                        iconColor: Color.orange,
-                        title: "Скинути Onboarding",
-                        subtitle: "При наступному запуску покаже онбординг"
-                    )
-                }
-                .buttonStyle(.plain)
-            }
         }
         .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
     }
@@ -222,7 +207,7 @@ struct SettingsView: View {
     private var appInfoSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             // Section header with long press for dev mode
-            SettingsSectionHeader(title: "Про додаток", icon: "sparkles")
+            SettingsSectionHeader(title: String(localized: "settings.section.about"), icon: "sparkles")
                 .contentShape(Rectangle())
                 .onLongPressGesture(minimumDuration: 1.5) {
                     withAnimation {
@@ -255,7 +240,7 @@ struct SettingsView: View {
                         }
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Версія")
+                            Text("settings.about.version")
                                 .font(.system(size: 15, weight: .medium))
                                 .foregroundStyle(.primary)
                             Text(appVersion)
@@ -298,7 +283,7 @@ struct SettingsView: View {
                         }
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Зроблено з любов'ю")
+                            Text("settings.about.made_with_love")
                                 .font(.system(size: 15, weight: .medium))
                                 .foregroundStyle(.primary)
                             Text("AstroSvitla Team 🇺🇦")
@@ -309,6 +294,22 @@ struct SettingsView: View {
                     
                     Spacer()
                 }
+                
+                Divider()
+                    .background(Color.white.opacity(0.1))
+                
+                // How It Works button
+                Button {
+                    showOnboarding = true
+                } label: {
+                    SettingsRow(
+                        icon: "questionmark.circle.fill",
+                        iconColor: Color.purple,
+                        title: String(localized: "settings.about.how_it_works"),
+                        subtitle: String(localized: "settings.about.how_it_works.subtitle")
+                    )
+                }
+                .buttonStyle(.plain)
             }
         }
         .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
@@ -536,7 +537,7 @@ private struct ModelOptionCard: View {
                         HStack(spacing: 4) {
                             Image(systemName: "number")
                                 .font(.system(size: 11))
-                            Text("\(model.maxTokens) токенів")
+                            Text("settings.ai_model.tokens \(model.maxTokens)")
                                 .font(.system(size: 11, weight: .medium))
                         }
                         .foregroundStyle(.tertiary)
@@ -547,7 +548,7 @@ private struct ModelOptionCard: View {
                 
                 // Recommended badge for gpt4oMini
                 if model == .gpt4oMini {
-                    Text("Рекомендовано")
+                    Text("settings.ai_model.recommended")
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(.white)
                         .padding(.horizontal, 8)

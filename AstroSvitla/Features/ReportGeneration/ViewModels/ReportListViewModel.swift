@@ -53,7 +53,7 @@ final class ReportListViewModel: ObservableObject {
             loadReports() // Refresh the list
         } catch {
             print("[ReportListViewModel] ❌ Failed to delete report: \(error)")
-            errorMessage = "Помилка видалення звіту"
+            errorMessage = String(localized: "reports.error.delete_failed")
         }
     }
 
@@ -70,7 +70,7 @@ final class ReportListViewModel: ObservableObject {
             sections = Self.buildSections(from: reports)
             errorMessage = nil
         } catch {
-            errorMessage = "Помилка завантаження звітів"
+            errorMessage = String(localized: "reports.error.load_failed")
             sections = []
         }
     }
@@ -97,8 +97,8 @@ private extension ReportListViewModel {
 
             let profile = purchases.first?.profile
             let isOrphan = profile == nil
-            let chartName = profile?.name ?? "Невідомий профіль"
-            let subtitle = profile.map { profileSubtitle(for: $0) } ?? "Без карти"
+            let chartName = profile?.name ?? String(localized: "reports.section.unknown_profile")
+            let subtitle = profile.map { profileSubtitle(for: $0) } ?? String(localized: "reports.section.no_chart")
 
             let items = purchases.map { purchase in
                 makeItem(from: purchase)
@@ -127,8 +127,8 @@ private extension ReportListViewModel {
         let displayName = area?.displayName ?? report.areaDisplayName
         let iconName = area?.icon ?? "doc.text"
         let purchaseText = purchaseDateFormatter.string(from: report.purchaseDate)
-        let readingTime = "Час читання: \(report.estimatedReadingTime) хв"
-        let languageName = Locale.current.localizedString(forLanguageCode: report.language) ?? report.language.uppercased()
+        let readingTime = String(localized: "reports.item.reading_time") + " \(report.estimatedReadingTime)"
+        let languageName = LocaleHelper.displayName(for: report.language)
 
         return Item(
             id: report.id,

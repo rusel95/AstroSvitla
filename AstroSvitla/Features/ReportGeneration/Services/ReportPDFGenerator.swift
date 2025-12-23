@@ -220,7 +220,7 @@ private struct ReportPDFContentView: View {
                         .font(.system(size: 20, weight: .bold, design: .rounded))
                         .foregroundStyle(primaryTextColor)
 
-                    Text("Астрологічний звіт")
+                    Text("report.header.subtitle")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(accentColor)
                 }
@@ -269,7 +269,7 @@ private struct ReportPDFContentView: View {
 
     private var chartSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Натальна карта", icon: "circle.hexagongrid.fill")
+            sectionHeader(title: String(localized: "report.section.natal_chart"), icon: "circle.hexagongrid.fill")
 
             if let image = chartImage {
                 // Calculate proper aspect ratio from the actual image
@@ -299,7 +299,7 @@ private struct ReportPDFContentView: View {
                             chartInfoItem(label: "MC", value: formatDegree(natalChart.midheaven), sign: ZodiacSign.from(degree: natalChart.midheaven))
                         }
 
-                        Text("\(natalChart.planets.count) планет • \(natalChart.aspects.count) аспектів")
+                        Text("pdf.chart.stats \(natalChart.planets.count) \(natalChart.aspects.count)")
                             .font(.system(size: 11, weight: .medium))
                             .foregroundStyle(secondaryTextColor)
                     }
@@ -338,7 +338,7 @@ private struct ReportPDFContentView: View {
 
     private var summarySection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Резюме", icon: "text.alignleft")
+            sectionHeader(title: String(localized: "report.section.summary"), icon: "text.alignleft")
 
             Text(report.summary)
                 .font(.system(size: 15, weight: .regular))
@@ -359,7 +359,7 @@ private struct ReportPDFContentView: View {
 
     private var influencesSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Ключові впливи", icon: "sparkle")
+            sectionHeader(title: String(localized: "report.section.key_influences"), icon: "sparkle")
 
             VStack(alignment: .leading, spacing: 10) {
                 ForEach(Array(report.keyInfluences.enumerated()), id: \.offset) { index, influence in
@@ -395,7 +395,7 @@ private struct ReportPDFContentView: View {
 
     private var analysisSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Детальний аналіз", icon: "doc.text.magnifyingglass")
+            sectionHeader(title: String(localized: "report.section.detailed_analysis"), icon: "doc.text.magnifyingglass")
 
             Text(report.detailedAnalysis)
                 .font(.system(size: 14, weight: .regular))
@@ -416,7 +416,7 @@ private struct ReportPDFContentView: View {
 
     private var recommendationsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Рекомендації", icon: "checkmark.seal.fill")
+            sectionHeader(title: String(localized: "report.section.recommendations"), icon: "checkmark.seal.fill")
 
             VStack(alignment: .leading, spacing: 12) {
                 ForEach(Array(report.recommendations.enumerated()), id: \.offset) { index, recommendation in
@@ -464,7 +464,7 @@ private struct ReportPDFContentView: View {
 
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Згенеровано за допомогою AstroSvitla")
+                    Text("report.footer.generated_with")
                         .font(.system(size: 10, weight: .medium))
                         .foregroundStyle(secondaryTextColor)
 

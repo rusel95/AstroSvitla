@@ -52,7 +52,7 @@ struct InstagramShareSheet: View {
     var body: some View {
         NavigationStack {
             content
-                .navigationTitle(Text("Share to Instagram", comment: "Share sheet title"))
+                .navigationTitle(Text("share.instagram.title"))
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
@@ -95,7 +95,7 @@ struct InstagramShareSheet: View {
             ProgressView()
                 .scaleEffect(1.5)
             
-            Text("Preparing templates...", comment: "Loading state")
+            Text("share.instagram.loading")
                 .font(.system(size: 16, weight: .medium))
                 .foregroundStyle(secondaryTextColor)
             
@@ -209,7 +209,7 @@ struct InstagramShareSheet: View {
             Button {
                 onDismiss()
             } label: {
-                Text("Close", comment: "Close button")
+                Text("action.close")
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(.white)
                     .padding(.horizontal, 32)

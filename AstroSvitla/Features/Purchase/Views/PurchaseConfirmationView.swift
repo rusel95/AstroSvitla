@@ -25,7 +25,7 @@ struct PurchaseConfirmationView: View {
                             Image(systemName: "sparkles")
                                 .font(.system(size: 16, weight: .semibold))
 
-                            Text("Створити звіт «\(area.displayName)»")
+                            Text(String(format: String(localized: "purchase.action.create %@"), area.displayName))
                         }
                     }
                     .buttonStyle(.astroPrimary)
@@ -37,7 +37,7 @@ struct PurchaseConfirmationView: View {
                             .font(.system(size: 14))
                             .foregroundStyle(Color.astroSuccess)
 
-                        Text("Гарантія якості та повернення коштів")
+                        Text("purchase.guarantee", bundle: .main)
                             .font(.system(size: 13, weight: .medium))
                             .foregroundStyle(.secondary)
                     }
@@ -48,7 +48,7 @@ struct PurchaseConfirmationView: View {
                 .padding(.vertical, 24)
             }
         }
-        .navigationTitle("Підтвердження")
+        .navigationTitle(Text("purchase.title", bundle: .main))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -59,7 +59,7 @@ struct PurchaseConfirmationView: View {
                         HStack(spacing: 4) {
                             Image(systemName: "chevron.left")
                                 .font(.system(size: 14, weight: .semibold))
-                            Text("Назад")
+                            Text("action.back", bundle: .main)
                         }
                     }
                 }
@@ -109,7 +109,7 @@ struct PurchaseConfirmationView: View {
                             .font(.system(size: 18, weight: .semibold))
                             .foregroundStyle(Color.accentColor)
 
-                        Text("одноразово")
+                        Text("purchase.price.once", bundle: .main)
                             .font(.system(size: 13, weight: .medium))
                             .foregroundStyle(.tertiary)
                     }
@@ -148,7 +148,7 @@ struct PurchaseConfirmationView: View {
                         .foregroundStyle(.secondary)
                         .frame(width: 20)
 
-                    Text("\(birthDetails.formattedBirthDate) о \(birthDetails.formattedBirthTime)")
+                    Text(String(localized: "purchase.datetime") + " \(birthDetails.formattedBirthDate) \(birthDetails.formattedBirthTime)")
                         .font(.system(size: 14, weight: .regular))
                         .foregroundStyle(.secondary)
                 }
@@ -170,33 +170,33 @@ struct PurchaseConfirmationView: View {
 
     private var featuresSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Що ви отримаєте")
+            Text("purchase.features.title", bundle: .main)
                 .font(.system(size: 18, weight: .bold, design: .rounded))
                 .foregroundStyle(.primary)
 
             VStack(spacing: 14) {
                 FeatureRow(
                     icon: "books.vertical.fill",
-                    title: "Аналіз на основі астролітератури",
-                    subtitle: "Інтерпретації з класичних та сучасних джерел"
+                    title: String(localized: "purchase.feature.literature.title"),
+                    subtitle: String(localized: "purchase.feature.literature.subtitle")
                 )
 
                 FeatureRow(
                     icon: "doc.text.fill",
-                    title: "Детальний персоналізований звіт",
-                    subtitle: "Унікальні рекомендації для вашої карти"
+                    title: String(localized: "purchase.feature.report.title"),
+                    subtitle: String(localized: "purchase.feature.report.subtitle")
                 )
 
                 FeatureRow(
                     icon: "arrow.down.doc.fill",
-                    title: "Експорт у PDF",
-                    subtitle: "Збережіть та поділіться результатами"
+                    title: String(localized: "purchase.feature.pdf.title"),
+                    subtitle: String(localized: "purchase.feature.pdf.subtitle")
                 )
 
                 FeatureRow(
                     icon: "infinity",
-                    title: "Безстроковий доступ",
-                    subtitle: "Звіт зберігається назавжди у вашому профілі"
+                    title: String(localized: "purchase.feature.access.title"),
+                    subtitle: String(localized: "purchase.feature.access.subtitle")
                 )
             }
         }

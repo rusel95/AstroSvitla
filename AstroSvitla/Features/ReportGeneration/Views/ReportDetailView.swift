@@ -5,6 +5,8 @@ struct ReportDetailView: View {
     let birthDetails: BirthDetails
     let natalChart: NatalChart
     let report: GeneratedReport
+    /// Language code for the report (defaults to current device language for live reports)
+    var languageCode: String = LocaleHelper.currentLanguageCode
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
 
@@ -62,6 +64,9 @@ struct ReportDetailView: View {
                     .padding(.bottom, 20)
 
                 recommendationsSection
+                    .padding(.bottom, 20)
+
+                disclaimerSection
                     .padding(.bottom, 24)
 
                 if AppPreferences.shared.isDevModeEnabled {
@@ -78,7 +83,7 @@ struct ReportDetailView: View {
             .padding(.top, 16)
         }
         .background(Color(.systemBackground))
-        .navigationTitle(Text("Звіт: \(report.area.displayName)"))
+        .navigationTitle(Text(String(localized: "report.title.with_area") + " \(report.area.displayName)"))
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $isPresentingShareSheet) {
             if let url = shareURL {
@@ -90,19 +95,19 @@ struct ReportDetailView: View {
                 }
             }
         }
-        .alert("Помилка експорту", isPresented: $isShowingErrorAlert, actions: {
-            Button("Закрити", role: .cancel) {
+        .alert(String(localized: "report.export.error.title"), isPresented: $isShowingErrorAlert, actions: {
+            Button(String(localized: "action.close"), role: .cancel) {
                 isShowingErrorAlert = false
             }
         }, message: {
-            Text(exportErrorMessage ?? "Не вдалося експортувати PDF")
+            Text(exportErrorMessage ?? String(localized: "report.export.error.default"))
         })
-        .alert("PDF збережено", isPresented: $isShowingSuccessAlert, actions: {
-            Button("OK", role: .cancel) {
+        .alert(String(localized: "report.export.success.title"), isPresented: $isShowingSuccessAlert, actions: {
+            Button(String(localized: "action.ok"), role: .cancel) {
                 isShowingSuccessAlert = false
             }
         }, message: {
-            Text("Звіт успішно експортовано")
+            Text("report.export.success.message")
         })
     }
 
@@ -129,26 +134,42 @@ struct ReportDetailView: View {
                         .foregroundStyle(.white)
                 }
 
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text("AstroSvitla")
                         .font(.system(size: 20, weight: .bold, design: .rounded))
                         .foregroundStyle(primaryTextColor)
 
-                    Text("Астрологічний звіт")
+                    Text("report.header.subtitle")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundStyle(Color.accentColor)
                 }
 
                 Spacer()
 
-                // Report type badge
-                Text(report.area.displayName)
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(Color.accentColor)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(Color.accentColor.opacity(0.12))
-                    .clipShape(Capsule())
+                // Language and Report type badges
+                HStack(spacing: 8) {
+                    // Language indicator
+                    Label(LocaleHelper.displayName(for: languageCode), systemImage: "globe")
+                        .font(.system(size: 10, weight: .semibold))
+                        .foregroundStyle(secondaryTextColor)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(cardBackground)
+                        .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .strokeBorder(borderColor, lineWidth: 1)
+                        )
+
+                    // Report type badge
+                    Text(report.area.displayName)
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundStyle(Color.accentColor)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.accentColor.opacity(0.12))
+                        .clipShape(Capsule())
+                }
             }
 
             // User info card
@@ -183,7 +204,7 @@ struct ReportDetailView: View {
 
     private var chartSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Натальна карта", icon: "circle.hexagongrid.fill", hint: "Натисніть для збільшення")
+            sectionHeader(title: String(localized: "report.section.natal_chart"), icon: "circle.hexagongrid.fill", hint: String(localized: "report.chart.zoom_hint"))
 
             NatalChartWheelView(chart: natalChart, allowsZoom: true)
                 .background(colorScheme == .dark ? Color.white.opacity(0.05) : Color.white)
@@ -199,7 +220,7 @@ struct ReportDetailView: View {
 
     private var summarySection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Резюме", icon: "text.alignleft")
+            sectionHeader(title: String(localized: "report.section.summary"), icon: "text.alignleft")
 
             Text(report.summary)
                 .font(.system(size: 15, weight: .regular))
@@ -220,7 +241,7 @@ struct ReportDetailView: View {
 
     private var influencesSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Ключові впливи", icon: "sparkle")
+            sectionHeader(title: String(localized: "report.section.key_influences"), icon: "sparkle")
 
             VStack(alignment: .leading, spacing: 12) {
                 ForEach(Array(report.keyInfluences.enumerated()), id: \.offset) { index, influence in
@@ -256,7 +277,7 @@ struct ReportDetailView: View {
 
     private var analysisSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Детальний аналіз", icon: "doc.text.magnifyingglass")
+            sectionHeader(title: String(localized: "report.section.detailed_analysis"), icon: "doc.text.magnifyingglass")
 
             Text(report.detailedAnalysis)
                 .font(.system(size: 14, weight: .regular))
@@ -277,7 +298,7 @@ struct ReportDetailView: View {
 
     private var recommendationsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: "Рекомендації", icon: "checkmark.seal.fill")
+            sectionHeader(title: String(localized: "report.section.recommendations"), icon: "checkmark.seal.fill")
 
             VStack(alignment: .leading, spacing: 14) {
                 ForEach(Array(report.recommendations.enumerated()), id: \.offset) { index, recommendation in
@@ -315,6 +336,30 @@ struct ReportDetailView: View {
         }
     }
 
+    // MARK: - Disclaimer Section
+
+    private var disclaimerSection: some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: "info.circle")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(secondaryTextColor.opacity(0.8))
+
+            Text("report.disclaimer")
+                .font(.system(size: 12, weight: .regular))
+                .foregroundStyle(secondaryTextColor.opacity(0.8))
+                .italic()
+                .lineSpacing(3)
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(colorScheme == .dark ? Color.white.opacity(0.03) : Color.black.opacity(0.02))
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .strokeBorder(borderColor.opacity(0.5), lineWidth: 0.5)
+        )
+    }
+
     // MARK: - Knowledge Logs Button
 
     private var knowledgeLogsButton: some View {
@@ -326,7 +371,7 @@ struct ReportDetailView: View {
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(Color.accentColor)
 
-                Text("Логи генерування")
+                Text("report.generation_logs")
                     .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(primaryTextColor)
 
@@ -372,7 +417,7 @@ struct ReportDetailView: View {
                             .font(.system(size: 16, weight: .semibold))
                     }
 
-                    Text(isExportingPDF ? "Генерування PDF..." : "Експортувати PDF")
+                    Text(isExportingPDF ? String(localized: "report.export.generating") : String(localized: "report.export.button"))
                         .font(.system(size: 16, weight: .semibold))
                 }
                 .foregroundStyle(.white)
@@ -408,7 +453,7 @@ struct ReportDetailView: View {
                 Image(systemName: "camera.fill")
                     .font(.system(size: 16, weight: .semibold))
                 
-                Text("Поділитись в Instagram")
+                Text("report.share.instagram")
                     .font(.system(size: 16, weight: .semibold))
             }
             .foregroundStyle(primaryTextColor)
@@ -465,7 +510,7 @@ struct ReportDetailView: View {
 
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Згенеровано за допомогою AstroSvitla")
+                    Text("report.footer.generated_with")
                         .font(.system(size: 11, weight: .medium))
                         .foregroundStyle(secondaryTextColor)
 

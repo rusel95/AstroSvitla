@@ -8,7 +8,7 @@ enum ChartCalculationError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .missingCoordinate:
-            return "Координати не знайдені"
+            return String(localized: "error.coordinates_not_found")
         }
     }
 }
@@ -17,9 +17,8 @@ struct MainFlowView: View {
     @EnvironmentObject private var preferences: AppPreferences
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var repositoryContext: RepositoryContext
-    @StateObject private var onboardingViewModel: OnboardingViewModel
     @StateObject private var profileViewModel: UserProfileViewModel
-    @State private var flowState: FlowState
+    @State private var flowState: FlowState = .birthInput
     @State private var navigationPath = NavigationPath()
     @State private var errorMessage: String?
     @State private var showProfileCreationSheet = false
@@ -30,16 +29,10 @@ struct MainFlowView: View {
     private let reportGenerator = AIReportGenerator()
 
     init(modelContext: ModelContext) {
-        let onboardingViewModel = OnboardingViewModel()
-        _onboardingViewModel = StateObject(wrappedValue: onboardingViewModel)
-
         let service = UserProfileService(context: modelContext)
         let repoContext = RepositoryContext(context: modelContext)
         let profileVM = UserProfileViewModel(service: service, repositoryContext: repoContext)
         _profileViewModel = StateObject(wrappedValue: profileVM)
-
-        let initialFlow: FlowState = onboardingViewModel.isCompleted ? .birthInput : .onboarding
-        _flowState = State(initialValue: initialFlow)
     }
 
     var body: some View {
@@ -50,13 +43,13 @@ struct MainFlowView: View {
                     destinationView(for: destination)
                 }
         }
-        .alert("Помилка", isPresented: Binding(
+        .alert(Text("error.title", bundle: .main), isPresented: Binding(
             get: { errorMessage != nil },
             set: { if !$0 { errorMessage = nil } }
         )) {
             Button("OK", role: .cancel) { errorMessage = nil }
         } message: {
-            Text(errorMessage ?? "Щось пішло не так")
+            Text(errorMessage ?? String(localized: "error.generic"))
         }
         .onAppear {
             profileViewModel.loadProfiles()
@@ -69,23 +62,13 @@ struct MainFlowView: View {
     @ViewBuilder
     private var rootContent: some View {
         switch flowState {
-        case .onboarding:
-            OnboardingView(
-                viewModel: onboardingViewModel,
-                onFinish: {
-                    withAnimation {
-                        flowState = .birthInput
-                    }
-                }
-            )
-
         case .birthInput:
             Group {
                 if profileViewModel.profiles.isEmpty {
                     ProfileEmptyStateView(onCreateProfile: {
                         showProfileCreationSheet = true
                     })
-                    .navigationTitle("Початок")
+                    .navigationTitle(Text("navigation.start", bundle: .main))
                 } else {
                     ProfileSelectionView(
                         profiles: profileViewModel.profiles,
@@ -102,7 +85,7 @@ struct MainFlowView: View {
                             }
                         }
                     )
-                    .navigationTitle("Профілі")
+                    .navigationTitle(Text("profile.navigation.title", bundle: .main))
                 }
             }
             .sheet(isPresented: $showProfileCreationSheet) {
@@ -199,7 +182,7 @@ struct MainFlowView: View {
             longitude: coordinate.longitude,
             timezone: timezone
         ) else {
-            errorMessage = profileViewModel.errorMessage ?? "Помилка створення профілю"
+            errorMessage = profileViewModel.errorMessage ?? String(localized: "error.profile.create")
             return
         }
 
@@ -216,7 +199,7 @@ struct MainFlowView: View {
     private func handleContinueWithSelectedProfile() async {
         guard let profile = repositoryContext.activeProfile else {
             await MainActor.run {
-                errorMessage = "Будь ласка, виберіть профіль"
+                errorMessage = String(localized: "error.profile.select")
             }
             return
         }
@@ -264,7 +247,8 @@ struct MainFlowView: View {
             }
         } catch {
             await MainActor.run {
-                errorMessage = "Не вдалося отримати натальну карту: \(error.localizedDescription). Перевірте з'єднання з інтернетом."
+                let baseError = String(localized: "error.chart.fetch")
+                errorMessage = "\(baseError): \(error.localizedDescription)"
                 flowState = .birthInput
             }
         }
@@ -305,7 +289,7 @@ struct MainFlowView: View {
               let existingReport = profile.reports.first(where: { $0.isForArea(area) }),
               let generatedReport = existingReport.generatedReport else {
             // Fallback: if we can't find the report, show error
-            errorMessage = "Не вдалося знайти збережений звіт"
+            errorMessage = String(localized: "error.report.not_found")
             return
         }
 
@@ -317,14 +301,17 @@ struct MainFlowView: View {
         navigationPath.removeLast(navigationPath.count)
         flowState = .generating(details, chart, area)
 
+        let languageCode = LocaleHelper.currentLanguageCode
+        let languageDisplayName = LocaleHelper.currentLanguageDisplayName
+        
         Task {
             do {
                 let report = try await reportGenerator.generateReport(
                     for: area,
                     birthDetails: details,
                     natalChart: chart,
-                    languageCode: "uk",
-                    languageDisplayName: "Українська",
+                    languageCode: languageCode,
+                    languageDisplayName: languageDisplayName,
                     repositoryContext: "AstroSvitla iOS app context",
                     selectedModel: preferences.selectedModel
                 )
@@ -416,7 +403,7 @@ private extension MainFlowView {
     @MainActor
     func persistGeneratedReport(details: BirthDetails, natalChart: NatalChart, generatedReport: GeneratedReport) throws {
         let reportText = renderReportText(from: generatedReport)
-        let languageCode = "uk"
+        let languageCode = LocaleHelper.currentLanguageCode
 
         // Extract knowledge source data for storage
         let sources = generatedReport.knowledgeUsage.sources ?? []
@@ -463,6 +450,7 @@ private extension MainFlowView {
             detailedAnalysis: generatedReport.detailedAnalysis,
             recommendations: generatedReport.recommendations,
             language: languageCode,
+            languageCode: languageCode,
             knowledgeVectorUsed: generatedReport.knowledgeUsage.vectorSourceUsed,
             knowledgeNotes: generatedReport.knowledgeUsage.notes,
             knowledgeSourceTitles: sourceTitles.isEmpty ? nil : sourceTitles,
@@ -508,24 +496,24 @@ private extension MainFlowView {
 
         if report.keyInfluences.isEmpty == false {
             lines.append("")
-            lines.append("Ключові впливи")
+            lines.append(String(localized: "report.section.key_influences"))
             report.keyInfluences.forEach { lines.append("• \($0)") }
         }
 
         lines.append("")
-        lines.append("Аналіз")
+        lines.append(String(localized: "report.section.analysis"))
         lines.append(report.detailedAnalysis)
 
         if report.recommendations.isEmpty == false {
             lines.append("")
-            lines.append("Рекомендації")
+            lines.append(String(localized: "report.section.recommendations"))
             report.recommendations.forEach { lines.append("• \($0)") }
         }
 
         lines.append("")
-        lines.append(report.knowledgeUsage.vectorSourceUsed ? "Джерела використано" : "Джерела не використано")
+        lines.append(report.knowledgeUsage.vectorSourceUsed ? String(localized: "report.sources.used") : String(localized: "report.sources.not_used"))
         if let notes = report.knowledgeUsage.notes, notes.isEmpty == false {
-            lines.append("Примітка: \(notes)")
+            lines.append(String(localized: "report.note_prefix \(notes)"))
         }
 
         return lines.joined(separator: "\n")
@@ -535,14 +523,12 @@ private extension MainFlowView {
 // MARK: - Flow State (kept for non-navigation state tracking)
 
 private enum FlowState: Equatable {
-    case onboarding
     case birthInput
     case calculating(BirthDetails)
     case generating(BirthDetails, NatalChart, ReportArea)
 
     static func == (lhs: FlowState, rhs: FlowState) -> Bool {
         switch (lhs, rhs) {
-        case (.onboarding, .onboarding): return true
         case (.birthInput, .birthInput): return true
         case (.calculating(let l), .calculating(let r)): return l.displayName == r.displayName
         case (.generating(let ld, _, let la), .generating(let rd, _, let ra)):
@@ -553,7 +539,6 @@ private enum FlowState: Equatable {
 
     var animationID: String {
         switch self {
-        case .onboarding: return "onboarding"
         case .birthInput: return "birthInput"
         case .calculating: return "calculating"
         case .generating: return "generating"
@@ -664,11 +649,11 @@ private struct CalculatingChartView: View {
 
                 // Text content
                 VStack(spacing: 12) {
-                    Text("Розраховуємо карту")
+                    Text("loading.calculating.title", bundle: .main)
                         .font(.system(size: 24, weight: .bold, design: .rounded))
                         .foregroundStyle(.primary)
 
-                    Text("Аналізуємо позиції планет та аспекти для \(birthDetails.displayName)")
+                    Text("loading.calculating.description \(birthDetails.displayName)", bundle: .main)
                         .font(.system(size: 15, weight: .regular))
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
@@ -692,7 +677,7 @@ private struct CalculatingChartView: View {
                 .padding(.bottom, 60)
             }
         }
-        .navigationTitle(Text("Розрахунок"))
+        .navigationTitle(Text("loading.calculating.navigation", bundle: .main))
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             withAnimation(
@@ -796,11 +781,11 @@ private struct GeneratingReportView: View {
 
                 // Text content
                 VStack(spacing: 16) {
-                    Text("Аналізуємо вашу карту")
+                    Text(String(localized: "loading.generating.title"))
                         .font(.system(size: 26, weight: .bold, design: .rounded))
                         .foregroundStyle(.primary)
 
-                    Text("Досліджуємо сферу «\(area.displayName)» на основі класичної та сучасної астрологічної літератури")
+                    Text(String(localized: "loading.generating.description") + " \(area.displayName)")
                         .font(.system(size: 16, weight: .regular))
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
@@ -813,7 +798,7 @@ private struct GeneratingReportView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "clock")
                             .font(.system(size: 14, weight: .medium))
-                        Text("Зазвичай займає 30-60 секунд")
+                        Text("loading.generating.time_estimate", bundle: .main)
                             .font(.system(size: 14, weight: .medium))
                     }
                     .foregroundStyle(.secondary)
@@ -832,7 +817,7 @@ private struct GeneratingReportView: View {
                 // Cancel button
                 if let onCancel {
                     Button(action: onCancel) {
-                        Text("Скасувати")
+                        Text("action.cancel", bundle: .main)
                     }
                     .buttonStyle(.astroSecondary)
                     .padding(.horizontal, 48)
@@ -840,7 +825,7 @@ private struct GeneratingReportView: View {
                 }
             }
         }
-        .navigationTitle(Text("Аналіз"))
+        .navigationTitle(Text("loading.generating.navigation", bundle: .main))
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             animateWave = true

@@ -58,67 +58,26 @@ struct OnboardingView: View {
             .ignoresSafeArea()
 
             VStack(spacing: 0) {
-                // Glass header with progress
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text("onboarding.step_counter \(viewModel.currentIndex + 1) \(viewModel.pages.count)")
-                                .font(.system(size: 13, weight: .semibold, design: .rounded))
-                                .tracking(0.3)
-                                .foregroundStyle(.secondary)
+                // Skip button at top right
+                HStack {
+                    Spacer()
 
-                            // Premium progress bar with glow
-                            GeometryReader { geometry in
-                                ZStack(alignment: .leading) {
-                                    RoundedRectangle(cornerRadius: 3)
-                                        .fill(Color.accentColor.opacity(0.15))
-
-                                    RoundedRectangle(cornerRadius: 3)
-                                        .fill(
-                                            LinearGradient(
-                                                colors: [Color.accentColor, Color.accentColor.opacity(0.8)],
-                                                startPoint: .leading,
-                                                endPoint: .trailing
-                                            )
-                                        )
-                                        .frame(width: geometry.size.width * CGFloat(viewModel.currentIndex + 1) / CGFloat(viewModel.pages.count))
-                                        .shadow(color: Color.accentColor.opacity(0.5), radius: 4, x: 0, y: 0)
-                                }
-                            }
-                            .frame(height: 5)
+                    Button(action: {
+                        let didFinish = viewModel.skip()
+                        if didFinish {
+                            onFinish()
                         }
-
-                        Spacer()
-
-                        // Skip button with glass effect
-                        Button(action: {
-                            let didFinish = viewModel.skip()
-                            if didFinish {
-                                onFinish()
-                            }
-                        }) {
-                            Text("onboarding.skip")
-                                .font(.system(size: 14, weight: .semibold, design: .rounded))
-                                .foregroundStyle(.secondary)
-                                .padding(.horizontal, 14)
-                                .padding(.vertical, 8)
-                                .background(.ultraThinMaterial, in: Capsule())
-                        }
+                    }) {
+                        Text("onboarding.skip")
+                            .font(.system(size: 14, weight: .semibold, design: .rounded))
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 8)
+                            .background(.ultraThinMaterial, in: Capsule())
                     }
                 }
                 .padding(.horizontal, 24)
-                .padding(.vertical, 20)
-
-                // Subtle glass divider
-                Rectangle()
-                    .fill(
-                        LinearGradient(
-                            colors: [Color.clear, Color.white.opacity(0.1), Color.clear],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .frame(height: 1)
+                .padding(.top, 12)
 
                 // Main carousel
                 TabView(selection: $viewModel.currentIndex) {
@@ -130,8 +89,8 @@ struct OnboardingView: View {
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .frame(maxHeight: .infinity)
 
-                // Premium action buttons with glass container
-                VStack(spacing: 14) {
+                // Bottom action area with buttons and step indicator together
+                VStack(spacing: 12) {
                     // Primary CTA button with dynamic text
                     Button(action: {
                         withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
@@ -182,9 +141,28 @@ struct OnboardingView: View {
                             removal: .move(edge: .bottom).combined(with: .opacity)
                         ))
                     }
+
+                    // Step counter and progress bar
+                    VStack(spacing: 6) {
+                        Text("onboarding.step_counter \(viewModel.currentIndex + 1) \(viewModel.pages.count)")
+                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                            .foregroundStyle(.secondary)
+
+                        // Progress bar with dots
+                        HStack(spacing: 8) {
+                            ForEach(0..<viewModel.pages.count, id: \.self) { index in
+                                Circle()
+                                    .fill(index <= viewModel.currentIndex ? Color.accentColor : Color.accentColor.opacity(0.3))
+                                    .frame(width: 8, height: 8)
+                                    .scaleEffect(index == viewModel.currentIndex ? 1.2 : 1.0)
+                                    .animation(.spring(response: 0.3), value: viewModel.currentIndex)
+                            }
+                        }
+                    }
+                    .padding(.top, 8)
                 }
                 .padding(.horizontal, 24)
-                .padding(.vertical, 24)
+                .padding(.vertical, 20)
                 .background(
                     // Subtle glass footer
                     Rectangle()

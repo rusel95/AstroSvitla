@@ -136,7 +136,7 @@ struct ChartOnlyTemplate: View {
                     .font(.system(size: 80, weight: .light))
                     .foregroundStyle(ZoryaBranding.accentGold.opacity(0.5))
                 
-                Text("Your Natal Chart", comment: "Placeholder text")
+                Text("share.chart.placeholder")
                     .font(.system(size: 32, weight: .medium))
                     .foregroundStyle(ZoryaBranding.textSecondary)
             }

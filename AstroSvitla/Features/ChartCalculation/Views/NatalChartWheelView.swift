@@ -23,7 +23,7 @@ struct NatalChartWheelView: View {
                 }
             } else if isLoadingImage {
                 // Show loading indicator while image loads
-                ProgressView("Завантаження карти")
+                ProgressView("chart.loading")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 // No image available or loading failed
@@ -78,12 +78,12 @@ struct NatalChartWheelView: View {
                 .font(.system(size: 60))
                 .foregroundStyle(.secondary)
             
-            Text("Карта недоступна")
+            Text("chart.unavailable")
                 .font(.headline)
                 .foregroundStyle(.secondary)
 
             if imageLoadingFailed {
-                Button("Повторити") {
+                Button("action.retry") {
                     Task {
                         await loadChartImage()
                     }
