@@ -4,6 +4,7 @@ struct AreaCard: View {
     let area: ReportArea
     var isPurchased: Bool = false
     var onViewReport: (() -> Void)? = nil
+    var purchaseService: PurchaseService?
 
     @State private var isPressed = false
 
@@ -121,10 +122,11 @@ struct AreaCard: View {
     }
 
     private var priceString: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "USD"
-        return formatter.string(from: area.price as NSNumber) ?? "$0.00"
+        if let service = purchaseService {
+            return service.getProductPrice()
+        }
+        // Fallback if service not provided
+        return String(localized: "purchase.price.unavailable", defaultValue: "Payment Unavailable")
     }
 
     // Color for the icon - green if purchased

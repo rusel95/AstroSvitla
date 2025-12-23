@@ -17,6 +17,7 @@ struct MainFlowView: View {
     @EnvironmentObject private var preferences: AppPreferences
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var repositoryContext: RepositoryContext
+    @Environment(PurchaseService.self) private var purchaseService
     @StateObject private var profileViewModel: UserProfileViewModel
     @State private var flowState: FlowState = .birthInput
     @State private var navigationPath = NavigationPath()
@@ -125,6 +126,7 @@ struct MainFlowView: View {
                 birthDetails: details,
                 natalChart: chart,
                 purchasedAreas: getPurchasedAreas(),
+                purchaseService: purchaseService,
                 onAreaSelected: { area in
                     navigationPath.append(MainNavDestination.purchase(details, chart, area))
                 },
@@ -143,6 +145,7 @@ struct MainFlowView: View {
                 PurchaseConfirmationView(
                     birthDetails: details,
                     area: area,
+                    purchaseService: purchaseService,
                     onBack: nil, // Native back button handles this
                     onGenerateReport: {
                         generateReport(details: details, chart: chart, area: area)
@@ -456,7 +459,7 @@ private extension MainFlowView {
             knowledgeSourceTitles: sourceTitles.isEmpty ? nil : sourceTitles,
             knowledgeSourceAuthors: sourceAuthors.isEmpty ? nil : sourceAuthors,
             knowledgeSourcePages: sourcePages.isEmpty ? nil : sourcePages,
-            price: generatedReport.area.price,
+            price: 0.00, // Price tracking removed - IAP system handles this via PurchaseRecord
             transactionId: UUID().uuidString,
             metadataJSON: metadataJSON,
             knowledgeSourcesJSON: knowledgeSourcesJSON,

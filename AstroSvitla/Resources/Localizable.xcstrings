@@ -63801,6 +63801,23 @@
     "purchase.paywall.buy_button" : {
 
     },
+    "purchase.price.unavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Payment Unavailable"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оплата недоступна"
+          }
+        }
+      }
+    },
     "purchase.price.once" : {
       "localizations" : {
         "ar" : {

@@ -3,6 +3,7 @@ import SwiftUI
 struct PurchaseConfirmationView: View {
     let birthDetails: BirthDetails
     let area: ReportArea
+    var purchaseService: PurchaseService?
     var onBack: (() -> Void)?
     var onGenerateReport: () -> Void
 
@@ -204,10 +205,11 @@ struct PurchaseConfirmationView: View {
     }
 
     private var priceString: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "USD"
-        return formatter.string(from: area.price as NSNumber) ?? "$0.00"
+        if let service = purchaseService {
+            return service.getProductPrice()
+        }
+        // Fallback if service not provided
+        return String(localized: "purchase.price.unavailable", defaultValue: "Payment Unavailable")
     }
 }
 

@@ -22,6 +22,10 @@ final class PurchaseService {
     private(set) var isPurchasing = false
     var purchaseError: PurchaseError?
     
+    /// Indicates if IAP system is available and working
+    /// If false, users can still generate reports (graceful degradation)
+    private(set) var isIAPAvailable = true
+    
     // MARK: - Dependencies
     
     private let context: ModelContext
@@ -58,11 +62,23 @@ final class PurchaseService {
                     errorBreadcrumb.message = "Invalid product type"
                     errorBreadcrumb.data = ["productId": product.id, "type": "\(product.type)"]
                     SentrySDK.addBreadcrumb(errorBreadcrumb)
+                    
+                    // Log to Sentry but don't block users
+                    SentrySDK.capture(message: "Invalid StoreKit product type") { scope in
+                        scope.setContext(value: [
+                            "productId": product.id,
+                            "expectedType": "consumable",
+                            "actualType": "\(product.type)"
+                        ], key: "product")
+                    }
+                    
+                    isIAPAvailable = false
                     throw PurchaseError.productNotFound
                 }
             }
             
             self.products = loadedProducts
+            isIAPAvailable = true
             
             let successBreadcrumb = Breadcrumb()
             successBreadcrumb.level = .info
@@ -74,11 +90,42 @@ final class PurchaseService {
             let failBreadcrumb = Breadcrumb()
             failBreadcrumb.level = .error
             failBreadcrumb.category = "purchase"
-            failBreadcrumb.message = "Product load failed"
+            failBreadcrumb.message = "Product load failed - IAP unavailable, allowing report generation"
             failBreadcrumb.data = ["error": error.localizedDescription]
             SentrySDK.addBreadcrumb(failBreadcrumb)
-            throw PurchaseError.productLoadFailed(error)
+            
+            // Log to Sentry as error (not crash)
+            SentrySDK.capture(error: error) { scope in
+                scope.setLevel(.error)
+                scope.setContext(value: [
+                    "action": "loadProducts",
+                    "productIds": productIDs,
+                    "gracefulDegradation": true
+                ], key: "iap")
+            }
+            
+            // Mark IAP as unavailable but don't block users
+            isIAPAvailable = false
+            self.products = []
+            
+            // Don't throw - allow app to continue without IAP
+            print("⚠️ [PurchaseService] IAP unavailable, users can still generate reports")
         }
+    }
+    
+    // MARK: - Product Price Helpers
+    
+    /// Get localized price from StoreKit product, or fallback message
+    func getProductPrice() -> String {
+        guard isIAPAvailable, let product = products.first else {
+            return String(localized: "purchase.price.unavailable", defaultValue: "Payment Unavailable")
+        }
+        return product.displayPrice
+    }
+    
+    /// Check if IAP system is working
+    func canPurchase() -> Bool {
+        return isIAPAvailable && !products.isEmpty
     }
     
     // MARK: - Purchase Flow
