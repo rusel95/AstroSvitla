@@ -13,6 +13,12 @@
 - Q: What is the exact price for each report type? → A: All reports same price: $4.99 (simplest pricing model for MVP)
 - Q: Are credits profile-specific or shared globally? → A: Global credit pool - credits can be used for any profile (simplest data model and UX)
 - Q: Is a credit balance view needed for displaying credit counts? → A: No - with 1-purchase-1-report model, just show locked/unlocked state on reports (boolean, not numeric balance)
+- Q: When exactly is credit consumed - before or after generation? → A: AFTER successful generation - credit remains available if generation fails
+- Q: Can users purchase credits when they already have unused credits? → A: No - system blocks purchase if unused credits exist for that report type (FR-025)
+- Q: What is "immediate" report generation enablement timing? → A: Within 1 second from purchase completion to generation UI ready (FR-009)
+- Q: Are generated reports always accessible? → A: Yes - once generated, reports remain in history permanently regardless of credit state (FR-032)
+- Q: How is 2-3 tap flow measured? → A: Tap 1: locked report → paywall (0 taps, automatic), Tap 2: purchase button → platform sheet, Tap 3: platform payment confirmation
+- Q: Does restore purchases recover consumed credits? → A: No - only unfinished/interrupted transactions are restored (Apple/Google consumable limitation)
 
 ## User Scenarios & Testing
 
@@ -64,7 +70,7 @@ A user who reinstalls the app or switches devices wants to restore their previou
 1. **Given** user has made purchases in the past, **When** user reinstalls app or logs in on new device, **Then** "Restore Purchases" option is available in settings or purchase screen
 2. **Given** user taps "Restore Purchases", **When** restoration completes successfully, **Then** all previously purchased unused credits are restored
 3. **Given** purchases are restored, **When** user views available reports, **Then** user can generate reports using restored credits
-4. **Given** user has already consumed credits before reinstalling, **When** purchases are restored, **Then** only unused credits are restored (consumed credits remain consumed)
+4. **Given** user has already consumed credits before reinstalling, **When** purchases are restored, **Then** only unfinished transactions are restored - consumed credits cannot be restored due to consumable product type (Apple/Google platform limitation)
 
 ---
 
@@ -105,17 +111,48 @@ A user exploring the app wants to see all available report types, understand wha
 - **FR-004**: Users MUST be able to complete purchase flow within 2-3 taps from viewing paywall to confirming purchase
 - **FR-005**: System MUST allow users to purchase the same report type multiple times for different profiles
 - **FR-006**: System MUST track purchase credits locally on device for each report type
-- **FR-007**: System MUST consume one credit per report generation for the corresponding report type
+- **FR-007**: System MUST consume one credit AFTER successful report generation (credit check before generation, consumption after successful save - if generation fails, credit remains available for retry)
 - **FR-008**: System MUST verify purchases through platform purchase system (App Store/Play Store) without requiring server infrastructure
-- **FR-009**: System MUST immediately enable report generation after successful purchase completion
+- **FR-009**: System MUST enable report generation within 1 second of purchase completion (measured from transaction completion to generation UI ready)
 - **FR-010**: System MUST support localization for purchase flow, starting with Ukrainian language
-- **FR-011**: System MUST provide "Restore Purchases" functionality to recover unused credits
+- **FR-011**: System MUST provide "Restore Purchases" functionality to recover unfinished/interrupted transactions (restores unconsumed credits from previous installations, but cannot restore consumed credits per consumable product type limitation - UI should display "Restore Interrupted Purchases" to set correct expectations)
 - **FR-012**: System MUST store all purchase records and credit balances locally on device
 - **FR-013**: System MUST prevent report generation when user has zero credits for that report type
-- **FR-014**: System MUST display locked/unlocked state for each report type in user interface (no numeric credit balance needed for MVP simplicity)
-- **FR-015**: System MUST handle purchase cancellation gracefully without consuming credits
-- **FR-016**: System MUST display appropriate error messages when purchase verification fails
-- **FR-017**: System MUST track which user profile each generated report was created for (credits are global, but generation history is profile-specific)
+- **FR-014**: System MUST display locked/unlocked state for each report type with visual distinction (lock icon for locked, unlock/checkmark for available - no numeric credit balance displayed per MVP simplicity)
+- **FR-015**: System MUST handle user-initiated purchase cancellation by returning to paywall without error message or consuming credits
+- **FR-016**: System MUST display specific error messages for purchase failures with defined structure (title + description) including network errors, verification failures, product unavailability, and payment declined scenarios
+- **FR-017**: System MUST track which user profile each generated report was created for (credits exist in global pool until consumed, then link to consumption profile)
+- **FR-018**: System MUST ensure atomic purchase-to-credit allocation where both purchase record and credit creation succeed together or neither persists
+- **FR-019**: System MUST prevent concurrent purchase attempts by disabling purchase UI during active transaction with loading indicator
+- **FR-020**: System MUST finish StoreKit transactions after credit delivery by calling `transaction.finish()` after successful credit allocation
+- **FR-021**: System MUST provide purchase transaction feedback via disabled purchase button with loading indicator during transaction
+- **FR-022**: System MUST implement transaction recovery mechanism by starting transaction listener on app launch to process unfinished transactions from previous sessions
+- **FR-023**: System MUST handle restore purchases failures by displaying localized error message without blocking app usage
+- **FR-024**: System MUST ensure credit consumption is irreversible with audit trail preservation (consumed state, timestamp, profile ID retained permanently)
+- **FR-025**: System MUST block purchase attempts when user already has unused credits for that specific report type (prevents stockpiling, encourages consumption before repurchase)
+- **FR-026**: System MUST calculate report lock state from credit availability (locked = 0 credits, unlocked = >0 credits) with reactive UI updates
+- **FR-027**: System MUST handle network unavailability by preventing purchase initiation when offline and displaying informative message
+- **FR-028**: System MUST display product prices from latest StoreKit fetch (platform payment sheet shows authoritative price)
+- **FR-029**: System MUST display all reports in "Locked" state on first app launch (zero-purchase state)
+- **FR-030**: System MUST handle multiple credits for same report type by consuming oldest credit first (FIFO)
+- **FR-031**: System MUST display prices from platform in user's App Store region currency (StoreKit handles conversion automatically)
+- **FR-032**: System MUST ensure generated reports remain accessible permanently in report history regardless of credit state
+
+### Error Message Requirements (FR-016 Details)
+
+System must display error messages for purchase failures with this structure:
+
+| Failure Scenario | Message Structure | Required Elements |
+|------------------|-------------------|-------------------|
+| Network Error | Title + Description + Action | Localized title indicating connection issue, description prompting network check, "Try Again" button |
+| User Cancelled | (No message) | Silent return to paywall, no error displayed |
+| Verification Failed | Title + Description + Action | Localized title indicating purchase error, description with retry/support guidance, "Try Again" button |
+| Product Not Found | Title + Description + Action | Localized title indicating unavailability, description suggesting retry later, "OK" button |
+| Payment Declined | Title + Description + Action | Localized title indicating payment failure, description prompting payment method check, "OK" button |
+| Restore Failed | Title + Description + Action | Localized title indicating restore error, description with non-blocking context, "Try Again" button |
+
+**Localization**: All messages must have Ukrainian + English versions.
+**UX**: Error messages should be informative but not alarming, with clear next steps.
 
 ### Key Entities
 
