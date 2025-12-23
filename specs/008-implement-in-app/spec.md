@@ -12,6 +12,7 @@
 - Q: Should the feature include bundle purchases of all four report types? → A: No - only individual report purchases (1 purchase = 1 report). No bundle offers for MVP simplicity.
 - Q: What is the exact price for each report type? → A: All reports same price: $4.99 (simplest pricing model for MVP)
 - Q: Are credits profile-specific or shared globally? → A: Global credit pool - credits can be used for any profile (simplest data model and UX)
+- Q: Is a credit balance view needed for displaying credit counts? → A: No - with 1-purchase-1-report model, just show locked/unlocked state on reports (boolean, not numeric balance)
 
 ## User Scenarios & Testing
 
@@ -111,7 +112,7 @@ A user exploring the app wants to see all available report types, understand wha
 - **FR-011**: System MUST provide "Restore Purchases" functionality to recover unused credits
 - **FR-012**: System MUST store all purchase records and credit balances locally on device
 - **FR-013**: System MUST prevent report generation when user has zero credits for that report type
-- **FR-014**: System MUST display current credit balance for each report type in user interface
+- **FR-014**: System MUST display locked/unlocked state for each report type in user interface (no numeric credit balance needed for MVP simplicity)
 - **FR-015**: System MUST handle purchase cancellation gracefully without consuming credits
 - **FR-016**: System MUST display appropriate error messages when purchase verification fails
 - **FR-017**: System MUST track which user profile each generated report was created for (credits are global, but generation history is profile-specific)
@@ -154,6 +155,7 @@ A user exploring the app wants to see all available report types, understand wha
 - Platform In-App Purchase SDK (App Store/Google Play) for transaction processing
 - Existing user profile management system for associating purchases with profiles
 - Existing report generation system for AI-powered astrological report creation
+- Existing report storage system (already implemented - no changes needed)
 - Localization system for Ukrainian language support in purchase UI
 
 ## Out of Scope
