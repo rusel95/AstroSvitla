@@ -17,12 +17,10 @@ enum ReportArea: String, Codable, CaseIterable, Sendable {
         }
     }
 
+    /// Uniform pricing for all report types per spec 008-implement-in-app
+    /// All reports are $4.99 USD (Tier 5)
     var price: Decimal {
-        switch self {
-        case .general: return Decimal(string: "9.99")!
-        case .finances, .career: return Decimal(string: "6.99")!
-        case .relationships, .health: return Decimal(string: "5.99")!
-        }
+        return Decimal(string: "4.99")!
     }
 
     var icon: String {

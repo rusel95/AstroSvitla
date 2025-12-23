@@ -16,6 +16,8 @@ struct AstroSvitlaApp: App {
     private let sharedModelContainer: ModelContainer
     @StateObject private var preferences = AppPreferences()
     @StateObject private var repositoryContext: RepositoryContext
+    @State private var purchaseService: PurchaseService
+    @State private var creditManager: CreditManager
     
     init() {
         SentrySDK.start { options in
@@ -66,6 +68,12 @@ struct AstroSvitlaApp: App {
         let repoContext = RepositoryContext(context: sharedModelContainer.mainContext)
         repoContext.loadActiveProfile()
         _repositoryContext = StateObject(wrappedValue: repoContext)
+        
+        // Initialize PurchaseService with main context
+        purchaseService = PurchaseService(context: sharedModelContainer.mainContext)
+        
+        // Initialize CreditManager with main context
+        creditManager = CreditManager(context: sharedModelContainer.mainContext)
     }
     
     var body: some Scene {
@@ -73,6 +81,8 @@ struct AstroSvitlaApp: App {
             ContentView()
                 .environmentObject(preferences)
                 .environmentObject(repositoryContext)
+                .environment(purchaseService)
+                .environment(creditManager)
                 .preferredColorScheme(preferences.selectedColorScheme)
                 .task {
                     // Ensure active profile is loaded when app starts
