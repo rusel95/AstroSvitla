@@ -50,7 +50,7 @@ struct ProfileSelectionView: View {
                         Text("action.continue", bundle: .main)
 
                         if let selected = selectedProfile {
-                            Text(String(localized: "profile.continue.with") + " \(selected.name)")
+                            Text(String(format: String(localized: "profile.continue.with %@"), selected.name))
                                 .opacity(0.85)
                         }
 

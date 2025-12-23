@@ -149,7 +149,7 @@ struct ReportDetailView: View {
                 // Language and Report type badges
                 HStack(spacing: 8) {
                     // Language indicator
-                    Label(languageCode.uppercased(), systemImage: "globe")
+                    Label(LocaleHelper.displayName(for: languageCode), systemImage: "globe")
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(secondaryTextColor)
                         .padding(.horizontal, 10)

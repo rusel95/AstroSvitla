@@ -91,7 +91,7 @@ struct ReportGenerationLogsView: View {
                     Label("logs.processing_time", systemImage: "clock")
                         .foregroundStyle(.secondary)
                     Spacer()
-                    Text("logs.seconds \(String(format: "%.2f", report.metadata.processingTimeSeconds))")
+                    Text(String(format: String(localized: "logs.seconds %@"), String(format: "%.2f", report.metadata.processingTimeSeconds)))
                         .fontWeight(.medium)
                 }
 
@@ -256,7 +256,7 @@ struct ReportGenerationLogsView: View {
                                 Image(systemName: "star.fill")
                                     .foregroundStyle(.yellow)
                                     .font(.caption2)
-                                Text("logs.relevance \(String(format: "%.0f", score * 100))")
+                                Text(String(format: String(localized: "logs.relevance %@"), String(format: "%.0f", score * 100)))
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -316,12 +316,12 @@ struct ReportGenerationLogsView: View {
                                     }
 
                                     HStack(spacing: 12) {
-                                        Label("logs.chunks \(book.totalChunks)", systemImage: "square.stack.3d.up")
+                                        Label(String(format: String(localized: "logs.chunks %lld"), book.totalChunks), systemImage: "square.stack.3d.up")
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
 
                                         if !book.usedChunks.isEmpty {
-                                            Label("logs.chunks_used \(book.usedChunks.count)", systemImage: "checkmark.circle.fill")
+                                            Label(String(format: String(localized: "logs.chunks_used %lld"), book.usedChunks.count), systemImage: "checkmark.circle.fill")
                                                 .font(.caption)
                                                 .foregroundStyle(.green)
                                         }
@@ -370,7 +370,7 @@ struct ReportGenerationLogsView: View {
                 Text("logs.section.vector_database")
                 Spacer()
                 if let books = report.knowledgeUsage.availableBooks {
-                    Text("logs.books_count \(books.count)")
+                    Text(String(format: String(localized: "logs.books_count %lld"), books.count))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

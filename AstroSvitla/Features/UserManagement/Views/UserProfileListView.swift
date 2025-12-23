@@ -15,11 +15,11 @@ struct UserProfileListView: View {
                     profileListView
                 }
             }
-            .navigationTitle(Text("profile.manage.title"))
+            .navigationTitle(String(localized: "profile.manage.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("action.done") {
+                    Button(String(localized: "action.done")) {
                         dismiss()
                     }
                 }
@@ -27,11 +27,11 @@ struct UserProfileListView: View {
                 // NOTE: Profile creation now happens inline on Home tab
                 // Remove the "Create Profile" button from Settings for simplified UX
             }
-            .alert(Text("profile.delete.title"), isPresented: $viewModel.showDeleteConfirmation) {
-                Button("action.cancel", role: .cancel) {
+            .alert(String(localized: "profile.delete.title"), isPresented: $viewModel.showDeleteConfirmation) {
+                Button(String(localized: "action.cancel"), role: .cancel) {
                     viewModel.cancelDelete()
                 }
-                Button("action.delete", role: .destructive) {
+                Button(String(localized: "action.delete"), role: .destructive) {
                     Task {
                         await viewModel.confirmDeleteProfile()
                     }
@@ -63,11 +63,11 @@ struct UserProfileListView: View {
                 .font(.system(size: 80))
                 .foregroundColor(.secondary)
 
-            Text("profile.empty.none", bundle: .main)
+            Text(String(localized: "profile.empty.none"))
                 .font(.title2)
                 .fontWeight(.semibold)
 
-            Text("profile.empty.create_first", bundle: .main)
+            Text(String(localized: "profile.empty.create_first"))
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -117,7 +117,7 @@ private struct ProfileRowView: View {
                             .font(.headline)
 
                         if isActive {
-                            Text("profile.badge.active", bundle: .main)
+                            Text(String(localized: "profile.badge.active"))
                                 .font(.caption)
                                 .fontWeight(.medium)
                                 .foregroundColor(.white)
@@ -152,7 +152,7 @@ private struct ProfileRowView: View {
                 Button(role: .destructive) {
                     onDelete()
                 } label: {
-                    Label("action.delete", systemImage: "trash")
+                    Label(String(localized: "action.delete"), systemImage: "trash")
                         .font(.caption)
                         .foregroundColor(.red)
                 }
@@ -189,7 +189,7 @@ private struct ProfileRowView: View {
         HStack(spacing: 4) {
             Image(systemName: "doc.text.fill")
                 .font(.caption2)
-            Text(String(localized: "profile.reports.count") + " \(profile.reports.count)")
+            Text(String(format: String(localized: "profile.reports.count %lld"), profile.reports.count))
                 .font(.caption)
         }
         .foregroundColor(.secondary)
