@@ -42,7 +42,7 @@ struct PurchaseConfirmationView: View {
                                     ProgressView()
                                         .tint(.white)
                                 } else {
-                                    Text(String(format: String(localized: "purchase.paywall.buy_button"), priceString))
+                                    Text(String(format: String(localized: "purchase.paywall.buy_button", defaultValue: "Buy for %@"), priceString))
                                         .font(.system(size: 17, weight: .semibold))
                                 }
                             }
@@ -62,7 +62,7 @@ struct PurchaseConfirmationView: View {
                                 }
                             }
                         } label: {
-                            Text("Restore Purchases", bundle: .main)
+                            Text(String(localized: "purchase.action.restore", defaultValue: "Restore Purchases"))
                                 .font(.system(size: 14, weight: .medium))
                                 .foregroundStyle(Color.accentColor)
                         }

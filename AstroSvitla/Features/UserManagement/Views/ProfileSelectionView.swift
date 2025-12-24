@@ -47,8 +47,6 @@ struct ProfileSelectionView: View {
                 // Continue button pinned to bottom
                 Button(action: onContinue) {
                     HStack(spacing: 8) {
-                        Text("action.continue", bundle: .main)
-
                         if let selected = selectedProfile {
                             Text(String(format: String(localized: "profile.continue.with %@"), selected.name))
                                 .opacity(0.85)

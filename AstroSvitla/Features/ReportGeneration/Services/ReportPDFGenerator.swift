@@ -216,7 +216,7 @@ private struct ReportPDFContentView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("AstroSvitla")
+                    Text(verbatim: "Zorya")
                         .font(.system(size: 20, weight: .bold, design: .rounded))
                         .foregroundStyle(primaryTextColor)
 

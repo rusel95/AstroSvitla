@@ -44,7 +44,7 @@ struct SettingsView: View {
                 .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showDevModeToast)
             }
         }
-        .navigationTitle(Text("settings.title"))
+        .navigationBarHidden(true)
         .sheet(isPresented: $showingProfileManager) {
             UserProfileListView(viewModel: profileViewModel)
         }
@@ -286,7 +286,7 @@ struct SettingsView: View {
                             Text("settings.about.made_with_love")
                                 .font(.system(size: 15, weight: .medium))
                                 .foregroundStyle(.primary)
-                            Text("AstroSvitla Team 🇺🇦")
+                            Text(verbatim: "Zorya Team 🇺🇦")
                                 .font(.system(size: 13, weight: .regular))
                                 .foregroundStyle(.secondary)
                         }

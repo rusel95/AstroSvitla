@@ -38,6 +38,7 @@ struct ReportListView: View {
                 }
             }
             .navigationTitle(showsTitle ? Text("report.list.title") : Text(""))
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if allowsDismiss {
                     ToolbarItem(placement: .topBarLeading) {

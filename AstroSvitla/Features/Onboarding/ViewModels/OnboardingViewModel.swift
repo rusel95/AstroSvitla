@@ -40,8 +40,13 @@ final class OnboardingViewModel: ObservableObject {
         guard pages.indices.contains(Self.pricePageIndex) else { return }
         
         let oldPage = pages[Self.pricePageIndex]
-        let newBadgeText = String(localized: "onboarding.page3.badge.dynamic \(price)", 
-                                   defaultValue: "from \(price) per report")
+        let localizedTemplate = String(localized: "onboarding.page3.badge")
+        // Replace static price (e.g., $5.99) with dynamic price from StoreKit
+        let newBadgeText = localizedTemplate.replacingOccurrences(
+            of: "\\$\\d+\\.?\\d*",
+            with: price,
+            options: .regularExpression
+        )
         
         let newPage = OnboardingPage(
             title: oldPage.title,
@@ -144,8 +149,15 @@ final class OnboardingViewModel: ObservableObject {
                     String(localized: "onboarding.page3.area5")
                 ],
                 badge: OnboardingPage.Badge(
-                    text: String(localized: "onboarding.page3.badge.dynamic \(priceText)", 
-                                  defaultValue: "from \(priceText) per report"),
+                    // Use existing localization with dynamic price replacement
+                    text: {
+                        let template = String(localized: "onboarding.page3.badge")
+                        return template.replacingOccurrences(
+                            of: "\\$\\d+\\.?\\d*",
+                            with: priceText,
+                            options: .regularExpression
+                        )
+                    }(),
                     icon: "tag.fill",
                     style: .value
                 ),

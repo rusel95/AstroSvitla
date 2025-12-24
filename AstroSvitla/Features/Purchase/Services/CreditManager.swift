@@ -190,17 +190,17 @@ final class CreditManager {
     func availableCreditsText() -> String {
         let count = getAvailableCreditCount()
         if count == 0 {
-            return String(localized: "purchase.credits.none")
+            return String(localized: "purchase.credits.none", defaultValue: "No credits")
         } else {
-            return String(format: String(localized: "purchase.credits.available"), count)
+            return String(format: String(localized: "purchase.credits.available", defaultValue: "%d credits available"), count)
         }
     }
     
     func reportStatusText(hasCredit: Bool) -> String {
         if hasCredit {
-            return String(localized: "purchase.report.available")
+            return String(localized: "purchase.report.available", defaultValue: "Report available")
         } else {
-            return String(localized: "purchase.report.locked")
+            return String(localized: "purchase.report.locked", defaultValue: "Unlock report")
         }
     }
     

@@ -135,7 +135,7 @@ struct ReportDetailView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("AstroSvitla")
+                    Text(verbatim: "Zorya")
                         .font(.system(size: 20, weight: .bold, design: .rounded))
                         .foregroundStyle(primaryTextColor)
 
@@ -586,7 +586,7 @@ struct ReportDetailView: View {
             .joined(separator: "_")
             .trimmingCharacters(in: .whitespaces)
         
-        let filename = "AstroSvitla_\(sanitizedName)_\(report.area.displayName).pdf"
+        let filename = "Zorya_\(sanitizedName)_\(report.area.displayName).pdf"
         let url = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
         try data.write(to: url, options: .atomic)
         return url
