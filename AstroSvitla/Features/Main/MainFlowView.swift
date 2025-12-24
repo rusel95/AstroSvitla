@@ -17,7 +17,7 @@ enum ChartCalculationError: LocalizedError {
 struct MainFlowView: View {
     @EnvironmentObject private var preferences: AppPreferences
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject private var repositoryContext: RepositoryContext
+    @ObservedObject private var repositoryContext: RepositoryContext
     @Environment(PurchaseService.self) private var purchaseService
     @Environment(CreditManager.self) private var creditManager
     @StateObject private var profileViewModel: UserProfileViewModel
@@ -31,10 +31,10 @@ struct MainFlowView: View {
     }
     private let reportGenerator = AIReportGenerator()
 
-    init(modelContext: ModelContext) {
+    init(modelContext: ModelContext, repositoryContext: RepositoryContext) {
+        self.repositoryContext = repositoryContext
         let service = UserProfileService(context: modelContext)
-        let repoContext = RepositoryContext(context: modelContext)
-        let profileVM = UserProfileViewModel(service: service, repositoryContext: repoContext)
+        let profileVM = UserProfileViewModel(service: service, repositoryContext: repositoryContext)
         _profileViewModel = StateObject(wrappedValue: profileVM)
     }
 
@@ -56,7 +56,6 @@ struct MainFlowView: View {
         }
         .onAppear {
             profileViewModel.loadProfiles()
-            repositoryContext.loadActiveProfile()
         }
     }
 
@@ -156,11 +155,11 @@ struct MainFlowView: View {
                         Task {
                             if let profile = repositoryContext.activeProfile {
                                 await MainActor.run {
-                                    generateReportWithCreditConsumption(
+                                    generateReport(
                                         details: details,
                                         chart: chart,
                                         area: area,
-                                        profileID: profile.id
+                                        consumeCreditProfileID: profile.id
                                     )
                                 }
                             } else {
@@ -348,62 +347,11 @@ struct MainFlowView: View {
         navigationPath.append(MainNavDestination.report(details, chart, area, generatedReport))
     }
 
-    private func generateReport(details: BirthDetails, chart: NatalChart, area: ReportArea) {
-        // Clear navigation stack to show generating view as root content
-        navigationPath.removeLast(navigationPath.count)
-        flowState = .generating(details, chart, area)
-
-        let languageCode = LocaleHelper.currentLanguageCode
-        let languageDisplayName = LocaleHelper.currentLanguageDisplayName
-        
-        Task {
-            do {
-                let report = try await reportGenerator.generateReport(
-                    for: area,
-                    birthDetails: details,
-                    natalChart: chart,
-                    languageCode: languageCode,
-                    languageDisplayName: languageDisplayName,
-                    repositoryContext: "AstroSvitla iOS app context",
-                    selectedModel: preferences.selectedModel
-                )
-                do {
-                    try persistGeneratedReport(
-                        details: details,
-                        natalChart: chart,
-                        generatedReport: report
-                    )
-                } catch {
-                    #if DEBUG
-                    print("⚠️ Помилка збереження звіту: \(error)")
-                    #endif
-                }
-                await MainActor.run {
-                    // Pop generating state, push report
-                    flowState = .birthInput
-                    // Replace the purchase destination with report
-                    if !navigationPath.isEmpty {
-                        navigationPath.removeLast() // Remove purchase
-                    }
-                    navigationPath.append(MainNavDestination.report(details, chart, area, report))
-                }
-            } catch {
-                await MainActor.run {
-                    errorMessage = error.localizedDescription
-                    // Return to purchase screen
-                    flowState = .birthInput
-                }
-            }
-        }
-    }
-    
-    /// Generate report and consume credit only after successful generation
-    /// This prevents credit loss if report generation fails
-    private func generateReportWithCreditConsumption(
+    private func generateReport(
         details: BirthDetails,
         chart: NatalChart,
         area: ReportArea,
-        profileID: UUID
+        consumeCreditProfileID: UUID? = nil
     ) {
         // Clear navigation stack to show generating view as root content
         navigationPath.removeLast(navigationPath.count)
@@ -414,7 +362,6 @@ struct MainFlowView: View {
         
         Task {
             do {
-                // Generate report first
                 let report = try await reportGenerator.generateReport(
                     for: area,
                     birthDetails: details,
@@ -424,29 +371,28 @@ struct MainFlowView: View {
                     repositoryContext: "AstroSvitla iOS app context",
                     selectedModel: preferences.selectedModel
                 )
-                
-                // Only consume credit after successful report generation
-                do {
-                    _ = try creditManager.consumeCredit(for: area.rawValue, profileID: profileID)
-                } catch {
-                    // If credit consumption fails, log but don't block report display
-                    // The report was already generated successfully
-                    #if DEBUG
-                    print("⚠️ [MainFlowView] Failed to consume credit after report generation: \(error)")
-                    #endif
-                    // Use capture(error:) for better stack traces
-                    SentrySDK.capture(error: error) { scope in
-                        scope.setLevel(.warning)
-                        scope.setTag(value: "credit_consumption", key: "issue")
-                        scope.setTag(value: "post_generation", key: "phase")
-                        scope.setContext(value: [
-                            "message": "Failed to consume credit after successful report generation",
-                            "report_area": area.rawValue
-                        ], key: "error_context")
+                if let profileID = consumeCreditProfileID {
+                    // Only consume credit after successful report generation
+                    do {
+                        _ = try creditManager.consumeCredit(for: area.rawValue, profileID: profileID)
+                    } catch {
+                        // If credit consumption fails, log but don't block report display
+                        #if DEBUG
+                        print("⚠️ [MainFlowView] Failed to consume credit after report generation: \(error)")
+                        #endif
+                        // Use capture(error:) for better stack traces
+                        SentrySDK.capture(error: error) { scope in
+                            scope.setLevel(.warning)
+                            scope.setTag(value: "credit_consumption", key: "issue")
+                            scope.setTag(value: "post_generation", key: "phase")
+                            scope.setContext(value: [
+                                "message": "Failed to consume credit after successful report generation",
+                                "report_area": area.rawValue
+                            ], key: "error_context")
+                        }
                     }
                 }
-                
-                // Persist report
+
                 do {
                     try persistGeneratedReport(
                         details: details,
@@ -458,7 +404,7 @@ struct MainFlowView: View {
                     print("⚠️ Помилка збереження звіту: \(error)")
                     #endif
                 }
-                
+
                 await MainActor.run {
                     // Pop generating state, push report
                     flowState = .birthInput
@@ -479,6 +425,8 @@ struct MainFlowView: View {
     }
 
     private func printChartData(_ chart: NatalChart) {
+#if DEBUG
+        guard Config.debugLoggingEnabled else { return }
         print("\n" + String(repeating: "=", count: 60))
         print("📊 NATAL CHART CALCULATION RESULTS")
         print(String(repeating: "=", count: 60))
@@ -506,6 +454,7 @@ struct MainFlowView: View {
 
         print("\n📅 Calculated at: \(chart.calculatedAt.formatted(date: .abbreviated, time: .standard))")
         print(String(repeating: "=", count: 60) + "\n")
+#endif
     }
 
     private func formatDegree(_ degree: Double) -> String {
@@ -608,19 +557,6 @@ private extension MainFlowView {
         try modelContext.save()
 
         print("[MainFlowView] ✅ Report saved successfully with full logging data")
-    }
-
-    @MainActor
-    func upsertBirthChart(details: BirthDetails, natalChart: NatalChart) throws -> BirthChart {
-        _ = details
-
-        // TODO: This logic needs complete rewrite for UserProfile architecture
-        // For now, just create a new chart each time
-        let chartJSON = BirthChart.encodedChartJSON(from: natalChart) ?? ""
-        let newChart = BirthChart(chartDataJSON: chartJSON)
-
-        modelContext.insert(newChart)
-        return newChart
     }
 
     func renderReportText(from report: GeneratedReport) -> String {
@@ -969,7 +905,7 @@ private struct GeneratingReportView: View {
 
 #Preview {
     let container = try! ModelContainer.astroSvitlaShared(inMemory: true)
-    MainFlowView(modelContext: container.mainContext)
+    let repositoryContext = RepositoryContext(context: container.mainContext)
+    MainFlowView(modelContext: container.mainContext, repositoryContext: repositoryContext)
         .environmentObject(AppPreferences())
-        .environmentObject(RepositoryContext(context: container.mainContext))
 }

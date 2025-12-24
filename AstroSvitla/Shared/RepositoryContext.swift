@@ -4,13 +4,15 @@ import SwiftUI
 import Combine
 
 @MainActor
-class RepositoryContext: ObservableObject {
+final class RepositoryContext: ObservableObject {
     @Published var activeProfile: UserProfile?
 
     private let context: ModelContext
 
     init(context: ModelContext) {
         self.context = context
+        createDefaultUserIfNeeded()
+        loadActiveProfile()
     }
 
     func setActiveProfile(_ profile: UserProfile) {
@@ -36,12 +38,12 @@ class RepositoryContext: ObservableObject {
         self.activeProfile = try? context.fetch(descriptor).first
     }
 
-    func fetchDeviceOwner() -> User? {
+    private func fetchDeviceOwner() -> User? {
         let descriptor = FetchDescriptor<User>()
         return try? context.fetch(descriptor).first
     }
 
-    func createDefaultUserIfNeeded() {
+    private func createDefaultUserIfNeeded() {
         guard fetchDeviceOwner() == nil else { return }
 
         let newUser = User()

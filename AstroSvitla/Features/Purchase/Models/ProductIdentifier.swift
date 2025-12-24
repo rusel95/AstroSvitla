@@ -10,7 +10,7 @@ import Foundation
 import StoreKit
 
 enum PurchaseProduct: String, CaseIterable {
-    case singleCredit = "com.astrosvitla.report.credit.single"
+    case singleCredit = "com.zorya.report_generation"
     
     var type: Product.ProductType {
         return .consumable

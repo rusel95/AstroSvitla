@@ -49,7 +49,7 @@ class UserProfileService {
         }
 
         // Create profile
-        let profile = UserProfile(
+        let profile = createProfileEntity(
             name: name,
             birthDate: birthDate,
             birthTime: birthTime,
@@ -59,18 +59,11 @@ class UserProfileService {
             timezone: timezone
         )
 
-        context.insert(profile)
-
         // Create and link birth chart
         let chartJSON = BirthChart.encodedChartJSON(from: natalChart) ?? ""
         let birthChart = BirthChart(chartDataJSON: chartJSON)
         birthChart.profile = profile
         context.insert(birthChart)
-
-        // Link to device owner
-        if let user = fetchDeviceOwner() {
-            profile.user = user
-        }
 
         try context.save()
 
@@ -93,7 +86,7 @@ class UserProfileService {
         }
 
         // Create profile
-        let profile = UserProfile(
+        let profile = createProfileEntity(
             name: name,
             birthDate: birthDate,
             birthTime: birthTime,
@@ -102,13 +95,6 @@ class UserProfileService {
             longitude: longitude,
             timezone: timezone
         )
-
-        context.insert(profile)
-
-        // Link to device owner
-        if let user = fetchDeviceOwner() {
-            profile.user = user
-        }
 
         try context.save()
 
@@ -281,5 +267,33 @@ class UserProfileService {
     private func fetchDeviceOwner() -> User? {
         let descriptor = FetchDescriptor<User>()
         return try? context.fetch(descriptor).first
+    }
+
+    private func createProfileEntity(
+        name: String,
+        birthDate: Date,
+        birthTime: Date,
+        locationName: String,
+        latitude: Double,
+        longitude: Double,
+        timezone: String
+    ) -> UserProfile {
+        let profile = UserProfile(
+            name: name,
+            birthDate: birthDate,
+            birthTime: birthTime,
+            locationName: locationName,
+            latitude: latitude,
+            longitude: longitude,
+            timezone: timezone
+        )
+
+        context.insert(profile)
+
+        if let user = fetchDeviceOwner() {
+            profile.user = user
+        }
+
+        return profile
     }
 }

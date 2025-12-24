@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftData
 import Sentry
 
 // MARK: - Main Mapper
@@ -112,63 +111,6 @@ enum AstrologyAPIDTOMapper {
     }
     
     // MARK: - Private Mapping Methods
-    
-    private static func mapPlanetsFromSubjectData(
-        _ subjectData: AstrologyAPISubjectData
-    ) throws -> [Planet] {
-        var planets: [Planet] = []
-        
-        // Map each planet from subject_data
-        let celestialBodies: [(AstrologyAPICelestialBody?, PlanetType)] = [
-            (subjectData.sun, .sun),
-            (subjectData.moon, .moon),
-            (subjectData.mercury, .mercury),
-            (subjectData.venus, .venus),
-            (subjectData.mars, .mars),
-            (subjectData.jupiter, .jupiter),
-            (subjectData.saturn, .saturn),
-            (subjectData.uranus, .uranus),
-            (subjectData.neptune, .neptune),
-            (subjectData.pluto, .pluto),
-            (subjectData.trueNode, .trueNode),
-            (subjectData.lilith, .lilith)
-        ]
-        
-        for (body, planetType) in celestialBodies {
-            guard let body = body else { continue }
-            
-            planets.append(Planet(
-                name: planetType,
-                longitude: body.absPos,
-                latitude: 0, // Astrology API doesn't provide latitude for planets
-                sign: ZodiacSign.from(apiName: body.sign),
-                house: extractHouseNumber(from: body.house),
-                isRetrograde: body.retrograde,
-                speed: 0 // Speed not available in subject_data
-            ))
-        }
-        
-        // Compute South Node if True Node is present
-        if let trueNode = planets.first(where: { $0.name == .trueNode }) {
-            let southNodeLongitude = (trueNode.longitude + 180).truncatingRemainder(dividingBy: 360)
-            let southNodeSign = ZodiacSign.from(degree: southNodeLongitude)
-            let southNodeHouse = ((trueNode.house + 5) % 12) + 1 // Approximate opposite house
-            
-            let southNode = Planet(
-                name: .southNode,
-                longitude: southNodeLongitude,
-                latitude: 0,
-                sign: southNodeSign,
-                house: southNodeHouse,
-                isRetrograde: false,
-                speed: 0
-            )
-            
-            planets.append(southNode)
-        }
-        
-        return planets
-    }
     
     private static func mapPlanets(
         _ apiPlanets: [AstrologyAPIPlanetaryPosition]
@@ -285,20 +227,6 @@ enum AstrologyAPIDTOMapper {
         return (ascendant: ascendant, midheaven: midheaven)
     }
     
-    private static func extractHouseNumber(from houseString: String?) -> Int {
-        guard let houseString = houseString else { return 1 }
-        
-        // Parse house names like "Ninth_House" -> 9
-        let houseMap: [String: Int] = [
-            "First_House": 1, "Second_House": 2, "Third_House": 3,
-            "Fourth_House": 4, "Fifth_House": 5, "Sixth_House": 6,
-            "Seventh_House": 7, "Eighth_House": 8, "Ninth_House": 9,
-            "Tenth_House": 10, "Eleventh_House": 11, "Twelfth_House": 12
-        ]
-        
-        return houseMap[houseString] ?? 1
-    }
-    
     /// Parse location string to extract city name and country code
     /// Expected format from geocoding: "City, Region, Country, ISO_CODE"
     /// Example: "London, England, United Kingdom, GB"
@@ -387,28 +315,6 @@ extension AspectType {
         case "quintile": return .quintile
         case "biquintile", "bi-quintile": return .biquintile
         default: return nil
-        }
-    }
-}
-
-// MARK: - Mapping Errors
-
-enum AstrologyAPIMappingError: LocalizedError {
-    case invalidPlanetData(String)
-    case invalidHouseData(String)  
-    case invalidAspectData(String)
-    case missingRequiredField(String)
-    
-    var errorDescription: String? {
-        switch self {
-        case .invalidPlanetData(let planet):
-            return "Invalid planet data for: \(planet)"
-        case .invalidHouseData(let house):
-            return "Invalid house data for: \(house)"
-        case .invalidAspectData(let aspect):
-            return "Invalid aspect data for: \(aspect)"
-        case .missingRequiredField(let field):
-            return "Missing required field: \(field)"
         }
     }
 }

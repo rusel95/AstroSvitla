@@ -24,8 +24,8 @@ final class BirthDataInputViewModel: ObservableObject {
     init(initialDetails: BirthDetails? = nil) {
         // Initialize with default values first
         self.name = ""
-        self.birthDate = Calendar.current.date(byAdding: .year, value: -25, to: Date()) ?? Date()
-        self.birthTime = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: Date()) ?? Date()
+        self.birthDate = Self.defaultBirthDate
+        self.birthTime = Self.defaultBirthTime
         self.location = ""
         self.timeZone = .current
         self.coordinate = nil
@@ -64,8 +64,8 @@ final class BirthDataInputViewModel: ObservableObject {
     func clearData() {
         storage.clear()
         self.name = ""
-        self.birthDate = Calendar.current.date(byAdding: .year, value: -25, to: Date()) ?? Date()
-        self.birthTime = Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: Date()) ?? Date()
+        self.birthDate = Self.defaultBirthDate
+        self.birthTime = Self.defaultBirthTime
         self.location = ""
         self.timeZone = .current
         self.coordinate = nil
@@ -108,6 +108,14 @@ final class BirthDataInputViewModel: ObservableObject {
     }
 
     // MARK: - Private Helpers
+
+    private static var defaultBirthDate: Date {
+        Calendar.current.date(byAdding: .year, value: -25, to: Date()) ?? Date()
+    }
+
+    private static var defaultBirthTime: Date {
+        Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: Date()) ?? Date()
+    }
 
     private func setupValidation() {
         Publishers.CombineLatest($location, $coordinate)

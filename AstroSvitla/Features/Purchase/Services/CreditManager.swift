@@ -18,6 +18,10 @@ final class CreditManager {
     // MARK: - Dependencies
     
     private let context: ModelContext
+
+    private enum Constants {
+        static let universalReportArea = "universal"
+    }
     
     // MARK: - Initialization
     
@@ -66,7 +70,7 @@ final class CreditManager {
         // Note: We currently use "universal" credits for all report types
         // The reportArea parameter is reserved for future area-specific credit support
         let descriptor = FetchDescriptor<PurchaseCredit>(
-            predicate: #Predicate { !$0.consumed && $0.reportArea == "universal" },
+            predicate: #Predicate { !$0.consumed && $0.reportArea == Constants.universalReportArea },
             sortBy: [SortDescriptor(\.purchaseDate, order: .forward)]
         )
         
@@ -143,7 +147,7 @@ final class CreditManager {
         
         // Create trial credit
         let trialCredit = PurchaseCredit(
-            reportArea: "universal",
+            reportArea: Constants.universalReportArea,
             transactionID: Self.trialTransactionID,
             purchaseDate: Date()
         )

@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct PurchaseConfirmationView: View {
     let birthDetails: BirthDetails
@@ -287,6 +288,13 @@ private struct FeatureRow: View {
 }
 
 #Preview {
+    // Create a mock service with test context for preview
+    let mockContext = try! ModelContainer(
+        for: PurchaseCredit.self, PurchaseRecord.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    ).mainContext
+    let mockService = PurchaseService(context: mockContext)
+    
     NavigationStack {
         PurchaseConfirmationView(
             birthDetails: BirthDetails(
@@ -296,6 +304,7 @@ private struct FeatureRow: View {
                 location: "Kyiv, Ukraine"
             ),
             area: .career,
+            purchaseService: mockService,
             hasCredit: true,
             onBack: {},
             onGenerateReport: {},

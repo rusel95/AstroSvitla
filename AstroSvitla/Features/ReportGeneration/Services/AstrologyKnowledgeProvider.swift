@@ -86,11 +86,11 @@ final class AstrologyKnowledgeProvider: KnowledgeSourceProvider, @unchecked Send
         }
 
         // Ascendant - compute sign without crossing isolation boundary
-        let ascSign = computeZodiacSign(for: chart.ascendant)
+        let ascSign = ZodiacSign.from(degree: chart.ascendant)
         context.append("Асцендент у знаку \(ascSign.rawValue)")
 
         // Midheaven - compute sign without crossing isolation boundary
-        let mcSign = computeZodiacSign(for: chart.midheaven)
+        let mcSign = ZodiacSign.from(degree: chart.midheaven)
         context.append("МС (Середина неба) у знаку \(mcSign.rawValue)")
 
         // Major aspects (limited to first 3 for brevity)
@@ -109,13 +109,6 @@ final class AstrologyKnowledgeProvider: KnowledgeSourceProvider, @unchecked Send
         return context
     }
 
-    private func computeZodiacSign(for degree: Double) -> ZodiacSign {
-        // Normalize degree to 0-360 range
-        let normalized = degree.truncatingRemainder(dividingBy: 360)
-        // Each sign is 30 degrees
-        let signIndex = Int(normalized / 30) % 12
-        return ZodiacSign.allCases[signIndex]
-    }
 }
 
 /// Stub implementation for testing transparency when vector store is unavailable

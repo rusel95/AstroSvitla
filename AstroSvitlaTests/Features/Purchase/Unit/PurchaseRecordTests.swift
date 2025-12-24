@@ -14,7 +14,7 @@ struct PurchaseRecordTests {
     /// Test that a record can be created with all fields
     @Test("Record creation with all fields")
     func testRecordCreation() throws {
-        let productID = "com.astrosvitla.report.credit.single"
+        let productID = "com.zorya.report_generation"
         let transactionID = "TEST-RECORD-123"
         let priceUSD: Decimal = 4.99
         let localizedPrice = "$4.99"
@@ -46,7 +46,7 @@ struct PurchaseRecordTests {
     @Test("Mark record as restored sets restoredDate")
     func testMarkAsRestored() throws {
         let record = PurchaseRecord(
-            productID: "com.astrosvitla.report.credit.single",
+            productID: "com.zorya.report_generation",
             transactionID: "TEST-RESTORE-456",
             priceUSD: 4.99,
             localizedPrice: "$4.99",
@@ -71,7 +71,7 @@ struct PurchaseRecordTests {
     @Test("isRestored property returns correct value")
     func testIsRestoredProperty() throws {
         let record = PurchaseRecord(
-            productID: "com.astrosvitla.report.credit.single",
+            productID: "com.zorya.report_generation",
             transactionID: "TEST-PROP-789",
             priceUSD: 4.99,
             localizedPrice: "$4.99",
@@ -89,7 +89,7 @@ struct PurchaseRecordTests {
     @Test("availableCredits returns only unconsumed credits")
     func testAvailableCreditsFiltering() throws {
         let record = PurchaseRecord(
-            productID: "com.astrosvitla.report.credit.single",
+            productID: "com.zorya.report_generation",
             transactionID: "TEST-FILTER-111",
             priceUSD: 4.99,
             localizedPrice: "$4.99",
@@ -118,7 +118,7 @@ struct PurchaseRecordTests {
     @Test("consumedCredits returns only consumed credits")
     func testConsumedCreditsFiltering() throws {
         let record = PurchaseRecord(
-            productID: "com.astrosvitla.report.credit.single",
+            productID: "com.zorya.report_generation",
             transactionID: "TEST-CONSUMED-222",
             priceUSD: 4.99,
             localizedPrice: "$4.99",

@@ -18,8 +18,8 @@
           "locale" : "uk"
         }
       ],
-      "productID" : "com.astrosvitla.report.credit.single",
-      "referenceName" : "Single Report Credit",
+      "productID" : "com.zorya.report_generation",
+      "referenceName" : "Report Generation",
       "type" : "Consumable"
     }
   ],

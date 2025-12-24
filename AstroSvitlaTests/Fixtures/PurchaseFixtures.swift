@@ -13,7 +13,7 @@ extension PurchaseRecord {
     /// Create a fixture PurchaseRecord for testing
     static func fixture(
         transactionID: String = "TEST-\(UUID().uuidString)",
-        productID: String = "com.astrosvitla.report.credit.single",
+        productID: String = "com.zorya.report_generation",
         priceUSD: Decimal = 4.99,
         localizedPrice: String = "$4.99",
         currencyCode: String = "USD",
@@ -34,6 +34,15 @@ extension PurchaseRecord {
 
 extension PurchaseCredit {
     /// Create a fixture PurchaseCredit for testing
+    ///
+    /// - Parameters:
+    ///   - reportArea: The report area identifier (defaults to "personality")
+    ///   - consumed: Whether the credit has been consumed (defaults to false)
+    ///   - transactionID: Unique transaction identifier (defaults to a test UUID)
+    ///   - purchaseDate: When the credit was purchased (defaults to current date)
+    ///   - userProfileID: Profile ID that consumed the credit. If `consumed=true` and this is `nil`,
+    ///     a random UUID will be generated automatically for testing purposes.
+    /// - Returns: A configured `PurchaseCredit` instance for testing
     static func fixture(
         reportArea: String = "personality",
         consumed: Bool = false,

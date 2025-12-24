@@ -13,7 +13,6 @@
 
 import Foundation
 import SwiftData
-import Network
 import Sentry
 
 /// Protocol for natal chart generation service
