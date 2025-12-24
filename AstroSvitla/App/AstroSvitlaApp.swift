@@ -57,10 +57,14 @@ struct AstroSvitlaApp: App {
         do {
             sharedModelContainer = try ModelContainer.astroSvitlaShared()
         } catch {
-            SentrySDK.capture(message: "Critical: Could not create ModelContainer - app cannot function") { scope in
+            // Use capture(error:) for better stack traces and error context
+            SentrySDK.capture(error: error) { scope in
                 scope.setLevel(.fatal)
                 scope.setTag(value: "startup", key: "phase")
-                scope.setExtra(value: error.localizedDescription, key: "error_details")
+                scope.setTag(value: "model_container", key: "operation")
+                scope.setContext(value: [
+                    "message": "Critical: Could not create ModelContainer - app cannot function"
+                ], key: "error_context")
             }
             fatalError("Could not create ModelContainer: \(error)")
         }
@@ -87,6 +91,28 @@ struct AstroSvitlaApp: App {
                 .task {
                     // Ensure active profile is loaded when app starts
                     repositoryContext.loadActiveProfile()
+                    
+                    // Grant free trial credit for new users (first report is free)
+                    creditManager.grantTrialCreditIfNeeded()
+                    
+                    // Load products for purchase service
+                    do {
+                        try await purchaseService.loadProducts()
+                    } catch {
+                        #if DEBUG
+                        print("Failed to load products: \(error)")
+                        #endif
+                        
+                        // Log to Sentry for monitoring
+                        SentrySDK.capture(error: error) { scope in
+                            scope.setLevel(.warning)
+                            scope.setTag(value: "product_loading", key: "operation")
+                            scope.setContext(value: [
+                                "action": "loadProducts",
+                                "gracefulDegradation": true
+                            ], key: "app_startup")
+                        }
+                    }
                 }
         }
         .modelContainer(sharedModelContainer)

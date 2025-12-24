@@ -4,8 +4,10 @@ struct PurchaseConfirmationView: View {
     let birthDetails: BirthDetails
     let area: ReportArea
     var purchaseService: PurchaseService?
+    var hasCredit: Bool
     var onBack: (() -> Void)?
     var onGenerateReport: () -> Void
+    var onPurchase: () -> Void
 
     var body: some View {
         ZStack {
@@ -20,17 +22,52 @@ struct PurchaseConfirmationView: View {
                     // Features list
                     featuresSection
 
-                    // Purchase button
-                    Button(action: onGenerateReport) {
-                        HStack(spacing: 10) {
-                            Image(systemName: "sparkles")
-                                .font(.system(size: 16, weight: .semibold))
-
-                            Text(String(format: String(localized: "purchase.action.create %@"), area.displayName))
+                    // Action button
+                    if hasCredit {
+                        // User has credit - show generate button
+                        Button(action: onGenerateReport) {
+                            HStack(spacing: 10) {
+                                Image(systemName: "sparkles")
+                                Text(String(format: String(localized: "purchase.action.create %@"), area.displayName))
+                            }
                         }
+                        .buttonStyle(.astroPrimary)
+                        .padding(.top, 8)
+                    } else {
+                        // No credit - show purchase button
+                        Button(action: onPurchase) {
+                            HStack(spacing: 10) {
+                                if let service = purchaseService, service.isPurchasing {
+                                    ProgressView()
+                                        .tint(.white)
+                                } else {
+                                    Text(String(format: String(localized: "purchase.paywall.buy_button"), priceString))
+                                        .font(.system(size: 17, weight: .semibold))
+                                }
+                            }
+                        }
+                        .buttonStyle(.astroPrimary)
+                        .padding(.top, 8)
+                        .disabled(purchaseService?.isPurchasing ?? false)
+                        
+                        // Restore button
+                        Button {
+                            Task {
+                                do {
+                                    try await purchaseService?.restorePurchases()
+                                } catch {
+                                    // Error handling is done by PurchaseService breadcrumbs
+                                    // User will see success/failure through credit balance update
+                                }
+                            }
+                        } label: {
+                            Text("Restore Purchases", bundle: .main)
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(Color.accentColor)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, -10)
                     }
-                    .buttonStyle(.astroPrimary)
-                    .padding(.top, 8)
 
                     // Guarantee text
                     HStack(spacing: 8) {
@@ -104,15 +141,17 @@ struct PurchaseConfirmationView: View {
                         .font(.system(size: 22, weight: .bold, design: .rounded))
                         .foregroundStyle(.primary)
 
-                    // Price with styling
-                    HStack(spacing: 4) {
-                        Text(priceString)
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundStyle(Color.accentColor)
+                    // Only show price if user doesn't have credit
+                    if !hasCredit {
+                        HStack(spacing: 4) {
+                            Text(priceString)
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundStyle(Color.accentColor)
 
-                        Text("purchase.price.once", bundle: .main)
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(.tertiary)
+                            Text("purchase.price.once", bundle: .main)
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundStyle(.tertiary)
+                        }
                     }
                 }
 
@@ -257,8 +296,10 @@ private struct FeatureRow: View {
                 location: "Kyiv, Ukraine"
             ),
             area: .career,
+            hasCredit: true,
             onBack: {},
-            onGenerateReport: {}
+            onGenerateReport: {},
+            onPurchase: {}
         )
     }
 }

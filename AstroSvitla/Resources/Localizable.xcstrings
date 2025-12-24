@@ -50836,6 +50836,17 @@
         }
       }
     },
+    "onboarding.page4.free_report" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "🎁 First report is FREE"
+          }
+        }
+      }
+    },
     "onboarding.page4.message" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -63801,19 +63812,13 @@
     "purchase.paywall.buy_button" : {
 
     },
-    "purchase.price.unavailable" : {
-      "extractionState" : "manual",
+    "purchase.price.free" : {
+      "extractionState" : "extracted_with_value",
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "Payment Unavailable"
-          }
-        },
-        "uk" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Оплата недоступна"
+            "state" : "new",
+            "value" : "FREE"
           }
         }
       }
@@ -64118,6 +64123,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "one-time payment"
+          }
+        }
+      }
+    },
+    "purchase.price.unavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Payment Unavailable"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оплата недоступна"
           }
         }
       }

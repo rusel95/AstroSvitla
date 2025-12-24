@@ -3,6 +3,7 @@ import SwiftUI
 struct AreaCard: View {
     let area: ReportArea
     var isPurchased: Bool = false
+    var hasCredit: Bool = false
     var onViewReport: (() -> Void)? = nil
     var purchaseService: PurchaseService?
 
@@ -70,7 +71,14 @@ struct AreaCard: View {
                                 .font(.system(size: 13, weight: .medium))
                         }
                         .foregroundStyle(Color.green)
+                    } else if hasCredit {
+                        // User has credit - don't show price, just description
+                        Text(area.shortDescription)
+                            .font(.system(size: 13, weight: .regular))
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
                     } else {
+                        // No credit - show price and description
                         Text(priceString)
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(.secondary)

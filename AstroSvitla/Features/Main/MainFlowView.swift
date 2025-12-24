@@ -1,6 +1,7 @@
 import SwiftUI
 import CoreLocation
 import SwiftData
+import Sentry
 
 enum ChartCalculationError: LocalizedError {
     case missingCoordinate
@@ -18,6 +19,7 @@ struct MainFlowView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var repositoryContext: RepositoryContext
     @Environment(PurchaseService.self) private var purchaseService
+    @Environment(CreditManager.self) private var creditManager
     @StateObject private var profileViewModel: UserProfileViewModel
     @State private var flowState: FlowState = .birthInput
     @State private var navigationPath = NavigationPath()
@@ -127,6 +129,7 @@ struct MainFlowView: View {
                 natalChart: chart,
                 purchasedAreas: getPurchasedAreas(),
                 purchaseService: purchaseService,
+                hasCredit: creditManager.hasAvailableCredits(),
                 onAreaSelected: { area in
                     navigationPath.append(MainNavDestination.purchase(details, chart, area))
                 },
@@ -146,9 +149,55 @@ struct MainFlowView: View {
                     birthDetails: details,
                     area: area,
                     purchaseService: purchaseService,
+                    hasCredit: creditManager.hasAvailableCredits(),
                     onBack: nil, // Native back button handles this
                     onGenerateReport: {
-                        generateReport(details: details, chart: chart, area: area)
+                        // Generate report first, then consume credit only on success
+                        Task {
+                            if let profile = repositoryContext.activeProfile {
+                                await MainActor.run {
+                                    generateReportWithCreditConsumption(
+                                        details: details,
+                                        chart: chart,
+                                        area: area,
+                                        profileID: profile.id
+                                    )
+                                }
+                            } else {
+                                await MainActor.run { errorMessage = String(localized: "error.profile.select") }
+                            }
+                        }
+                    },
+                    onPurchase: {
+                        Task {
+                            if let product = purchaseService.products.first {
+                                do {
+                                    _ = try await purchaseService.purchase(product)
+                                } catch let error as PurchaseError {
+                                    // Show user-facing error alert (skip userCancelled)
+                                    await MainActor.run {
+                                        if case .userCancelled = error {
+                                            // Don't show error for user cancellation
+                                            return
+                                        }
+                                        if let errorDesc = error.errorDescription {
+                                            errorMessage = errorDesc
+                                        } else {
+                                            errorMessage = String(localized: "purchase.error.purchase_failed", defaultValue: "Purchase failed. Please try again.")
+                                        }
+                                    }
+                                } catch {
+                                    // Handle unexpected errors
+                                    await MainActor.run {
+                                        errorMessage = String(localized: "purchase.error.purchase_failed", defaultValue: "Purchase failed. Please try again.")
+                                    }
+                                }
+                            } else {
+                                await MainActor.run {
+                                    errorMessage = String(localized: "purchase.error.product_not_found", defaultValue: "Product not available. Please try again later.")
+                                }
+                            }
+                        }
                     }
                 )
             }
@@ -342,6 +391,87 @@ struct MainFlowView: View {
                 await MainActor.run {
                     errorMessage = error.localizedDescription
                     // Return to purchase screen
+                    flowState = .birthInput
+                }
+            }
+        }
+    }
+    
+    /// Generate report and consume credit only after successful generation
+    /// This prevents credit loss if report generation fails
+    private func generateReportWithCreditConsumption(
+        details: BirthDetails,
+        chart: NatalChart,
+        area: ReportArea,
+        profileID: UUID
+    ) {
+        // Clear navigation stack to show generating view as root content
+        navigationPath.removeLast(navigationPath.count)
+        flowState = .generating(details, chart, area)
+
+        let languageCode = LocaleHelper.currentLanguageCode
+        let languageDisplayName = LocaleHelper.currentLanguageDisplayName
+        
+        Task {
+            do {
+                // Generate report first
+                let report = try await reportGenerator.generateReport(
+                    for: area,
+                    birthDetails: details,
+                    natalChart: chart,
+                    languageCode: languageCode,
+                    languageDisplayName: languageDisplayName,
+                    repositoryContext: "AstroSvitla iOS app context",
+                    selectedModel: preferences.selectedModel
+                )
+                
+                // Only consume credit after successful report generation
+                do {
+                    _ = try creditManager.consumeCredit(for: area.rawValue, profileID: profileID)
+                } catch {
+                    // If credit consumption fails, log but don't block report display
+                    // The report was already generated successfully
+                    #if DEBUG
+                    print("⚠️ [MainFlowView] Failed to consume credit after report generation: \(error)")
+                    #endif
+                    // Use capture(error:) for better stack traces
+                    SentrySDK.capture(error: error) { scope in
+                        scope.setLevel(.warning)
+                        scope.setTag(value: "credit_consumption", key: "issue")
+                        scope.setTag(value: "post_generation", key: "phase")
+                        scope.setContext(value: [
+                            "message": "Failed to consume credit after successful report generation",
+                            "report_area": area.rawValue
+                        ], key: "error_context")
+                    }
+                }
+                
+                // Persist report
+                do {
+                    try persistGeneratedReport(
+                        details: details,
+                        natalChart: chart,
+                        generatedReport: report
+                    )
+                } catch {
+                    #if DEBUG
+                    print("⚠️ Помилка збереження звіту: \(error)")
+                    #endif
+                }
+                
+                await MainActor.run {
+                    // Pop generating state, push report
+                    flowState = .birthInput
+                    // Replace the purchase destination with report
+                    if !navigationPath.isEmpty {
+                        navigationPath.removeLast() // Remove purchase
+                    }
+                    navigationPath.append(MainNavDestination.report(details, chart, area, report))
+                }
+            } catch {
+                await MainActor.run {
+                    errorMessage = error.localizedDescription
+                    // Return to purchase screen (credit not consumed)
                     flowState = .birthInput
                 }
             }

@@ -9,6 +9,7 @@
 import Foundation
 import SwiftData
 import Observation
+import Sentry
 
 @MainActor
 @Observable
@@ -47,10 +48,25 @@ final class CreditManager {
     
     // MARK: - Credit Consumption
     
+    /// Consumes a credit for generating a report
+    /// 
+    /// **Note on credit types**: Currently, all credits are stored as "universal" credits,
+    /// meaning they can be used for any report area (personality, career, relationship, wellness).
+    /// The `reportArea` parameter is accepted for API compatibility but is not currently used
+    /// for filtering credits. This design allows flexibility for future area-specific pricing
+    /// while maintaining a simple credit system for now.
+    ///
+    /// - Parameters:
+    ///   - reportArea: The report area identifier (currently not used for filtering, reserved for future use)
+    ///   - profileID: The profile ID that will consume this credit
+    /// - Returns: The consumed credit
+    /// - Throws: `CreditError.insufficientCredits` if no credits are available
     func consumeCredit(for reportArea: String, profileID: UUID) throws -> PurchaseCredit {
-        // Find first available credit for this report area
+        // Find first available universal credit
+        // Note: We currently use "universal" credits for all report types
+        // The reportArea parameter is reserved for future area-specific credit support
         let descriptor = FetchDescriptor<PurchaseCredit>(
-            predicate: #Predicate { !$0.consumed && $0.reportArea == reportArea },
+            predicate: #Predicate { !$0.consumed && $0.reportArea == "universal" },
             sortBy: [SortDescriptor(\.purchaseDate, order: .forward)]
         )
         
@@ -84,6 +100,86 @@ final class CreditManager {
         return (try? context.fetch(descriptor)) ?? []
     }
     
+    // MARK: - Trial Credit
+    
+    /// Transaction ID used for trial credits
+    static let trialTransactionID = "trial-first-report-free"
+    
+    /// Check if user has ever had any credits (trial or purchased)
+    func hasEverHadCredits() -> Bool {
+        let descriptor = FetchDescriptor<PurchaseCredit>()
+        return (try? context.fetchCount(descriptor)) ?? 0 > 0
+    }
+    
+    /// Check if user has a trial credit specifically
+    func hasTrialCredit() -> Bool {
+        let trialID = Self.trialTransactionID
+        let descriptor = FetchDescriptor<PurchaseCredit>(
+            predicate: #Predicate { $0.transactionID == trialID && !$0.consumed }
+        )
+        return (try? context.fetchCount(descriptor)) ?? 0 > 0
+    }
+    
+    /// Check if user has used their trial credit
+    func hasUsedTrialCredit() -> Bool {
+        let trialID = Self.trialTransactionID
+        let descriptor = FetchDescriptor<PurchaseCredit>(
+            predicate: #Predicate { $0.transactionID == trialID && $0.consumed }
+        )
+        return (try? context.fetchCount(descriptor)) ?? 0 > 0
+    }
+    
+    /// Grant a free trial credit if user hasn't received one yet
+    /// Returns true if trial was granted, false if already granted
+    @discardableResult
+    func grantTrialCreditIfNeeded() -> Bool {
+        // Check if user already has any credits (trial or purchased)
+        guard !hasEverHadCredits() else {
+            #if DEBUG
+            print("📦 [CreditManager] User already has credits, skipping trial")
+            #endif
+            return false
+        }
+        
+        // Create trial credit
+        let trialCredit = PurchaseCredit(
+            reportArea: "universal",
+            transactionID: Self.trialTransactionID,
+            purchaseDate: Date()
+        )
+        
+        context.insert(trialCredit)
+        
+        do {
+            try context.save()
+            #if DEBUG
+            print("🎁 [CreditManager] Trial credit granted successfully!")
+            #endif
+            
+            // Log to Sentry for analytics
+            let breadcrumb = Breadcrumb()
+            breadcrumb.level = .info
+            breadcrumb.category = "credit"
+            breadcrumb.message = "Trial credit granted"
+            SentrySDK.addBreadcrumb(breadcrumb)
+            
+            return true
+        } catch {
+            #if DEBUG
+            print("❌ [CreditManager] Failed to grant trial credit: \(error)")
+            #endif
+            
+            // Log error to Sentry
+            SentrySDK.capture(error: error) { scope in
+                scope.setLevel(.error)
+                scope.setTag(value: "trial_credit", key: "operation")
+                scope.setContext(value: ["action": "grantTrialCredit"], key: "credit_manager")
+            }
+            
+            return false
+        }
+    }
+    
     // MARK: - Localized Display
     
     func availableCreditsText() -> String {
@@ -100,6 +196,15 @@ final class CreditManager {
             return String(localized: "purchase.report.available")
         } else {
             return String(localized: "purchase.report.locked")
+        }
+    }
+    
+    /// Get display text for the price/action button
+    func priceDisplayText(purchaseService: PurchaseService) -> String {
+        if hasTrialCredit() {
+            return String(localized: "purchase.price.free", defaultValue: "FREE")
+        } else {
+            return purchaseService.getProductPrice()
         }
     }
 }

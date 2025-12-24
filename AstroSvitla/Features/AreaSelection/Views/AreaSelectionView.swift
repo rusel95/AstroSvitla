@@ -5,6 +5,7 @@ struct AreaSelectionView: View {
     let natalChart: NatalChart
     let purchasedAreas: Set<ReportArea>
     var purchaseService: PurchaseService?
+    var hasCredit: Bool
     var onAreaSelected: (ReportArea) -> Void
     var onViewExistingReport: ((ReportArea) -> Void)? = nil
 
@@ -15,6 +16,7 @@ struct AreaSelectionView: View {
         natalChart: NatalChart,
         purchasedAreas: Set<ReportArea> = [],
         purchaseService: PurchaseService? = nil,
+        hasCredit: Bool = false,
         onAreaSelected: @escaping (ReportArea) -> Void,
         onViewExistingReport: ((ReportArea) -> Void)? = nil
     ) {
@@ -22,6 +24,7 @@ struct AreaSelectionView: View {
         self.natalChart = natalChart
         self.purchasedAreas = purchasedAreas
         self.purchaseService = purchaseService
+        self.hasCredit = hasCredit
         self.onAreaSelected = onAreaSelected
         self.onViewExistingReport = onViewExistingReport
     }
@@ -112,7 +115,7 @@ struct AreaSelectionView: View {
                                     onAreaSelected(area)
                                 }
                             } label: {
-                                AreaCard(area: area, isPurchased: isPurchased, purchaseService: purchaseService)
+                                AreaCard(area: area, isPurchased: isPurchased, hasCredit: hasCredit, purchaseService: purchaseService)
                             }
                             .buttonStyle(.plain)
                         }

@@ -109,7 +109,9 @@ final class PurchaseService {
             self.products = []
             
             // Don't throw - allow app to continue without IAP
+            #if DEBUG
             print("⚠️ [PurchaseService] IAP unavailable, users can still generate reports")
+            #endif
         }
     }
     
@@ -235,7 +237,9 @@ final class PurchaseService {
         
         // Check for duplicate
         guard !isTransactionProcessed(transactionID) else {
+            #if DEBUG
             print("⚠️ Transaction already processed: \(transactionID)")
+            #endif
             return
         }
         
@@ -253,9 +257,9 @@ final class PurchaseService {
             context.insert(record)
             
             // Create credit
-            // For now, we'll use "personality" as default - this will be passed from UI later
+            // Use "universal" to indicate this credit can be used for any report area
             let credit = PurchaseCredit(
-                reportArea: "personality",
+                reportArea: "universal",
                 transactionID: transactionID,
                 purchaseDate: transaction.purchaseDate
             )
@@ -265,7 +269,9 @@ final class PurchaseService {
             // Atomic save
             try context.save()
             
+            #if DEBUG
             print("✅ Delivered credit for transaction \(transactionID)")
+            #endif
         } catch {
             throw PurchaseError.saveFailed(error)
         }
@@ -287,7 +293,9 @@ final class PurchaseService {
             
             // Find product
             guard let product = products.first(where: { $0.id == transaction.productID }) else {
+                #if DEBUG
                 print("⚠️ Product not found for transaction: \(transaction.productID)")
+                #endif
                 await transaction.finish()
                 return
             }
@@ -298,7 +306,16 @@ final class PurchaseService {
             // Finish transaction
             await transaction.finish()
         } catch {
+            #if DEBUG
             print("❌ Failed to handle transaction update: \(error)")
+            #endif
+            
+            // Log to Sentry
+            SentrySDK.capture(error: error) { scope in
+                scope.setLevel(.error)
+                scope.setTag(value: "transaction_listener", key: "operation")
+                scope.setContext(value: ["action": "handleTransactionUpdate"], key: "purchase_service")
+            }
         }
     }
     

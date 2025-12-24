@@ -112,12 +112,13 @@ final class OnboardingViewModel: ObservableObject {
                 accentColor: .warm
             ),
 
-            // Page 4: Trust & Ready - Final CTA
+            // Page 4: Trust & Ready - Final CTA with free report highlight
             OnboardingPage(
                 title: String(localized: "onboarding.page4.title"),
                 message: String(localized: "onboarding.page4.message"),
-                symbolName: "paperplane.fill",
+                symbolName: "gift.fill",
                 highlights: [
+                    String(localized: "onboarding.page4.free_report", defaultValue: "🎁 First report is FREE"),
                     String(localized: "onboarding.page4.feature1"),
                     String(localized: "onboarding.page4.feature2"),
                     String(localized: "onboarding.page4.feature3")
