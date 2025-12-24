@@ -91,24 +91,8 @@ struct AstroSvitlaApp: App {
                     // Grant free trial credit for new users (first report is free)
                     creditManager.grantTrialCreditIfNeeded()
                     
-                    // Load products for purchase service
-                    do {
-                        try await purchaseService.loadProducts()
-                    } catch {
-                        #if DEBUG
-                        print("Failed to load products: \(error)")
-                        #endif
-                        
-                        // Log to Sentry for monitoring
-                        SentrySDK.capture(error: error) { scope in
-                            scope.setLevel(.warning)
-                            scope.setTag(value: "product_loading", key: "operation")
-                            scope.setContext(value: [
-                                "action": "loadProducts",
-                                "gracefulDegradation": true
-                            ], key: "app_startup")
-                        }
-                    }
+                    // Load products for purchase service (includes retry with exponential backoff)
+                    await purchaseService.loadProducts()
                 }
         }
         .modelContainer(sharedModelContainer)

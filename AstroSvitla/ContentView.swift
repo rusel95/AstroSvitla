@@ -4,6 +4,7 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var repositoryContext: RepositoryContext
+    @Environment(PurchaseService.self) private var purchaseService
     @StateObject private var onboardingViewModel = OnboardingViewModel()
     @State private var showOnboarding = false
 
@@ -57,6 +58,12 @@ struct ContentView: View {
                 showOnboarding = true
             }
         }
+        .onChange(of: purchaseService.products) { _, products in
+            // Update onboarding price when products are loaded
+            if !products.isEmpty {
+                onboardingViewModel.updatePriceText(from: purchaseService)
+            }
+        }
         .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingView(
                 viewModel: onboardingViewModel,
@@ -74,4 +81,6 @@ struct ContentView: View {
         .environment(\.modelContext, container.mainContext)
         .environmentObject(AppPreferences())
         .environmentObject(RepositoryContext(context: container.mainContext))
+        .environment(PurchaseService(context: container.mainContext))
+        .environment(CreditManager(context: container.mainContext))
 }

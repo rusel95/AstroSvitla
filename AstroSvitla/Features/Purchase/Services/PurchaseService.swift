@@ -40,7 +40,14 @@ final class PurchaseService {
     
     // MARK: - Product Loading
     
-    func loadProducts() async throws {
+    /// Retry configuration for product loading
+    private enum RetryConfig {
+        static let maxAttempts = 3
+        static let baseDelaySeconds: UInt64 = 1
+    }
+    
+    /// Load products with automatic retry on failure
+    func loadProducts() async {
         let productIDs = PurchaseProduct.allCases.map { $0.rawValue }
         
         let breadcrumb = Breadcrumb()
@@ -50,77 +57,130 @@ final class PurchaseService {
         breadcrumb.data = ["productCount": productIDs.count]
         SentrySDK.addBreadcrumb(breadcrumb)
         
-        do {
-            let loadedProducts = try await Product.products(for: productIDs)
-            
-            // Validate product types
-            for product in loadedProducts {
-                guard product.type == .consumable else {
-                    let errorBreadcrumb = Breadcrumb()
-                    errorBreadcrumb.level = .error
-                    errorBreadcrumb.category = "purchase"
-                    errorBreadcrumb.message = "Invalid product type"
-                    errorBreadcrumb.data = ["productId": product.id, "type": "\(product.type)"]
-                    SentrySDK.addBreadcrumb(errorBreadcrumb)
-                    
-                    // Log to Sentry but don't block users
-                    SentrySDK.capture(message: "Invalid StoreKit product type") { scope in
-                        scope.setContext(value: [
-                            "productId": product.id,
-                            "expectedType": "consumable",
-                            "actualType": "\(product.type)"
-                        ], key: "product")
+        var lastError: Error?
+        
+        for attempt in 1...RetryConfig.maxAttempts {
+            do {
+                let loadedProducts = try await Product.products(for: productIDs)
+                
+                // Validate product types
+                for product in loadedProducts {
+                    guard product.type == .consumable else {
+                        let errorBreadcrumb = Breadcrumb()
+                        errorBreadcrumb.level = .error
+                        errorBreadcrumb.category = "purchase"
+                        errorBreadcrumb.message = "Invalid product type"
+                        errorBreadcrumb.data = ["productId": product.id, "type": "\(product.type)"]
+                        SentrySDK.addBreadcrumb(errorBreadcrumb)
+                        
+                        // Log to Sentry but don't block users
+                        SentrySDK.capture(message: "Invalid StoreKit product type") { scope in
+                            scope.setContext(value: [
+                                "productId": product.id,
+                                "expectedType": "consumable",
+                                "actualType": "\(product.type)"
+                            ], key: "product")
+                        }
+                        
+                        isIAPAvailable = false
+                        return
                     }
-                    
-                    isIAPAvailable = false
-                    throw PurchaseError.productNotFound
+                }
+                
+                self.products = loadedProducts
+                isIAPAvailable = true
+                
+                let successBreadcrumb = Breadcrumb()
+                successBreadcrumb.level = .info
+                successBreadcrumb.category = "purchase"
+                successBreadcrumb.message = "Products loaded successfully"
+                successBreadcrumb.data = ["count": loadedProducts.count, "attempt": attempt]
+                SentrySDK.addBreadcrumb(successBreadcrumb)
+                
+                #if DEBUG
+                print("✅ [PurchaseService] Products loaded on attempt \(attempt)")
+                #endif
+                
+                return // Success - exit retry loop
+                
+            } catch {
+                lastError = error
+                
+                let retryBreadcrumb = Breadcrumb()
+                retryBreadcrumb.level = .warning
+                retryBreadcrumb.category = "purchase"
+                retryBreadcrumb.message = "Product load attempt \(attempt) failed"
+                retryBreadcrumb.data = [
+                    "error": error.localizedDescription,
+                    "attempt": attempt,
+                    "maxAttempts": RetryConfig.maxAttempts
+                ]
+                SentrySDK.addBreadcrumb(retryBreadcrumb)
+                
+                #if DEBUG
+                print("⚠️ [PurchaseService] Attempt \(attempt)/\(RetryConfig.maxAttempts) failed: \(error.localizedDescription)")
+                #endif
+                
+                // Don't delay after last attempt
+                if attempt < RetryConfig.maxAttempts {
+                    // Exponential backoff: 1s, 2s, 4s
+                    let delaySeconds = RetryConfig.baseDelaySeconds * UInt64(1 << (attempt - 1))
+                    try? await Task.sleep(nanoseconds: delaySeconds * 1_000_000_000)
                 }
             }
-            
-            self.products = loadedProducts
-            isIAPAvailable = true
-            
-            let successBreadcrumb = Breadcrumb()
-            successBreadcrumb.level = .info
-            successBreadcrumb.category = "purchase"
-            successBreadcrumb.message = "Products loaded successfully"
-            successBreadcrumb.data = ["count": loadedProducts.count]
-            SentrySDK.addBreadcrumb(successBreadcrumb)
-        } catch {
-            let failBreadcrumb = Breadcrumb()
-            failBreadcrumb.level = .error
-            failBreadcrumb.category = "purchase"
-            failBreadcrumb.message = "Product load failed - IAP unavailable, allowing report generation"
-            failBreadcrumb.data = ["error": error.localizedDescription]
-            SentrySDK.addBreadcrumb(failBreadcrumb)
-            
-            // Log to Sentry as error (not crash)
+        }
+        
+        // All retries failed
+        let failBreadcrumb = Breadcrumb()
+        failBreadcrumb.level = .error
+        failBreadcrumb.category = "purchase"
+        failBreadcrumb.message = "Product load failed after all retries - IAP unavailable"
+        failBreadcrumb.data = [
+            "error": lastError?.localizedDescription ?? "unknown",
+            "attempts": RetryConfig.maxAttempts
+        ]
+        SentrySDK.addBreadcrumb(failBreadcrumb)
+        
+        // Log to Sentry as error (not crash)
+        if let error = lastError {
             SentrySDK.capture(error: error) { scope in
                 scope.setLevel(.error)
                 scope.setContext(value: [
                     "action": "loadProducts",
                     "productIds": productIDs,
+                    "attempts": RetryConfig.maxAttempts,
                     "gracefulDegradation": true
                 ], key: "iap")
             }
-            
-            // Mark IAP as unavailable but don't block users
-            isIAPAvailable = false
-            self.products = []
-            
-            // Don't throw - allow app to continue without IAP
-            #if DEBUG
-            print("⚠️ [PurchaseService] IAP unavailable, users can still generate reports")
-            #endif
         }
+        
+        // Mark IAP as unavailable but don't block users
+        isIAPAvailable = false
+        self.products = []
+        
+        #if DEBUG
+        print("⚠️ [PurchaseService] IAP unavailable after \(RetryConfig.maxAttempts) attempts, users can still generate reports")
+        #endif
     }
     
     // MARK: - Product Price Helpers
+    
+    /// Default price fallback when StoreKit products aren't loaded
+    private static let defaultPriceText = "$5"
     
     /// Get localized price from StoreKit product, or fallback message
     func getProductPrice() -> String {
         guard isIAPAvailable, let product = products.first else {
             return String(localized: "purchase.price.unavailable", defaultValue: "Payment Unavailable")
+        }
+        return product.displayPrice
+    }
+    
+    /// Get price text for onboarding screen
+    /// Returns StoreKit price if available, otherwise fallback to default $5
+    func getOnboardingPriceText() -> String {
+        guard isIAPAvailable, let product = products.first else {
+            return Self.defaultPriceText
         }
         return product.displayPrice
     }
