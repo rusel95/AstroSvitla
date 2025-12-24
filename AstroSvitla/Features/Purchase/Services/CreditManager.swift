@@ -69,8 +69,9 @@ final class CreditManager {
         // Find first available universal credit
         // Note: We currently use "universal" credits for all report types
         // The reportArea parameter is reserved for future area-specific credit support
+        let universalArea = Constants.universalReportArea
         let descriptor = FetchDescriptor<PurchaseCredit>(
-            predicate: #Predicate { !$0.consumed && $0.reportArea == Constants.universalReportArea },
+            predicate: #Predicate { !$0.consumed && $0.reportArea == universalArea },
             sortBy: [SortDescriptor(\.purchaseDate, order: .forward)]
         )
         
