@@ -205,7 +205,7 @@ final class CreditManager {
     }
     
     /// Get display text for the price/action button
-    func priceDisplayText(purchaseService: PurchaseService) -> String {
+    func priceDisplayText(purchaseService: RevenueCatPurchaseService) -> String {
         if hasTrialCredit() {
             return String(localized: "purchase.price.free", defaultValue: "FREE")
         } else {

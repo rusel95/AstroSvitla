@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Sentry
-
+import RevenueCat
 import SwiftData
 
 @main
@@ -16,10 +16,11 @@ struct AstroSvitlaApp: App {
     private let sharedModelContainer: ModelContainer
     @StateObject private var preferences = AppPreferences()
     @StateObject private var repositoryContext: RepositoryContext
-    @State private var purchaseService: PurchaseService
+    @State private var purchaseService: RevenueCatPurchaseService
     @State private var creditManager: CreditManager
     
     init() {
+        // 1. Configure Sentry first (for error tracking during init)
         SentrySDK.start { options in
             options.dsn = "https://2663ea6169f8259819b691c586a1af16@o1271632.ingest.us.sentry.io/4510221414957056"
 
@@ -44,6 +45,10 @@ struct AstroSvitlaApp: App {
             // Enable experimental logging features
             options.experimental.enableLogs = true
         }
+        
+        // 2. Configure RevenueCat SDK
+        RevenueCatConfiguration.configure()
+        
         // Optional: Validate configuration
 #if DEBUG
         do {
@@ -54,6 +59,7 @@ struct AstroSvitlaApp: App {
         }
 #endif
         
+        // 3. Set up ModelContainer
         do {
             sharedModelContainer = try ModelContainer.astroSvitlaShared()
         } catch {
@@ -72,10 +78,10 @@ struct AstroSvitlaApp: App {
         let repoContext = RepositoryContext(context: sharedModelContainer.mainContext)
         _repositoryContext = StateObject(wrappedValue: repoContext)
         
-        // Initialize PurchaseService with main context
-        purchaseService = PurchaseService(context: sharedModelContainer.mainContext)
+        // 4. Initialize RevenueCat Purchase Service
+        purchaseService = RevenueCatPurchaseService(context: sharedModelContainer.mainContext)
         
-        // Initialize CreditManager with main context
+        // 5. Initialize CreditManager
         creditManager = CreditManager(context: sharedModelContainer.mainContext)
     }
     
@@ -91,8 +97,8 @@ struct AstroSvitlaApp: App {
                     // Grant free trial credit for new users (first report is free)
                     creditManager.grantTrialCreditIfNeeded()
                     
-                    // Load products for purchase service (includes retry with exponential backoff)
-                    await purchaseService.loadProducts()
+                    // Load RevenueCat offerings and customer info
+                    await purchaseService.load()
                 }
         }
         .modelContainer(sharedModelContainer)

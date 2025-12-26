@@ -5,7 +5,7 @@ struct AreaCard: View {
     var isPurchased: Bool = false
     var hasCredit: Bool = false
     var onViewReport: (() -> Void)? = nil
-    var purchaseService: PurchaseService?
+    var purchaseService: RevenueCatPurchaseService?
 
     @State private var isPressed = false
 

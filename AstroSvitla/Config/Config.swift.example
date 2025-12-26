@@ -75,6 +75,12 @@ enum Config {
 
     static let debugLoggingEnabled = true
     static let analyticsEnabled = false
+    
+    // MARK: - RevenueCat Configuration
+    
+    /// RevenueCat public API key
+    /// Get this from RevenueCat Dashboard: Project Settings → API Keys
+    static let revenueCatAPIKey = "YOUR_REVENUECAT_API_KEY_HERE"
 
     // MARK: - Validation Helpers
 

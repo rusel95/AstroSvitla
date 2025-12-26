@@ -16,19 +16,19 @@ struct StoreKitProductContractTests {
     @Test("Single credit product exists in App Store")
     func testSingleCreditProductExists() async throws {
         let products = try await Product.products(
-            for: ["com.zorya.report_generation"]
+            for: ["com.astrosvitla.report_generation"]
         )
         
         #expect(products.count == 1, "Expected exactly 1 product")
         
         let product = products[0]
-        #expect(product.id == "com.zorya.report_generation")
+        #expect(product.id == "com.astrosvitla.report_generation")
     }
     
     @Test("Single credit product is consumable type")
     func testProductIsConsumable() async throws {
         let products = try await Product.products(
-            for: ["com.zorya.report_generation"]
+            for: ["com.astrosvitla.report_generation"]
         )
         
         let product = products[0]
@@ -38,7 +38,7 @@ struct StoreKitProductContractTests {
     @Test("Product has valid pricing information")
     func testProductPricing() async throws {
         let products = try await Product.products(
-            for: ["com.zorya.report_generation"]
+            for: ["com.astrosvitla.report_generation"]
         )
         
         let product = products[0]
@@ -59,7 +59,7 @@ struct StoreKitProductContractTests {
     @Test("Product has localized display name")
     func testProductDisplayName() async throws {
         let products = try await Product.products(
-            for: ["com.zorya.report_generation"]
+            for: ["com.astrosvitla.report_generation"]
         )
         
         let product = products[0]
@@ -74,7 +74,7 @@ struct StoreKitProductContractTests {
     @Test("Product has localized description")
     func testProductDescription() async throws {
         let products = try await Product.products(
-            for: ["com.zorya.report_generation"]
+            for: ["com.astrosvitla.report_generation"]
         )
         
         let product = products[0]
@@ -85,7 +85,7 @@ struct StoreKitProductContractTests {
     @Test("Product IDs match enum definition")
     func testProductIDsMatchEnum() {
         let enumProductIDs = Set(PurchaseProduct.allCases.map { $0.rawValue })
-        let expectedIDs = Set(["com.zorya.report_generation"])
+        let expectedIDs = Set(["com.astrosvitla.report_generation"])
         
         #expect(enumProductIDs == expectedIDs, "Enum product IDs must match contract definition")
     }

@@ -25,10 +25,10 @@ final class OnboardingViewModel: ObservableObject {
         self.isCompleted = isPreviewMode ? false : storage.bool(forKey: Self.completionKey)
     }
     
-    /// Update price text from PurchaseService
-    /// Call this after products are loaded to show real StoreKit price
-    func updatePriceText(from purchaseService: PurchaseService) {
-        let newPrice = purchaseService.getOnboardingPriceText()
+    /// Update price text from RevenueCatPurchaseService
+    /// Call this after offerings are loaded to show real StoreKit price
+    func updatePriceText(from purchaseService: RevenueCatPurchaseService) {
+        let newPrice = purchaseService.getProductPrice()
         guard newPrice != priceText else { return }
         
         priceText = newPrice

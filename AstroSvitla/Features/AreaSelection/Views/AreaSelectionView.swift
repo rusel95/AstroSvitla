@@ -4,7 +4,7 @@ struct AreaSelectionView: View {
     let birthDetails: BirthDetails
     let natalChart: NatalChart
     let purchasedAreas: Set<ReportArea>
-    var purchaseService: PurchaseService?
+    var purchaseService: RevenueCatPurchaseService?
     var hasCredit: Bool
     var onAreaSelected: (ReportArea) -> Void
     var onViewExistingReport: ((ReportArea) -> Void)? = nil
@@ -15,7 +15,7 @@ struct AreaSelectionView: View {
         birthDetails: BirthDetails,
         natalChart: NatalChart,
         purchasedAreas: Set<ReportArea> = [],
-        purchaseService: PurchaseService? = nil,
+        purchaseService: RevenueCatPurchaseService? = nil,
         hasCredit: Bool = false,
         onAreaSelected: @escaping (ReportArea) -> Void,
         onViewExistingReport: ((ReportArea) -> Void)? = nil

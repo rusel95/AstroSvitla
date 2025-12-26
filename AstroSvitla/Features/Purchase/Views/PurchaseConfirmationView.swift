@@ -4,7 +4,7 @@ import SwiftData
 struct PurchaseConfirmationView: View {
     let birthDetails: BirthDetails
     let area: ReportArea
-    var purchaseService: PurchaseService?
+    var purchaseService: RevenueCatPurchaseService?
     var hasCredit: Bool
     var onBack: (() -> Void)?
     var onGenerateReport: () -> Void
@@ -34,6 +34,9 @@ struct PurchaseConfirmationView: View {
                         }
                         .buttonStyle(.astroPrimary)
                         .padding(.top, 8)
+                    } else if let service = purchaseService, !service.canPurchase() {
+                        // IAP unavailable - show informative message with retry
+                        iapUnavailableSection
                     } else {
                         // No credit - show purchase button
                         Button(action: onPurchase) {
@@ -51,13 +54,13 @@ struct PurchaseConfirmationView: View {
                         .padding(.top, 8)
                         .disabled(purchaseService?.isPurchasing ?? false)
                         
-                        // Restore button
+                        // Restore button (via RevenueCat)
                         Button {
                             Task {
                                 do {
-                                    try await purchaseService?.restorePurchases()
+                                    _ = try await purchaseService?.restorePurchases()
                                 } catch {
-                                    // Error handling is done by PurchaseService breadcrumbs
+                                    // RevenueCat handles error logging
                                     // User will see success/failure through credit balance update
                                 }
                             }
@@ -251,6 +254,56 @@ struct PurchaseConfirmationView: View {
         // Fallback if service not provided
         return String(localized: "purchase.price.unavailable", defaultValue: "Payment Unavailable")
     }
+    
+    @State private var isRetryingProducts = false
+    
+    private var iapUnavailableSection: some View {
+        VStack(spacing: 16) {
+            // Info message
+            HStack(spacing: 12) {
+                Image(systemName: "exclamationmark.icloud")
+                    .font(.system(size: 24))
+                    .foregroundStyle(Color.orange)
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(String(localized: "purchase.iap.unavailable.title", defaultValue: "Payment Temporarily Unavailable"))
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(.primary)
+                    
+                    Text(String(localized: "purchase.iap.unavailable.message", defaultValue: "Unable to connect to App Store. Please check your internet connection and try again."))
+                        .font(.system(size: 13))
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .padding(16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.orange.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            
+            // Retry button
+            Button {
+                Task {
+                    isRetryingProducts = true
+                    await purchaseService?.loadOfferings()
+                    isRetryingProducts = false
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    if isRetryingProducts {
+                        ProgressView()
+                            .tint(.white)
+                    } else {
+                        Image(systemName: "arrow.clockwise")
+                        Text(String(localized: "purchase.iap.retry", defaultValue: "Try Again"))
+                    }
+                }
+            }
+            .buttonStyle(.astroPrimary)
+            .disabled(isRetryingProducts)
+        }
+        .padding(.top, 8)
+    }
 }
 
 // MARK: - Feature Row
@@ -284,31 +337,5 @@ private struct FeatureRow: View {
 
             Spacer()
         }
-    }
-}
-
-#Preview {
-    // Create a mock service with test context for preview
-    let mockContext = try! ModelContainer(
-        for: PurchaseCredit.self, PurchaseRecord.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    ).mainContext
-    let mockService = PurchaseService(context: mockContext)
-    
-    NavigationStack {
-        PurchaseConfirmationView(
-            birthDetails: BirthDetails(
-                name: "Alex",
-                birthDate: .now,
-                birthTime: .now,
-                location: "Kyiv, Ukraine"
-            ),
-            area: .career,
-            purchaseService: mockService,
-            hasCredit: true,
-            onBack: {},
-            onGenerateReport: {},
-            onPurchase: {}
-        )
     }
 }

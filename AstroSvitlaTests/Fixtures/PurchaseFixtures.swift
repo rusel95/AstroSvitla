@@ -13,7 +13,7 @@ extension PurchaseRecord {
     /// Create a fixture PurchaseRecord for testing
     static func fixture(
         transactionID: String = "TEST-\(UUID().uuidString)",
-        productID: String = "com.zorya.report_generation",
+        productID: String = "com.astrosvitla.report_generation",
         priceUSD: Decimal = 4.99,
         localizedPrice: String = "$4.99",
         currencyCode: String = "USD",

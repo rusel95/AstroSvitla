@@ -19,7 +19,7 @@ struct MainFlowView: View {
     @EnvironmentObject private var preferences: AppPreferences
     @Environment(\.modelContext) private var modelContext
     @ObservedObject private var repositoryContext: RepositoryContext
-    @Environment(PurchaseService.self) private var purchaseService
+    @Environment(RevenueCatPurchaseService.self) private var purchaseService
     @Environment(CreditManager.self) private var creditManager
     @StateObject private var profileViewModel: UserProfileViewModel
     @State private var flowState: FlowState = .birthInput
@@ -187,76 +187,62 @@ struct MainFlowView: View {
                             print("💳 [MainFlowView] Purchase button tapped")
                             #endif
                             
-                            if let product = purchaseService.products.first {
-                                do {
+                            do {
+                                #if DEBUG
+                                print("💳 [MainFlowView] Starting purchase via RevenueCat")
+                                #endif
+                                
+                                _ = try await purchaseService.purchaseSingleCredit()
+                                
+                                #if DEBUG
+                                print("✅ [MainFlowView] Purchase completed!")
+                                #endif
+                                
+                                // After successful purchase, automatically generate report
+                                if let profile = repositoryContext.activeProfile {
                                     #if DEBUG
-                                    print("💳 [MainFlowView] Starting purchase for: \(product.displayName)")
-                                    #endif
-                                    
-                                    let transaction = try await purchaseService.purchase(product)
-                                    
-                                    #if DEBUG
-                                    if let transaction = transaction {
-                                        print("✅ [MainFlowView] Purchase completed! Transaction: \(transaction.id)")
-                                    } else {
-                                        print("⏳ [MainFlowView] Purchase pending (Ask to Buy)")
-                                    }
-                                    #endif
-                                    
-                                    // After successful purchase, automatically generate report
-                                    if let profile = repositoryContext.activeProfile {
-                                        #if DEBUG
-                                        print("🚀 [MainFlowView] Auto-triggering report generation after purchase")
-                                        #endif
-                                        
-                                        await MainActor.run {
-                                            generateReport(
-                                                details: details,
-                                                chart: chart,
-                                                area: area,
-                                                consumeCreditProfileID: profile.id
-                                            )
-                                        }
-                                    } else {
-                                        await MainActor.run {
-                                            errorMessage = String(localized: "error.profile.select")
-                                        }
-                                    }
-                                    
-                                } catch let error as PurchaseError {
-                                    // Show user-facing error alert (skip userCancelled)
-                                    #if DEBUG
-                                    print("❌ [MainFlowView] Purchase error: \(error)")
+                                    print("🚀 [MainFlowView] Auto-triggering report generation after purchase")
                                     #endif
                                     
                                     await MainActor.run {
-                                        if case .userCancelled = error {
-                                            // Don't show error for user cancellation
-                                            return
-                                        }
-                                        if let errorDesc = error.errorDescription {
-                                            errorMessage = errorDesc
-                                        } else {
-                                            errorMessage = String(localized: "purchase.error.purchase_failed", defaultValue: "Purchase failed. Please try again.")
-                                        }
+                                        generateReport(
+                                            details: details,
+                                            chart: chart,
+                                            area: area,
+                                            consumeCreditProfileID: profile.id
+                                        )
                                     }
-                                } catch {
-                                    // Handle unexpected errors
-                                    #if DEBUG
-                                    print("❌ [MainFlowView] Unexpected error: \(error)")
-                                    #endif
-                                    
+                                } else {
                                     await MainActor.run {
-                                        errorMessage = String(localized: "purchase.error.purchase_failed", defaultValue: "Purchase failed. Please try again.")
+                                        errorMessage = String(localized: "error.profile.select")
                                     }
                                 }
-                            } else {
+                                
+                            } catch let error as PurchaseError {
+                                // Show user-facing error alert (skip userCancelled)
                                 #if DEBUG
-                                print("⚠️ [MainFlowView] No products available")
+                                print("❌ [MainFlowView] Purchase error: \(error)")
                                 #endif
                                 
                                 await MainActor.run {
-                                    errorMessage = String(localized: "purchase.error.product_not_found", defaultValue: "Product not available. Please try again later.")
+                                    if case .userCancelled = error {
+                                        // Don't show error for user cancellation
+                                        return
+                                    }
+                                    if let errorDesc = error.errorDescription {
+                                        errorMessage = errorDesc
+                                    } else {
+                                        errorMessage = String(localized: "purchase.error.purchase_failed", defaultValue: "Purchase failed. Please try again.")
+                                    }
+                                }
+                            } catch {
+                                // Handle unexpected errors
+                                #if DEBUG
+                                print("❌ [MainFlowView] Unexpected error: \(error)")
+                                #endif
+                                
+                                await MainActor.run {
+                                    errorMessage = String(localized: "purchase.error.purchase_failed", defaultValue: "Purchase failed. Please try again.")
                                 }
                             }
                         }
