@@ -17,6 +17,34 @@ struct ZoryaBranding {
         endPoint: .bottom
     )
     
+    /// Chart Only template gradient - deep cosmic purple with starfield feel
+    static let chartOnlyGradient = LinearGradient(
+        colors: [Color(hex: "#0f0c29"), Color(hex: "#302b63"), Color(hex: "#24243e")],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    
+    /// Key Insights template gradient - rich midnight blue with gold undertones
+    static let keyInsightsGradient = LinearGradient(
+        colors: [Color(hex: "#1a1a2e"), Color(hex: "#16213e"), Color(hex: "#0f3460")],
+        startPoint: .top,
+        endPoint: .bottom
+    )
+    
+    /// Recommendations template gradient - cosmic purple-blue with mystical feel
+    static let recommendationsGradient = LinearGradient(
+        colors: [Color(hex: "#2c1654"), Color(hex: "#1e3a5f"), Color(hex: "#0d1b2a")],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    
+    /// Carousel template gradient - aurora-inspired with dynamic colors
+    static let carouselGradient = LinearGradient(
+        colors: [Color(hex: "#1f1c2c"), Color(hex: "#1a2a6c"), Color(hex: "#2c1654")],
+        startPoint: .top,
+        endPoint: .bottom
+    )
+    
     /// Secondary gradient for overlay effects
     static let overlayGradient = LinearGradient(
         colors: [
@@ -88,6 +116,9 @@ struct ZoryaBranding {
     
     /// Website display string
     static let websiteDisplay = "zorya.app"
+    
+    /// App Store URL for download CTA
+    static let appStoreURL = "apps.apple.com/app/zorya"
     
     /// Localized watermark text
     static var watermark: String {

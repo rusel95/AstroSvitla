@@ -5,8 +5,9 @@ import SwiftUI
 
 // MARK: - KeyInsightsTemplate
 
-/// Instagram Post template showing summary and top 3 planetary influences
+/// Instagram Post template showing summary, top 3 planetary influences, and additional insights
 /// Dimensions: 1080 x 1080 pixels (1:1 aspect ratio)
+/// Enhanced to use full space with more information
 struct KeyInsightsTemplate: View {
     let shareContent: ShareContent
     let birthDetails: BirthDetails
@@ -14,8 +15,8 @@ struct KeyInsightsTemplate: View {
     
     var body: some View {
         ZStack {
-            // Background gradient
-            ZoryaBranding.primaryGradient
+            // Background gradient - unique midnight blue theme
+            ZoryaBranding.keyInsightsGradient
                 .ignoresSafeArea()
             
             // Decorative elements
@@ -25,23 +26,25 @@ struct KeyInsightsTemplate: View {
             VStack(spacing: 0) {
                 // Header with area badge
                 headerSection
-                    .padding(.top, 48)
-                
-                Spacer()
+                    .padding(.top, 40)
                 
                 // Summary
                 summarySection
-                
-                Spacer()
+                    .padding(.top, 28)
                 
                 // Key influences
                 influencesSection
+                    .padding(.top, 24)
+                
+                // Analysis highlights
+                analysisHighlightsSection
+                    .padding(.top, 24)
                 
                 Spacer()
                 
-                // Footer
+                // Footer with app link
                 footerSection
-                    .padding(.bottom, 48)
+                    .padding(.bottom, 40)
             }
             .padding(.horizontal, ZoryaBranding.templatePadding)
         }
@@ -54,42 +57,43 @@ struct KeyInsightsTemplate: View {
         ZStack {
             // Top right glow
             Circle()
-                .fill(ZoryaBranding.accentGold.opacity(0.08))
-                .frame(width: 400, height: 400)
+                .fill(ZoryaBranding.accentGold.opacity(0.1))
+                .frame(width: 350, height: 350)
                 .blur(radius: 60)
-                .offset(x: 300, y: -300)
+                .offset(x: 300, y: -280)
             
             // Bottom left glow
             Circle()
-                .fill(Color.purple.opacity(0.1))
-                .frame(width: 500, height: 500)
+                .fill(Color.purple.opacity(0.12))
+                .frame(width: 400, height: 400)
                 .blur(radius: 80)
-                .offset(x: -250, y: 350)
+                .offset(x: -220, y: 320)
         }
     }
     
     // MARK: - Header Section
     
     private var headerSection: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 12) {
             // Report area badge
             HStack(spacing: 10) {
                 Image(systemName: reportArea.icon)
-                    .font(.system(size: 22, weight: .semibold))
+                    .font(.system(size: 20, weight: .semibold))
                 
                 Text(reportArea.displayName)
-                    .font(.system(size: 24, weight: .bold))
+                    .font(.system(size: 22, weight: .bold))
             }
             .foregroundStyle(ZoryaBranding.accentGold)
-            .padding(.horizontal, 28)
-            .padding(.vertical, 14)
+            .padding(.horizontal, 24)
+            .padding(.vertical, 12)
             .background(ZoryaBranding.accentGold.opacity(0.15))
             .clipShape(Capsule())
             
             // User name
             Text(birthDetails.displayName)
-                .font(.system(size: 36, weight: .semibold, design: .rounded))
+                .font(.system(size: 32, weight: .semibold, design: .rounded))
                 .foregroundStyle(ZoryaBranding.textSecondary)
+                .lineLimit(1)
         }
     }
     
@@ -97,81 +101,134 @@ struct KeyInsightsTemplate: View {
     
     private var summarySection: some View {
         Text(shareContent.condensedSummary)
-            .font(.system(size: 34, weight: .medium, design: .rounded))
+            .font(.system(size: 28, weight: .medium, design: .rounded))
             .foregroundStyle(ZoryaBranding.textPrimary)
             .multilineTextAlignment(.center)
-            .lineSpacing(8)
-            .padding(.horizontal, 24)
+            .lineSpacing(6)
+            .padding(.horizontal, 16)
+            .lineLimit(4)
     }
     
     // MARK: - Influences Section
     
     private var influencesSection: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 16) {
             // Section header
-            Text("share.key_influences.title")
-                .font(.system(size: 22, weight: .bold))
+            Text(String(localized: "share.key_influences.title", defaultValue: "KEY INFLUENCES"))
+                .font(.system(size: 18, weight: .bold))
                 .foregroundStyle(ZoryaBranding.textTertiary)
                 .textCase(.uppercase)
                 .tracking(2)
             
-            // Influence items
-            VStack(spacing: 16) {
+            // Influence items in a compact grid
+            HStack(spacing: 12) {
                 ForEach(Array(shareContent.topInfluences.enumerated()), id: \.offset) { index, influence in
-                    influenceRow(influence, index: index)
+                    compactInfluenceCard(influence, index: index)
                 }
             }
         }
-        .padding(28)
-        .background(ZoryaBranding.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: ZoryaBranding.largeCornerRadius, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: ZoryaBranding.largeCornerRadius, style: .continuous)
-                .strokeBorder(ZoryaBranding.borderColor, lineWidth: 1)
-        )
     }
     
-    private func influenceRow(_ text: String, index: Int) -> some View {
-        HStack(spacing: 16) {
-            // Index circle
+    private func compactInfluenceCard(_ text: String, index: Int) -> some View {
+        VStack(spacing: 8) {
+            // Number badge
             ZStack {
                 Circle()
-                    .fill(ZoryaBranding.accentGold.opacity(0.2))
-                    .frame(width: 44, height: 44)
+                    .fill(ZoryaBranding.accentGold.opacity(0.25))
+                    .frame(width: 36, height: 36)
                 
                 Text("\(index + 1)")
-                    .font(.system(size: 22, weight: .bold))
+                    .font(.system(size: 18, weight: .bold))
                     .foregroundStyle(ZoryaBranding.accentGold)
             }
             
             // Influence text
             Text(text)
-                .font(.system(size: 26, weight: .medium))
+                .font(.system(size: 20, weight: .medium))
                 .foregroundStyle(ZoryaBranding.textPrimary)
+                .multilineTextAlignment(.center)
                 .lineLimit(2)
+                .minimumScaleFactor(0.8)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+        .padding(.horizontal, 12)
+        .background(ZoryaBranding.cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: ZoryaBranding.cornerRadius, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: ZoryaBranding.cornerRadius, style: .continuous)
+                .strokeBorder(ZoryaBranding.borderColor, lineWidth: 1)
+        )
+    }
+    
+    // MARK: - Analysis Highlights Section
+    
+    private var analysisHighlightsSection: some View {
+        VStack(spacing: 12) {
+            // Section header
+            HStack(spacing: 8) {
+                Image(systemName: "doc.text.magnifyingglass")
+                    .font(.system(size: 18, weight: .semibold))
+                Text(String(localized: "share.analysis_highlights.title", defaultValue: "ANALYSIS HIGHLIGHTS"))
+                    .font(.system(size: 18, weight: .bold))
+                    .textCase(.uppercase)
+                    .tracking(1.5)
+            }
+            .foregroundStyle(ZoryaBranding.textTertiary)
             
-            Spacer()
+            // Highlights grid
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                ForEach(Array(shareContent.analysisHighlights.enumerated()), id: \.offset) { _, highlight in
+                    HStack(spacing: 8) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundStyle(ZoryaBranding.accentGold)
+                        
+                        Text(highlight)
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundStyle(ZoryaBranding.textPrimary)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.8)
+                        
+                        Spacer()
+                    }
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 12)
+                    .background(ZoryaBranding.cardBackground)
+                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                }
+            }
         }
     }
     
     // MARK: - Footer Section
     
     private var footerSection: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "sparkles")
-                .font(.system(size: 24, weight: .medium))
-                .foregroundStyle(ZoryaBranding.accentGold)
+        VStack(spacing: 12) {
+            // Divider
+            Rectangle()
+                .fill(ZoryaBranding.accentGold.opacity(0.3))
+                .frame(width: 120, height: 2)
             
-            Text(ZoryaBranding.appName)
-                .font(.system(size: 28, weight: .bold, design: .rounded))
-                .foregroundStyle(ZoryaBranding.textPrimary)
+            // App branding
+            HStack(spacing: 10) {
+                Image(systemName: "sparkles")
+                    .font(.system(size: 22, weight: .medium))
+                    .foregroundStyle(ZoryaBranding.accentGold)
+                
+                Text(ZoryaBranding.appName)
+                    .font(.system(size: 26, weight: .bold, design: .rounded))
+                    .foregroundStyle(ZoryaBranding.textPrimary)
+            }
             
-            Text("•")
-                .foregroundStyle(ZoryaBranding.textTertiary)
-            
-            Text(ZoryaBranding.websiteDisplay)
-                .font(.system(size: 24, weight: .medium))
-                .foregroundStyle(ZoryaBranding.textSecondary)
+            // Download CTA
+            HStack(spacing: 6) {
+                Image(systemName: "arrow.down.app.fill")
+                    .font(.system(size: 18, weight: .medium))
+                Text(ZoryaBranding.appStoreURL)
+                    .font(.system(size: 20, weight: .semibold))
+            }
+            .foregroundStyle(ZoryaBranding.accentGold)
         }
     }
 }

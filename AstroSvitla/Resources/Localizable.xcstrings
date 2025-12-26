@@ -29809,6 +29809,17 @@
         }
       }
     },
+    "error.report.generation_failed" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Report generation failed. Please try again."
+          }
+        }
+      }
+    },
     "error.report.not_found" : {
       "localizations" : {
         "ar" : {
@@ -31933,6 +31944,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Creating your personalized report for"
+          }
+        }
+      }
+    },
+    "loading.generating.keep_open" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Please keep the app open while your report is being created"
           }
         }
       }
@@ -93164,6 +93186,17 @@
         }
       }
     },
+    "share.analysis_highlights.title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "ANALYSIS HIGHLIGHTS"
+          }
+        }
+      }
+    },
     "share.carousel.info" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -93774,6 +93807,50 @@
         }
       }
     },
+    "share.cta.download_app" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Download on App Store"
+          }
+        }
+      }
+    },
+    "share.cta.feature_charts" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Natal Charts"
+          }
+        }
+      }
+    },
+    "share.cta.feature_insights" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Deep Insights"
+          }
+        }
+      }
+    },
+    "share.cta.feature_personalized" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Personalized"
+          }
+        }
+      }
+    },
     "share.cta.get_full_report" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -94075,6 +94152,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Get your full report"
+          }
+        }
+      }
+    },
+    "share.highlights.title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "HIGHLIGHTS"
           }
         }
       }
@@ -95295,6 +95383,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "KEY INFLUENCES"
+          }
+        }
+      }
+    },
+    "share.key_insights.title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "KEY INSIGHTS"
+          }
+        }
+      }
+    },
+    "share.main_influence.title" : {
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "MAIN INFLUENCE"
           }
         }
       }

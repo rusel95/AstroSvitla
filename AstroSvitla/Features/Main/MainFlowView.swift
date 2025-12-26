@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import CoreLocation
 import SwiftData
 import Sentry
@@ -72,6 +73,7 @@ struct MainFlowView: View {
             profileViewModel.loadProfiles()
         }
     }
+
 
     // MARK: - Root Content (non-navigable states)
 
@@ -415,64 +417,139 @@ struct MainFlowView: View {
         let languageCode = LocaleHelper.currentLanguageCode
         let languageDisplayName = LocaleHelper.currentLanguageDisplayName
         
-        do {
-            let report = try await reportGenerator.generateReport(
-                for: overlay.area,
-                birthDetails: overlay.details,
-                natalChart: overlay.chart,
-                languageCode: languageCode,
-                languageDisplayName: languageDisplayName,
-                repositoryContext: "Zorya iOS app",
-                selectedModel: preferences.selectedModel
-            )
-            
-            if let profileID = overlay.consumeCreditProfileID {
-                // Only consume credit after successful report generation
-                do {
-                    _ = try creditManager.consumeCredit(for: overlay.area.rawValue, profileID: profileID)
-                } catch {
-                    #if DEBUG
-                    print("⚠️ [MainFlowView] Failed to consume credit after report generation: \(error)")
-                    #endif
-                    SentrySDK.capture(error: error) { scope in
-                        scope.setLevel(.warning)
-                        scope.setTag(value: "credit_consumption", key: "issue")
-                        scope.setTag(value: "post_generation", key: "phase")
-                        scope.setContext(value: [
-                            "message": "Failed to consume credit after successful report generation",
-                            "report_area": overlay.area.rawValue
-                        ], key: "error_context")
-                    }
-                }
-            }
-
-            do {
-                try persistGeneratedReport(
-                    details: overlay.details,
-                    natalChart: overlay.chart,
-                    generatedReport: report
-                )
-            } catch {
-                #if DEBUG
-                print("⚠️ Помилка збереження звіту: \(error)")
-                #endif
-            }
-
-            await MainActor.run {
-                // Dismiss overlay and navigate to report
-                generationOverlay = nil
-                // Clear navigation to purchase if present, then push report
-                while navigationPath.count > 1 {
-                    navigationPath.removeLast()
-                }
-                navigationPath.append(MainNavDestination.report(overlay.details, overlay.chart, overlay.area, report))
-            }
-        } catch {
-            await MainActor.run {
-                generationOverlay = nil
-                errorMessage = error.localizedDescription
+        // Configuration for retries
+        let maxRetries = 3
+        let baseDelaySeconds: UInt64 = 2
+        
+        // Request background time to complete generation
+        var backgroundTaskID: UIBackgroundTaskIdentifier = .invalid
+        backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "ReportGeneration") {
+            // Background time expired - task will be cancelled
+            #if DEBUG
+            print("⚠️ [MainFlowView] Background time expired during report generation")
+            #endif
+            UIApplication.shared.endBackgroundTask(backgroundTaskID)
+        }
+        
+        defer {
+            // End background task when done
+            if backgroundTaskID != .invalid {
+                UIApplication.shared.endBackgroundTask(backgroundTaskID)
             }
         }
+        
+        var lastError: Error?
+        
+        for attempt in 1...maxRetries {
+            do {
+                #if DEBUG
+                if attempt > 1 {
+                    print("🔄 [MainFlowView] Report generation retry attempt \(attempt)/\(maxRetries)")
+                }
+                #endif
+                
+                let report = try await reportGenerator.generateReport(
+                    for: overlay.area,
+                    birthDetails: overlay.details,
+                    natalChart: overlay.chart,
+                    languageCode: languageCode,
+                    languageDisplayName: languageDisplayName,
+                    repositoryContext: "Zorya iOS app",
+                    selectedModel: preferences.selectedModel
+                )
+                
+                // Success! Consume credit and persist report
+                if let profileID = overlay.consumeCreditProfileID {
+                    do {
+                        _ = try creditManager.consumeCredit(for: overlay.area.rawValue, profileID: profileID)
+                    } catch {
+                        #if DEBUG
+                        print("⚠️ [MainFlowView] Failed to consume credit after report generation: \(error)")
+                        #endif
+                        SentrySDK.capture(error: error) { scope in
+                            scope.setLevel(.warning)
+                            scope.setTag(value: "credit_consumption", key: "issue")
+                            scope.setTag(value: "post_generation", key: "phase")
+                            scope.setContext(value: [
+                                "message": "Failed to consume credit after successful report generation",
+                                "report_area": overlay.area.rawValue
+                            ], key: "error_context")
+                        }
+                    }
+                }
+
+                do {
+                    try persistGeneratedReport(
+                        details: overlay.details,
+                        natalChart: overlay.chart,
+                        generatedReport: report
+                    )
+                } catch {
+                    #if DEBUG
+                    print("⚠️ Помилка збереження звіту: \(error)")
+                    #endif
+                }
+
+                await MainActor.run {
+                    // Dismiss overlay and navigate to report
+                    generationOverlay = nil
+                    // Clear navigation to purchase if present, then push report
+                    while navigationPath.count > 1 {
+                        navigationPath.removeLast()
+                    }
+                    navigationPath.append(MainNavDestination.report(overlay.details, overlay.chart, overlay.area, report))
+                }
+                
+                // Success - exit retry loop
+                return
+                
+            } catch {
+                lastError = error
+                
+                #if DEBUG
+                print("❌ [MainFlowView] Report generation failed (attempt \(attempt)/\(maxRetries)): \(error.localizedDescription)")
+                #endif
+                
+                // Check if this is a retryable error
+                let isRetryable = isRetryableError(error)
+                
+                if attempt < maxRetries && isRetryable {
+                    // Wait with exponential backoff before retrying
+                    let delay = baseDelaySeconds * UInt64(pow(2.0, Double(attempt - 1)))
+                    try? await Task.sleep(nanoseconds: delay * 1_000_000_000)
+                } else {
+                    // No more retries or non-retryable error
+                    break
+                }
+            }
+        }
+        
+        // All retries failed
+        await MainActor.run {
+            generationOverlay = nil
+            errorMessage = lastError?.localizedDescription ?? String(localized: "error.report.generation_failed", defaultValue: "Report generation failed. Please try again.")
+        }
+    }
+    
+    /// Determines if an error should trigger a retry
+    private func isRetryableError(_ error: Error) -> Bool {
+        // Network errors are retryable
+        if let urlError = error as? URLError {
+            switch urlError.code {
+            case .notConnectedToInternet, .networkConnectionLost, .timedOut, .cannotConnectToHost:
+                return true
+            default:
+                return false
+            }
+        }
+        
+        // Check for transient server errors (5xx)
+        let nsError = error as NSError
+        if nsError.domain == NSURLErrorDomain || nsError.domain == "OpenAIServiceError" {
+            return true
+        }
+        
+        return false
     }
 
     private func printChartData(_ chart: NatalChart) {
@@ -833,6 +910,8 @@ private struct GeneratingReportView: View {
 
     @State private var animateWave = false
     @State private var pulsate = false
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var wasInBackground = false
 
     var body: some View {
         ZStack {
@@ -941,6 +1020,31 @@ private struct GeneratingReportView: View {
                             .strokeBorder(Color.white.opacity(0.2), lineWidth: 1)
                     )
                 }
+                
+                // "Keep app open" warning - styled to match the design
+                HStack(spacing: 10) {
+                    Image(systemName: "exclamationmark.circle.fill")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundStyle(Color.orange)
+                    
+                    Text(String(localized: "loading.generating.keep_open", 
+                         defaultValue: "Please keep the app open while your report is being created"))
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.leading)
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 14)
+                .frame(maxWidth: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .fill(Color.orange.opacity(0.08))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .strokeBorder(Color.orange.opacity(0.2), lineWidth: 1)
+                        )
+                )
+                .padding(.horizontal, 24)
 
                 Spacer()
 
@@ -960,6 +1064,19 @@ private struct GeneratingReportView: View {
         .onAppear {
             animateWave = true
             pulsate = true
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .background {
+                wasInBackground = true
+                #if DEBUG
+                print("⚠️ [GeneratingReportView] App moved to background during generation")
+                #endif
+            } else if newPhase == .active && wasInBackground {
+                wasInBackground = false
+                #if DEBUG
+                print("✅ [GeneratingReportView] App returned to foreground")
+                #endif
+            }
         }
     }
 }
