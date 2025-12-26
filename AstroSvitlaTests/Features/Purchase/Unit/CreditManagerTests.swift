@@ -70,14 +70,14 @@ struct CreditManagerTests {
         )
         let context = container.mainContext
         
-        let credit = PurchaseCredit.fixture(reportArea: "career", consumed: false)
+        let credit = PurchaseCredit.fixture(reportArea: PurchaseCredit.universalReportArea, consumed: false)
         context.insert(credit)
         try context.save()
         
         let manager = CreditManager(context: context)
         let profileID = UUID()
         
-        let consumedCredit = try manager.consumeCredit(for: "career", profileID: profileID)
+        let consumedCredit = try manager.consumeCredit(for: ReportArea.career.rawValue, profileID: profileID)
         
         #expect(consumedCredit.consumed == true)
         #expect(consumedCredit.userProfileID == profileID)
@@ -97,7 +97,7 @@ struct CreditManagerTests {
         let profileID = UUID()
         
         #expect(throws: CreditError.self) {
-            try manager.consumeCredit(for: "personality", profileID: profileID)
+            try manager.consumeCredit(for: ReportArea.general.rawValue, profileID: profileID)
         }
     }
     

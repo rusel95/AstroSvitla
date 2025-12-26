@@ -73,18 +73,7 @@ struct PurchaseConfirmationView: View {
                         .padding(.top, -10)
                     }
 
-                    // Guarantee text
-                    HStack(spacing: 8) {
-                        Image(systemName: "checkmark.shield.fill")
-                            .font(.system(size: 14))
-                            .foregroundStyle(Color.astroSuccess)
 
-                        Text("purchase.guarantee", bundle: .main)
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, 4)
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 24)

@@ -183,23 +183,6 @@ final class RevenueCatPurchaseService {
         }
     }
     
-    /// Purchase a product directly by ID
-    func purchase(productID: String) async throws -> CustomerInfo {
-        guard let offerings = offerings,
-              let currentOffering = offerings.current else {
-            throw PurchaseError.productNotFound
-        }
-        
-        // Find the package with this product
-        if let package = currentOffering.availablePackages.first(where: { 
-            $0.storeProduct.productIdentifier == productID 
-        }) {
-            return try await purchase(package: package)
-        }
-        
-        throw PurchaseError.productNotFound
-    }
-    
     /// Purchase consumable credit (convenience method)
     /// Finds the first consumable product from current offering
     func purchaseSingleCredit() async throws -> CustomerInfo {
@@ -296,7 +279,7 @@ final class RevenueCatPurchaseService {
             
             // Create credit
             let credit = PurchaseCredit(
-                reportArea: "universal",
+                reportArea: PurchaseCredit.universalReportArea,
                 transactionID: transactionID,
                 purchaseDate: transaction.purchaseDate
             )

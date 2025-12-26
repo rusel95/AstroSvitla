@@ -198,22 +198,13 @@ private struct ReportPDFContentView: View {
         VStack(alignment: .leading, spacing: 16) {
             // Logo and title
             HStack(spacing: 12) {
-                // App icon placeholder
-                ZStack {
-                    Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [accentColor, accentColor.opacity(0.7)],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(width: 48, height: 48)
-
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 22, weight: .medium))
-                        .foregroundStyle(.white)
-                }
+                // App icon
+                Image("1024")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 48, height: 48)
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 1)
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(verbatim: "Zorya")

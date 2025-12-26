@@ -17,8 +17,8 @@ final class PurchaseCredit {
     @Attribute(.unique)
     var id: UUID
     
-    /// Report area this credit is valid for
-    /// Maps to ReportArea enum: .personality, .career, .relationship, .wellness
+    /// Report area this credit is valid for.
+    /// Currently uses `PurchaseCredit.universalReportArea` for all areas.
     var reportArea: String
     
     /// When the credit was purchased (transaction completion date)
@@ -41,6 +41,9 @@ final class PurchaseCredit {
     
     /// Back-reference to purchase record
     var purchaseRecord: PurchaseRecord?
+
+    /// Report area value for universal credits (usable across all areas).
+    static let universalReportArea = "universal"
     
     // MARK: - Initialization
     
@@ -62,6 +65,7 @@ final class PurchaseCredit {
     
     /// Mark credit as consumed for specific profile
     func consume(for profileID: UUID) {
+        guard !consumed else { return }
         self.consumed = true
         self.consumedDate = Date()
         self.userProfileID = profileID

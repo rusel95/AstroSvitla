@@ -68186,6 +68186,7 @@
       }
     },
     "purchase.guarantee" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {

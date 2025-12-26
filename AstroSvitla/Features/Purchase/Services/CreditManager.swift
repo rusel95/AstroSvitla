@@ -19,10 +19,6 @@ final class CreditManager {
     
     private let context: ModelContext
 
-    private enum Constants {
-        static let universalReportArea = "universal"
-    }
-    
     // MARK: - Initialization
     
     init(context: ModelContext) {
@@ -54,8 +50,8 @@ final class CreditManager {
     
     /// Consumes a credit for generating a report
     /// 
-    /// **Note on credit types**: Currently, all credits are stored as "universal" credits,
-    /// meaning they can be used for any report area (personality, career, relationship, wellness).
+    /// **Note on credit types**: Currently, all credits are stored as universal credits,
+    /// meaning they can be used for any report area (finances, career, relationships, health, general).
     /// The `reportArea` parameter is accepted for API compatibility but is not currently used
     /// for filtering credits. This design allows flexibility for future area-specific pricing
     /// while maintaining a simple credit system for now.
@@ -69,7 +65,7 @@ final class CreditManager {
         // Find first available universal credit
         // Note: We currently use "universal" credits for all report types
         // The reportArea parameter is reserved for future area-specific credit support
-        let universalArea = Constants.universalReportArea
+        let universalArea = PurchaseCredit.universalReportArea
         let descriptor = FetchDescriptor<PurchaseCredit>(
             predicate: #Predicate { !$0.consumed && $0.reportArea == universalArea },
             sortBy: [SortDescriptor(\.purchaseDate, order: .forward)]
@@ -148,7 +144,7 @@ final class CreditManager {
         
         // Create trial credit
         let trialCredit = PurchaseCredit(
-            reportArea: Constants.universalReportArea,
+            reportArea: PurchaseCredit.universalReportArea,
             transactionID: Self.trialTransactionID,
             purchaseDate: Date()
         )

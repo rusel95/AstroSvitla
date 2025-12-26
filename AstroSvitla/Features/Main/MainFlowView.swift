@@ -86,7 +86,7 @@ struct MainFlowView: View {
                     ProfileEmptyStateView(onCreateProfile: {
                         showProfileCreationSheet = true
                     })
-                    .navigationBarHidden(true)
+                    .toolbar(.hidden, for: .navigationBar)
                 } else {
                     ProfileSelectionView(
                         profiles: profileViewModel.profiles,
@@ -103,7 +103,7 @@ struct MainFlowView: View {
                             }
                         }
                     )
-                    .navigationBarHidden(true)
+                    .toolbar(.hidden, for: .navigationBar)
                 }
             }
             .sheet(isPresented: $showProfileCreationSheet) {
@@ -533,6 +533,15 @@ struct MainFlowView: View {
     
     /// Determines if an error should trigger a retry
     private func isRetryableError(_ error: Error) -> Bool {
+        if let reportError = error as? ReportGenerationError {
+            switch reportError {
+            case .rateLimited, .serviceUnavailable, .network:
+                return true
+            default:
+                return false
+            }
+        }
+
         // Network errors are retryable
         if let urlError = error as? URLError {
             switch urlError.code {
@@ -542,13 +551,7 @@ struct MainFlowView: View {
                 return false
             }
         }
-        
-        // Check for transient server errors (5xx)
-        let nsError = error as NSError
-        if nsError.domain == NSURLErrorDomain || nsError.domain == "OpenAIServiceError" {
-            return true
-        }
-        
+
         return false
     }
 

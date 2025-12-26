@@ -28,7 +28,6 @@
                         <constraints>
                             <constraint firstItem="sparkle-img" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" multiplier="3:4" id="0S8-zK-LzM"/>
                             <constraint firstItem="sparkle-img" firstAttribute="centerY" secondItem="Bcu-3y-fUS" secondAttribute="centerY" id="3I4-U4-pw5"/>
-                            <constraint firstItem="sparkle-img" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="sparkle-cx"/>
                             <constraint firstItem="sparkle-img" firstAttribute="centerX" secondItem="Bcu-3y-fUS" secondAttribute="centerX" id="yui-42-dlO"/>
                         </constraints>
                     </view>

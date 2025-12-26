@@ -109,6 +109,9 @@ struct ReportDetailView: View {
         }, message: {
             Text("report.export.success.message")
         })
+        .task {
+            loadChartImage()
+        }
     }
 
     // MARK: - Header
@@ -118,21 +121,12 @@ struct ReportDetailView: View {
             // Logo and title
             HStack(spacing: 12) {
                 // App icon
-                ZStack {
-                    Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [Color.accentColor, Color.accentColor.opacity(0.7)],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(width: 48, height: 48)
-
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 22, weight: .medium))
-                        .foregroundStyle(.white)
-                }
+                Image("1024")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 48, height: 48)
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 1)
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(verbatim: "Zorya")
@@ -146,20 +140,8 @@ struct ReportDetailView: View {
 
                 Spacer()
 
-                // Language and Report type badges
+                // Report badges
                 HStack(spacing: 8) {
-                    // Language indicator
-                    Label(LocaleHelper.displayName(for: languageCode), systemImage: "globe")
-                        .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(secondaryTextColor)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 6)
-                        .background(cardBackground)
-                        .clipShape(Capsule())
-                        .overlay(
-                            Capsule()
-                                .strokeBorder(borderColor, lineWidth: 1)
-                        )
 
                     // Report type badge
                     Text(report.area.displayName)
@@ -639,6 +621,35 @@ struct ReportDetailView: View {
             topController.present(activityVC, animated: true) {
                 // Close the preview after presenting share sheet
                 self.isShowingTemplatePreview = false
+            }
+        }
+    }
+
+    private func loadChartImage() {
+        guard let imageFileID = natalChart.imageFileID else { return }
+        
+        Task.detached(priority: .userInitiated) {
+            let imageCacheService = ImageCacheService()
+            var loadedImage: UIImage?
+            
+            // Try PNG first (preferred for sharing)
+            if imageCacheService.imageExists(fileID: imageFileID, format: "png") {
+                if let data = try? imageCacheService.loadImage(fileID: imageFileID, format: "png") {
+                    loadedImage = UIImage(data: data)
+                }
+            } 
+            
+            // Fallback to original format
+            if loadedImage == nil, let format = natalChart.imageFormat {
+                 if let data = try? imageCacheService.loadImage(fileID: imageFileID, format: format) {
+                     loadedImage = UIImage(data: data)
+                 }
+            }
+            
+            if let image = loadedImage {
+                await MainActor.run {
+                    self.chartImage = image
+                }
             }
         }
     }

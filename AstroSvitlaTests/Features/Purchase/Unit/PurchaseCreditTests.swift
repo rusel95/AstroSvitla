@@ -15,7 +15,7 @@ struct PurchaseCreditTests {
     @Test("Credit creation with required fields")
     func testCreditCreation() throws {
         let transactionID = "TEST-12345"
-        let reportArea = "personality"
+        let reportArea = PurchaseCredit.universalReportArea
         
         let credit = PurchaseCredit(
             reportArea: reportArea,
@@ -35,15 +35,18 @@ struct PurchaseCreditTests {
     @Test("Credit consumption marks credit as consumed")
     func testCreditConsumption() throws {
         let credit = PurchaseCredit(
-            reportArea: "career",
+            reportArea: ReportArea.career.rawValue,
             transactionID: "TEST-67890"
         )
         let profileID = UUID()
         
         credit.consume(for: profileID)
+        let firstConsumedDate = credit.consumedDate
+        credit.consume(for: UUID())
         
         #expect(credit.consumed == true)
         #expect(credit.consumedDate != nil)
+        #expect(credit.consumedDate == firstConsumedDate)
         #expect(credit.userProfileID == profileID)
     }
     
@@ -51,7 +54,7 @@ struct PurchaseCreditTests {
     @Test("Available credit returns true when not consumed")
     func testAvailableCredit() throws {
         let credit = PurchaseCredit(
-            reportArea: "relationship",
+            reportArea: ReportArea.relationships.rawValue,
             transactionID: "TEST-111"
         )
         
@@ -62,27 +65,23 @@ struct PurchaseCreditTests {
         #expect(credit.isAvailable == false)
     }
     
-    /// Test that transaction ID uniqueness is preserved
-    @Test("Transaction ID uniqueness constraint")
-    func testTransactionIDUniqueness() throws {
-        // This test will verify that the @Attribute(.unique) constraint works
-        // by attempting to create two credits with the same transaction ID
-        // in a real SwiftData context during integration testing.
-        // For now, we just verify the property exists and is set correctly.
+    /// Test that transaction ID values are assigned as expected
+    @Test("Transaction ID assignment")
+    func testTransactionIDAssignment() throws {
+        // Note: uniqueness is enforced at the SwiftData layer and should be
+        // validated in integration tests with a ModelContext.
         
         let transactionID = "TEST-UNIQUE-123"
         let credit1 = PurchaseCredit(
-            reportArea: "wellness",
+            reportArea: ReportArea.health.rawValue,
             transactionID: transactionID
         )
         let credit2 = PurchaseCredit(
-            reportArea: "personality",
+            reportArea: ReportArea.general.rawValue,
             transactionID: transactionID
         )
         
         #expect(credit1.transactionID == transactionID)
         #expect(credit2.transactionID == transactionID)
-        // Note: Actual uniqueness constraint is enforced at SwiftData level
-        // and will be tested in integration tests with ModelContext
     }
 }

@@ -14,7 +14,7 @@ struct PurchaseRecordTests {
     /// Test that a record can be created with all fields
     @Test("Record creation with all fields")
     func testRecordCreation() throws {
-        let productID = "com.astrosvitla.report_generation"
+        let productID = "test.product"
         let transactionID = "TEST-RECORD-123"
         let priceUSD: Decimal = 4.99
         let localizedPrice = "$4.99"
@@ -46,7 +46,7 @@ struct PurchaseRecordTests {
     @Test("Mark record as restored sets restoredDate")
     func testMarkAsRestored() throws {
         let record = PurchaseRecord(
-            productID: "com.astrosvitla.report_generation",
+            productID: "test.product",
             transactionID: "TEST-RESTORE-456",
             priceUSD: 4.99,
             localizedPrice: "$4.99",
@@ -71,7 +71,7 @@ struct PurchaseRecordTests {
     @Test("isRestored property returns correct value")
     func testIsRestoredProperty() throws {
         let record = PurchaseRecord(
-            productID: "com.astrosvitla.report_generation",
+            productID: "test.product",
             transactionID: "TEST-PROP-789",
             priceUSD: 4.99,
             localizedPrice: "$4.99",
@@ -89,7 +89,7 @@ struct PurchaseRecordTests {
     @Test("availableCredits returns only unconsumed credits")
     func testAvailableCreditsFiltering() throws {
         let record = PurchaseRecord(
-            productID: "com.astrosvitla.report_generation",
+            productID: "test.product",
             transactionID: "TEST-FILTER-111",
             priceUSD: 4.99,
             localizedPrice: "$4.99",
@@ -98,9 +98,9 @@ struct PurchaseRecordTests {
         )
         
         // Create mock credits
-        let credit1 = PurchaseCredit(reportArea: "personality", transactionID: "TEST-C1")
-        let credit2 = PurchaseCredit(reportArea: "career", transactionID: "TEST-C2")
-        let credit3 = PurchaseCredit(reportArea: "relationship", transactionID: "TEST-C3")
+        let credit1 = PurchaseCredit(reportArea: ReportArea.general.rawValue, transactionID: "TEST-C1")
+        let credit2 = PurchaseCredit(reportArea: ReportArea.career.rawValue, transactionID: "TEST-C2")
+        let credit3 = PurchaseCredit(reportArea: ReportArea.relationships.rawValue, transactionID: "TEST-C3")
         
         // Consume one credit
         credit2.consume(for: UUID())
@@ -109,16 +109,16 @@ struct PurchaseRecordTests {
         
         let available = record.availableCredits
         #expect(available.count == 2)
-        #expect(available.contains { $0.reportArea == "personality" })
-        #expect(available.contains { $0.reportArea == "relationship" })
-        #expect(!available.contains { $0.reportArea == "career" })
+        #expect(available.contains { $0.reportArea == ReportArea.general.rawValue })
+        #expect(available.contains { $0.reportArea == ReportArea.relationships.rawValue })
+        #expect(!available.contains { $0.reportArea == ReportArea.career.rawValue })
     }
     
     /// Test that consumedCredits filters correctly
     @Test("consumedCredits returns only consumed credits")
     func testConsumedCreditsFiltering() throws {
         let record = PurchaseRecord(
-            productID: "com.astrosvitla.report_generation",
+            productID: "test.product",
             transactionID: "TEST-CONSUMED-222",
             priceUSD: 4.99,
             localizedPrice: "$4.99",
@@ -127,9 +127,9 @@ struct PurchaseRecordTests {
         )
         
         // Create mock credits
-        let credit1 = PurchaseCredit(reportArea: "personality", transactionID: "TEST-D1")
-        let credit2 = PurchaseCredit(reportArea: "career", transactionID: "TEST-D2")
-        let credit3 = PurchaseCredit(reportArea: "wellness", transactionID: "TEST-D3")
+        let credit1 = PurchaseCredit(reportArea: ReportArea.general.rawValue, transactionID: "TEST-D1")
+        let credit2 = PurchaseCredit(reportArea: ReportArea.career.rawValue, transactionID: "TEST-D2")
+        let credit3 = PurchaseCredit(reportArea: ReportArea.health.rawValue, transactionID: "TEST-D3")
         
         // Consume two credits
         credit1.consume(for: UUID())
@@ -139,8 +139,8 @@ struct PurchaseRecordTests {
         
         let consumed = record.consumedCredits
         #expect(consumed.count == 2)
-        #expect(consumed.contains { $0.reportArea == "personality" })
-        #expect(consumed.contains { $0.reportArea == "wellness" })
-        #expect(!consumed.contains { $0.reportArea == "career" })
+        #expect(consumed.contains { $0.reportArea == ReportArea.general.rawValue })
+        #expect(consumed.contains { $0.reportArea == ReportArea.health.rawValue })
+        #expect(!consumed.contains { $0.reportArea == ReportArea.career.rawValue })
     }
 }

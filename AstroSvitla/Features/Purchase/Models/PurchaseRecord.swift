@@ -16,8 +16,7 @@ final class PurchaseRecord {
     @Attribute(.unique)
     var id: UUID
     
-    /// StoreKit product identifier
-    /// e.g., "com.astrosvitla.report.credit.single"
+    /// StoreKit product identifier (captured from the RevenueCat product)
     var productID: String
     
     /// StoreKit transaction ID (unique across all Apple purchases)

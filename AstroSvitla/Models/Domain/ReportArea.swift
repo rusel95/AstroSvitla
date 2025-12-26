@@ -27,13 +27,4 @@ enum ReportArea: String, Codable, CaseIterable, Sendable {
         }
     }
 
-    var productIdentifier: String {
-        switch self {
-        case .general: return Config.ProductID.generalReport
-        case .finances: return Config.ProductID.financesReport
-        case .career: return Config.ProductID.careerReport
-        case .relationships: return Config.ProductID.relationshipsReport
-        case .health: return Config.ProductID.healthReport
-        }
-    }
 }
