@@ -17,14 +17,6 @@ enum ReportArea: String, Codable, CaseIterable, Sendable {
         }
     }
 
-    var price: Decimal {
-        switch self {
-        case .general: return Decimal(string: "9.99")!
-        case .finances, .career: return Decimal(string: "6.99")!
-        case .relationships, .health: return Decimal(string: "5.99")!
-        }
-    }
-
     var icon: String {
         switch self {
         case .finances: return "dollarsign.circle.fill"
@@ -35,13 +27,4 @@ enum ReportArea: String, Codable, CaseIterable, Sendable {
         }
     }
 
-    var productIdentifier: String {
-        switch self {
-        case .general: return Config.ProductID.generalReport
-        case .finances: return Config.ProductID.financesReport
-        case .career: return Config.ProductID.careerReport
-        case .relationships: return Config.ProductID.relationshipsReport
-        case .health: return Config.ProductID.healthReport
-        }
-    }
 }

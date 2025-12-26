@@ -3,7 +3,9 @@ import SwiftUI
 struct AreaCard: View {
     let area: ReportArea
     var isPurchased: Bool = false
+    var hasCredit: Bool = false
     var onViewReport: (() -> Void)? = nil
+    var purchaseService: RevenueCatPurchaseService?
 
     @State private var isPressed = false
 
@@ -69,7 +71,14 @@ struct AreaCard: View {
                                 .font(.system(size: 13, weight: .medium))
                         }
                         .foregroundStyle(Color.green)
+                    } else if hasCredit {
+                        // User has credit - don't show price, just description
+                        Text(area.shortDescription)
+                            .font(.system(size: 13, weight: .regular))
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
                     } else {
+                        // No credit - show price and description
                         Text(priceString)
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(.secondary)
@@ -116,15 +125,16 @@ struct AreaCard: View {
                     lineWidth: 1
                 )
         )
-        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 4)
+        .shadow(color: Color.black.opacity(0.03), radius: 8, x: 0, y: 4)
         .scaleEffect(isPressed ? 0.98 : 1)
     }
 
     private var priceString: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "USD"
-        return formatter.string(from: area.price as NSNumber) ?? "$0.00"
+        if let service = purchaseService {
+            return service.getProductPrice()
+        }
+        // Fallback if service not provided
+        return String(localized: "purchase.price.unavailable", defaultValue: "Payment Unavailable")
     }
 
     // Color for the icon - green if purchased

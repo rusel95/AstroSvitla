@@ -68,20 +68,12 @@ class UserProfileViewModel: ObservableObject {
 
         defer { isLoading = false }
 
-        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
-
-        // Validate
-        guard validateProfileName(trimmedName) else {
-            return false
-        }
-
-        guard service.validateProfileData(
-            name: trimmedName,
+        guard let trimmedName = validatedName(
+            name,
             birthDate: birthDate,
             latitude: latitude,
             longitude: longitude
         ) else {
-            errorMessage = "Invalid profile data"
             return false
         }
 
@@ -119,20 +111,12 @@ class UserProfileViewModel: ObservableObject {
         longitude: Double,
         timezone: String
     ) -> UserProfile? {
-        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
-
-        // Validate
-        guard validateProfileName(trimmedName) else {
-            return nil
-        }
-
-        guard service.validateProfileData(
-            name: trimmedName,
+        guard let trimmedName = validatedName(
+            name,
             birthDate: birthDate,
             latitude: latitude,
             longitude: longitude
         ) else {
-            errorMessage = "Invalid profile data"
             return nil
         }
 
@@ -188,19 +172,13 @@ class UserProfileViewModel: ObservableObject {
 
         defer { isLoading = false }
 
-        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
-
-        guard validateProfileName(trimmedName, excluding: profile.id) else {
-            return false
-        }
-
-        guard service.validateProfileData(
-            name: trimmedName,
+        guard let trimmedName = validatedName(
+            name,
             birthDate: birthDate,
             latitude: latitude,
-            longitude: longitude
+            longitude: longitude,
+            excluding: profile.id
         ) else {
-            errorMessage = "Invalid profile data"
             return false
         }
 
@@ -278,6 +256,32 @@ class UserProfileViewModel: ObservableObject {
     }
 
     // MARK: - Helper Methods
+
+    private func validatedName(
+        _ name: String,
+        birthDate: Date,
+        latitude: Double,
+        longitude: Double,
+        excluding profileId: UUID? = nil
+    ) -> String? {
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard validateProfileName(trimmedName, excluding: profileId) else {
+            return nil
+        }
+
+        guard service.validateProfileData(
+            name: trimmedName,
+            birthDate: birthDate,
+            latitude: latitude,
+            longitude: longitude
+        ) else {
+            errorMessage = "Invalid profile data"
+            return nil
+        }
+
+        return trimmedName
+    }
 
     func getReportCount(for profile: UserProfile) -> Int {
         return service.getReportCount(for: profile)

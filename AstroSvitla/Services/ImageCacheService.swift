@@ -46,21 +46,16 @@ final class ImageCacheService {
     /// Initialize with default Documents/ChartImages directory
     init() {
         self.fileManager = FileManager.default
-
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         self.cacheDirectory = documentsURL.appendingPathComponent("ChartImages", isDirectory: true)
-
-        // Create directory if it doesn't exist
-        try? fileManager.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
+        ensureCacheDirectory()
     }
 
     /// Initialize with custom cache directory (for testing)
     init(cacheDirectory: URL) {
         self.fileManager = FileManager.default
         self.cacheDirectory = cacheDirectory
-
-        // Create directory if it doesn't exist
-        try? fileManager.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
+        ensureCacheDirectory()
     }
 
     // MARK: - Public Methods
@@ -194,6 +189,12 @@ final class ImageCacheService {
 
             return (fileID: components[0], format: components[1])
         }
+    }
+
+    // MARK: - Private Helpers
+
+    private func ensureCacheDirectory() {
+        try? fileManager.createDirectory(at: cacheDirectory, withIntermediateDirectories: true)
     }
 
     /// Delete old cached images to enforce storage limits

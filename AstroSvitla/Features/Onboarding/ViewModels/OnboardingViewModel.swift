@@ -7,17 +7,62 @@ final class OnboardingViewModel: ObservableObject {
     @Published private(set) var pages: [OnboardingPage]
     @Published var currentIndex: Int = 0
     @Published private(set) var isCompleted: Bool
+    @Published private(set) var priceText: String = "$5"
 
     private let storage: UserDefaults
     private let isPreviewMode: Bool
     private static let completionKey = "com.astrosvitla.onboarding.completed"
+    private static let defaultPriceText = "$5"
+    
+    /// Page index where price badge is shown (0-indexed)
+    private static let pricePageIndex = 2
 
     init(storage: UserDefaults = .standard, isPreviewMode: Bool = false) {
         self.storage = storage
         self.isPreviewMode = isPreviewMode
-        self.pages = OnboardingViewModel.makePages()
+        self.pages = OnboardingViewModel.makePages(priceText: Self.defaultPriceText)
         // In preview mode, always show onboarding regardless of stored completion status
         self.isCompleted = isPreviewMode ? false : storage.bool(forKey: Self.completionKey)
+    }
+    
+    /// Update price text from RevenueCatPurchaseService
+    /// Call this after offerings are loaded to show real StoreKit price
+    func updatePriceText(from purchaseService: RevenueCatPurchaseService) {
+        let newPrice = purchaseService.getProductPrice()
+        guard newPrice != priceText else { return }
+        
+        priceText = newPrice
+        // Rebuild page 3 with new price
+        updatePriceBadge(with: newPrice)
+    }
+    
+    private func updatePriceBadge(with price: String) {
+        guard pages.indices.contains(Self.pricePageIndex) else { return }
+        
+        let oldPage = pages[Self.pricePageIndex]
+        let localizedTemplate = String(localized: "onboarding.page3.badge")
+        // Replace static price (e.g., $5.99) with dynamic price from StoreKit
+        let newBadgeText = localizedTemplate.replacingOccurrences(
+            of: "\\$\\d+\\.?\\d*",
+            with: price,
+            options: .regularExpression
+        )
+        
+        let newPage = OnboardingPage(
+            title: oldPage.title,
+            message: oldPage.message,
+            symbolName: oldPage.symbolName,
+            highlights: oldPage.highlights,
+            badge: OnboardingPage.Badge(
+                text: newBadgeText,
+                icon: "tag.fill",
+                style: .value
+            ),
+            timeEstimate: oldPage.timeEstimate,
+            accentColor: oldPage.accentColor
+        )
+        
+        pages[Self.pricePageIndex] = newPage
     }
 
     func advance() -> Bool {
@@ -55,7 +100,7 @@ final class OnboardingViewModel: ObservableObject {
         }
     }
 
-    private static func makePages() -> [OnboardingPage] {
+    private static func makePages(priceText: String) -> [OnboardingPage] {
         [
             // Page 1: Hero Welcome - Hook with time promise
             OnboardingPage(
@@ -104,7 +149,15 @@ final class OnboardingViewModel: ObservableObject {
                     String(localized: "onboarding.page3.area5")
                 ],
                 badge: OnboardingPage.Badge(
-                    text: String(localized: "onboarding.page3.badge"),
+                    // Use existing localization with dynamic price replacement
+                    text: {
+                        let template = String(localized: "onboarding.page3.badge")
+                        return template.replacingOccurrences(
+                            of: "\\$\\d+\\.?\\d*",
+                            with: priceText,
+                            options: .regularExpression
+                        )
+                    }(),
                     icon: "tag.fill",
                     style: .value
                 ),
@@ -112,12 +165,13 @@ final class OnboardingViewModel: ObservableObject {
                 accentColor: .warm
             ),
 
-            // Page 4: Trust & Ready - Final CTA
+            // Page 4: Trust & Ready - Final CTA with free report highlight
             OnboardingPage(
                 title: String(localized: "onboarding.page4.title"),
                 message: String(localized: "onboarding.page4.message"),
-                symbolName: "paperplane.fill",
+                symbolName: "gift.fill",
                 highlights: [
+                    String(localized: "onboarding.page4.free_report", defaultValue: "🎁 First report is FREE"),
                     String(localized: "onboarding.page4.feature1"),
                     String(localized: "onboarding.page4.feature2"),
                     String(localized: "onboarding.page4.feature3")

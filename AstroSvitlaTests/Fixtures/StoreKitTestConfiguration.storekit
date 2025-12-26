@@ -1,0 +1,36 @@
+{
+  "identifier" : "storekit",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "6736471234",
+      "localizations" : [
+        {
+          "description" : "Purchase 1 credit to generate an AI-powered astrology report for any life area (Personality, Career, Relationships, or Wellness). Each credit allows one report generation for any profile.",
+          "displayName" : "1 Report Credit",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "Придбайте 1 кредит для створення астрологічного звіту на базі штучного інтелекту для будь-якої сфери життя (Особистість, Кар'єра, Стосунки або Здоров'я). Кожен кредит дозволяє згенерувати один звіт для будь-якого профілю.",
+          "displayName" : "1 кредит звіту",
+          "locale" : "uk"
+        }
+      ],
+      "productID" : "com.zorya.report_generation",
+      "referenceName" : "Report Generation",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6736461234",
+    "_developerTeamID" : "XXXXXXXXXX",
+    "_lastSynchronizedDate" : 756432000.0
+  },
+  "subscriptionGroups" : [],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

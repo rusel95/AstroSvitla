@@ -60,6 +60,7 @@ struct BirthDataInputView: View {
             }
         }
         .navigationTitle(Text("birth.navigation.title"))
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 if let onCancel {

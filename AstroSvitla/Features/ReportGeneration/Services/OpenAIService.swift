@@ -151,14 +151,16 @@ struct OpenAIService: Sendable {
                     try await Task.sleep(nanoseconds: UInt64(backoff * 1_000_000_000))
                     continue
                 } else {
-                    // Log report generation failures
-                    SentrySDK.capture(message: "Unexpected: Report generation failed") { scope in
+                    // Log report generation failures - use capture(error:) for better stack traces
+                    SentrySDK.capture(error: error) { scope in
                         scope.setLevel(.error)
                         scope.setTag(value: "report_generation", key: "service")
                         scope.setTag(value: "openai", key: "provider")
                         scope.setTag(value: area.rawValue, key: "report_area")
-                        scope.setExtra(value: error.localizedDescription, key: "error_details")
-                        scope.setExtra(value: attempt, key: "attempt_count")
+                        scope.setContext(value: [
+                            "message": "Unexpected: Report generation failed",
+                            "attempt_count": attempt
+                        ], key: "error_context")
                     }
                     throw error
                 }
@@ -166,13 +168,17 @@ struct OpenAIService: Sendable {
         }
 
         let finalError = lastError ?? ReportGenerationError.invalidResponse
-        SentrySDK.capture(message: "Unexpected: Report generation exhausted retries") { scope in
+        // Use capture(error:) for better stack traces even when we have a final error
+        SentrySDK.capture(error: finalError) { scope in
             scope.setLevel(.error)
             scope.setTag(value: "report_generation", key: "service")
             scope.setTag(value: "openai", key: "provider")
             scope.setTag(value: area.rawValue, key: "report_area")
-            scope.setExtra(value: finalError.localizedDescription, key: "final_error")
-            scope.setExtra(value: maxAttempts, key: "max_attempts")
+            scope.setTag(value: "retries_exhausted", key: "failure_type")
+            scope.setContext(value: [
+                "message": "Unexpected: Report generation exhausted retries",
+                "max_attempts": maxAttempts
+            ], key: "error_context")
         }
         throw finalError
     }

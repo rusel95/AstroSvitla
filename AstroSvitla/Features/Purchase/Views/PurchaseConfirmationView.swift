@@ -1,10 +1,14 @@
 import SwiftUI
+import SwiftData
 
 struct PurchaseConfirmationView: View {
     let birthDetails: BirthDetails
     let area: ReportArea
+    var purchaseService: RevenueCatPurchaseService?
+    var hasCredit: Bool
     var onBack: (() -> Void)?
     var onGenerateReport: () -> Void
+    var onPurchase: () -> Void
 
     var body: some View {
         ZStack {
@@ -19,30 +23,57 @@ struct PurchaseConfirmationView: View {
                     // Features list
                     featuresSection
 
-                    // Purchase button
-                    Button(action: onGenerateReport) {
-                        HStack(spacing: 10) {
-                            Image(systemName: "sparkles")
-                                .font(.system(size: 16, weight: .semibold))
-
-                            Text(String(format: String(localized: "purchase.action.create %@"), area.displayName))
+                    // Action button
+                    if hasCredit {
+                        // User has credit - show generate button
+                        Button(action: onGenerateReport) {
+                            HStack(spacing: 10) {
+                                Image(systemName: "sparkles")
+                                Text(String(format: String(localized: "purchase.action.create %@"), area.displayName))
+                            }
                         }
+                        .buttonStyle(.astroPrimary)
+                        .padding(.top, 8)
+                    } else if let service = purchaseService, !service.canPurchase() {
+                        // IAP unavailable - show informative message with retry
+                        iapUnavailableSection
+                    } else {
+                        // No credit - show purchase button
+                        Button(action: onPurchase) {
+                            HStack(spacing: 10) {
+                                if let service = purchaseService, service.isPurchasing {
+                                    ProgressView()
+                                        .tint(.white)
+                                } else {
+                                    Text(String(format: String(localized: "purchase.paywall.buy_button", defaultValue: "Buy for %@"), priceString))
+                                        .font(.system(size: 17, weight: .semibold))
+                                }
+                            }
+                        }
+                        .buttonStyle(.astroPrimary)
+                        .padding(.top, 8)
+                        .disabled(purchaseService?.isPurchasing ?? false)
+                        
+                        // Restore button (via RevenueCat)
+                        Button {
+                            Task {
+                                do {
+                                    _ = try await purchaseService?.restorePurchases()
+                                } catch {
+                                    // RevenueCat handles error logging
+                                    // User will see success/failure through credit balance update
+                                }
+                            }
+                        } label: {
+                            Text(String(localized: "purchase.action.restore", defaultValue: "Restore Purchases"))
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundStyle(Color.accentColor)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, -10)
                     }
-                    .buttonStyle(.astroPrimary)
-                    .padding(.top, 8)
 
-                    // Guarantee text
-                    HStack(spacing: 8) {
-                        Image(systemName: "checkmark.shield.fill")
-                            .font(.system(size: 14))
-                            .foregroundStyle(Color.astroSuccess)
 
-                        Text("purchase.guarantee", bundle: .main)
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, 4)
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 24)
@@ -103,15 +134,17 @@ struct PurchaseConfirmationView: View {
                         .font(.system(size: 22, weight: .bold, design: .rounded))
                         .foregroundStyle(.primary)
 
-                    // Price with styling
-                    HStack(spacing: 4) {
-                        Text(priceString)
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundStyle(Color.accentColor)
+                    // Only show price if user doesn't have credit
+                    if !hasCredit {
+                        HStack(spacing: 4) {
+                            Text(priceString)
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundStyle(Color.accentColor)
 
-                        Text("purchase.price.once", bundle: .main)
-                            .font(.system(size: 13, weight: .medium))
-                            .foregroundStyle(.tertiary)
+                            Text("purchase.price.once", bundle: .main)
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundStyle(.tertiary)
+                        }
                     }
                 }
 
@@ -204,10 +237,61 @@ struct PurchaseConfirmationView: View {
     }
 
     private var priceString: String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "USD"
-        return formatter.string(from: area.price as NSNumber) ?? "$0.00"
+        if let service = purchaseService {
+            return service.getProductPrice()
+        }
+        // Fallback if service not provided
+        return String(localized: "purchase.price.unavailable", defaultValue: "Payment Unavailable")
+    }
+    
+    @State private var isRetryingProducts = false
+    
+    private var iapUnavailableSection: some View {
+        VStack(spacing: 16) {
+            // Info message
+            HStack(spacing: 12) {
+                Image(systemName: "exclamationmark.icloud")
+                    .font(.system(size: 24))
+                    .foregroundStyle(Color.orange)
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(String(localized: "purchase.iap.unavailable.title", defaultValue: "Payment Temporarily Unavailable"))
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(.primary)
+                    
+                    Text(String(localized: "purchase.iap.unavailable.message", defaultValue: "Unable to connect to App Store. Please check your internet connection and try again."))
+                        .font(.system(size: 13))
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .padding(16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.orange.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            
+            // Retry button
+            Button {
+                Task {
+                    isRetryingProducts = true
+                    await purchaseService?.loadOfferings()
+                    isRetryingProducts = false
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    if isRetryingProducts {
+                        ProgressView()
+                            .tint(.white)
+                    } else {
+                        Image(systemName: "arrow.clockwise")
+                        Text(String(localized: "purchase.iap.retry", defaultValue: "Try Again"))
+                    }
+                }
+            }
+            .buttonStyle(.astroPrimary)
+            .disabled(isRetryingProducts)
+        }
+        .padding(.top, 8)
     }
 }
 
@@ -242,21 +326,5 @@ private struct FeatureRow: View {
 
             Spacer()
         }
-    }
-}
-
-#Preview {
-    NavigationStack {
-        PurchaseConfirmationView(
-            birthDetails: BirthDetails(
-                name: "Alex",
-                birthDate: .now,
-                birthTime: .now,
-                location: "Kyiv, Ukraine"
-            ),
-            area: .career,
-            onBack: {},
-            onGenerateReport: {}
-        )
     }
 }

@@ -148,7 +148,8 @@ final class InstagramShareViewModel {
         case .chartOnly:
             let image = try generator.renderChartOnly(
                 birthDetails: birthDetails,
-                chartImage: chartImage
+                chartImage: chartImage,
+                shareContent: shareContent
             )
             return [image]
             

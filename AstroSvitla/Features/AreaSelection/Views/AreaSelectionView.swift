@@ -4,6 +4,8 @@ struct AreaSelectionView: View {
     let birthDetails: BirthDetails
     let natalChart: NatalChart
     let purchasedAreas: Set<ReportArea>
+    var purchaseService: RevenueCatPurchaseService?
+    var hasCredit: Bool
     var onAreaSelected: (ReportArea) -> Void
     var onViewExistingReport: ((ReportArea) -> Void)? = nil
 
@@ -13,12 +15,16 @@ struct AreaSelectionView: View {
         birthDetails: BirthDetails,
         natalChart: NatalChart,
         purchasedAreas: Set<ReportArea> = [],
+        purchaseService: RevenueCatPurchaseService? = nil,
+        hasCredit: Bool = false,
         onAreaSelected: @escaping (ReportArea) -> Void,
         onViewExistingReport: ((ReportArea) -> Void)? = nil
     ) {
         self.birthDetails = birthDetails
         self.natalChart = natalChart
         self.purchasedAreas = purchasedAreas
+        self.purchaseService = purchaseService
+        self.hasCredit = hasCredit
         self.onAreaSelected = onAreaSelected
         self.onViewExistingReport = onViewExistingReport
     }
@@ -84,36 +90,39 @@ struct AreaSelectionView: View {
                     .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
 
                     // Section header
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("area.title.choose")
-                            .font(.system(size: 22, weight: .bold, design: .rounded))
-                            .foregroundStyle(.primary)
+                    VStack(alignment: .leading, spacing: 16) {
+                        // Section header
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("area.title.choose")
+                                .font(.system(size: 22, weight: .bold, design: .rounded))
+                                .foregroundStyle(.primary)
 
-                        Text("area.subtitle.choose")
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(.top, 8)
+                            Text("area.subtitle.choose")
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundStyle(.secondary)
+                        }
 
-                    // Area cards
-                    VStack(spacing: 12) {
-                        ForEach(ReportArea.allCases, id: \.self) { area in
-                            let isPurchased = purchasedAreas.contains(area)
-                            
-                            Button {
-                                if isPurchased {
-                                    // View existing report
-                                    onViewExistingReport?(area)
-                                } else {
-                                    // Go to purchase flow
-                                    onAreaSelected(area)
+                        // Area cards
+                        VStack(spacing: 12) {
+                            ForEach(ReportArea.allCases, id: \.self) { area in
+                                let isPurchased = purchasedAreas.contains(area)
+                                
+                                Button {
+                                    if isPurchased {
+                                        // View existing report
+                                        onViewExistingReport?(area)
+                                    } else {
+                                        // Go to purchase flow
+                                        onAreaSelected(area)
+                                    }
+                                } label: {
+                                    AreaCard(area: area, isPurchased: isPurchased, hasCredit: hasCredit, purchaseService: purchaseService)
                                 }
-                            } label: {
-                                AreaCard(area: area, isPurchased: isPurchased)
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(.plain)
                         }
                     }
+                    .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 24)

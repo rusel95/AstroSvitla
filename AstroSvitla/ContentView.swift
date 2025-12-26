@@ -3,6 +3,8 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var repositoryContext: RepositoryContext
+    @Environment(RevenueCatPurchaseService.self) private var purchaseService
     @StateObject private var onboardingViewModel = OnboardingViewModel()
     @State private var showOnboarding = false
 
@@ -16,7 +18,7 @@ struct ContentView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            MainFlowView(modelContext: modelContext)
+            MainFlowView(modelContext: modelContext, repositoryContext: repositoryContext)
                 .tabItem {
                     Label {
                         Text("tab.main")
@@ -56,6 +58,12 @@ struct ContentView: View {
                 showOnboarding = true
             }
         }
+        .onChange(of: purchaseService.isReady) { _, isReady in
+            // Update onboarding price when offerings are loaded
+            if isReady {
+                onboardingViewModel.updatePriceText(from: purchaseService)
+            }
+        }
         .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingView(
                 viewModel: onboardingViewModel,
@@ -68,5 +76,11 @@ struct ContentView: View {
 }
 
 #Preview {
+    let container = try! ModelContainer.astroSvitlaShared(inMemory: true)
     ContentView()
+        .environment(\.modelContext, container.mainContext)
+        .environmentObject(AppPreferences())
+        .environmentObject(RepositoryContext(context: container.mainContext))
+        .environment(RevenueCatPurchaseService(context: container.mainContext))
+        .environment(CreditManager(context: container.mainContext))
 }

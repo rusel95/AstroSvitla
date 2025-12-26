@@ -1,6 +1,9 @@
 import SwiftUI
+import UIKit
 import CoreLocation
 import SwiftData
+import Sentry
+import StoreKit
 
 enum ChartCalculationError: LocalizedError {
     case missingCoordinate
@@ -16,22 +19,25 @@ enum ChartCalculationError: LocalizedError {
 struct MainFlowView: View {
     @EnvironmentObject private var preferences: AppPreferences
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject private var repositoryContext: RepositoryContext
+    @ObservedObject private var repositoryContext: RepositoryContext
+    @Environment(RevenueCatPurchaseService.self) private var purchaseService
+    @Environment(CreditManager.self) private var creditManager
     @StateObject private var profileViewModel: UserProfileViewModel
     @State private var flowState: FlowState = .birthInput
     @State private var navigationPath = NavigationPath()
     @State private var errorMessage: String?
     @State private var showProfileCreationSheet = false
+    @State private var generationOverlay: GenerationOverlayData?
 
     private var chartCalculator: ChartCalculator {
         ChartCalculator(modelContext: modelContext)
     }
     private let reportGenerator = AIReportGenerator()
 
-    init(modelContext: ModelContext) {
+    init(modelContext: ModelContext, repositoryContext: RepositoryContext) {
+        self.repositoryContext = repositoryContext
         let service = UserProfileService(context: modelContext)
-        let repoContext = RepositoryContext(context: modelContext)
-        let profileVM = UserProfileViewModel(service: service, repositoryContext: repoContext)
+        let profileVM = UserProfileViewModel(service: service, repositoryContext: repositoryContext)
         _profileViewModel = StateObject(wrappedValue: profileVM)
     }
 
@@ -51,11 +57,23 @@ struct MainFlowView: View {
         } message: {
             Text(errorMessage ?? String(localized: "error.generic"))
         }
+        .fullScreenCover(item: $generationOverlay) { overlay in
+            GeneratingReportView(
+                birthDetails: overlay.details,
+                area: overlay.area,
+                onCancel: {
+                    generationOverlay = nil
+                }
+            )
+            .task {
+                await performReportGeneration(overlay: overlay)
+            }
+        }
         .onAppear {
             profileViewModel.loadProfiles()
-            repositoryContext.loadActiveProfile()
         }
     }
+
 
     // MARK: - Root Content (non-navigable states)
 
@@ -68,7 +86,7 @@ struct MainFlowView: View {
                     ProfileEmptyStateView(onCreateProfile: {
                         showProfileCreationSheet = true
                     })
-                    .navigationTitle(Text("navigation.start", bundle: .main))
+                    .toolbar(.hidden, for: .navigationBar)
                 } else {
                     ProfileSelectionView(
                         profiles: profileViewModel.profiles,
@@ -85,7 +103,7 @@ struct MainFlowView: View {
                             }
                         }
                     )
-                    .navigationTitle(Text("profile.navigation.title", bundle: .main))
+                    .toolbar(.hidden, for: .navigationBar)
                 }
             }
             .sheet(isPresented: $showProfileCreationSheet) {
@@ -125,6 +143,8 @@ struct MainFlowView: View {
                 birthDetails: details,
                 natalChart: chart,
                 purchasedAreas: getPurchasedAreas(),
+                purchaseService: purchaseService,
+                hasCredit: creditManager.hasAvailableCredits(),
                 onAreaSelected: { area in
                     navigationPath.append(MainNavDestination.purchase(details, chart, area))
                 },
@@ -143,9 +163,91 @@ struct MainFlowView: View {
                 PurchaseConfirmationView(
                     birthDetails: details,
                     area: area,
+                    purchaseService: purchaseService,
+                    hasCredit: creditManager.hasAvailableCredits(),
                     onBack: nil, // Native back button handles this
                     onGenerateReport: {
-                        generateReport(details: details, chart: chart, area: area)
+                        // Generate report first, then consume credit only on success
+                        Task {
+                            if let profile = repositoryContext.activeProfile {
+                                await MainActor.run {
+                                    generateReport(
+                                        details: details,
+                                        chart: chart,
+                                        area: area,
+                                        consumeCreditProfileID: profile.id
+                                    )
+                                }
+                            } else {
+                                await MainActor.run { errorMessage = String(localized: "error.profile.select") }
+                            }
+                        }
+                    },
+                    onPurchase: {
+                        Task {
+                            #if DEBUG
+                            print("💳 [MainFlowView] Purchase button tapped")
+                            #endif
+                            
+                            do {
+                                #if DEBUG
+                                print("💳 [MainFlowView] Starting purchase via RevenueCat")
+                                #endif
+                                
+                                _ = try await purchaseService.purchaseSingleCredit()
+                                
+                                #if DEBUG
+                                print("✅ [MainFlowView] Purchase completed!")
+                                #endif
+                                
+                                // After successful purchase, automatically generate report
+                                if let profile = repositoryContext.activeProfile {
+                                    #if DEBUG
+                                    print("🚀 [MainFlowView] Auto-triggering report generation after purchase")
+                                    #endif
+                                    
+                                    await MainActor.run {
+                                        generateReport(
+                                            details: details,
+                                            chart: chart,
+                                            area: area,
+                                            consumeCreditProfileID: profile.id
+                                        )
+                                    }
+                                } else {
+                                    await MainActor.run {
+                                        errorMessage = String(localized: "error.profile.select")
+                                    }
+                                }
+                                
+                            } catch let error as PurchaseError {
+                                // Show user-facing error alert (skip userCancelled)
+                                #if DEBUG
+                                print("❌ [MainFlowView] Purchase error: \(error)")
+                                #endif
+                                
+                                await MainActor.run {
+                                    if case .userCancelled = error {
+                                        // Don't show error for user cancellation
+                                        return
+                                    }
+                                    if let errorDesc = error.errorDescription {
+                                        errorMessage = errorDesc
+                                    } else {
+                                        errorMessage = String(localized: "purchase.error.purchase_failed", defaultValue: "Purchase failed. Please try again.")
+                                    }
+                                }
+                            } catch {
+                                // Handle unexpected errors
+                                #if DEBUG
+                                print("❌ [MainFlowView] Unexpected error: \(error)")
+                                #endif
+                                
+                                await MainActor.run {
+                                    errorMessage = String(localized: "purchase.error.purchase_failed", defaultValue: "Purchase failed. Please try again.")
+                                }
+                            }
+                        }
                     }
                 )
             }
@@ -296,29 +398,90 @@ struct MainFlowView: View {
         navigationPath.append(MainNavDestination.report(details, chart, area, generatedReport))
     }
 
-    private func generateReport(details: BirthDetails, chart: NatalChart, area: ReportArea) {
-        // Clear navigation stack to show generating view as root content
-        navigationPath.removeLast(navigationPath.count)
-        flowState = .generating(details, chart, area)
-
+    private func generateReport(
+        details: BirthDetails,
+        chart: NatalChart,
+        area: ReportArea,
+        consumeCreditProfileID: UUID? = nil
+    ) {
+        // Show generation overlay on top of current navigation
+        generationOverlay = GenerationOverlayData(
+            details: details,
+            chart: chart,
+            area: area,
+            consumeCreditProfileID: consumeCreditProfileID
+        )
+    }
+    
+    private func performReportGeneration(overlay: GenerationOverlayData) async {
         let languageCode = LocaleHelper.currentLanguageCode
         let languageDisplayName = LocaleHelper.currentLanguageDisplayName
         
-        Task {
+        // Configuration for retries
+        let maxRetries = 3
+        let baseDelaySeconds: UInt64 = 2
+        
+        // Request background time to complete generation
+        var backgroundTaskID: UIBackgroundTaskIdentifier = .invalid
+        backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "ReportGeneration") {
+            // Background time expired - task will be cancelled
+            #if DEBUG
+            print("⚠️ [MainFlowView] Background time expired during report generation")
+            #endif
+            UIApplication.shared.endBackgroundTask(backgroundTaskID)
+        }
+        
+        defer {
+            // End background task when done
+            if backgroundTaskID != .invalid {
+                UIApplication.shared.endBackgroundTask(backgroundTaskID)
+            }
+        }
+        
+        var lastError: Error?
+        
+        for attempt in 1...maxRetries {
             do {
+                #if DEBUG
+                if attempt > 1 {
+                    print("🔄 [MainFlowView] Report generation retry attempt \(attempt)/\(maxRetries)")
+                }
+                #endif
+                
                 let report = try await reportGenerator.generateReport(
-                    for: area,
-                    birthDetails: details,
-                    natalChart: chart,
+                    for: overlay.area,
+                    birthDetails: overlay.details,
+                    natalChart: overlay.chart,
                     languageCode: languageCode,
                     languageDisplayName: languageDisplayName,
-                    repositoryContext: "AstroSvitla iOS app context",
+                    repositoryContext: "Zorya iOS app",
                     selectedModel: preferences.selectedModel
                 )
+                
+                // Success! Consume credit and persist report
+                if let profileID = overlay.consumeCreditProfileID {
+                    do {
+                        _ = try creditManager.consumeCredit(for: overlay.area.rawValue, profileID: profileID)
+                    } catch {
+                        #if DEBUG
+                        print("⚠️ [MainFlowView] Failed to consume credit after report generation: \(error)")
+                        #endif
+                        SentrySDK.capture(error: error) { scope in
+                            scope.setLevel(.warning)
+                            scope.setTag(value: "credit_consumption", key: "issue")
+                            scope.setTag(value: "post_generation", key: "phase")
+                            scope.setContext(value: [
+                                "message": "Failed to consume credit after successful report generation",
+                                "report_area": overlay.area.rawValue
+                            ], key: "error_context")
+                        }
+                    }
+                }
+
                 do {
                     try persistGeneratedReport(
-                        details: details,
-                        natalChart: chart,
+                        details: overlay.details,
+                        natalChart: overlay.chart,
                         generatedReport: report
                     )
                 } catch {
@@ -326,26 +489,75 @@ struct MainFlowView: View {
                     print("⚠️ Помилка збереження звіту: \(error)")
                     #endif
                 }
+
                 await MainActor.run {
-                    // Pop generating state, push report
-                    flowState = .birthInput
-                    // Replace the purchase destination with report
-                    if !navigationPath.isEmpty {
-                        navigationPath.removeLast() // Remove purchase
+                    // Dismiss overlay and navigate to report
+                    generationOverlay = nil
+                    // Clear navigation to purchase if present, then push report
+                    while navigationPath.count > 1 {
+                        navigationPath.removeLast()
                     }
-                    navigationPath.append(MainNavDestination.report(details, chart, area, report))
+                    navigationPath.append(MainNavDestination.report(overlay.details, overlay.chart, overlay.area, report))
                 }
+                
+                // Success - exit retry loop
+                return
+                
             } catch {
-                await MainActor.run {
-                    errorMessage = error.localizedDescription
-                    // Return to purchase screen
-                    flowState = .birthInput
+                lastError = error
+                
+                #if DEBUG
+                print("❌ [MainFlowView] Report generation failed (attempt \(attempt)/\(maxRetries)): \(error.localizedDescription)")
+                #endif
+                
+                // Check if this is a retryable error
+                let isRetryable = isRetryableError(error)
+                
+                if attempt < maxRetries && isRetryable {
+                    // Wait with exponential backoff before retrying
+                    let delay = baseDelaySeconds * UInt64(pow(2.0, Double(attempt - 1)))
+                    try? await Task.sleep(nanoseconds: delay * 1_000_000_000)
+                } else {
+                    // No more retries or non-retryable error
+                    break
                 }
             }
         }
+        
+        // All retries failed
+        await MainActor.run {
+            generationOverlay = nil
+            errorMessage = lastError?.localizedDescription ?? String(localized: "error.report.generation_failed", defaultValue: "Report generation failed. Please try again.")
+        }
+    }
+    
+    /// Determines if an error should trigger a retry
+    private func isRetryableError(_ error: Error) -> Bool {
+        if let reportError = error as? ReportGenerationError {
+            switch reportError {
+            case .rateLimited, .serviceUnavailable, .network:
+                return true
+            default:
+                return false
+            }
+        }
+
+        // Network errors are retryable
+        if let urlError = error as? URLError {
+            switch urlError.code {
+            case .notConnectedToInternet, .networkConnectionLost, .timedOut, .cannotConnectToHost:
+                return true
+            default:
+                return false
+            }
+        }
+
+        return false
     }
 
     private func printChartData(_ chart: NatalChart) {
+#if DEBUG
+        guard Config.debugLoggingEnabled else { return }
         print("\n" + String(repeating: "=", count: 60))
         print("📊 NATAL CHART CALCULATION RESULTS")
         print(String(repeating: "=", count: 60))
@@ -373,6 +585,7 @@ struct MainFlowView: View {
 
         print("\n📅 Calculated at: \(chart.calculatedAt.formatted(date: .abbreviated, time: .standard))")
         print(String(repeating: "=", count: 60) + "\n")
+#endif
     }
 
     private func formatDegree(_ degree: Double) -> String {
@@ -456,7 +669,7 @@ private extension MainFlowView {
             knowledgeSourceTitles: sourceTitles.isEmpty ? nil : sourceTitles,
             knowledgeSourceAuthors: sourceAuthors.isEmpty ? nil : sourceAuthors,
             knowledgeSourcePages: sourcePages.isEmpty ? nil : sourcePages,
-            price: generatedReport.area.price,
+            price: 0.00, // Price tracking removed - IAP system handles this via PurchaseRecord
             transactionId: UUID().uuidString,
             metadataJSON: metadataJSON,
             knowledgeSourcesJSON: knowledgeSourcesJSON,
@@ -475,19 +688,6 @@ private extension MainFlowView {
         try modelContext.save()
 
         print("[MainFlowView] ✅ Report saved successfully with full logging data")
-    }
-
-    @MainActor
-    func upsertBirthChart(details: BirthDetails, natalChart: NatalChart) throws -> BirthChart {
-        _ = details
-
-        // TODO: This logic needs complete rewrite for UserProfile architecture
-        // For now, just create a new chart each time
-        let chartJSON = BirthChart.encodedChartJSON(from: natalChart) ?? ""
-        let newChart = BirthChart(chartDataJSON: chartJSON)
-
-        modelContext.insert(newChart)
-        return newChart
     }
 
     func renderReportText(from report: GeneratedReport) -> String {
@@ -518,6 +718,16 @@ private extension MainFlowView {
 
         return lines.joined(separator: "\n")
     }
+}
+
+// MARK: - Generation Overlay Data
+
+struct GenerationOverlayData: Identifiable {
+    let id = UUID()
+    let details: BirthDetails
+    let chart: NatalChart
+    let area: ReportArea
+    let consumeCreditProfileID: UUID?
 }
 
 // MARK: - Flow State (kept for non-navigation state tracking)
@@ -703,6 +913,8 @@ private struct GeneratingReportView: View {
 
     @State private var animateWave = false
     @State private var pulsate = false
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var wasInBackground = false
 
     var body: some View {
         ZStack {
@@ -811,6 +1023,31 @@ private struct GeneratingReportView: View {
                             .strokeBorder(Color.white.opacity(0.2), lineWidth: 1)
                     )
                 }
+                
+                // "Keep app open" warning - styled to match the design
+                HStack(spacing: 10) {
+                    Image(systemName: "exclamationmark.circle.fill")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundStyle(Color.orange)
+                    
+                    Text(String(localized: "loading.generating.keep_open", 
+                         defaultValue: "Please keep the app open while your report is being created"))
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.leading)
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 14)
+                .frame(maxWidth: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .fill(Color.orange.opacity(0.08))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .strokeBorder(Color.orange.opacity(0.2), lineWidth: 1)
+                        )
+                )
+                .padding(.horizontal, 24)
 
                 Spacer()
 
@@ -831,12 +1068,25 @@ private struct GeneratingReportView: View {
             animateWave = true
             pulsate = true
         }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .background {
+                wasInBackground = true
+                #if DEBUG
+                print("⚠️ [GeneratingReportView] App moved to background during generation")
+                #endif
+            } else if newPhase == .active && wasInBackground {
+                wasInBackground = false
+                #if DEBUG
+                print("✅ [GeneratingReportView] App returned to foreground")
+                #endif
+            }
+        }
     }
 }
 
 #Preview {
     let container = try! ModelContainer.astroSvitlaShared(inMemory: true)
-    MainFlowView(modelContext: container.mainContext)
+    let repositoryContext = RepositoryContext(context: container.mainContext)
+    MainFlowView(modelContext: container.mainContext, repositoryContext: repositoryContext)
         .environmentObject(AppPreferences())
-        .environmentObject(RepositoryContext(context: container.mainContext))
 }

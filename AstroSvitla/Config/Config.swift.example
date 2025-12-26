@@ -51,30 +51,16 @@ enum Config {
     static let buildNumber = "1"
     static let bundleIdentifier = "com.astrosvitla.astroinsight"
 
-    // MARK: - StoreKit Product IDs
-
-    enum ProductID {
-        static let generalReport = "com.astrosvitla.astroinsight.report.general"
-        static let financesReport = "com.astrosvitla.astroinsight.report.finances"
-        static let careerReport = "com.astrosvitla.astroinsight.report.career"
-        static let relationshipsReport = "com.astrosvitla.astroinsight.report.relationships"
-        static let healthReport = "com.astrosvitla.astroinsight.report.health"
-
-        static var all: [String] {
-            [
-                generalReport,
-                financesReport,
-                careerReport,
-                relationshipsReport,
-                healthReport,
-            ]
-        }
-    }
-
     // MARK: - Feature Flags
 
     static let debugLoggingEnabled = true
     static let analyticsEnabled = false
+    
+    // MARK: - RevenueCat Configuration
+    
+    /// RevenueCat public API key
+    /// Get this from RevenueCat Dashboard: Project Settings → API Keys
+    static let revenueCatAPIKey = "YOUR_REVENUECAT_API_KEY_HERE"
 
     // MARK: - Validation Helpers
 

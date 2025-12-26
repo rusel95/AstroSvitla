@@ -5,16 +5,17 @@ import SwiftUI
 
 // MARK: - RecommendationsTemplate
 
-/// Instagram Stories template showing personalized recommendations
+/// Instagram Stories template showing personalized recommendations with full space usage
 /// Dimensions: 1080 x 1920 pixels (9:16 aspect ratio)
+/// Enhanced to maximize text space and show more content
 struct RecommendationsTemplate: View {
     let shareContent: ShareContent
     let reportArea: ReportArea
     
     var body: some View {
         ZStack {
-            // Background gradient
-            ZoryaBranding.primaryGradient
+            // Background gradient - unique cosmic purple-blue theme
+            ZoryaBranding.recommendationsGradient
                 .ignoresSafeArea()
             
             // Decorative elements
@@ -24,25 +25,32 @@ struct RecommendationsTemplate: View {
             VStack(spacing: 0) {
                 // Header
                 headerSection
-                    .padding(.top, 80)
+                    .padding(.top, 60)
+                
+                // Condensed summary
+                summarySection
+                    .padding(.top, 32)
                 
                 Spacer()
                 
-                // Recommendations
+                // Recommendations - full width usage
                 recommendationsSection
+                
+                Spacer()
+                
+                // Analysis highlights
+                analysisSection
                 
                 Spacer()
                 
                 // CTA Section
                 ctaSection
                 
-                Spacer()
-                
                 // Footer
                 footerSection
-                    .padding(.bottom, 60)
+                    .padding(.bottom, 50)
             }
-            .padding(.horizontal, ZoryaBranding.templatePadding)
+            .padding(.horizontal, 40)
         }
         .frame(width: 1080, height: 1920)
     }
@@ -53,38 +61,45 @@ struct RecommendationsTemplate: View {
         ZStack {
             // Top glow
             Circle()
-                .fill(ZoryaBranding.accentGold.opacity(0.1))
-                .frame(width: 600, height: 600)
+                .fill(ZoryaBranding.accentGold.opacity(0.12))
+                .frame(width: 500, height: 500)
                 .blur(radius: 100)
                 .offset(y: -600)
             
-            // Bottom glow
+            // Middle glow
             Circle()
                 .fill(Color.purple.opacity(0.15))
-                .frame(width: 500, height: 500)
+                .frame(width: 400, height: 400)
                 .blur(radius: 80)
-                .offset(y: 600)
+                .offset(x: -300, y: 0)
+            
+            // Bottom glow
+            Circle()
+                .fill(Color.blue.opacity(0.12))
+                .frame(width: 450, height: 450)
+                .blur(radius: 90)
+                .offset(x: 200, y: 600)
         }
     }
     
     // MARK: - Header Section
     
     private var headerSection: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 20) {
             // Icon
             ZStack {
                 Circle()
                     .fill(ZoryaBranding.accentGold.opacity(0.15))
-                    .frame(width: 100, height: 100)
+                    .frame(width: 90, height: 90)
                 
                 Image(systemName: "lightbulb.fill")
-                    .font(.system(size: 48, weight: .medium))
+                    .font(.system(size: 44, weight: .medium))
                     .foregroundStyle(ZoryaBranding.accentGold)
             }
             
             // Title
-            Text("share.recommendations.title")
-                .font(.system(size: 48, weight: .bold, design: .rounded))
+            Text(String(localized: "share.recommendations.title", defaultValue: "RECOMMENDATIONS"))
+                .font(.system(size: 44, weight: .bold, design: .rounded))
                 .foregroundStyle(ZoryaBranding.textPrimary)
             
             // Report area badge
@@ -102,10 +117,22 @@ struct RecommendationsTemplate: View {
         }
     }
     
+    // MARK: - Summary Section
+    
+    private var summarySection: some View {
+        Text(shareContent.condensedSummary)
+            .font(.system(size: 28, weight: .medium, design: .rounded))
+            .foregroundStyle(ZoryaBranding.textPrimary)
+            .multilineTextAlignment(.center)
+            .lineSpacing(6)
+            .lineLimit(4)
+            .padding(.horizontal, 8)
+    }
+    
     // MARK: - Recommendations Section
     
     private var recommendationsSection: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 20) {
             ForEach(Array(shareContent.topRecommendations.enumerated()), id: \.offset) { index, recommendation in
                 recommendationCard(recommendation, index: index)
             }
@@ -124,21 +151,21 @@ struct RecommendationsTemplate: View {
                             endPoint: .bottomTrailing
                         )
                     )
-                    .frame(width: 56, height: 56)
+                    .frame(width: 52, height: 52)
                 
                 Text("\(index + 1)")
-                    .font(.system(size: 28, weight: .bold))
+                    .font(.system(size: 26, weight: .bold))
                     .foregroundStyle(.white)
             }
             
-            // Recommendation text
+            // Recommendation text - using full available width
             Text(text)
-                .font(.system(size: 30, weight: .medium, design: .rounded))
+                .font(.system(size: 28, weight: .medium, design: .rounded))
                 .foregroundStyle(ZoryaBranding.textPrimary)
-                .lineSpacing(6)
+                .lineSpacing(8)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(28)
+        .padding(24)
         .background(ZoryaBranding.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: ZoryaBranding.largeCornerRadius, style: .continuous))
         .overlay(
@@ -147,53 +174,98 @@ struct RecommendationsTemplate: View {
         )
     }
     
+    // MARK: - Analysis Section
+    
+    private var analysisSection: some View {
+        VStack(spacing: 16) {
+            // Section header
+            HStack(spacing: 8) {
+                Image(systemName: "sparkles")
+                    .font(.system(size: 20, weight: .semibold))
+                Text(String(localized: "share.highlights.title", defaultValue: "HIGHLIGHTS"))
+                    .font(.system(size: 20, weight: .bold))
+                    .textCase(.uppercase)
+                    .tracking(1.5)
+            }
+            .foregroundStyle(ZoryaBranding.textTertiary)
+            
+            // Highlights in horizontal layout - 2 per row
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                ForEach(Array(shareContent.analysisHighlights.enumerated()), id: \.offset) { _, highlight in
+                    HStack(spacing: 10) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 22, weight: .medium))
+                            .foregroundStyle(ZoryaBranding.accentGold)
+                        
+                        Text(highlight)
+                            .font(.system(size: 22, weight: .medium))
+                            .foregroundStyle(ZoryaBranding.textPrimary)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.8)
+                        
+                        Spacer()
+                    }
+                    .padding(.vertical, 12)
+                    .padding(.horizontal, 16)
+                    .background(ZoryaBranding.cardBackground)
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                }
+            }
+        }
+    }
+    
     // MARK: - CTA Section
     
     private var ctaSection: some View {
-        VStack(spacing: 16) {
-            Text("share.cta.get_full_report")
-                .font(.system(size: 26, weight: .semibold))
+        VStack(spacing: 14) {
+            Text(String(localized: "share.cta.get_full_report", defaultValue: "Get your full report"))
+                .font(.system(size: 24, weight: .semibold))
                 .foregroundStyle(ZoryaBranding.textSecondary)
             
             HStack(spacing: 12) {
-                Image(systemName: "arrow.down.circle.fill")
-                    .font(.system(size: 28, weight: .medium))
+                Image(systemName: "arrow.down.app.fill")
+                    .font(.system(size: 26, weight: .medium))
                 
-                Text(ZoryaBranding.websiteDisplay)
-                    .font(.system(size: 32, weight: .bold))
+                Text(ZoryaBranding.appStoreURL)
+                    .font(.system(size: 28, weight: .bold))
             }
             .foregroundStyle(ZoryaBranding.accentGold)
+            .padding(.horizontal, 32)
+            .padding(.vertical, 16)
+            .background(
+                RoundedRectangle(cornerRadius: ZoryaBranding.cornerRadius, style: .continuous)
+                    .strokeBorder(ZoryaBranding.accentGold.opacity(0.4), lineWidth: 2)
+            )
         }
-        .padding(32)
-        .background(
-            RoundedRectangle(cornerRadius: ZoryaBranding.largeCornerRadius, style: .continuous)
-                .strokeBorder(ZoryaBranding.accentGold.opacity(0.3), lineWidth: 2)
-        )
+        .padding(.vertical, 24)
     }
     
     // MARK: - Footer Section
     
     private var footerSection: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 10) {
             // Decorative line
             Rectangle()
                 .fill(ZoryaBranding.accentGold.opacity(0.3))
-                .frame(width: 120, height: 2)
+                .frame(width: 100, height: 2)
             
             // Branding
             HStack(spacing: 10) {
                 Image(systemName: "sparkles")
-                    .font(.system(size: 22, weight: .medium))
+                    .font(.system(size: 20, weight: .medium))
                     .foregroundStyle(ZoryaBranding.accentGold)
                 
                 Text(ZoryaBranding.appName)
-                    .font(.system(size: 26, weight: .bold, design: .rounded))
+                    .font(.system(size: 24, weight: .bold, design: .rounded))
                     .foregroundStyle(ZoryaBranding.textPrimary)
+                
+                Text("•")
+                    .foregroundStyle(ZoryaBranding.textTertiary)
+                
+                Text(ZoryaBranding.tagline)
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundStyle(ZoryaBranding.textTertiary)
             }
-            
-            Text(ZoryaBranding.tagline)
-                .font(.system(size: 20, weight: .medium))
-                .foregroundStyle(ZoryaBranding.textTertiary)
         }
     }
 }

@@ -38,6 +38,7 @@ struct ReportListView: View {
                 }
             }
             .navigationTitle(showsTitle ? Text("report.list.title") : Text(""))
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if allowsDismiss {
                     ToolbarItem(placement: .topBarLeading) {
@@ -255,7 +256,7 @@ private struct ReportListRow: View {
                     lineWidth: 1
                 )
         )
-        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 4)
+        .shadow(color: Color.black.opacity(0.03), radius: 8, x: 0, y: 4)
         .contentShape(Rectangle())
     }
     

@@ -45,11 +45,13 @@ struct InstagramTemplateGenerator {
     /// Renders the Chart Only template (9:16 Stories format)
     func renderChartOnly(
         birthDetails: BirthDetails,
-        chartImage: UIImage?
+        chartImage: UIImage?,
+        shareContent: ShareContent?
     ) throws -> GeneratedShareImage {
         let template = ChartOnlyTemplate(
             birthDetails: birthDetails,
-            chartImage: chartImage
+            chartImage: chartImage,
+            shareContent: shareContent
         )
         
         let image = try renderTemplate(
@@ -120,7 +122,8 @@ struct InstagramTemplateGenerator {
         let coverTemplate = CarouselCoverSlide(
             birthDetails: birthDetails,
             chartImage: chartImage,
-            reportArea: reportArea
+            reportArea: reportArea,
+            shareContent: shareContent
         )
         let coverImage = try renderTemplate(
             view: coverTemplate,
@@ -198,7 +201,8 @@ struct InstagramTemplateGenerator {
         // Chart Only
         let chartOnly = try renderChartOnly(
             birthDetails: birthDetails,
-            chartImage: chartImage
+            chartImage: chartImage,
+            shareContent: shareContent
         )
         results[.chartOnly] = [chartOnly]
         

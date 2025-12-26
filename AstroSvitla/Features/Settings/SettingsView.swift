@@ -44,7 +44,7 @@ struct SettingsView: View {
                 .animation(.spring(response: 0.4, dampingFraction: 0.8), value: showDevModeToast)
             }
         }
-        .navigationTitle(Text("settings.title"))
+        .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showingProfileManager) {
             UserProfileListView(viewModel: profileViewModel)
         }
@@ -286,7 +286,7 @@ struct SettingsView: View {
                             Text("settings.about.made_with_love")
                                 .font(.system(size: 15, weight: .medium))
                                 .foregroundStyle(.primary)
-                            Text("AstroSvitla Team 🇺🇦")
+                            Text(verbatim: "Zorya Team 🇺🇦")
                                 .font(.system(size: 13, weight: .regular))
                                 .foregroundStyle(.secondary)
                         }
@@ -437,6 +437,7 @@ private struct SettingsRow: View {
         .padding(.horizontal, 14)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         .overlay(
+
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .strokeBorder(
                     LinearGradient(
@@ -447,6 +448,7 @@ private struct SettingsRow: View {
                     lineWidth: 1
                 )
         )
+        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 4)
     }
 }
 
@@ -469,23 +471,25 @@ private struct ThemeOptionButton: View {
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(isSelected ? .primary : .secondary)
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
-            .background(
-                isSelected
-                    ? Color.accentColor.opacity(0.15)
-                    : Color.white.opacity(0.05),
-                in: RoundedRectangle(cornerRadius: 12, style: .continuous)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .strokeBorder(
-                        isSelected
-                            ? Color.accentColor.opacity(0.5)
-                            : Color.white.opacity(0.1),
-                        lineWidth: 1
-                    )
-            )
+
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 14)
+        .background(
+            isSelected
+                ? Color.accentColor.opacity(0.15)
+                : Color.white.opacity(0.05),
+            in: RoundedRectangle(cornerRadius: 12, style: .continuous)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .strokeBorder(
+                    isSelected
+                        ? Color.accentColor.opacity(0.5)
+                        : Color.white.opacity(0.1),
+                    lineWidth: 1
+                )
+        )
+
         }
         .buttonStyle(.plain)
     }
@@ -580,6 +584,7 @@ private struct ModelOptionCard: View {
                         lineWidth: 1
                     )
             )
+
         }
         .buttonStyle(.plain)
     }

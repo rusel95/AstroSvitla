@@ -28,9 +28,7 @@ struct AIPromptBuilder {
             - NEVER make general statements without a source citation
             """
         } else {
-            citationRequirement = """
-            Base your interpretations on established astrological knowledge. Provide professional, accurate analysis without inline source citations.
-            """
+            citationRequirement = ""
         }
 
         let systemMessage = """
@@ -188,7 +186,7 @@ struct AIPromptBuilder {
             ВИМОГИ ЩОДО ТОЧНОСТІ:
             • Базуйся на встановлених астрологічних знаннях.
             • Аналіз АСПЕКТІВ і ДОМІВ має бути максимально точним та професійним.
-            • НЕ додавай посилання на джерела у тексті відповіді.
+            • Пиши чистий, професійний текст.
             """
         }
 

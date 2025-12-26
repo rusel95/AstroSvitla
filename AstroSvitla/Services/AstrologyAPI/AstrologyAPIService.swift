@@ -157,20 +157,9 @@ final class AstrologyAPIService: NSObject {
     // MARK: - Private Methods
     
     private func buildNatalChartRequest(birthDetails: BirthDetails) throws -> URLRequest {
-        guard let url = URL(string: "\(baseURL)/charts/natal") else {
-            throw AstrologyAPIError.invalidURL
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.setValue("Bearer \(Config.astrologyAPIKey)", forHTTPHeaderField: "Authorization")
-        request.timeoutInterval = requestTimeout
-
         let requestBody = AstrologyAPIDTOMapper.toAPIRequest(birthDetails: birthDetails)
-        request.httpBody = try JSONEncoder().encode(requestBody)
-
-        return request
+        let bodyData = try JSONEncoder().encode(requestBody)
+        return try buildRequest(path: "/charts/natal", body: bodyData)
     }
     
     private func buildSVGRequest(
@@ -178,26 +167,28 @@ final class AstrologyAPIService: NSObject {
         theme: String,
         language: String
     ) throws -> URLRequest {
-        guard let url = URL(string: "\(baseURL)/svg/natal") else {
+        let requestBody = AstrologyAPIDTOMapper.toSVGRequest(
+            birthDetails: birthDetails,
+            theme: theme,
+            language: language
+        )
+        let bodyData = try JSONEncoder().encode(requestBody)
+        return try buildRequest(path: "/svg/natal", body: bodyData)
+    }
+
+    private func buildRequest(path: String, body: Data) throws -> URLRequest {
+        guard let url = URL(string: "\(baseURL)\(path)") else {
             throw AstrologyAPIError.invalidURL
         }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.setValue("Bearer \(Config.astrologyAPIKey)", forHTTPHeaderField: "Authorization")
         request.timeoutInterval = requestTimeout
-
-        let requestBody = AstrologyAPIDTOMapper.toSVGRequest(
-            birthDetails: birthDetails,
-            theme: theme,
-            language: language
-        )
-        request.httpBody = try JSONEncoder().encode(requestBody)
-
+        request.httpBody = body
         return request
     }
-    
+
     private func executeRequest(_ request: URLRequest) async throws -> (Data, HTTPURLResponse) {
         let (data, response): (Data, URLResponse)
         

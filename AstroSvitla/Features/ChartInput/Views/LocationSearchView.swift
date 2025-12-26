@@ -57,6 +57,7 @@ struct LocationSearchView: View {
             }
         }
         .navigationTitle(Text("location.search.title"))
+        .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always))
         .onChange(of: query) { _, newValue in
             scheduleSearch(for: newValue)

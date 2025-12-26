@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		853E6E872EA6530C00F3D3DF /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		853E6E882EA6530C00F3D3DF /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		85830FD52EFEB706000DE4E7 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 85830FD42EFEB706000DE4E7 /* RevenueCat */; };
+		85830FD72EFEB706000DE4E7 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 85830FD62EFEB706000DE4E7 /* RevenueCatUI */; };
 		85E2C24C2E96896700349727 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 85E2C24B2E96896700349727 /* OpenAI */; };
 		8835B9A55E0643DF97FFB977 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = FFBEB15F41AE4CB39BCBE99F /* Sentry */; };
 /* End PBXBuildFile section */
@@ -72,8 +74,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85830FD72EFEB706000DE4E7 /* RevenueCatUI in Frameworks */,
 				85E2C24C2E96896700349727 /* OpenAI in Frameworks */,
 				8835B9A55E0643DF97FFB977 /* Sentry in Frameworks */,
+				85830FD52EFEB706000DE4E7 /* RevenueCat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +143,8 @@
 			packageProductDependencies = (
 				85E2C24B2E96896700349727 /* OpenAI */,
 				FFBEB15F41AE4CB39BCBE99F /* Sentry */,
+				85830FD42EFEB706000DE4E7 /* RevenueCat */,
+				85830FD62EFEB706000DE4E7 /* RevenueCatUI */,
 			);
 			productName = AstroSvitla;
 			productReference = 85F4816D2E805C4B0031646F /* AstroSvitla.app */;
@@ -226,6 +232,7 @@
 			packageReferences = (
 				85E2C24A2E96896700349727 /* XCRemoteSwiftPackageReference "OpenAI" */,
 				BCBA13B7E1FA43ACBA177F44 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				85830FD32EFEB706000DE4E7 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 85F4816E2E805C4B0031646F /* Products */;
@@ -278,7 +285,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# This script is responsible for uploading debug symbols and source context for Sentry.\nif which sentry-cli >/dev/null; then\n  export SENTRY_ORG=ruslanpopesku\n  export SENTRY_PROJECT=astro-svitla\n  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1 >/dev/null)\n  if [ ! $? -eq 0 ]; then\n    echo \"warning: sentry-cli - $ERROR\"\n  fi\nelse\n  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi\n";
+			shellScript = "# This script is responsible for uploading debug symbols and source context for Sentry.\n# Only upload for Release builds to avoid unnecessary uploads during development\nif [ \"${CONFIGURATION}\" != \"Release\" ]; then\n  echo \"Skipping dSYM upload for ${CONFIGURATION} build\"\n  exit 0\nfi\n\nif which sentry-cli >/dev/null; then\n  # Set Sentry configuration (auth token should be set via environment variable or ~/.sentryclirc)\n  export SENTRY_ORG=ruslanpopesku\n  export SENTRY_PROJECT=astro-svitla\n  \n  # Upload dSYM files with source context\n  # Note: SENTRY_AUTH_TOKEN should be set as environment variable or in ~/.sentryclirc\n  if [ -z \"$SENTRY_AUTH_TOKEN\" ] && [ ! -f \"$HOME/.sentryclirc\" ]; then\n    echo \"warning: SENTRY_AUTH_TOKEN not set and ~/.sentryclirc not found. dSYM upload may fail.\"\n    echo \"warning: Set SENTRY_AUTH_TOKEN environment variable or configure ~/.sentryclirc\"\n  fi\n  \n  ERROR=$(sentry-cli debug-files upload --include-sources \"$DWARF_DSYM_FOLDER_PATH\" 2>&1)\n  UPLOAD_STATUS=$?\n  \n  if [ $UPLOAD_STATUS -eq 0 ]; then\n    echo \"✅ Successfully uploaded dSYM files to Sentry\"\n  else\n    echo \"warning: sentry-cli dSYM upload failed: $ERROR\"\n    echo \"warning: This is non-fatal - app will still build, but Sentry stack traces may be incomplete\"\n  fi\nelse\n  echo \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\n  echo \"warning: dSYM files will not be uploaded - Sentry stack traces may be incomplete\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -326,7 +333,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = FWHF624C4H;
@@ -338,7 +345,7 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AstroSvitla/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Natalica;
+				INFOPLIST_KEY_CFBundleDisplayName = Zorya;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -378,7 +385,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = FWHF624C4H;
@@ -389,7 +396,7 @@
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AstroSvitla/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Natalica;
+				INFOPLIST_KEY_CFBundleDisplayName = Zorya;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -693,6 +700,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		85830FD32EFEB706000DE4E7 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.52.0;
+			};
+		};
 		85E2C24A2E96896700349727 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/MacPaw/OpenAI/";
@@ -712,6 +727,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		85830FD42EFEB706000DE4E7 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 85830FD32EFEB706000DE4E7 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
+		};
+		85830FD62EFEB706000DE4E7 /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 85830FD32EFEB706000DE4E7 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCatUI;
+		};
 		85E2C24B2E96896700349727 /* OpenAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 85E2C24A2E96896700349727 /* XCRemoteSwiftPackageReference "OpenAI" */;

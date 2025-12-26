@@ -59,7 +59,8 @@ struct InstagramTemplateGeneratorTests {
         
         let image = try generator.renderChartOnly(
             birthDetails: testBirthDetails,
-            chartImage: nil
+            chartImage: nil,
+            shareContent: testShareContent
         )
         
         #expect(image.templateType == .chartOnly)

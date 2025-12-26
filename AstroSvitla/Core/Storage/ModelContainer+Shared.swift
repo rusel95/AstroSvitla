@@ -8,6 +8,8 @@ extension ModelContainer {
             BirthChart.self,
             CachedNatalChart.self,
             ReportPurchase.self,
+            PurchaseCredit.self,
+            PurchaseRecord.self,
         ])
 
         let configuration = ModelConfiguration(
