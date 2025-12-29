@@ -35,6 +35,9 @@ struct NatalChartWheelView: View {
         .frame(maxWidth: .infinity)
         .task {
             await loadChartSVG()
+            if showsShareButton {
+                await loadShareImage()
+            }
         }
         .sheet(isPresented: $isPresentingShareSheet) {
             if let shareImage {
@@ -138,9 +141,21 @@ struct NatalChartWheelView: View {
         .padding(8)
     }
 
-    private var shareImage: UIImage? {
-        // For sharing via WebView snapshot - can be enhanced later
-        nil
+    @State private var shareImage: UIImage?
+
+    /// Load PNG image for sharing (generated from SVG)
+    private func loadShareImage() async {
+        guard chart.imageFileID != nil else { return }
+
+        let service = NatalChartService(modelContext: modelContext)
+        if let image = await service.ensureChartImage(for: chart) {
+            await MainActor.run {
+                self.shareImage = image
+            }
+            print("[NatalChartWheelView] ✅ Share image loaded: \(image.size)")
+        } else {
+            print("[NatalChartWheelView] ⚠️ No share image available")
+        }
     }
 
     // MARK: - SVG Loading

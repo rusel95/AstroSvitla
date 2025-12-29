@@ -209,6 +209,67 @@ final class NatalChartService: NatalChartServiceProtocol {
     private func log(_ message: String) {
         print("[NatalChartService] \(message)")
     }
+
+    /// Validates that an image contains actual chart content (not just blank white)
+    /// by sampling pixels from different regions and checking for color variance
+    private func isValidChartImage(_ image: UIImage) -> Bool {
+        guard let cgImage = image.cgImage else { return false }
+
+        let width = cgImage.width
+        let height = cgImage.height
+
+        // Need reasonable size
+        guard width > 100 && height > 100 else { return false }
+
+        // Create a small bitmap context to sample pixels
+        let bytesPerPixel = 4
+        let bytesPerRow = bytesPerPixel * width
+        var pixelData = [UInt8](repeating: 0, count: bytesPerRow * height)
+
+        guard let context = CGContext(
+            data: &pixelData,
+            width: width,
+            height: height,
+            bitsPerComponent: 8,
+            bytesPerRow: bytesPerRow,
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        ) else { return false }
+
+        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+
+        // Sample pixels from center region where chart content should be
+        let centerX = width / 2
+        let centerY = height / 2
+        let sampleRadius = min(width, height) / 4
+
+        var nonWhitePixels = 0
+        let samplePoints = 100
+
+        for _ in 0..<samplePoints {
+            let offsetX = Int.random(in: -sampleRadius..<sampleRadius)
+            let offsetY = Int.random(in: -sampleRadius..<sampleRadius)
+            let x = centerX + offsetX
+            let y = centerY + offsetY
+
+            guard x >= 0 && x < width && y >= 0 && y < height else { continue }
+
+            let offset = (y * bytesPerRow) + (x * bytesPerPixel)
+            let r = pixelData[offset]
+            let g = pixelData[offset + 1]
+            let b = pixelData[offset + 2]
+
+            // Check if pixel is not white/near-white (allowing for some tolerance)
+            if r < 240 || g < 240 || b < 240 {
+                nonWhitePixels += 1
+            }
+        }
+
+        // A valid chart should have at least 10% non-white pixels in the center region
+        let isValid = nonWhitePixels > samplePoints / 10
+        log("📊 Image validation: \(nonWhitePixels)/\(samplePoints) non-white pixels → \(isValid ? "valid" : "invalid")")
+        return isValid
+    }
     
     // MARK: - Public Image Access
 
@@ -220,17 +281,16 @@ final class NatalChartService: NatalChartServiceProtocol {
 
         // 1. Try to load existing PNG
         if imageCacheService.imageExists(fileID: imageFileID, format: "png") {
-            do {
-                if let data = try? imageCacheService.loadImage(fileID: imageFileID, format: "png") {
-                    // Validate image data size. A blank chart (just white bg) is ~70KB.
-                    // A valid chart with content is typically > 100KB.
-                    if data.count > 100_000, let image = UIImage(data: data) {
-                        return image
-                    } else {
-                        log("⚠️ Cached PNG is suspiciously small (\(data.count) bytes) or invalid. Forcing regeneration.")
-                        // Remove invalid/blank image
-                        try? imageCacheService.deleteImage(fileID: imageFileID, format: "png")
-                    }
+            if let data = try? imageCacheService.loadImage(fileID: imageFileID, format: "png"),
+               let image = UIImage(data: data) {
+                // Validate the image has actual content by checking pixel data
+                // A blank white image will have very low variance in pixel values
+                if isValidChartImage(image) {
+                    log("✅ Loaded valid cached PNG (\(data.count) bytes)")
+                    return image
+                } else {
+                    log("⚠️ Cached PNG appears to be blank or invalid. Forcing regeneration.")
+                    try? imageCacheService.deleteImage(fileID: imageFileID, format: "png")
                 }
             }
         }
@@ -254,153 +314,146 @@ final class NatalChartService: NatalChartServiceProtocol {
     }
 
     // MARK: - PNG Generation from SVG
-    
+
     /// Render SVG to PNG using WKWebView and save to cache
+    /// Uses approach from main branch which doesn't require a window
     @MainActor
     private func savePNGFromSVG(svgData: Data, imageFileID: String, imageCacheService: ImageCacheService) async {
         guard let svgString = String(data: svgData, encoding: .utf8) else {
             log("⚠️ Failed to convert SVG data to string")
             return
         }
-        
+
         let chartWidth: CGFloat = 820
         let chartHeight: CGFloat = 550
         let size = CGSize(width: chartWidth, height: chartHeight)
-        
+
         log("🎨 Rendering SVG to PNG...")
-        
-        let image: UIImage? = await withCheckedContinuation { continuation in
-            // Use same HTML template as SVGWebView which is known to work
+
+        do {
+            let pngImage = try await renderSVGToPNG(svg: svgString, size: size)
+            if let pngData = pngImage.pngData() {
+                try imageCacheService.saveImage(data: pngData, fileID: imageFileID, format: "png")
+                log("📷 PNG saved (\(pngData.count) bytes)")
+            }
+        } catch {
+            log("⚠️ Failed to render SVG to PNG: \(error.localizedDescription)")
+        }
+    }
+
+    /// Render SVG to PNG using WKWebView (approach from main branch)
+    @MainActor
+    private func renderSVGToPNG(svg: String, size: CGSize) async throws -> UIImage {
+        return try await withCheckedThrowingContinuation { continuation in
             let html = """
             <!DOCTYPE html>
             <html>
             <head>
                 <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=yes">
                 <style>
-                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    * { margin: 0; padding: 0; }
                     html, body {
-                        width: 100%;
-                        height: 100%;
+                        width: \(Int(size.width))px;
+                        height: \(Int(size.height))px;
                         overflow: hidden;
                         background: white;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
                     }
                     svg {
                         width: 100%;
                         height: 100%;
-                        max-width: 100%;
-                        max-height: 100%;
                         display: block;
                     }
                 </style>
             </head>
             <body>
-                \(svgString)
+                \(svg)
             </body>
             </html>
             """
-            
+
             let config = WKWebViewConfiguration()
-            config.suppressesIncrementalRendering = true // Ensure full render
-            
             let webView = WKWebView(frame: CGRect(origin: .zero, size: size), configuration: config)
-            webView.isOpaque = false // Match SVGWebView
-            webView.backgroundColor = .white
-            webView.scrollView.backgroundColor = .white
-            
-            // WKWebView needs to be added to a window to render properly
-            let window = UIWindow(frame: CGRect(origin: .zero, size: size))
-            window.rootViewController = UIViewController()
-            window.rootViewController?.view.addSubview(webView)
-            window.isHidden = false
-            window.makeKeyAndVisible()
-            
-            let coordinator = SVGToPNGCoordinator(continuation: continuation, window: window)
+
+            let coordinator = SVGRenderCoordinator(continuation: continuation, webView: webView)
             webView.navigationDelegate = coordinator
-            
-            // Keep coordinator and window alive
+
+            // Keep a strong reference to coordinator
             objc_setAssociatedObject(webView, "coordinator", coordinator, .OBJC_ASSOCIATION_RETAIN)
-            objc_setAssociatedObject(webView, "window", window, .OBJC_ASSOCIATION_RETAIN)
-            
+
             webView.loadHTMLString(html, baseURL: nil)
-            
-            // Timeout after 15 seconds
+
+            // Timeout after 10 seconds
             Task {
-                try? await Task.sleep(nanoseconds: 15_000_000_000)
-                if !coordinator.didComplete {
-                    print("[NatalChartService] ⏰ Timeout waiting for PNG render")
-                    coordinator.didComplete = true
-                    continuation.resume(returning: nil)
-                }
+                try? await Task.sleep(nanoseconds: 10_000_000_000)
+                coordinator.timeout()
             }
-        }
-        
-        guard let image = image, let pngData = image.pngData() else {
-            log("⚠️ Failed to render SVG to PNG")
-            return
-        }
-        
-        do {
-            try imageCacheService.saveImage(data: pngData, fileID: imageFileID, format: "png")
-            log("📷 PNG saved (\(pngData.count) bytes)")
-        } catch {
-            log("⚠️ Failed to save PNG: \(error.localizedDescription)")
         }
     }
 }
 
-// MARK: - SVG to PNG Coordinator
+// MARK: - SVG Render Coordinator
 
-private class SVGToPNGCoordinator: NSObject, WKNavigationDelegate {
-    var continuation: CheckedContinuation<UIImage?, Never>?
-    var didComplete = false
-    var window: UIWindow?
-    
-    init(continuation: CheckedContinuation<UIImage?, Never>, window: UIWindow) {
+private class SVGRenderCoordinator: NSObject, WKNavigationDelegate {
+    private var continuation: CheckedContinuation<UIImage, Error>?
+    private var webView: WKWebView
+    private(set) var didComplete = false
+    private let lock = NSLock()
+
+    init(continuation: CheckedContinuation<UIImage, Error>, webView: WKWebView) {
         self.continuation = continuation
-        self.window = window
+        self.webView = webView
     }
-    
+
+    private func complete(with result: Result<UIImage, Error>) {
+        lock.lock()
+        defer { lock.unlock() }
+
+        guard !didComplete, let continuation = continuation else { return }
+        didComplete = true
+        self.continuation = nil
+
+        switch result {
+        case .success(let image):
+            continuation.resume(returning: image)
+        case .failure(let error):
+            continuation.resume(throwing: error)
+        }
+    }
+
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         guard !didComplete else { return }
-        
+
         print("[NatalChartService] ✅ WebView finished loading, waiting for render...")
-        
-        // Wait longer for rendering to complete/paint
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+
+        // Delay to allow rendering (0.5s as in main branch)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self = self, !self.didComplete else { return }
-            self.didComplete = true
-            
+
             let config = WKSnapshotConfiguration()
-            config.rect = webView.bounds
-            
+            config.rect = webView.frame
+
             webView.takeSnapshot(with: config) { [weak self] image, error in
                 if let error = error {
                     print("[NatalChartService] ❌ Snapshot error: \(error)")
+                    self?.complete(with: .failure(error))
                 } else if let image = image {
                     print("[NatalChartService] 📷 Snapshot taken: \(image.size)")
+                    self?.complete(with: .success(image))
                 } else {
                     print("[NatalChartService] ❌ Snapshot returned nil")
+                    self?.complete(with: .failure(NSError(domain: "NatalChartService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Snapshot failed"])))
                 }
-                
-                // Clean up window
-                self?.window?.isHidden = true
-                self?.window = nil
-                
-                self?.continuation?.resume(returning: image)
             }
         }
     }
-    
+
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        guard !didComplete else { return }
-        didComplete = true
         print("[NatalChartService] ❌ WebView navigation failed: \(error)")
-        window?.isHidden = true
-        window = nil
-        continuation?.resume(returning: nil)
+        complete(with: .failure(error))
+    }
+
+    func timeout() {
+        print("[NatalChartService] ⏰ Timeout waiting for PNG render")
+        complete(with: .failure(NSError(domain: "NatalChartService", code: -1, userInfo: [NSLocalizedDescriptionKey: "SVG render timeout"])))
     }
 }
