@@ -14,11 +14,13 @@
 import Foundation
 import SwiftData
 import Sentry
+import WebKit
 
 /// Protocol for natal chart generation service
 protocol NatalChartServiceProtocol {
     func generateChart(birthDetails: BirthDetails, forceRefresh: Bool) async throws -> NatalChart
     func getCachedChart(birthDetails: BirthDetails) -> NatalChart?
+    func ensureChartImage(for chart: NatalChart) async -> UIImage?
 }
 
 /// Main service for generating and managing natal charts
@@ -108,20 +110,21 @@ final class NatalChartService: NatalChartServiceProtocol {
             let natalChart = try await astrologyAPIService.generateNatalChart(birthDetails: birthDetails)
             log("✅ Natal chart received with \(natalChart.planets.count) planets, \(natalChart.houses.count) houses")
 
-            // Download SVG chart visualization
-            if let imageFileID = natalChart.imageFileID, let imageFormat = natalChart.imageFormat {
+            // Download and save SVG, then render to PNG for PDF export
+            if let imageFileID = natalChart.imageFileID {
                 do {
                     log("🖼️ Downloading chart SVG visualization...")
                     let svgString = try await astrologyAPIService.generateChartSVG(birthDetails: birthDetails)
-                    let svgData = Data(svgString.utf8)
 
                     // Save SVG to file system
                     let imageCacheService = ImageCacheService()
-                    try imageCacheService.saveImage(data: svgData, fileID: imageFileID, format: imageFormat)
-                    log("✅ Chart image saved (\(svgData.count) bytes)")
-
-                    // Also render and save PNG version for PDF export
-                    await savePNGVersionForPDF(svgString: svgString, imageFileID: imageFileID, imageCacheService: imageCacheService)
+                    if let svgData = svgString.data(using: .utf8) {
+                        try imageCacheService.saveImage(data: svgData, fileID: imageFileID, format: "svg")
+                        log("📄 SVG saved (\(svgData.count) bytes)")
+                        
+                        // Also render and save PNG for PDF export
+                        await savePNGFromSVG(svgData: svgData, imageFileID: imageFileID, imageCacheService: imageCacheService)
+                    }
                 } catch {
                     log("⚠️ Failed to download chart image: \(error.localizedDescription)")
 
@@ -206,127 +209,198 @@ final class NatalChartService: NatalChartServiceProtocol {
     private func log(_ message: String) {
         print("[NatalChartService] \(message)")
     }
+    
+    // MARK: - Public Image Access
 
-    // MARK: - PNG Generation for PDF Export
+    /// Ensures a PNG image of the chart is available (generates from SVG if needed)
+    /// Used for PDF export and Instagram sharing
+    func ensureChartImage(for chart: NatalChart) async -> UIImage? {
+        guard let imageFileID = chart.imageFileID else { return nil }
+        let imageCacheService = ImageCacheService()
 
-    /// Saves a PNG version of the chart for use in PDF export
-    /// This is needed because ImageRenderer can't handle async SVG rendering
-    @MainActor
-    private func savePNGVersionForPDF(svgString: String, imageFileID: String, imageCacheService: ImageCacheService) async {
-        do {
-            let result = SvgChartProcessor.process(svg: svgString)
-            // Use original SVG dimensions
-            let renderSize = result.dimensions
-            
-            let pngImage = try await renderSVGToPNG(svg: result.svgString, size: renderSize)
-            if let pngData = pngImage.pngData() {
-                try imageCacheService.saveImage(data: pngData, fileID: imageFileID, format: "png")
-                log("📷 PNG version saved for PDF export (\(pngData.count) bytes)")
+        // 1. Try to load existing PNG
+        if imageCacheService.imageExists(fileID: imageFileID, format: "png") {
+            do {
+                if let data = try? imageCacheService.loadImage(fileID: imageFileID, format: "png") {
+                    // Validate image data size. A blank chart (just white bg) is ~70KB.
+                    // A valid chart with content is typically > 100KB.
+                    if data.count > 100_000, let image = UIImage(data: data) {
+                        return image
+                    } else {
+                        log("⚠️ Cached PNG is suspiciously small (\(data.count) bytes) or invalid. Forcing regeneration.")
+                        // Remove invalid/blank image
+                        try? imageCacheService.deleteImage(fileID: imageFileID, format: "png")
+                    }
+                }
             }
-        } catch {
-            log("⚠️ Failed to save PNG version: \(error.localizedDescription)")
-            // Non-critical - PDF will show fallback chart info
         }
+
+        // 2. If no PNG, try to render from SVG
+        if imageCacheService.imageExists(fileID: imageFileID, format: "svg") {
+            do {
+                if let svgData = try? imageCacheService.loadImage(fileID: imageFileID, format: "svg") {
+                    await savePNGFromSVG(svgData: svgData, imageFileID: imageFileID, imageCacheService: imageCacheService)
+                    
+                    // 3. Load the newly generated PNG
+                    if let data = try? imageCacheService.loadImage(fileID: imageFileID, format: "png"),
+                       let image = UIImage(data: data) {
+                        return image
+                    }
+                }
+            }
+        }
+
+        return nil
     }
 
-    /// Render SVG to PNG using WKWebView
+    // MARK: - PNG Generation from SVG
+    
+    /// Render SVG to PNG using WKWebView and save to cache
     @MainActor
-    private func renderSVGToPNG(svg: String, size: CGSize) async throws -> UIImage {
-        return try await withCheckedThrowingContinuation { continuation in
+    private func savePNGFromSVG(svgData: Data, imageFileID: String, imageCacheService: ImageCacheService) async {
+        guard let svgString = String(data: svgData, encoding: .utf8) else {
+            log("⚠️ Failed to convert SVG data to string")
+            return
+        }
+        
+        let chartWidth: CGFloat = 820
+        let chartHeight: CGFloat = 550
+        let size = CGSize(width: chartWidth, height: chartHeight)
+        
+        log("🎨 Rendering SVG to PNG...")
+        
+        let image: UIImage? = await withCheckedContinuation { continuation in
+            // Use same HTML template as SVGWebView which is known to work
             let html = """
             <!DOCTYPE html>
             <html>
             <head>
                 <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=yes">
                 <style>
-                    * { margin: 0; padding: 0; }
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
                     html, body {
-                        width: \(Int(size.width))px;
-                        height: \(Int(size.height))px;
+                        width: 100%;
+                        height: 100%;
                         overflow: hidden;
                         background: white;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
                     }
                     svg {
                         width: 100%;
                         height: 100%;
+                        max-width: 100%;
+                        max-height: 100%;
                         display: block;
                     }
                 </style>
             </head>
             <body>
-                \(svg)
+                \(svgString)
             </body>
             </html>
             """
-
+            
             let config = WKWebViewConfiguration()
+            config.suppressesIncrementalRendering = true // Ensure full render
+            
             let webView = WKWebView(frame: CGRect(origin: .zero, size: size), configuration: config)
-
-            // Create a coordinator to handle navigation delegate
-            let coordinator = SVGRenderCoordinator(continuation: continuation, webView: webView)
+            webView.isOpaque = false // Match SVGWebView
+            webView.backgroundColor = .white
+            webView.scrollView.backgroundColor = .white
+            
+            // WKWebView needs to be added to a window to render properly
+            let window = UIWindow(frame: CGRect(origin: .zero, size: size))
+            window.rootViewController = UIViewController()
+            window.rootViewController?.view.addSubview(webView)
+            window.isHidden = false
+            window.makeKeyAndVisible()
+            
+            let coordinator = SVGToPNGCoordinator(continuation: continuation, window: window)
             webView.navigationDelegate = coordinator
-
-            // Keep a strong reference to coordinator
+            
+            // Keep coordinator and window alive
             objc_setAssociatedObject(webView, "coordinator", coordinator, .OBJC_ASSOCIATION_RETAIN)
-
+            objc_setAssociatedObject(webView, "window", window, .OBJC_ASSOCIATION_RETAIN)
+            
             webView.loadHTMLString(html, baseURL: nil)
-
-            // Timeout after 10 seconds
+            
+            // Timeout after 15 seconds
             Task {
-                try? await Task.sleep(nanoseconds: 10_000_000_000)
+                try? await Task.sleep(nanoseconds: 15_000_000_000)
                 if !coordinator.didComplete {
+                    print("[NatalChartService] ⏰ Timeout waiting for PNG render")
                     coordinator.didComplete = true
-                    continuation.resume(throwing: ServiceError.chartGenerationFailed(
-                        NSError(domain: "NatalChartService", code: -1, userInfo: [NSLocalizedDescriptionKey: "SVG render timeout"])
-                    ))
+                    continuation.resume(returning: nil)
                 }
             }
+        }
+        
+        guard let image = image, let pngData = image.pngData() else {
+            log("⚠️ Failed to render SVG to PNG")
+            return
+        }
+        
+        do {
+            try imageCacheService.saveImage(data: pngData, fileID: imageFileID, format: "png")
+            log("📷 PNG saved (\(pngData.count) bytes)")
+        } catch {
+            log("⚠️ Failed to save PNG: \(error.localizedDescription)")
         }
     }
 }
 
-// MARK: - SVG Render Coordinator
+// MARK: - SVG to PNG Coordinator
 
-import WebKit
-
-private class SVGRenderCoordinator: NSObject, WKNavigationDelegate {
-    var continuation: CheckedContinuation<UIImage, Error>?
-    var webView: WKWebView
+private class SVGToPNGCoordinator: NSObject, WKNavigationDelegate {
+    var continuation: CheckedContinuation<UIImage?, Never>?
     var didComplete = false
-
-    init(continuation: CheckedContinuation<UIImage, Error>, webView: WKWebView) {
+    var window: UIWindow?
+    
+    init(continuation: CheckedContinuation<UIImage?, Never>, window: UIWindow) {
         self.continuation = continuation
-        self.webView = webView
+        self.window = window
     }
-
+    
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         guard !didComplete else { return }
-
-        // Delay to allow rendering
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+        
+        print("[NatalChartService] ✅ WebView finished loading, waiting for render...")
+        
+        // Wait longer for rendering to complete/paint
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
             guard let self = self, !self.didComplete else { return }
             self.didComplete = true
-
+            
             let config = WKSnapshotConfiguration()
-            config.rect = webView.frame
-
+            config.rect = webView.bounds
+            
             webView.takeSnapshot(with: config) { [weak self] image, error in
-                guard let continuation = self?.continuation else { return }
-
                 if let error = error {
-                    continuation.resume(throwing: error)
+                    print("[NatalChartService] ❌ Snapshot error: \(error)")
                 } else if let image = image {
-                    continuation.resume(returning: image)
+                    print("[NatalChartService] 📷 Snapshot taken: \(image.size)")
                 } else {
-                    continuation.resume(throwing: NSError(domain: "NatalChartService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Snapshot failed"]))
+                    print("[NatalChartService] ❌ Snapshot returned nil")
                 }
+                
+                // Clean up window
+                self?.window?.isHidden = true
+                self?.window = nil
+                
+                self?.continuation?.resume(returning: image)
             }
         }
     }
-
+    
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         guard !didComplete else { return }
         didComplete = true
-        continuation?.resume(throwing: error)
+        print("[NatalChartService] ❌ WebView navigation failed: \(error)")
+        window?.isHidden = true
+        window = nil
+        continuation?.resume(returning: nil)
     }
 }

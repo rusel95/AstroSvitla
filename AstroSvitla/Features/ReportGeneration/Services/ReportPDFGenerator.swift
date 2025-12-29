@@ -1,5 +1,7 @@
 import SwiftUI
 import Sentry
+import WebKit
+import SwiftData
 
 struct ReportPDFGenerator {
 
@@ -25,13 +27,14 @@ struct ReportPDFGenerator {
         birthDetails: BirthDetails,
         natalChart: NatalChart,
         report: GeneratedReport,
+        modelContext: ModelContext,
         theme: PDFTheme = .light
-    ) throws -> Data {
+    ) async throws -> Data {
         let pageWidth: CGFloat = 612 // 8.5" at 72 DPI
         let horizontalPadding: CGFloat = 32
 
-        // Pre-load chart image synchronously for PDF rendering
-        let chartImage = loadChartImage(for: natalChart)
+        // Load chart image - now async for SVG rendering
+        let chartImage = await loadChartImage(for: natalChart, modelContext: modelContext)
 
         let content = ReportPDFContentView(
             birthDetails: birthDetails,
@@ -81,59 +84,24 @@ struct ReportPDFGenerator {
         return data
     }
 
-    /// Load chart image synchronously for PDF rendering
-    /// This is needed because ImageRenderer doesn't support async loading
-    private func loadChartImage(for chart: NatalChart) -> UIImage? {
-        guard let imageFileID = chart.imageFileID else {
-            print("[ReportPDFGenerator] No cached image metadata found")
-            return nil
+    /// Load chart image for PDF rendering
+    /// First tries cached PNG, then renders SVG to image using WKWebView via NatalChartService
+    @MainActor
+    private func loadChartImage(for chart: NatalChart, modelContext: ModelContext) async -> UIImage? {
+        let service = NatalChartService(modelContext: modelContext)
+        if let image = await service.ensureChartImage(for: chart) {
+            print("[ReportPDFGenerator] ✅ Loaded chart image for PDF: \(image.size)")
+            return image
         }
-
-        let imageCacheService = ImageCacheService()
-
-        // First try to load PNG version (pre-rendered for PDF)
-        if imageCacheService.imageExists(fileID: imageFileID, format: "png") {
-            do {
-                let pngData = try imageCacheService.loadImage(fileID: imageFileID, format: "png")
-                if let image = UIImage(data: pngData) {
-                    print("[ReportPDFGenerator] ✅ Loaded PNG chart image (\(pngData.count) bytes)")
-                    return image
-                }
-            } catch {
-                print("[ReportPDFGenerator] Failed to load PNG: \(error)")
-            }
-        }
-
-        // Fallback: try to load original format
-        guard let imageFormat = chart.imageFormat else {
-            return nil
-        }
-
-        do {
-            let imageData = try imageCacheService.loadImage(fileID: imageFileID, format: imageFormat)
-
-            // For SVG, we can't render synchronously - will show fallback
-            if imageFormat.lowercased() == "svg" {
-                print("[ReportPDFGenerator] ⚠️ SVG found but no PNG cache - chart will show fallback info")
-                return nil
-            } else {
-                return UIImage(data: imageData)
-            }
-        } catch {
-            print("[ReportPDFGenerator] Failed to load chart image: \(error)")
-            return nil
-        }
-    }
-
-    /// Convert SVG data to UIImage for PDF rendering using Core Graphics
-    private func convertSVGToImage(data: Data, theme: PDFTheme) -> UIImage? {
-        // This is deprecated - we now use pre-rendered PNG from NatalChartService
-        print("[ReportPDFGenerator] ⚠️ SVG conversion deprecated - using PNG cache instead")
+        
+        print("[ReportPDFGenerator] ⚠️ No chart image available")
         return nil
     }
+
+    // Previous duplicate rendering logic removed - now handled by NatalChartService
 }
 
-// MARK: - PDF Content View
+
 
 private struct ReportPDFContentView: View {
     let birthDetails: BirthDetails

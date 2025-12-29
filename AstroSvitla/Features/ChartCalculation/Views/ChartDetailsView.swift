@@ -11,7 +11,7 @@ struct ChartDetailsView: View {
             Section {
                 NatalChartWheelView(
                     chart: chart,
-                    showsShareButton: true
+                    showsShareButton: false
                 )
                     .listRowInsets(EdgeInsets())
             }

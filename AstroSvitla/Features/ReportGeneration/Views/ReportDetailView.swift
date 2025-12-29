@@ -1,6 +1,7 @@
 import SwiftUI
 import UIKit
 import OSLog
+import SwiftData
 
 private let reportDetailLogger = Logger(subsystem: "com.astrosvitla.app", category: "report_detail")
 
@@ -12,6 +13,7 @@ struct ReportDetailView: View {
     var languageCode: String = LocaleHelper.currentLanguageCode
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.modelContext) private var modelContext
 
     @State private var isExportingPDF = false
     @State private var exportErrorMessage: String?
@@ -539,30 +541,37 @@ struct ReportDetailView: View {
 
         isExportingPDF = true
 
-        // Schedule PDF generation after UI has updated
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.generateAndSharePDF()
+        // Generate PDF asynchronously
+        Task {
+            await generateAndSharePDF()
         }
     }
 
-    private func generateAndSharePDF() {
+    private func generateAndSharePDF() async {
         let pdfTheme: ReportPDFGenerator.PDFTheme = colorScheme == .dark ? .dark : .light
 
         do {
-            let pdfData = try pdfGenerator.makePDF(
+            let pdfData = try await pdfGenerator.makePDF(
                 birthDetails: birthDetails,
                 natalChart: natalChart,
                 report: report,
+                modelContext: modelContext,
                 theme: pdfTheme
             )
             let url = try writePDFToTemporaryLocation(data: pdfData)
-            shareURL = url
-            isPresentingShareSheet = true
+            await MainActor.run {
+                shareURL = url
+                isPresentingShareSheet = true
+            }
         } catch {
-            exportErrorMessage = error.localizedDescription
-            isShowingErrorAlert = true
+            await MainActor.run {
+                exportErrorMessage = error.localizedDescription
+                isShowingErrorAlert = true
+            }
         }
-        isExportingPDF = false
+        await MainActor.run {
+            isExportingPDF = false
+        }
     }
 
     private func writePDFToTemporaryLocation(data: Data) throws -> URL {
@@ -629,43 +638,11 @@ struct ReportDetailView: View {
     }
 
     private func loadChartImage() async {
-        guard let imageFileID = natalChart.imageFileID else { return }
-        
-        let imageCacheService = ImageCacheService()
-        var loadedImage: UIImage?
-        
-        // Try PNG first (preferred for sharing)
-        if imageCacheService.imageExists(fileID: imageFileID, format: "png") {
-            do {
-                let data = try imageCacheService.loadImage(fileID: imageFileID, format: "png")
-                loadedImage = UIImage(data: data)
-                if loadedImage == nil {
-                    reportDetailLogger.warning("Failed to decode PNG chart image for fileID: \(imageFileID, privacy: .public)")
-                }
-            } catch {
-                reportDetailLogger.error("Failed to load PNG chart image for fileID: \(imageFileID, privacy: .public). Error: \(error.localizedDescription, privacy: .public)")
-            }
-        }
-        
-        // Fallback to original format
-        if loadedImage == nil, let format = natalChart.imageFormat {
-            do {
-                let data = try imageCacheService.loadImage(fileID: imageFileID, format: format)
-                loadedImage = UIImage(data: data)
-                if loadedImage == nil {
-                    reportDetailLogger.warning("Failed to decode chart image format \(format, privacy: .public) for fileID: \(imageFileID, privacy: .public)")
-                }
-            } catch {
-                reportDetailLogger.error("Failed to load chart image format \(format, privacy: .public) for fileID: \(imageFileID, privacy: .public). Error: \(error.localizedDescription, privacy: .public)")
-            }
-        }
-
-        if loadedImage == nil {
-            reportDetailLogger.warning("No chart image loaded for Instagram sharing. fileID: \(imageFileID, privacy: .public)")
-        }
-        
-        if let image = loadedImage {
-            self.chartImage = image
+        let service = NatalChartService(modelContext: modelContext)
+        if let image = await service.ensureChartImage(for: natalChart) {
+             self.chartImage = image
+        } else {
+             reportDetailLogger.warning("No chart image loaded for Instagram sharing. fileID: \(String(describing: natalChart.imageFileID), privacy: .public)")
         }
     }
 }
