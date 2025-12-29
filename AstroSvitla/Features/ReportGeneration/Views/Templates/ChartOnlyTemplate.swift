@@ -14,10 +14,9 @@ struct ChartOnlyTemplate: View {
     let shareContent: ShareContent?
 
     private enum Layout {
-        static let chartWidth: CGFloat = 900
-        static let chartHeight: CGFloat = 720
-        static let chartCornerRadius: CGFloat = 36
-        static let chartGlowPadding: CGFloat = 70
+        static let chartWidth: CGFloat = 980
+        static let chartHeight: CGFloat = 980  // Square for placeholder only
+        static let chartCornerRadius: CGFloat = 32
     }
     
     // Optional initializer for backward compatibility
@@ -131,43 +130,16 @@ struct ChartOnlyTemplate: View {
     }
     
     // MARK: - Chart Section
-    
+
     private var chartSection: some View {
         Group {
             if let image = chartImage {
-                // Chart image with decorative frame
-                ZStack {
-                    // Outer glow
-                    RoundedRectangle(cornerRadius: Layout.chartCornerRadius + 10, style: .continuous)
-                        .fill(ZoryaBranding.accentGold.opacity(0.15))
-                        .frame(
-                            width: Layout.chartWidth + Layout.chartGlowPadding,
-                            height: Layout.chartHeight + Layout.chartGlowPadding
-                        )
-                        .blur(radius: 30)
-                    
-                    // Chart image
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: Layout.chartWidth, height: Layout.chartHeight)
-                        .background(ZoryaBranding.cardBackground)
-                        .clipShape(RoundedRectangle(cornerRadius: Layout.chartCornerRadius, style: .continuous))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: Layout.chartCornerRadius, style: .continuous)
-                                .strokeBorder(
-                                    LinearGradient(
-                                        colors: [
-                                            ZoryaBranding.accentGold.opacity(0.6),
-                                            ZoryaBranding.accentGold.opacity(0.2)
-                                        ],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    ),
-                                    lineWidth: 3
-                                )
-                        )
-                }
+                // Chart image - clean display with just corner radius
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: Layout.chartWidth)
+                    .clipShape(RoundedRectangle(cornerRadius: Layout.chartCornerRadius, style: .continuous))
             } else {
                 #if targetEnvironment(simulator)
                 // Simulator Mock Chart - improved fallback
@@ -322,31 +294,35 @@ struct ChartOnlyTemplate: View {
 // MARK: - Preview
 
 #Preview("Chart Only - With Image") {
-    ChartOnlyTemplate(
-        birthDetails: BirthDetails(
-            name: "Олександра",
-            birthDate: Date(),
-            birthTime: Date(),
-            location: "Київ, Україна"
-        ),
-        chartImage: nil,
-        shareContent: .preview
-    )
-    .frame(width: 1080, height: 1920)
-    .scaleEffect(0.3)
+    ScrollView {
+        ChartOnlyTemplate(
+            birthDetails: BirthDetails(
+                name: "Олександра",
+                birthDate: Date(),
+                birthTime: Date(),
+                location: "Київ, Україна"
+            ),
+            chartImage: nil,
+            shareContent: .preview
+        )
+        .scaleEffect(0.3)
+        .frame(width: 1080 * 0.3, height: 1920 * 0.3)
+    }
 }
 
 #Preview("Chart Only - Long Name") {
-    ChartOnlyTemplate(
-        birthDetails: BirthDetails(
-            name: "Олександра Вікторівна Петренко-Коваленко",
-            birthDate: Date(),
-            birthTime: Date(),
-            location: "Дніпропетровськ, Україна"
-        ),
-        chartImage: nil,
-        shareContent: .ukrainianPreview
-    )
-    .frame(width: 1080, height: 1920)
-    .scaleEffect(0.3)
+    ScrollView {
+        ChartOnlyTemplate(
+            birthDetails: BirthDetails(
+                name: "Олександра Вікторівна Петренко-Коваленко",
+                birthDate: Date(),
+                birthTime: Date(),
+                location: "Дніпропетровськ, Україна"
+            ),
+            chartImage: nil,
+            shareContent: .ukrainianPreview
+        )
+        .scaleEffect(0.3)
+        .frame(width: 1080 * 0.3, height: 1920 * 0.3)
+    }
 }
