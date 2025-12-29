@@ -192,9 +192,8 @@ struct InstagramTemplateGenerator {
         birthDetails: BirthDetails,
         chartImage: UIImage?
     ) async throws -> [ShareTemplateType: [GeneratedShareImage]] {
-        guard let shareContent = report.shareContent else {
-            throw TemplateError.missingContent
-        }
+        let shareContent = report.effectiveShareContent
+
         
         var results: [ShareTemplateType: [GeneratedShareImage]] = [:]
         

@@ -113,9 +113,7 @@ struct SettingsView: View {
             
             // Theme picker
             VStack(alignment: .leading, spacing: 12) {
-                Text(String(localized: "settings.theme.title"))
-                    .font(.system(size: 15, weight: .medium))
-                    .foregroundStyle(.secondary)
+
                 
                 // Custom segmented control with glass style
                 HStack(spacing: 8) {
@@ -226,6 +224,19 @@ struct SettingsView: View {
                 }
             
             VStack(spacing: 12) {
+                // How It Works button
+                Button {
+                    showOnboarding = true
+                } label: {
+                    SettingsRow(
+                        icon: "questionmark.circle.fill",
+                        iconColor: Color.purple,
+                        title: String(localized: "settings.about.how_it_works"),
+                        subtitle: String(localized: "settings.about.how_it_works.subtitle")
+                    )
+                }
+                .buttonStyle(.plain)
+
                 // App version
                 HStack {
                     HStack(spacing: 10) {
@@ -255,7 +266,7 @@ struct SettingsView: View {
                     if preferences.isDevModeEnabled {
                         HStack(spacing: 4) {
                             Image(systemName: "hammer.fill")
-                                .font(.system(size: 10))
+                            .font(.system(size: 10))
                             Text("DEV")
                                 .font(.system(size: 10, weight: .bold))
                         }
@@ -265,9 +276,6 @@ struct SettingsView: View {
                         .background(Color.green.opacity(0.15), in: Capsule())
                     }
                 }
-                
-                Divider()
-                    .background(Color.white.opacity(0.1))
                 
                 // Made with love
                 HStack {
@@ -294,22 +302,6 @@ struct SettingsView: View {
                     
                     Spacer()
                 }
-                
-                Divider()
-                    .background(Color.white.opacity(0.1))
-                
-                // How It Works button
-                Button {
-                    showOnboarding = true
-                } label: {
-                    SettingsRow(
-                        icon: "questionmark.circle.fill",
-                        iconColor: Color.purple,
-                        title: String(localized: "settings.about.how_it_works"),
-                        subtitle: String(localized: "settings.about.how_it_works.subtitle")
-                    )
-                }
-                .buttonStyle(.plain)
             }
         }
         .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
@@ -477,7 +469,7 @@ private struct ThemeOptionButton: View {
         .background(
             isSelected
                 ? Color.accentColor.opacity(0.15)
-                : Color.white.opacity(0.05),
+                : Color.primary.opacity(0.05),
             in: RoundedRectangle(cornerRadius: 12, style: .continuous)
         )
         .overlay(
@@ -485,7 +477,7 @@ private struct ThemeOptionButton: View {
                 .strokeBorder(
                     isSelected
                         ? Color.accentColor.opacity(0.5)
-                        : Color.white.opacity(0.1),
+                        : Color.primary.opacity(0.1),
                     lineWidth: 1
                 )
         )

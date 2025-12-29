@@ -91069,6 +91069,7 @@
       }
     },
     "share_unavailable" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {

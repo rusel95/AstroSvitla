@@ -42,7 +42,6 @@ struct SvgChartProcessor {
     
     /// Extract dimensions from SVG viewBox or width/height attributes
     static func extractDimensions(from svg: String) -> CGSize {
-        // Try to extract viewBox first (e.g., viewBox="0 0 800 800")
         if let viewBoxRegex = try? NSRegularExpression(pattern: #"viewBox\s*=\s*"([^"]+)""#),
            let match = viewBoxRegex.firstMatch(in: svg, range: NSRange(svg.startIndex..., in: svg)),
            let viewBoxRange = Range(match.range(at: 1), in: svg) {

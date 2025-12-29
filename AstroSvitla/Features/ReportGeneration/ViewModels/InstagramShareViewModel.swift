@@ -41,7 +41,7 @@ final class InstagramShareViewModel {
     
     /// Whether share content is available
     var hasShareContent: Bool {
-        report?.shareContent != nil
+        report != nil
     }
     
     /// Whether templates are ready for sharing
@@ -76,11 +76,8 @@ final class InstagramShareViewModel {
         self.birthDetails = birthDetails
         self.chartImage = chartImage
         
-        // Check for share content availability
-        guard report.shareContent != nil else {
-            state = .failed(String(localized: "share_unavailable", defaultValue: "Share not available for this report"))
-            return
-        }
+        // Always proceed as we generate fallback content if needed
+
         
         state = .rendering
         renderProgress = 0.0
@@ -140,9 +137,7 @@ final class InstagramShareViewModel {
         birthDetails: BirthDetails,
         chartImage: UIImage?
     ) async throws -> [GeneratedShareImage] {
-        guard let shareContent = report.shareContent else {
-            throw InstagramTemplateGenerator.TemplateError.missingContent
-        }
+        let shareContent = report.effectiveShareContent
         
         switch type {
         case .chartOnly:

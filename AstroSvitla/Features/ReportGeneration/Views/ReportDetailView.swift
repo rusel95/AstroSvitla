@@ -427,9 +427,7 @@ struct ReportDetailView: View {
             .animation(.easeInOut(duration: 0.2), value: isExportingPDF)
             
             // Instagram Share Button
-            if report.shareContent != nil {
-                instagramShareButton
-            }
+            instagramShareButton
         }
     }
     
@@ -590,7 +588,6 @@ struct ReportDetailView: View {
     // MARK: - Instagram Share Actions
     
     private func openInstagramShareSheet() {
-        guard report.shareContent != nil else { return }
         isShowingInstagramShareSheet = true
     }
     

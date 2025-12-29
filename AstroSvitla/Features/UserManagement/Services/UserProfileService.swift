@@ -163,6 +163,17 @@ class UserProfileService {
     // MARK: - Delete Profile
 
     func deleteProfile(_ profile: UserProfile) throws {
+        // Cleanup cached chart images before deleting profile
+        if let chart = profile.chart?.decodedNatalChart(),
+           let imageFileID = chart.imageFileID {
+            let imageCache = ImageCacheService()
+            // Attempt to delete associated images (SVG and PNG)
+            // We use try? because if the file doesn't exist, it's fine,
+            // and we don't want to block profile deletion.
+            try? imageCache.deleteImage(fileID: imageFileID, format: "svg")
+            try? imageCache.deleteImage(fileID: imageFileID, format: "png")
+        }
+        
         context.delete(profile)
         try context.save()
     }

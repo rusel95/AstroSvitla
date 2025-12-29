@@ -251,7 +251,9 @@ struct GeneratedShareImage: Identifiable, @unchecked Sendable {
 
 // MARK: - String Truncation Extension
 
-private extension String {
+// MARK: - String Truncation Extension
+
+extension String {
     
     /// Truncates string for social sharing, preserving word boundaries
     func truncatedForShare(maxLength: Int) -> String {
@@ -267,3 +269,4 @@ private extension String {
         return String(truncated) + "…"
     }
 }
+
