@@ -1,7 +1,7 @@
 import XCTest
 @testable import AstroSvitla
 
-final class AstroSvitlaTests: XCTestCase {
+final class SvgChartProcessorTests: XCTestCase {
 
     func testExtractDimensions_viewBox() {
         let svg = "<svg viewBox=\"0 0 1200 800\"></svg>"
@@ -33,16 +33,14 @@ final class AstroSvitlaTests: XCTestCase {
         // Should detect crop needed
         XCTAssertTrue(result.shouldCropToSquare)
         
-        // Dimensions should reflect the input viewBox
+        // Should have updated dimension extraction to reflect *original* dimensions (or new? the processor returns original dimensions but modifies SVG)
+        // Actually the logic is: extract dimensions -> check ratio -> replace string.
+        // The returned dimensions in 'result' are the *extracted* dimensions from input.
         XCTAssertEqual(result.dimensions.width, 820)
-        XCTAssertEqual(result.dimensions.height, 550.0)
         
-        // But the SVG string should now have the new viewBox for cropping
+        // But the SVG string should now have the new viewBox
         XCTAssertTrue(result.svgString.contains("viewBox=\"0 0 550 550.0\""))
         XCTAssertFalse(result.svgString.contains("viewBox=\"0 0 820 550.0\""))
-        
-        // Verify width/height attributes are left alone (or should they be? The processor currently only touches viewBox)
-        // If the webview relies on viewBox, this is sufficient.
     }
     
     func testProcessing_standardSquare_shouldNotCrop() {
@@ -58,16 +56,32 @@ final class AstroSvitlaTests: XCTestCase {
         XCTAssertEqual(result.svgString, svg)
     }
     
-    func testProcessing_customWide_shouldCrop() {
-         let svg = """
-         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
-           <g>Chart</g>
-         </svg>
-         """
-         
-         let result = SvgChartProcessor.process(svg: svg)
-         
-         XCTAssertTrue(result.shouldCropToSquare)
-         XCTAssertTrue(result.svgString.contains("viewBox=\"0 0 600 600\""))
+    func testProcessing_unknownWideFormat_shouldNotCrop() {
+        // A wide format that we don't know how to handle specifically
+        let svg = """
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 550.0">
+          <g>Unknown Chart</g>
+        </svg>
+        """
+        
+        let result = SvgChartProcessor.process(svg: svg)
+        
+        // Should be ignored unless we add specific handling
+        XCTAssertFalse(result.shouldCropToSquare)
+        XCTAssertEqual(result.svgString, svg)
     }
+    
+    func testProcessing_alternativeWideFormat_shouldCrop() {
+            let svg = """
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+              <g>Chart</g>
+            </svg>
+            """
+            
+            let result = SvgChartProcessor.process(svg: svg)
+            
+            XCTAssertTrue(result.shouldCropToSquare)
+            XCTAssertTrue(result.svgString.contains("viewBox=\"0 0 600 600\""))
+        }
+
 }

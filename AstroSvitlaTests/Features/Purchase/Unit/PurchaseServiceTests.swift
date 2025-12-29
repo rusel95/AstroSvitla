@@ -1,4 +1,4 @@
-//  PurchaseServiceTests.swift
+//  RevenueCatPurchaseServiceTests.swift
 //  AstroSvitlaTests
 //
 //  Created on 2025-12-23
@@ -6,14 +6,13 @@
 
 import Testing
 import SwiftData
-import StoreKit
 @testable import AstroSvitla
 
-@Suite("PurchaseService Tests")
-struct PurchaseServiceTests {
+@Suite("RevenueCatPurchaseService Tests")
+struct RevenueCatPurchaseServiceTests {
     
-    @Test("Load products successfully")
-    func testLoadProducts() async throws {
+    @Test("Initial state is not ready and cannot purchase")
+    func testInitialState() throws {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(
             for: PurchaseCredit.self, PurchaseRecord.self,
@@ -21,39 +20,25 @@ struct PurchaseServiceTests {
         )
         let context = container.mainContext
         
-        let service = PurchaseService(context: context)
-        
-        try await service.loadProducts()
-        
-        #expect(!service.products.isEmpty, "Products should be loaded")
+        let service = RevenueCatPurchaseService(context: context)
+
+        #expect(service.isReady == false)
+        #expect(service.canPurchase() == false)
     }
     
-    @Test("Purchase creates credit and record")
-    func testPurchaseCreatesCredit() async throws {
-        // Note: This test requires StoreKit testing environment
-        // Will be implemented with mock StoreKit during integration testing
-        #expect(true, "Test placeholder - requires StoreKit test environment")
-    }
-    
-    @Test("Duplicate transaction prevention")
-    func testDuplicateTransactionPrevention() async throws {
+    @Test("Price helpers return localized fallback when no offerings")
+    func testPriceFallback() throws {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(
             for: PurchaseCredit.self, PurchaseRecord.self,
             configurations: config
         )
         let context = container.mainContext
-        
-        let service = PurchaseService(context: context)
-        
-        // Create a purchase record manually
-        let transactionID = "TEST-DUP-123"
-        let record = PurchaseRecord.fixture(transactionID: transactionID)
-        context.insert(record)
-        try context.save()
-        
-        // Check that transaction is already processed
-        let isProcessed = service.isTransactionProcessed(transactionID)
-        #expect(isProcessed == true, "Transaction should be marked as processed")
+        let service = RevenueCatPurchaseService(context: context)
+
+        let fallback = String(localized: "purchase.price.unavailable", defaultValue: "Payment Unavailable")
+        #expect(service.getProductPrice() == fallback)
+        #expect(RevenueCatPurchaseService.displayPrice(from: nil) == fallback)
+        #expect(RevenueCatPurchaseService.displayPrice(from: service) == fallback)
     }
 }

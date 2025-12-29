@@ -94,7 +94,7 @@ struct ZoomableChartView: View {
 
                     // Zoom indicator
                     if scale > 1.0 {
-                        Text("\(Int(scale * 100))%")
+                        Text(Double(scale).formatted(.percent.precision(.fractionLength(0))))
                             .font(.system(size: 14, weight: .medium, design: .rounded))
                             .foregroundStyle(.white.opacity(0.7))
                             .padding(.horizontal, 12)
@@ -110,9 +110,10 @@ struct ZoomableChartView: View {
     }
 
     private func constrainOffset(in containerSize: CGSize) {
+        let imageAspectRatio = image.size.width / image.size.height
         let imageSize = CGSize(
             width: containerSize.width * scale,
-            height: containerSize.width * scale // Assuming square chart
+            height: (containerSize.width / imageAspectRatio) * scale
         )
 
         let maxOffsetX = max(0, (imageSize.width - containerSize.width) / 2)

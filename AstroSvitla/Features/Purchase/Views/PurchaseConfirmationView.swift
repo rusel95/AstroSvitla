@@ -45,7 +45,12 @@ struct PurchaseConfirmationView: View {
                                     ProgressView()
                                         .tint(.white)
                                 } else {
-                                    Text(String(format: String(localized: "purchase.paywall.buy_button", defaultValue: "Buy for %@"), priceString))
+                                    Text(
+                                        String(
+                                            format: String(localized: "purchase.paywall.buy_button", defaultValue: "Buy for %@"),
+                                            RevenueCatPurchaseService.displayPrice(from: purchaseService)
+                                        )
+                                    )
                                         .font(.system(size: 17, weight: .semibold))
                                 }
                             }
@@ -137,7 +142,7 @@ struct PurchaseConfirmationView: View {
                     // Only show price if user doesn't have credit
                     if !hasCredit {
                         HStack(spacing: 4) {
-                            Text(priceString)
+                            Text(RevenueCatPurchaseService.displayPrice(from: purchaseService))
                                 .font(.system(size: 18, weight: .semibold))
                                 .foregroundStyle(Color.accentColor)
 
@@ -236,14 +241,6 @@ struct PurchaseConfirmationView: View {
         .glassCard(cornerRadius: 18, padding: 18, intensity: .subtle)
     }
 
-    private var priceString: String {
-        if let service = purchaseService {
-            return service.getProductPrice()
-        }
-        // Fallback if service not provided
-        return String(localized: "purchase.price.unavailable", defaultValue: "Payment Unavailable")
-    }
-    
     @State private var isRetryingProducts = false
     
     private var iapUnavailableSection: some View {

@@ -417,7 +417,7 @@ private struct ReportPDFContentView: View {
                                 .fill(accentColor.opacity(0.15))
                                 .frame(width: 24, height: 24)
 
-                            Text("\(index + 1)")
+                            Text(index + 1, format: .number)
                                 .font(.system(size: 12, weight: .bold))
                                 .foregroundStyle(accentColor)
                         }

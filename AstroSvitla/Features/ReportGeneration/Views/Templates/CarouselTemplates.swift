@@ -12,6 +12,13 @@ struct CarouselCoverSlide: View {
     let chartImage: UIImage?
     let reportArea: ReportArea
     let shareContent: ShareContent?
+
+    private enum Layout {
+        static let chartWidth: CGFloat = 900
+        static let chartHeight: CGFloat = 620
+        static let chartCornerRadius: CGFloat = 36
+        static let chartGlowPadding: CGFloat = 80
+    }
     
     init(birthDetails: BirthDetails, chartImage: UIImage?, reportArea: ReportArea, shareContent: ShareContent? = nil) {
         self.birthDetails = birthDetails
@@ -119,27 +126,31 @@ struct CarouselCoverSlide: View {
     private var chartView: some View {
         if let image = chartImage {
             ZStack {
-                Circle()
+                RoundedRectangle(cornerRadius: Layout.chartCornerRadius + 10, style: .continuous)
                     .fill(ZoryaBranding.accentGold.opacity(0.1))
-                    .frame(width: 420, height: 420)
+                    .frame(
+                        width: Layout.chartWidth + Layout.chartGlowPadding,
+                        height: Layout.chartHeight + Layout.chartGlowPadding
+                    )
                     .blur(radius: 20)
                 
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 380, height: 380)
-                    .clipShape(Circle())
+                    .frame(width: Layout.chartWidth, height: Layout.chartHeight)
+                    .background(ZoryaBranding.cardBackground)
+                    .clipShape(RoundedRectangle(cornerRadius: Layout.chartCornerRadius, style: .continuous))
                     .overlay(
-                        Circle()
+                        RoundedRectangle(cornerRadius: Layout.chartCornerRadius, style: .continuous)
                             .strokeBorder(ZoryaBranding.accentGold.opacity(0.4), lineWidth: 2)
                     )
             }
         } else {
             #if targetEnvironment(simulator)
             ZStack {
-                Circle()
+                RoundedRectangle(cornerRadius: Layout.chartCornerRadius, style: .continuous)
                     .fill(ZoryaBranding.cardBackground)
-                    .frame(width: 380, height: 380)
+                    .frame(width: Layout.chartWidth, height: Layout.chartHeight)
                 
                 // Mock planetary positions
                 ZStack {
@@ -157,30 +168,30 @@ struct CarouselCoverSlide: View {
                         .foregroundStyle(Color.blue.opacity(0.6))
                         .offset(x: -70, y: 80)
                     
-                    Circle()
+                    RoundedRectangle(cornerRadius: Layout.chartCornerRadius - 8, style: .continuous)
                         .strokeBorder(ZoryaBranding.accentGold.opacity(0.3), lineWidth: 2)
-                        .frame(width: 320, height: 320)
+                        .frame(width: Layout.chartWidth - 120, height: Layout.chartHeight - 120)
                 }
             }
             .overlay(
-                Circle()
+                RoundedRectangle(cornerRadius: Layout.chartCornerRadius, style: .continuous)
                     .strokeBorder(ZoryaBranding.borderColor, lineWidth: 2)
-                    .frame(width: 380, height: 380)
+                    .frame(width: Layout.chartWidth, height: Layout.chartHeight)
             )
             #else
             ZStack {
-                Circle()
+                RoundedRectangle(cornerRadius: Layout.chartCornerRadius, style: .continuous)
                     .fill(ZoryaBranding.cardBackground)
-                    .frame(width: 380, height: 380)
+                    .frame(width: Layout.chartWidth, height: Layout.chartHeight)
                 
                 Image(systemName: "circle.hexagongrid.fill")
                     .font(.system(size: 70, weight: .light))
                     .foregroundStyle(ZoryaBranding.accentGold.opacity(0.5))
             }
             .overlay(
-                Circle()
+                RoundedRectangle(cornerRadius: Layout.chartCornerRadius, style: .continuous)
                     .strokeBorder(ZoryaBranding.borderColor, lineWidth: 2)
-                    .frame(width: 380, height: 380)
+                    .frame(width: Layout.chartWidth, height: Layout.chartHeight)
             )
             #endif
         }

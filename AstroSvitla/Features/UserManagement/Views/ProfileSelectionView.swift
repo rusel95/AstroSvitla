@@ -158,13 +158,6 @@ struct ProfileCard: View {
 
                 Spacer()
 
-                // Selection indicator
-                if isSelected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 26))
-                        .foregroundStyle(Color.accentColor)
-                        .shadow(color: Color.accentColor.opacity(0.3), radius: 4, x: 0, y: 2)
-                }
             }
             .padding(.horizontal, 18)
             .padding(.vertical, 16)

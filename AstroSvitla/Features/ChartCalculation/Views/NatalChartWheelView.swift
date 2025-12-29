@@ -5,34 +5,40 @@ import SwiftData
 struct NatalChartWheelView: View {
     let chart: NatalChart
     var allowsZoom: Bool = false
+    var zoomScale: CGFloat = 1.0
+    var zoomScaleX: CGFloat? = nil
+    var zoomScaleY: CGFloat? = nil
+    var zoomAnchor: UnitPoint = .center
+    var showsShareButton: Bool = false
     @Environment(\.modelContext) private var modelContext
 
     @State private var chartImageData: Data?
     @State private var imageLoadingFailed = false
     @State private var isLoadingImage = false
     @State private var showFullScreenChart = false
+    @State private var isPresentingShareSheet = false
 
     var body: some View {
         Group {
-            if let imageData = chartImageData {
-                if let uiImage = UIImage(data: imageData) {
-                    chartImageView(uiImage: uiImage)
-                } else {
-                    // Image data is corrupted
-                    errorPlaceholder
-                }
-            } else if isLoadingImage {
+            if let imageData = chartImageData, let uiImage = UIImage(data: imageData) {
+                chartImageView(uiImage: uiImage)
+            } else if imageLoadingFailed {
+                // No image available or loading failed
+                errorPlaceholder
+            } else {
                 // Show loading indicator while image loads
                 ProgressView("chart.loading")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                // No image available or loading failed
-                errorPlaceholder
             }
         }
         .frame(maxWidth: .infinity)
         .task {
             await loadChartImage()
+        }
+        .sheet(isPresented: $isPresentingShareSheet) {
+            if let shareImage {
+                ShareSheet(activityItems: [shareImage])
+            }
         }
         .fullScreenCover(isPresented: $showFullScreenChart) {
             if let imageData = chartImageData, let uiImage = UIImage(data: imageData) {
@@ -45,10 +51,14 @@ struct NatalChartWheelView: View {
 
     @ViewBuilder
     private func chartImageView(uiImage: UIImage) -> some View {
+        let scaleX = zoomScaleX ?? zoomScale
+        let scaleY = zoomScaleY ?? zoomScale
+
         if allowsZoom {
             Image(uiImage: uiImage)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
+                .scaleEffect(x: scaleX, y: scaleY, anchor: zoomAnchor)
                 .frame(maxWidth: .infinity)
                 .background(Color(.systemBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
@@ -64,12 +74,46 @@ struct NatalChartWheelView: View {
                         .clipShape(Circle())
                         .padding(8)
                 }
+                .overlay(alignment: .topTrailing) {
+                    if showsShareButton {
+                        shareButton
+                    }
+                }
         } else {
             Image(uiImage: uiImage)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
+                .scaleEffect(x: scaleX, y: scaleY, anchor: zoomAnchor)
                 .frame(maxWidth: .infinity)
+                .overlay(alignment: .topTrailing) {
+                    if showsShareButton {
+                        shareButton
+                    }
+                }
         }
+    }
+
+    private var shareImage: UIImage? {
+        guard let chartImageData else { return nil }
+        return UIImage(data: chartImageData)
+    }
+
+    private var shareButton: some View {
+        Button {
+            isPresentingShareSheet = true
+        } label: {
+            Image(systemName: "square.and.arrow.up")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(.white)
+                .padding(8)
+                .background(Color.black.opacity(0.55), in: Circle())
+                .overlay(
+                    Circle()
+                        .strokeBorder(Color.white.opacity(0.25), lineWidth: 1)
+                )
+        }
+        .padding(10)
+        .accessibilityLabel(Text(String(localized: "action.share", defaultValue: "Share")))
     }
     
     private var errorPlaceholder: some View {
@@ -100,6 +144,10 @@ struct NatalChartWheelView: View {
     private func loadChartImage() async {
         // Check if chart has image information
         guard let imageFileID = chart.imageFileID else {
+            await MainActor.run {
+                self.imageLoadingFailed = true
+                self.isLoadingImage = false
+            }
             print("[NatalChartWheelView] No cached image metadata found")
             return
         }
@@ -167,12 +215,19 @@ struct NatalChartWheelView: View {
         }
 
         do {
-            let controller = SVGWebViewController()
-            // Extract actual SVG dimensions to preserve aspect ratio
-            let dimensions = extractSVGDimensions(from: svgString)
-            let renderSize = CGSize(width: 1200, height: 1200 * (dimensions.height / dimensions.width))
+            // Process SVG using shared processor
+            let result = SvgChartProcessor.process(svg: svgString)
+            let dimensions = result.dimensions
             
-            let pngImage = try await controller.renderSVGToImage(svg: svgString, size: renderSize)
+            if result.shouldCropToSquare {
+                 print("[NatalChartWheelView] ✂️ Detected wide chart, cropping to square wheel")
+            }
+
+            let controller = SVGWebViewController()
+            // Use SVG dimensions naturally
+            let renderSize = result.dimensions
+            
+            let pngImage = try await controller.renderSVGToImage(svg: result.svgString, size: renderSize)
 
             // Cache PNG for future use
             if let pngData = pngImage.pngData() {
@@ -189,46 +244,7 @@ struct NatalChartWheelView: View {
         }
     }
     
-    /// Extract dimensions from SVG viewBox or width/height attributes
-    private func extractSVGDimensions(from svg: String) -> CGSize {
-        // Try to extract viewBox first (e.g., viewBox="0 0 800 800")
-        if let viewBoxRegex = try? NSRegularExpression(pattern: #"viewBox\s*=\s*"([^"]+)""#),
-           let match = viewBoxRegex.firstMatch(in: svg, range: NSRange(svg.startIndex..., in: svg)),
-           let viewBoxRange = Range(match.range(at: 1), in: svg) {
-            let viewBoxString = String(svg[viewBoxRange])
-            let values = viewBoxString.split(separator: " ").compactMap { Double($0) }
-            if values.count == 4 {
-                let width = values[2]
-                let height = values[3]
-                return CGSize(width: width, height: height)
-            }
-        }
-        
-        // Try to extract width and height attributes
-        var width: Double?
-        var height: Double?
-        
-        if let widthRegex = try? NSRegularExpression(pattern: #"width\s*=\s*"([^"]+)""#),
-           let match = widthRegex.firstMatch(in: svg, range: NSRange(svg.startIndex..., in: svg)),
-           let widthRange = Range(match.range(at: 1), in: svg) {
-            let widthString = String(svg[widthRange]).replacingOccurrences(of: "px", with: "")
-            width = Double(widthString)
-        }
-        
-        if let heightRegex = try? NSRegularExpression(pattern: #"height\s*=\s*"([^"]+)""#),
-           let match = heightRegex.firstMatch(in: svg, range: NSRange(svg.startIndex..., in: svg)),
-           let heightRange = Range(match.range(at: 1), in: svg) {
-            let heightString = String(svg[heightRange]).replacingOccurrences(of: "px", with: "")
-            height = Double(heightString)
-        }
-        
-        if let w = width, let h = height {
-            return CGSize(width: w, height: h)
-        }
-        
-        // Default to square if dimensions can't be extracted
-        return CGSize(width: 800, height: 800)
-    }
+
 }
 
 // MARK: - Zodiac Segment

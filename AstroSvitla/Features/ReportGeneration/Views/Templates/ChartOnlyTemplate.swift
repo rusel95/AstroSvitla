@@ -12,6 +12,13 @@ struct ChartOnlyTemplate: View {
     let birthDetails: BirthDetails
     let chartImage: UIImage?
     let shareContent: ShareContent?
+
+    private enum Layout {
+        static let chartWidth: CGFloat = 900
+        static let chartHeight: CGFloat = 720
+        static let chartCornerRadius: CGFloat = 36
+        static let chartGlowPadding: CGFloat = 70
+    }
     
     // Optional initializer for backward compatibility
     init(birthDetails: BirthDetails, chartImage: UIImage?, shareContent: ShareContent? = nil) {
@@ -131,19 +138,23 @@ struct ChartOnlyTemplate: View {
                 // Chart image with decorative frame
                 ZStack {
                     // Outer glow
-                    Circle()
+                    RoundedRectangle(cornerRadius: Layout.chartCornerRadius + 10, style: .continuous)
                         .fill(ZoryaBranding.accentGold.opacity(0.15))
-                        .frame(width: 620, height: 620)
+                        .frame(
+                            width: Layout.chartWidth + Layout.chartGlowPadding,
+                            height: Layout.chartHeight + Layout.chartGlowPadding
+                        )
                         .blur(radius: 30)
                     
                     // Chart image
                     Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 560, height: 560)
-                        .clipShape(Circle())
+                        .frame(width: Layout.chartWidth, height: Layout.chartHeight)
+                        .background(ZoryaBranding.cardBackground)
+                        .clipShape(RoundedRectangle(cornerRadius: Layout.chartCornerRadius, style: .continuous))
                         .overlay(
-                            Circle()
+                            RoundedRectangle(cornerRadius: Layout.chartCornerRadius, style: .continuous)
                                 .strokeBorder(
                                     LinearGradient(
                                         colors: [
@@ -161,9 +172,9 @@ struct ChartOnlyTemplate: View {
                 #if targetEnvironment(simulator)
                 // Simulator Mock Chart - improved fallback
                 ZStack {
-                    Circle()
+                    RoundedRectangle(cornerRadius: Layout.chartCornerRadius, style: .continuous)
                         .fill(ZoryaBranding.cardBackground)
-                        .frame(width: 560, height: 560)
+                        .frame(width: Layout.chartWidth, height: Layout.chartHeight)
                     
                     // Mock planetary positions
                     ZStack {
@@ -181,19 +192,19 @@ struct ChartOnlyTemplate: View {
                             .foregroundStyle(Color.blue.opacity(0.6))
                             .offset(x: -100, y: 120)
                         
-                        Circle()
+                        RoundedRectangle(cornerRadius: Layout.chartCornerRadius - 8, style: .continuous)
                             .strokeBorder(ZoryaBranding.accentGold.opacity(0.3), lineWidth: 2)
-                            .frame(width: 480, height: 480)
+                            .frame(width: Layout.chartWidth - 80, height: Layout.chartHeight - 80)
                         
-                        Circle()
+                        RoundedRectangle(cornerRadius: Layout.chartCornerRadius - 16, style: .continuous)
                             .strokeBorder(ZoryaBranding.accentGold.opacity(0.2), lineWidth: 1)
-                            .frame(width: 380, height: 380)
+                            .frame(width: Layout.chartWidth - 180, height: Layout.chartHeight - 180)
                     }
                 }
                 .overlay(
-                    Circle()
+                    RoundedRectangle(cornerRadius: Layout.chartCornerRadius, style: .continuous)
                         .strokeBorder(ZoryaBranding.borderColor, lineWidth: 2)
-                        .frame(width: 560, height: 560)
+                        .frame(width: Layout.chartWidth, height: Layout.chartHeight)
                 )
                 #else
                 // Placeholder when no chart image
@@ -205,9 +216,9 @@ struct ChartOnlyTemplate: View {
     
     private var placeholderChart: some View {
         ZStack {
-            Circle()
+            RoundedRectangle(cornerRadius: Layout.chartCornerRadius, style: .continuous)
                 .fill(ZoryaBranding.cardBackground)
-                .frame(width: 560, height: 560)
+                .frame(width: Layout.chartWidth, height: Layout.chartHeight)
             
             VStack(spacing: 16) {
                 Image(systemName: "circle.hexagongrid.fill")
@@ -220,9 +231,9 @@ struct ChartOnlyTemplate: View {
             }
         }
         .overlay(
-            Circle()
+            RoundedRectangle(cornerRadius: Layout.chartCornerRadius, style: .continuous)
                 .strokeBorder(ZoryaBranding.borderColor, lineWidth: 2)
-                .frame(width: 560, height: 560)
+                .frame(width: Layout.chartWidth, height: Layout.chartHeight)
         )
     }
     

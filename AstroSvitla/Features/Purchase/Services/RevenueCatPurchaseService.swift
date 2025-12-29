@@ -243,6 +243,14 @@ final class RevenueCatPurchaseService {
         }
         return String(localized: "purchase.price.unavailable", defaultValue: "Payment Unavailable")
     }
+
+    /// Display price for optional purchase service instances.
+    static func displayPrice(from service: RevenueCatPurchaseService?) -> String {
+        guard let service else {
+            return String(localized: "purchase.price.unavailable", defaultValue: "Payment Unavailable")
+        }
+        return service.getProductPrice()
+    }
     
     /// Check if purchases are available
     func canPurchase() -> Bool {

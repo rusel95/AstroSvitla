@@ -1,5 +1,8 @@
 import SwiftUI
 import UIKit
+import OSLog
+
+private let reportDetailLogger = Logger(subsystem: "com.astrosvitla.app", category: "report_detail")
 
 struct ReportDetailView: View {
     let birthDetails: BirthDetails
@@ -110,7 +113,7 @@ struct ReportDetailView: View {
             Text("report.export.success.message")
         })
         .task {
-            loadChartImage()
+            await loadChartImage()
         }
     }
 
@@ -186,9 +189,12 @@ struct ReportDetailView: View {
 
     private var chartSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            sectionHeader(title: String(localized: "report.section.natal_chart"), icon: "circle.hexagongrid.fill", hint: String(localized: "report.chart.zoom_hint"))
+            sectionHeader(title: String(localized: "report.section.natal_chart"), icon: "circle.hexagongrid.fill")
 
-            NatalChartWheelView(chart: natalChart, allowsZoom: true)
+            NatalChartWheelView(
+                chart: natalChart,
+                allowsZoom: true
+            )
                 .background(colorScheme == .dark ? Color.white.opacity(0.05) : Color.white)
                 .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                 .overlay(
@@ -290,7 +296,7 @@ struct ReportDetailView: View {
                                 .fill(Color.accentColor.opacity(0.15))
                                 .frame(width: 24, height: 24)
 
-                            Text("\(index + 1)")
+                            Text(index + 1, format: .number)
                                 .font(.system(size: 12, weight: .bold))
                                 .foregroundStyle(Color.accentColor)
                         }
@@ -625,32 +631,44 @@ struct ReportDetailView: View {
         }
     }
 
-    private func loadChartImage() {
+    private func loadChartImage() async {
         guard let imageFileID = natalChart.imageFileID else { return }
         
-        Task.detached(priority: .userInitiated) {
-            let imageCacheService = ImageCacheService()
-            var loadedImage: UIImage?
-            
-            // Try PNG first (preferred for sharing)
-            if imageCacheService.imageExists(fileID: imageFileID, format: "png") {
-                if let data = try? imageCacheService.loadImage(fileID: imageFileID, format: "png") {
-                    loadedImage = UIImage(data: data)
+        let imageCacheService = ImageCacheService()
+        var loadedImage: UIImage?
+        
+        // Try PNG first (preferred for sharing)
+        if imageCacheService.imageExists(fileID: imageFileID, format: "png") {
+            do {
+                let data = try imageCacheService.loadImage(fileID: imageFileID, format: "png")
+                loadedImage = UIImage(data: data)
+                if loadedImage == nil {
+                    reportDetailLogger.warning("Failed to decode PNG chart image for fileID: \(imageFileID, privacy: .public)")
                 }
-            } 
-            
-            // Fallback to original format
-            if loadedImage == nil, let format = natalChart.imageFormat {
-                 if let data = try? imageCacheService.loadImage(fileID: imageFileID, format: format) {
-                     loadedImage = UIImage(data: data)
-                 }
+            } catch {
+                reportDetailLogger.error("Failed to load PNG chart image for fileID: \(imageFileID, privacy: .public). Error: \(error.localizedDescription, privacy: .public)")
             }
-            
-            if let image = loadedImage {
-                await MainActor.run {
-                    self.chartImage = image
+        }
+        
+        // Fallback to original format
+        if loadedImage == nil, let format = natalChart.imageFormat {
+            do {
+                let data = try imageCacheService.loadImage(fileID: imageFileID, format: format)
+                loadedImage = UIImage(data: data)
+                if loadedImage == nil {
+                    reportDetailLogger.warning("Failed to decode chart image format \(format, privacy: .public) for fileID: \(imageFileID, privacy: .public)")
                 }
+            } catch {
+                reportDetailLogger.error("Failed to load chart image format \(format, privacy: .public) for fileID: \(imageFileID, privacy: .public). Error: \(error.localizedDescription, privacy: .public)")
             }
+        }
+
+        if loadedImage == nil {
+            reportDetailLogger.warning("No chart image loaded for Instagram sharing. fileID: \(imageFileID, privacy: .public)")
+        }
+        
+        if let image = loadedImage {
+            self.chartImage = image
         }
     }
 }

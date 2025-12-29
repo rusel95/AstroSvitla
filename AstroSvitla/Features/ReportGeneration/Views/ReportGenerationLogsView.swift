@@ -246,7 +246,7 @@ struct ReportGenerationLogsView: View {
                         }
 
                         if source.isFromVectorDatabase, let chunkId = source.chunkId {
-                            Label("ID: \(chunkId)", systemImage: "number")
+                            Label("Chunk ID: \(chunkId)", systemImage: "number")
                                 .font(.caption2)
                                 .foregroundStyle(.tertiary)
                         }

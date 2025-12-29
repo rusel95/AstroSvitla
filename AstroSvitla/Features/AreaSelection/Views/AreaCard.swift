@@ -79,7 +79,7 @@ struct AreaCard: View {
                             .lineLimit(1)
                     } else {
                         // No credit - show price and description
-                        Text(priceString)
+                        Text(RevenueCatPurchaseService.displayPrice(from: purchaseService))
                             .font(.system(size: 14, weight: .medium))
                             .foregroundStyle(.secondary)
 
@@ -127,14 +127,6 @@ struct AreaCard: View {
         )
         .shadow(color: Color.black.opacity(0.03), radius: 8, x: 0, y: 4)
         .scaleEffect(isPressed ? 0.98 : 1)
-    }
-
-    private var priceString: String {
-        if let service = purchaseService {
-            return service.getProductPrice()
-        }
-        // Fallback if service not provided
-        return String(localized: "purchase.price.unavailable", defaultValue: "Payment Unavailable")
     }
 
     // Color for the icon - green if purchased

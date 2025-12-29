@@ -3,7 +3,6 @@ import UIKit
 import CoreLocation
 import SwiftData
 import Sentry
-import StoreKit
 
 enum ChartCalculationError: LocalizedError {
     case missingCoordinate
@@ -422,19 +421,25 @@ struct MainFlowView: View {
         let baseDelaySeconds: UInt64 = 2
         
         // Request background time to complete generation
-        var backgroundTaskID: UIBackgroundTaskIdentifier = .invalid
-        backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "ReportGeneration") {
+        class BackgroundTaskState: @unchecked Sendable {
+            var id: UIBackgroundTaskIdentifier = .invalid
+        }
+        let taskState = BackgroundTaskState()
+        
+        taskState.id = UIApplication.shared.beginBackgroundTask(withName: "ReportGeneration") {
             // Background time expired - task will be cancelled
             #if DEBUG
             print("⚠️ [MainFlowView] Background time expired during report generation")
             #endif
-            UIApplication.shared.endBackgroundTask(backgroundTaskID)
+            UIApplication.shared.endBackgroundTask(taskState.id)
+            taskState.id = .invalid
         }
         
         defer {
             // End background task when done
-            if backgroundTaskID != .invalid {
-                UIApplication.shared.endBackgroundTask(backgroundTaskID)
+            if taskState.id != .invalid {
+                UIApplication.shared.endBackgroundTask(taskState.id)
+                taskState.id = .invalid
             }
         }
         

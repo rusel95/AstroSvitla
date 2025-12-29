@@ -59,8 +59,15 @@ struct InstagramShareSheet: View {
                         Button {
                             onDismiss()
                         } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundStyle(secondaryTextColor)
+                            Image(systemName: "xmark")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundStyle(primaryTextColor)
+                                .padding(10)
+                                .background(.ultraThinMaterial, in: Circle())
+                                .overlay(
+                                    Circle()
+                                        .strokeBorder(Color.white.opacity(0.25), lineWidth: 1)
+                                )
                         }
                     }
                 }

@@ -214,7 +214,11 @@ final class NatalChartService: NatalChartServiceProtocol {
     @MainActor
     private func savePNGVersionForPDF(svgString: String, imageFileID: String, imageCacheService: ImageCacheService) async {
         do {
-            let pngImage = try await renderSVGToPNG(svg: svgString, size: CGSize(width: 800, height: 800))
+            let result = SvgChartProcessor.process(svg: svgString)
+            // Use original SVG dimensions
+            let renderSize = result.dimensions
+            
+            let pngImage = try await renderSVGToPNG(svg: result.svgString, size: renderSize)
             if let pngData = pngImage.pngData() {
                 try imageCacheService.saveImage(data: pngData, fileID: imageFileID, format: "png")
                 log("📷 PNG version saved for PDF export (\(pngData.count) bytes)")

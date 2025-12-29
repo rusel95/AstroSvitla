@@ -9,7 +9,10 @@ struct ChartDetailsView: View {
         List {
             // Chart Wheel Visualization
             Section {
-                NatalChartWheelView(chart: chart)
+                NatalChartWheelView(
+                    chart: chart,
+                    showsShareButton: true
+                )
                     .listRowInsets(EdgeInsets())
             }
 

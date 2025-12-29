@@ -242,8 +242,9 @@ struct InstagramTemplateGenerator {
                 .frame(width: size.width, height: size.height)
         )
         
-        // Use device scale for high-quality output
-        renderer.scale = UIScreen.main.scale
+        // Use fixed scale (3.0) instead of UIScreen.main.scale to avoid potential crashes
+        // and Main Actor isolation issues on newer iOS versions
+        renderer.scale = 3.0
         
         guard let uiImage = renderer.uiImage else {
             throw TemplateError.renderFailed

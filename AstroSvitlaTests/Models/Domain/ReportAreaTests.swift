@@ -6,6 +6,9 @@ struct ReportAreaTests {
 
     @Test
     func testIcons() {
+        for area in ReportArea.allCases {
+            #expect(!area.icon.isEmpty)
+        }
         #expect(ReportArea.finances.icon == "dollarsign.circle.fill")
         #expect(ReportArea.career.icon == "briefcase.fill")
     }
