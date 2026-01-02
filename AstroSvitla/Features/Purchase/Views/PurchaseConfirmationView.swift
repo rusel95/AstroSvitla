@@ -79,13 +79,13 @@ struct PurchaseConfirmationView: View {
                                 }
                             } label: {
                                 Text("purchase.legal.terms", bundle: .main)
-                                    .font(.system(size: 11, weight: .medium))
-                                    .foregroundStyle(.tertiary)
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundStyle(.secondary)
                             }
                             
                             Text("•")
-                                .font(.system(size: 11))
-                                .foregroundStyle(.quaternary)
+                                .font(.system(size: 12))
+                                .foregroundStyle(.tertiary)
                             
                             Button {
                                 if let url = URL(string: "https://rusel95.github.io/AstroSvitla/privacy-policy.html") {
@@ -93,13 +93,13 @@ struct PurchaseConfirmationView: View {
                                 }
                             } label: {
                                 Text("purchase.legal.privacy", bundle: .main)
-                                    .font(.system(size: 11, weight: .medium))
-                                    .foregroundStyle(.tertiary)
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundStyle(.secondary)
                             }
                             
                             Text("•")
-                                .font(.system(size: 11))
-                                .foregroundStyle(.quaternary)
+                                .font(.system(size: 12))
+                                .foregroundStyle(.tertiary)
                             
                             Button {
                                 if let url = URL(string: "https://rusel95.github.io/AstroSvitla/support.html") {
@@ -107,8 +107,8 @@ struct PurchaseConfirmationView: View {
                                 }
                             } label: {
                                 Text("purchase.legal.support", bundle: .main)
-                                    .font(.system(size: 11, weight: .medium))
-                                    .foregroundStyle(.tertiary)
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundStyle(.secondary)
                             }
                         }
                         .frame(maxWidth: .infinity)
