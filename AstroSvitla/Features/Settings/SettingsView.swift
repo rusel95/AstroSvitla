@@ -27,6 +27,7 @@ struct SettingsView: View {
                     if preferences.isDevModeEnabled {
                         openAIModelSection
                     }
+                    legalSection
                     appInfoSection
                 }
                 .padding(.horizontal, 20)
@@ -196,6 +197,63 @@ struct SettingsView: View {
                     .foregroundStyle(.secondary)
             }
             .padding(.top, 4)
+        }
+        .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
+    }
+    
+    // MARK: - Legal Section
+    
+    private var legalSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Section header
+            SettingsSectionHeader(title: String(localized: "settings.section.legal"), icon: "doc.text.fill")
+            
+            VStack(spacing: 12) {
+                // Privacy Policy
+                Button {
+                    if let url = URL(string: "https://rusel95.github.io/AstroSvitla/privacy-policy.html") {
+                        UIApplication.shared.open(url)
+                    }
+                } label: {
+                    SettingsRow(
+                        icon: "hand.raised.fill",
+                        iconColor: Color.blue,
+                        title: String(localized: "settings.legal.privacy"),
+                        subtitle: String(localized: "settings.legal.privacy.subtitle")
+                    )
+                }
+                .buttonStyle(.plain)
+                
+                // Terms of Service
+                Button {
+                    if let url = URL(string: "https://rusel95.github.io/AstroSvitla/terms-of-service.html") {
+                        UIApplication.shared.open(url)
+                    }
+                } label: {
+                    SettingsRow(
+                        icon: "doc.plaintext.fill",
+                        iconColor: Color.orange,
+                        title: String(localized: "settings.legal.terms"),
+                        subtitle: String(localized: "settings.legal.terms.subtitle")
+                    )
+                }
+                .buttonStyle(.plain)
+                
+                // Support
+                Button {
+                    if let url = URL(string: "https://rusel95.github.io/AstroSvitla/support.html") {
+                        UIApplication.shared.open(url)
+                    }
+                } label: {
+                    SettingsRow(
+                        icon: "questionmark.bubble.fill",
+                        iconColor: Color.green,
+                        title: String(localized: "settings.legal.support"),
+                        subtitle: String(localized: "settings.legal.support.subtitle")
+                    )
+                }
+                .buttonStyle(.plain)
+            }
         }
         .glassCard(cornerRadius: 20, padding: 18, intensity: .regular)
     }

@@ -34,9 +34,6 @@ struct PurchaseConfirmationView: View {
                         }
                         .buttonStyle(.astroPrimary)
                         .padding(.top, 8)
-                    } else if let service = purchaseService, !service.canPurchase() {
-                        // IAP unavailable - show informative message with retry
-                        iapUnavailableSection
                     } else {
                         // No credit - show purchase button
                         Button(action: onPurchase) {
@@ -45,12 +42,7 @@ struct PurchaseConfirmationView: View {
                                     ProgressView()
                                         .tint(.white)
                                 } else {
-                                    Text(
-                                        String(
-                                            format: String(localized: "purchase.paywall.buy_button", defaultValue: "Buy for %@"),
-                                            RevenueCatPurchaseService.displayPrice(from: purchaseService)
-                                        )
-                                    )
+                                    Text(String(format: String(localized: "purchase.paywall.buy_button"), priceString))
                                         .font(.system(size: 17, weight: .semibold))
                                 }
                             }
@@ -59,18 +51,18 @@ struct PurchaseConfirmationView: View {
                         .padding(.top, 8)
                         .disabled(purchaseService?.isPurchasing ?? false)
                         
-                        // Restore button (via RevenueCat)
+                        // Restore button
                         Button {
                             Task {
                                 do {
-                                    _ = try await purchaseService?.restorePurchases()
+                                    try await purchaseService?.restorePurchases()
                                 } catch {
-                                    // RevenueCat handles error logging
+                                    // Error handling is done by PurchaseService breadcrumbs
                                     // User will see success/failure through credit balance update
                                 }
                             }
                         } label: {
-                            Text(String(localized: "purchase.action.restore", defaultValue: "Restore Purchases"))
+                            Text("Restore Purchases", bundle: .main)
                                 .font(.system(size: 14, weight: .medium))
                                 .foregroundStyle(Color.accentColor)
                         }
@@ -78,7 +70,50 @@ struct PurchaseConfirmationView: View {
                         .padding(.top, -10)
                     }
 
-
+                    // Legal links (only shown when purchasing)
+                    if !hasCredit {
+                        HStack(spacing: 12) {
+                            Button {
+                                if let url = URL(string: "https://rusel95.github.io/AstroSvitla/terms-of-service.html") {
+                                    UIApplication.shared.open(url)
+                                }
+                            } label: {
+                                Text("purchase.legal.terms", bundle: .main)
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundStyle(.tertiary)
+                            }
+                            
+                            Text("•")
+                                .font(.system(size: 11))
+                                .foregroundStyle(.quaternary)
+                            
+                            Button {
+                                if let url = URL(string: "https://rusel95.github.io/AstroSvitla/privacy-policy.html") {
+                                    UIApplication.shared.open(url)
+                                }
+                            } label: {
+                                Text("purchase.legal.privacy", bundle: .main)
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundStyle(.tertiary)
+                            }
+                            
+                            Text("•")
+                                .font(.system(size: 11))
+                                .foregroundStyle(.quaternary)
+                            
+                            Button {
+                                if let url = URL(string: "https://rusel95.github.io/AstroSvitla/support.html") {
+                                    UIApplication.shared.open(url)
+                                }
+                            } label: {
+                                Text("purchase.legal.support", bundle: .main)
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundStyle(.tertiary)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 8)
+                    }
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 24)
@@ -142,7 +177,7 @@ struct PurchaseConfirmationView: View {
                     // Only show price if user doesn't have credit
                     if !hasCredit {
                         HStack(spacing: 4) {
-                            Text(RevenueCatPurchaseService.displayPrice(from: purchaseService))
+                            Text(priceString)
                                 .font(.system(size: 18, weight: .semibold))
                                 .foregroundStyle(Color.accentColor)
 
@@ -241,54 +276,12 @@ struct PurchaseConfirmationView: View {
         .glassCard(cornerRadius: 18, padding: 18, intensity: .subtle)
     }
 
-    @State private var isRetryingProducts = false
-    
-    private var iapUnavailableSection: some View {
-        VStack(spacing: 16) {
-            // Info message
-            HStack(spacing: 12) {
-                Image(systemName: "exclamationmark.icloud")
-                    .font(.system(size: 24))
-                    .foregroundStyle(Color.orange)
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(String(localized: "purchase.iap.unavailable.title", defaultValue: "Payment Temporarily Unavailable"))
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(.primary)
-                    
-                    Text(String(localized: "purchase.iap.unavailable.message", defaultValue: "Unable to connect to App Store. Please check your internet connection and try again."))
-                        .font(.system(size: 13))
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-            }
-            .padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.orange.opacity(0.1))
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            
-            // Retry button
-            Button {
-                Task {
-                    isRetryingProducts = true
-                    await purchaseService?.loadOfferings()
-                    isRetryingProducts = false
-                }
-            } label: {
-                HStack(spacing: 8) {
-                    if isRetryingProducts {
-                        ProgressView()
-                            .tint(.white)
-                    } else {
-                        Image(systemName: "arrow.clockwise")
-                        Text(String(localized: "purchase.iap.retry", defaultValue: "Try Again"))
-                    }
-                }
-            }
-            .buttonStyle(.astroPrimary)
-            .disabled(isRetryingProducts)
+    private var priceString: String {
+        if let service = purchaseService {
+            return service.getProductPrice()
         }
-        .padding(.top, 8)
+        // Fallback if service not provided
+        return String(localized: "purchase.price.unavailable", defaultValue: "Payment Unavailable")
     }
 }
 
