@@ -74,7 +74,7 @@ struct PurchaseConfirmationView: View {
                     if !hasCredit {
                         HStack(spacing: 12) {
                             Button {
-                                if let url = URL(string: "https://rusel95.github.io/AstroSvitla/terms-of-service.html") {
+                                if let url = URL(string: "https://rusel95.github.io/rusel95-apps-legal/AstroSvitla/terms-of-service.html") {
                                     UIApplication.shared.open(url)
                                 }
                             } label: {
@@ -88,7 +88,7 @@ struct PurchaseConfirmationView: View {
                                 .foregroundStyle(.tertiary)
                             
                             Button {
-                                if let url = URL(string: "https://rusel95.github.io/AstroSvitla/privacy-policy.html") {
+                                if let url = URL(string: "https://rusel95.github.io/rusel95-apps-legal/AstroSvitla/privacy-policy.html") {
                                     UIApplication.shared.open(url)
                                 }
                             } label: {
@@ -102,7 +102,7 @@ struct PurchaseConfirmationView: View {
                                 .foregroundStyle(.tertiary)
                             
                             Button {
-                                if let url = URL(string: "https://rusel95.github.io/AstroSvitla/support.html") {
+                                if let url = URL(string: "https://rusel95.github.io/rusel95-apps-legal/AstroSvitla/support.html") {
                                     UIApplication.shared.open(url)
                                 }
                             } label: {

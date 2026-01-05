@@ -211,7 +211,7 @@ struct SettingsView: View {
             VStack(spacing: 12) {
                 // Privacy Policy
                 Button {
-                    if let url = URL(string: "https://rusel95.github.io/AstroSvitla/privacy-policy.html") {
+                    if let url = URL(string: "https://rusel95.github.io/rusel95-apps-legal/AstroSvitla/privacy-policy.html") {
                         UIApplication.shared.open(url)
                     }
                 } label: {
@@ -226,7 +226,7 @@ struct SettingsView: View {
                 
                 // Terms of Service
                 Button {
-                    if let url = URL(string: "https://rusel95.github.io/AstroSvitla/terms-of-service.html") {
+                    if let url = URL(string: "https://rusel95.github.io/rusel95-apps-legal/AstroSvitla/terms-of-service.html") {
                         UIApplication.shared.open(url)
                     }
                 } label: {
@@ -241,7 +241,7 @@ struct SettingsView: View {
                 
                 // Support
                 Button {
-                    if let url = URL(string: "https://rusel95.github.io/AstroSvitla/support.html") {
+                    if let url = URL(string: "https://rusel95.github.io/rusel95-apps-legal/AstroSvitla/support.html") {
                         UIApplication.shared.open(url)
                     }
                 } label: {
