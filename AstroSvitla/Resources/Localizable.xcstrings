@@ -6930,7 +6930,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "View natal chart"
+            "value": "Visa födelsehoroskop"
           }
         },
         "sw": {
@@ -6990,7 +6990,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "View natal chart"
+            "value": "查看本命盤"
           }
         }
       }
@@ -7235,7 +7235,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Already purchased"
+            "value": "Redan köpt"
           }
         },
         "sw": {
@@ -7295,7 +7295,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Already purchased"
+            "value": "已購買"
           }
         }
       }
@@ -7539,7 +7539,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Career"
+            "value": "Karriär"
           }
         },
         "sw": {
@@ -7599,7 +7599,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Career"
+            "value": "事業"
           }
         }
       }
@@ -7844,7 +7844,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Career & success"
+            "value": "Karriär och framgång"
           }
         },
         "sw": {
@@ -7904,7 +7904,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Career & success"
+            "value": "事業與成功"
           }
         }
       }
@@ -8148,7 +8148,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Finances"
+            "value": "Ekonomi"
           }
         },
         "sw": {
@@ -8208,7 +8208,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Finances"
+            "value": "財務"
           }
         }
       }
@@ -8453,7 +8453,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Money & abundance"
+            "value": "Pengar och överflöd"
           }
         },
         "sw": {
@@ -8513,7 +8513,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Money & abundance"
+            "value": "金錢與富足"
           }
         }
       }
@@ -8757,7 +8757,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "General"
+            "value": "Allmänt"
           }
         },
         "sw": {
@@ -8817,7 +8817,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "General"
+            "value": "綜合"
           }
         }
       }
@@ -9062,7 +9062,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "General overview"
+            "value": "Allmän översikt"
           }
         },
         "sw": {
@@ -9122,7 +9122,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "General overview"
+            "value": "綜合概覽"
           }
         }
       }
@@ -9975,7 +9975,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select area"
+            "value": "Välj område"
           }
         },
         "sw": {
@@ -10035,7 +10035,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select area"
+            "value": "選擇領域"
           }
         }
       }
@@ -10279,7 +10279,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Relationships"
+            "value": "Relationer"
           }
         },
         "sw": {
@@ -10339,7 +10339,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Relationships"
+            "value": "關係"
           }
         }
       }
@@ -10584,7 +10584,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Love & partnership"
+            "value": "Kärlek och partnerskap"
           }
         },
         "sw": {
@@ -10644,7 +10644,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Love & partnership"
+            "value": "愛情與伴侶"
           }
         }
       }
@@ -10889,7 +10889,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select a life area for a detailed astrological report"
+            "value": "Välj ett livsområde för en detaljerad astrologisk rapport"
           }
         },
         "sw": {
@@ -10949,7 +10949,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select a life area for a detailed astrological report"
+            "value": "選擇生活領域以獲取詳細的占星報告"
           }
         }
       }
@@ -11194,7 +11194,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose analysis area"
+            "value": "Välj analysområde"
           }
         },
         "sw": {
@@ -11254,7 +11254,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose analysis area"
+            "value": "選擇分析領域"
           }
         }
       }
@@ -11802,7 +11802,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Clear saved data"
+            "value": "Rensa sparade data"
           }
         },
         "sw": {
@@ -11862,7 +11862,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Clear saved data"
+            "value": "清除已儲存資料"
           }
         }
       }
@@ -12106,7 +12106,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Date"
+            "value": "Datum"
           }
         },
         "sw": {
@@ -12166,7 +12166,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Date"
+            "value": "日期"
           }
         }
       }
@@ -12410,7 +12410,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Location"
+            "value": "Plats"
           }
         },
         "sw": {
@@ -12470,7 +12470,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Location"
+            "value": "位置"
           }
         }
       }
@@ -12714,7 +12714,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Name (optional)"
+            "value": "Namn (valfritt)"
           }
         },
         "sw": {
@@ -12774,7 +12774,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Name (optional)"
+            "value": "姓名（選填）"
           }
         }
       }
@@ -13018,7 +13018,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Time"
+            "value": "Tid"
           }
         },
         "sw": {
@@ -13078,7 +13078,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Time"
+            "value": "時間"
           }
         }
       }
@@ -13322,7 +13322,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter exact birth details. Precise time ensures accurate house calculation."
+            "value": "Ange exakta födelseuppgifter. Exakt tid säkerställer korrekt husberäkning."
           }
         },
         "sw": {
@@ -13382,7 +13382,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter exact birth details. Precise time ensures accurate house calculation."
+            "value": "請輸入準確的出生資訊。精確的時間可確保準確計算宮位。"
           }
         }
       }
@@ -13627,7 +13627,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select location"
+            "value": "Välj plats"
           }
         },
         "sw": {
@@ -13687,7 +13687,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select location"
+            "value": "選擇位置"
           }
         }
       }
@@ -13931,7 +13931,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth data"
+            "value": "Födelsedata"
           }
         },
         "sw": {
@@ -13991,7 +13991,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth data"
+            "value": "出生資料"
           }
         }
       }
@@ -14235,7 +14235,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth data"
+            "value": "Födelsedata"
           }
         },
         "sw": {
@@ -14295,7 +14295,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth data"
+            "value": "出生資料"
           }
         }
       }
@@ -14599,7 +14599,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Person"
+            "value": "個人"
           }
         }
       }
@@ -14843,7 +14843,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your Chart"
+            "value": "Ditt horoskop"
           }
         },
         "sw": {
@@ -14903,7 +14903,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your Chart"
+            "value": "您的星盤"
           }
         }
       }
@@ -15147,7 +15147,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deep Analysis"
+            "value": "Djupgående analys"
           }
         },
         "sw": {
@@ -15207,7 +15207,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deep Analysis"
+            "value": "深度分析"
           }
         }
       }
@@ -15451,7 +15451,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cover"
+            "value": "Omslag"
           }
         },
         "sw": {
@@ -15511,7 +15511,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cover"
+            "value": "封面"
           }
         }
       }
@@ -15755,7 +15755,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Get Your Full Report"
+            "value": "Få din fullständiga rapport"
           }
         },
         "sw": {
@@ -15815,7 +15815,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Get Your Full Report"
+            "value": "獲取完整報告"
           }
         }
       }
@@ -16059,7 +16059,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Influences"
+            "value": "Nyckelinflytanden"
           }
         },
         "sw": {
@@ -16119,7 +16119,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Influences"
+            "value": "關鍵影響"
           }
         }
       }
@@ -16363,7 +16363,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "Rekommendationer"
           }
         },
         "sw": {
@@ -16423,7 +16423,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "建議"
           }
         }
       }
@@ -16668,7 +16668,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Analysis"
+            "value": "Analys"
           }
         },
         "sw": {
@@ -16728,7 +16728,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Analysis"
+            "value": "分析"
           }
         }
       }
@@ -16973,7 +16973,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Swipe for insights"
+            "value": "Svep för insikter"
           }
         },
         "sw": {
@@ -17033,7 +17033,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Swipe for insights"
+            "value": "滑動查看洞察"
           }
         }
       }
@@ -17278,7 +17278,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Get Your Report"
+            "value": "Få din rapport"
           }
         },
         "sw": {
@@ -17338,7 +17338,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Get Your Report"
+            "value": "獲取報告"
           }
         }
       }
@@ -17583,7 +17583,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Influences"
+            "value": "Nyckelinflytanden"
           }
         },
         "sw": {
@@ -17643,7 +17643,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Influences"
+            "value": "關鍵影響"
           }
         }
       }
@@ -17888,7 +17888,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "Rekommendationer"
           }
         },
         "sw": {
@@ -17948,7 +17948,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "建議"
           }
         }
       }
@@ -18252,7 +18252,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ascendant"
+            "value": "上升點"
           }
         }
       }
@@ -18556,7 +18556,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Orb: %@"
+            "value": "容許度：%@"
           }
         }
       }
@@ -18800,7 +18800,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculation Date"
+            "value": "Beräkningsdatum"
           }
         },
         "sw": {
@@ -18860,7 +18860,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculation Date"
+            "value": "計算日期"
           }
         }
       }
@@ -19104,7 +19104,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Coordinates"
+            "value": "Koordinater"
           }
         },
         "sw": {
@@ -19164,7 +19164,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Coordinates"
+            "value": "座標"
           }
         }
       }
@@ -19408,7 +19408,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Date"
+            "value": "Datum"
           }
         },
         "sw": {
@@ -19468,7 +19468,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Date"
+            "value": "日期"
           }
         }
       }
@@ -19712,7 +19712,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chart Details"
+            "value": "Horoskopdetaljer"
           }
         },
         "sw": {
@@ -19772,7 +19772,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chart Details"
+            "value": "星盤詳情"
           }
         }
       }
@@ -20016,7 +20016,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "House %lld"
+            "value": "Hus %lld"
           }
         },
         "sw": {
@@ -20076,7 +20076,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "House %lld"
+            "value": "第 %lld 宮"
           }
         }
       }
@@ -20320,7 +20320,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Loading chart..."
+            "value": "Laddar horoskop..."
           }
         },
         "sw": {
@@ -20380,7 +20380,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Loading chart..."
+            "value": "正在載入星盤..."
           }
         }
       }
@@ -20624,7 +20624,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Location"
+            "value": "Plats"
           }
         },
         "sw": {
@@ -20684,7 +20684,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Location"
+            "value": "位置"
           }
         }
       }
@@ -20928,7 +20928,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Midheaven"
+            "value": "Medium Coeli"
           }
         },
         "sw": {
@@ -20988,7 +20988,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Midheaven"
+            "value": "天頂"
           }
         }
       }
@@ -21232,7 +21232,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Name"
+            "value": "Namn"
           }
         },
         "sw": {
@@ -21292,7 +21292,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Name"
+            "value": "姓名"
           }
         }
       }
@@ -21536,7 +21536,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "%1$@ House %2$lld"
+            "value": "%1$@ Hus %2$lld"
           }
         },
         "sw": {
@@ -21596,7 +21596,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "%1$@ House %2$lld"
+            "value": "%1$@ 第 %2$lld 宮"
           }
         }
       }
@@ -21840,7 +21840,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Speed: %@"
+            "value": "Hastighet: %@"
           }
         },
         "sw": {
@@ -21900,7 +21900,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Speed: %@"
+            "value": "速度：%@"
           }
         }
       }
@@ -22144,7 +22144,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Angles"
+            "value": "Vinklar"
           }
         },
         "sw": {
@@ -22204,7 +22204,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Angles"
+            "value": "角度"
           }
         }
       }
@@ -22448,7 +22448,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aspects (%lld)"
+            "value": "Aspekter (%lld)"
           }
         },
         "sw": {
@@ -22508,7 +22508,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aspects (%lld)"
+            "value": "相位（%lld）"
           }
         }
       }
@@ -22752,7 +22752,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Data"
+            "value": "Födelsedata"
           }
         },
         "sw": {
@@ -22812,7 +22812,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Data"
+            "value": "出生資料"
           }
         }
       }
@@ -23056,7 +23056,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Houses (%lld)"
+            "value": "Hus (%lld)"
           }
         },
         "sw": {
@@ -23116,7 +23116,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Houses (%lld)"
+            "value": "宮位（%lld）"
           }
         }
       }
@@ -23420,7 +23420,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Metadata"
+            "value": "中繼資料"
           }
         }
       }
@@ -23664,7 +23664,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Planets (%lld)"
+            "value": "Planeter (%lld)"
           }
         },
         "sw": {
@@ -23724,7 +23724,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Planets (%lld)"
+            "value": "行星（%lld）"
           }
         }
       }
@@ -23968,7 +23968,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Time"
+            "value": "Tid"
           }
         },
         "sw": {
@@ -24028,7 +24028,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Time"
+            "value": "時間"
           }
         }
       }
@@ -24272,7 +24272,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Timezone"
+            "value": "Tidszon"
           }
         },
         "sw": {
@@ -24332,7 +24332,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Timezone"
+            "value": "時區"
           }
         }
       }
@@ -24576,7 +24576,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chart Visualization Unavailable"
+            "value": "Horoskopvisualisering ej tillgänglig"
           }
         },
         "sw": {
@@ -24636,7 +24636,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chart Visualization Unavailable"
+            "value": "星盤視覺化不可用"
           }
         }
       }
@@ -24941,7 +24941,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "DEV"
+            "value": "開發"
           }
         }
       }
@@ -25185,7 +25185,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Invalid response from server"
+            "value": "Ogiltigt serversvar"
           }
         },
         "sw": {
@@ -25245,7 +25245,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Invalid response from server"
+            "value": "伺服器回應無效"
           }
         }
       }
@@ -25489,7 +25489,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "API key is missing"
+            "value": "API-nyckel saknas"
           }
         },
         "sw": {
@@ -25549,7 +25549,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "API key is missing"
+            "value": "缺少 API 金鑰"
           }
         }
       }
@@ -25793,7 +25793,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "No content received"
+            "value": "Inget innehåll mottaget"
           }
         },
         "sw": {
@@ -25853,7 +25853,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "No content received"
+            "value": "未收到內容"
           }
         }
       }
@@ -26097,7 +26097,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Too many requests. Please try again later."
+            "value": "För många förfrågningar. Försök igen senare."
           }
         },
         "sw": {
@@ -26157,7 +26157,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Too many requests. Please try again later."
+            "value": "請求過多。請稍後再試。"
           }
         }
       }
@@ -26401,7 +26401,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Service temporarily unavailable"
+            "value": "Tjänsten är tillfälligt otillgänglig"
           }
         },
         "sw": {
@@ -26461,7 +26461,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Service temporarily unavailable"
+            "value": "服務暫時不可用"
           }
         }
       }
@@ -26705,7 +26705,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Operation cancelled"
+            "value": "Åtgärden avbröts"
           }
         },
         "sw": {
@@ -26765,7 +26765,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Operation cancelled"
+            "value": "操作已取消"
           }
         }
       }
@@ -27009,7 +27009,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Failed to fetch chart"
+            "value": "Kunde inte hämta horoskop"
           }
         },
         "sw": {
@@ -27069,7 +27069,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Failed to fetch chart"
+            "value": "獲取星盤失敗"
           }
         }
       }
@@ -27313,7 +27313,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Coordinates not found"
+            "value": "Koordinater hittades inte"
           }
         },
         "sw": {
@@ -27373,7 +27373,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Coordinates not found"
+            "value": "未找到座標"
           }
         }
       }
@@ -27921,7 +27921,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Network error: %@"
+            "value": "Nätverksfel: %@"
           }
         },
         "sw": {
@@ -27981,7 +27981,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Network error: %@"
+            "value": "網路錯誤：%@"
           }
         }
       }
@@ -28225,7 +28225,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Failed to create profile"
+            "value": "Kunde inte skapa profil"
           }
         },
         "sw": {
@@ -28285,7 +28285,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Failed to create profile"
+            "value": "建立檔案失敗"
           }
         }
       }
@@ -28529,7 +28529,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Please select a profile"
+            "value": "Välj en profil"
           }
         },
         "sw": {
@@ -28589,7 +28589,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Please select a profile"
+            "value": "請選擇檔案"
           }
         }
       }
@@ -28844,7 +28844,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Report not found"
+            "value": "Rapport hittades inte"
           }
         },
         "sw": {
@@ -28904,7 +28904,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Report not found"
+            "value": "未找到報告"
           }
         }
       }
@@ -29452,7 +29452,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculating natal chart for %@"
+            "value": "Beräknar födelsehoroskop för %@"
           }
         },
         "sw": {
@@ -29512,7 +29512,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculating natal chart for %@"
+            "value": "正在為 %@ 計算本命盤"
           }
         }
       }
@@ -29756,7 +29756,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculating"
+            "value": "Beräknar"
           }
         },
         "sw": {
@@ -29816,7 +29816,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculating"
+            "value": "計算中"
           }
         }
       }
@@ -30060,7 +30060,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculating Chart"
+            "value": "Beräknar horoskop"
           }
         },
         "sw": {
@@ -30120,7 +30120,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculating Chart"
+            "value": "正在計算星盤"
           }
         }
       }
@@ -30197,6 +30197,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "आपकी व्यक्तिगत रिपोर्ट बन रही है"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skapar din personliga rapport"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在為您建立個人化報告"
           }
         }
       }
@@ -30451,7 +30463,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generating"
+            "value": "Genererar"
           }
         },
         "sw": {
@@ -30511,7 +30523,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generating"
+            "value": "生成中"
           }
         }
       }
@@ -30755,7 +30767,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "This may take a minute..."
+            "value": "Detta kan ta en minut..."
           }
         },
         "sw": {
@@ -30815,7 +30827,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "This may take a minute..."
+            "value": "這可能需要一分鐘..."
           }
         }
       }
@@ -31059,7 +31071,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generating Report"
+            "value": "Genererar rapport"
           }
         },
         "sw": {
@@ -31119,7 +31131,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generating Report"
+            "value": "正在生成報告"
           }
         }
       }
@@ -31363,7 +31375,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start typing the city and country (minimum 3 characters)."
+            "value": "Börja skriva stad och land (minst 3 tecken)."
           }
         },
         "sw": {
@@ -31423,7 +31435,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start typing the city and country (minimum 3 characters)."
+            "value": "開始輸入城市和國家（至少3個字元）。"
           }
         }
       }
@@ -31667,7 +31679,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Searching…"
+            "value": "Söker..."
           }
         },
         "sw": {
@@ -31727,7 +31739,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Searching…"
+            "value": "搜尋中…"
           }
         }
       }
@@ -31971,7 +31983,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "No matches found. Try a different spelling."
+            "value": "Inga träffar hittades. Prova annan stavning."
           }
         },
         "sw": {
@@ -32031,7 +32043,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "No matches found. Try a different spelling."
+            "value": "未找到匹配項。請嘗試不同的拼寫。"
           }
         }
       }
@@ -32275,7 +32287,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Search location"
+            "value": "Sök plats"
           }
         },
         "sw": {
@@ -32335,7 +32347,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Search location"
+            "value": "搜尋位置"
           }
         }
       }
@@ -32579,7 +32591,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld books"
+            "value": "%lld böcker"
           }
         },
         "sw": {
@@ -32639,7 +32651,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld books"
+            "value": "%lld 本書"
           }
         }
       }
@@ -32883,7 +32895,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld chunks"
+            "value": "%lld delar"
           }
         },
         "sw": {
@@ -32943,7 +32955,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld chunks"
+            "value": "%lld 個片段"
           }
         }
       }
@@ -33187,7 +33199,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld chunks used"
+            "value": "%lld delar använda"
           }
         },
         "sw": {
@@ -33247,7 +33259,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld chunks used"
+            "value": "已使用 %lld 個片段"
           }
         }
       }
@@ -33491,7 +33503,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cost"
+            "value": "Kostnad"
           }
         },
         "sw": {
@@ -33551,7 +33563,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cost"
+            "value": "成本"
           }
         }
       }
@@ -33795,7 +33807,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Database Empty"
+            "value": "Databasen är tom"
           }
         },
         "sw": {
@@ -33855,7 +33867,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Database Empty"
+            "value": "資料庫為空"
           }
         }
       }
@@ -34099,7 +34111,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "No knowledge sources available"
+            "value": "Inga kunskapskällor tillgängliga"
           }
         },
         "sw": {
@@ -34159,7 +34171,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "No knowledge sources available"
+            "value": "沒有可用的知識來源"
           }
         }
       }
@@ -34403,7 +34415,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "External Books"
+            "value": "Externa böcker"
           }
         },
         "sw": {
@@ -34463,7 +34475,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "External Books"
+            "value": "外部書籍"
           }
         }
       }
@@ -34707,7 +34719,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "From Our Database"
+            "value": "Från vår databas"
           }
         },
         "sw": {
@@ -34767,7 +34779,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "From Our Database"
+            "value": "來自我們的資料庫"
           }
         }
       }
@@ -35011,7 +35023,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generation Date"
+            "value": "Genereringsdatum"
           }
         },
         "sw": {
@@ -35071,7 +35083,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generation Date"
+            "value": "生成日期"
           }
         }
       }
@@ -35315,7 +35327,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Model"
+            "value": "Modell"
           }
         },
         "sw": {
@@ -35375,7 +35387,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Model"
+            "value": "模型"
           }
         }
       }
@@ -35619,7 +35631,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "No sources cited"
+            "value": "Inga källor citerade"
           }
         },
         "sw": {
@@ -35679,7 +35691,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "No sources cited"
+            "value": "未引用任何來源"
           }
         }
       }
@@ -35923,7 +35935,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Processing Time"
+            "value": "Bearbetningstid"
           }
         },
         "sw": {
@@ -35983,7 +35995,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Processing Time"
+            "value": "處理時間"
           }
         }
       }
@@ -37199,7 +37211,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Metadata"
+            "value": "中繼資料"
           }
         }
       }
@@ -37443,7 +37455,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Notes"
+            "value": "Anteckningar"
           }
         },
         "sw": {
@@ -37503,7 +37515,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Notes"
+            "value": "註釋"
           }
         }
       }
@@ -37747,7 +37759,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sources Overview"
+            "value": "Källöversikt"
           }
         },
         "sw": {
@@ -37807,7 +37819,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sources Overview"
+            "value": "來源概覽"
           }
         }
       }
@@ -38051,7 +38063,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vector Database"
+            "value": "Vektordatabas"
           }
         },
         "sw": {
@@ -38111,7 +38123,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vector Database"
+            "value": "向量資料庫"
           }
         }
       }
@@ -38355,7 +38367,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Snippets Provided"
+            "value": "Tillhandahållna utdrag"
           }
         },
         "sw": {
@@ -38415,7 +38427,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Snippets Provided"
+            "value": "提供的片段"
           }
         }
       }
@@ -38659,7 +38671,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sources Cited"
+            "value": "Citerade källor"
           }
         },
         "sw": {
@@ -38719,7 +38731,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sources Cited"
+            "value": "引用的來源"
           }
         }
       }
@@ -38963,7 +38975,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generation Logs"
+            "value": "Genereringsloggar"
           }
         },
         "sw": {
@@ -39023,7 +39035,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generation Logs"
+            "value": "生成日誌"
           }
         }
       }
@@ -39267,7 +39279,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Completion Tokens"
+            "value": "Kompletteringstokens"
           }
         },
         "sw": {
@@ -39327,7 +39339,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Completion Tokens"
+            "value": "完成令牌"
           }
         }
       }
@@ -39571,7 +39583,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prompt Tokens"
+            "value": "Prompttokens"
           }
         },
         "sw": {
@@ -39631,7 +39643,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prompt Tokens"
+            "value": "提示令牌"
           }
         }
       }
@@ -39875,7 +39887,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Total Tokens"
+            "value": "Totalt tokens"
           }
         },
         "sw": {
@@ -39935,7 +39947,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Total Tokens"
+            "value": "總令牌"
           }
         }
       }
@@ -40543,7 +40555,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "OK"
+            "value": "確定"
           }
         }
       }
@@ -40788,7 +40800,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create Profile"
+            "value": "Skapa profil"
           }
         },
         "sw": {
@@ -40848,7 +40860,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create Profile"
+            "value": "建立檔案"
           }
         }
       }
@@ -41093,7 +41105,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Next"
+            "value": "Nästa"
           }
         },
         "sw": {
@@ -41153,7 +41165,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Next"
+            "value": "下一步"
           }
         }
       }
@@ -41398,7 +41410,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start"
+            "value": "Starta"
           }
         },
         "sw": {
@@ -41458,7 +41470,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start"
+            "value": "開始"
           }
         }
       }
@@ -41703,7 +41715,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "First analysis in 2 minutes"
+            "value": "Första analysen på 2 minuter"
           }
         },
         "sw": {
@@ -41763,7 +41775,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "First analysis in 2 minutes"
+            "value": "2分鐘內完成首次分析"
           }
         }
       }
@@ -42008,7 +42020,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Takes only 2 minutes"
+            "value": "Tar bara 2 minuter"
           }
         },
         "sw": {
@@ -42068,7 +42080,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Takes only 2 minutes"
+            "value": "僅需2分鐘"
           }
         }
       }
@@ -42313,7 +42325,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Discover what the stars say about your career, relationships, and finances — no registration, no subscriptions."
+            "value": "Upptäck vad stjärnorna säger om din karriär, relationer och ekonomi — ingen registrering, inga prenumerationer."
           }
         },
         "sw": {
@@ -42373,7 +42385,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Discover what the stars say about your career, relationships, and finances — no registration, no subscriptions."
+            "value": "了解星星對您的事業、關係和財務的啟示——無需註冊，無需訂閱。"
           }
         }
       }
@@ -42618,7 +42630,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your first astrological analysis in 2 minutes"
+            "value": "Din första astrologiska analys på 2 minuter"
           }
         },
         "sw": {
@@ -42678,7 +42690,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your first astrological analysis in 2 minutes"
+            "value": "2分鐘內獲得您的首次占星分析"
           }
         }
       }
@@ -42923,7 +42935,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "No registration"
+            "value": "Ingen registrering"
           }
         },
         "sw": {
@@ -42983,7 +42995,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "No registration"
+            "value": "無需註冊"
           }
         }
       }
@@ -43228,7 +43240,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "We made the process as quick and simple as possible."
+            "value": "Vi gjorde processen så snabb och enkel som möjligt."
           }
         },
         "sw": {
@@ -43288,7 +43300,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "We made the process as quick and simple as possible."
+            "value": "我們讓流程盡可能快速簡單。"
           }
         }
       }
@@ -43533,7 +43545,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "📝 Enter birth date — 30 sec"
+            "value": "📝 Ange födelsedatum — 30 sek"
           }
         },
         "sw": {
@@ -43593,7 +43605,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "📝 Enter birth date — 30 sec"
+            "value": "📝 輸入出生日期 — 30秒"
           }
         }
       }
@@ -43838,7 +43850,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "🎯 Choose analysis area — 10 sec"
+            "value": "🎯 Välj analysområde — 10 sek"
           }
         },
         "sw": {
@@ -43898,7 +43910,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "🎯 Choose analysis area — 10 sec"
+            "value": "🎯 選擇分析領域 — 10秒"
           }
         }
       }
@@ -44143,7 +44155,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "✨ Get your personal report — 60 sec"
+            "value": "✨ Få din personliga rapport — 60 sek"
           }
         },
         "sw": {
@@ -44203,7 +44215,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "✨ Get your personal report — 60 sec"
+            "value": "✨ 獲取個人報告 — 60秒"
           }
         }
       }
@@ -44448,7 +44460,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "~2 min total"
+            "value": "~2 min totalt"
           }
         },
         "sw": {
@@ -44508,7 +44520,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "~2 min total"
+            "value": "總共約2分鐘"
           }
         }
       }
@@ -44753,7 +44765,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Three simple steps to insights"
+            "value": "Tre enkla steg till insikter"
           }
         },
         "sw": {
@@ -44813,7 +44825,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Three simple steps to insights"
+            "value": "三個簡單步驟獲得洞察"
           }
         }
       }
@@ -45058,7 +45070,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "💰 Finances and material potential"
+            "value": "💰 Ekonomi och materiell potential"
           }
         },
         "sw": {
@@ -45118,7 +45130,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "💰 Finances and material potential"
+            "value": "💰 財務和物質潛力"
           }
         }
       }
@@ -45363,7 +45375,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "💼 Career and professional growth"
+            "value": "💼 Karriär och professionell tillväxt"
           }
         },
         "sw": {
@@ -45423,7 +45435,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "💼 Career and professional growth"
+            "value": "�� 事業和職業發展"
           }
         }
       }
@@ -45668,7 +45680,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "❤️ Relationships and partnership"
+            "value": "❤️ Relationer och partnerskap"
           }
         },
         "sw": {
@@ -45728,7 +45740,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "❤️ Relationships and partnership"
+            "value": "❤️ 關係和伴侶"
           }
         }
       }
@@ -45973,7 +45985,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "🏥 Health and energy"
+            "value": "🏥 Hälsa och energi"
           }
         },
         "sw": {
@@ -46033,7 +46045,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "🏥 Health and energy"
+            "value": "🏥 健康和能量"
           }
         }
       }
@@ -46278,7 +46290,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "⭐️ General personality portrait"
+            "value": "⭐️ Allmänt personlighetsporträtt"
           }
         },
         "sw": {
@@ -46338,7 +46350,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "⭐️ General personality portrait"
+            "value": "⭐️ 綜合性格畫像"
           }
         }
       }
@@ -46583,7 +46595,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "from $5.99 per report"
+            "value": "från $5.99 per rapport"
           }
         },
         "sw": {
@@ -46643,7 +46655,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "from $5.99 per report"
+            "value": "每份報告起價 $5.99"
           }
         }
       }
@@ -46888,7 +46900,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Each report is a deep AI analysis of your natal chart with practical advice."
+            "value": "Varje rapport är en djupgående AI-analys av ditt födelsehoroskop med praktiska råd."
           }
         },
         "sw": {
@@ -46948,7 +46960,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Each report is a deep AI analysis of your natal chart with practical advice."
+            "value": "每份報告都是對您本命盤的深度AI分析，並附帶實用建議。"
           }
         }
       }
@@ -47193,7 +47205,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 areas of your life under control"
+            "value": "5 områden av ditt liv under kontroll"
           }
         },
         "sw": {
@@ -47253,7 +47265,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 areas of your life under control"
+            "value": "掌控您生活的5個領域"
           }
         }
       }
@@ -47498,7 +47510,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start for free"
+            "value": "Börja gratis"
           }
         },
         "sw": {
@@ -47558,7 +47570,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start for free"
+            "value": "免費開始"
           }
         }
       }
@@ -47803,7 +47815,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "🔒 100% privacy — data never leaves device"
+            "value": "🔒 100% integritet — data lämnar aldrig enheten"
           }
         },
         "sw": {
@@ -47863,7 +47875,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "🔒 100% privacy — data never leaves device"
+            "value": "🔒 100% 隱私 — 資料永不離開裝置"
           }
         }
       }
@@ -48108,7 +48120,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "⚡️ Instant natal chart calculation"
+            "value": "⚡️ Omedelbar horoskopberäkning"
           }
         },
         "sw": {
@@ -48168,7 +48180,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "⚡️ Instant natal chart calculation"
+            "value": "⚡️ 即時本命盤計算"
           }
         }
       }
@@ -48413,7 +48425,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "📚 Analysis based on classical astrology"
+            "value": "📚 Analys baserad på klassisk astrologi"
           }
         },
         "sw": {
@@ -48473,7 +48485,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "📚 Analysis based on classical astrology"
+            "value": "📚 基於經典占星學的分析"
           }
         }
       }
@@ -48539,6 +48551,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "🎁 التقرير الأول مجاني"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎁 Första rapporten är GRATIS"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎁 首份報告免費"
           }
         }
       }
@@ -48783,7 +48807,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your data stays only on your device. Start now — first profile is free."
+            "value": "Dina data stannar bara på din enhet. Börja nu."
           }
         },
         "sw": {
@@ -48843,7 +48867,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your data stays only on your device. Start now — first profile is free."
+            "value": "您的資料僅保存在您的裝置上。現在開始吧。"
           }
         }
       }
@@ -49088,7 +49112,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ready to see your chart?"
+            "value": "Redo att se ditt horoskop?"
           }
         },
         "sw": {
@@ -49148,7 +49172,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ready to see your chart?"
+            "value": "準備好查看您的星盤了嗎？"
           }
         }
       }
@@ -49393,7 +49417,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Skip"
+            "value": "Hoppa över"
           }
         },
         "sw": {
@@ -49453,7 +49477,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Skip"
+            "value": "跳過"
           }
         }
       }
@@ -49698,7 +49722,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Step %1$lld of %2$lld"
+            "value": "Steg %1$lld av %2$lld"
           }
         },
         "sw": {
@@ -49758,7 +49782,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Step %1$lld of %2$lld"
+            "value": "第 %1$lld 步，共 %2$lld 步"
           }
         }
       }
@@ -50003,7 +50027,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld planets • %lld aspects"
+            "value": "%lld planeter • %lld aspekter"
           }
         },
         "sw": {
@@ -50063,7 +50087,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld planets • %lld aspects"
+            "value": "%lld 顆行星 • %lld 個相位"
           }
         }
       }
@@ -50307,7 +50331,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create Profile"
+            "value": "Skapa profil"
           }
         },
         "sw": {
@@ -50367,7 +50391,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create Profile"
+            "value": "建立檔案"
           }
         }
       }
@@ -50611,7 +50635,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Active"
+            "value": "Aktiv"
           }
         },
         "sw": {
@@ -50671,7 +50695,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Active"
+            "value": "活躍"
           }
         }
       }
@@ -50915,7 +50939,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continue with %@"
+            "value": "Fortsätt med %@"
           }
         },
         "sw": {
@@ -50975,7 +50999,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continue with %@"
+            "value": "繼續使用 %@"
           }
         }
       }
@@ -51219,7 +51243,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add a new profile"
+            "value": "Lägg till ny profil"
           }
         },
         "sw": {
@@ -51279,7 +51303,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add a new profile"
+            "value": "新增新檔案"
           }
         }
       }
@@ -51523,7 +51547,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create New Profile"
+            "value": "Skapa ny profil"
           }
         },
         "sw": {
@@ -51583,7 +51607,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create New Profile"
+            "value": "建立新檔案"
           }
         }
       }
@@ -51827,7 +51851,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Delete Profile"
+            "value": "Ta bort profil"
           }
         },
         "sw": {
@@ -51887,7 +51911,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Delete Profile"
+            "value": "刪除檔案"
           }
         }
       }
@@ -52131,7 +52155,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create your first profile to get started"
+            "value": "Skapa din första profil för att komma igång"
           }
         },
         "sw": {
@@ -52191,7 +52215,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create your first profile to get started"
+            "value": "建立您的第一個檔案以開始"
           }
         }
       }
@@ -52435,7 +52459,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create profiles from the Home tab to get started with personalized natal charts and reports"
+            "value": "Skapa profiler från Hem-fliken för att komma igång med personliga horoskop och rapporter"
           }
         },
         "sw": {
@@ -52495,7 +52519,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create profiles from the Home tab to get started with personalized natal charts and reports"
+            "value": "從主頁標籤建立檔案，以開始使用個人化本命盤和報告"
           }
         }
       }
@@ -52739,7 +52763,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "No profiles yet"
+            "value": "Inga profiler ännu"
           }
         },
         "sw": {
@@ -52799,7 +52823,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "No profiles yet"
+            "value": "尚無檔案"
           }
         }
       }
@@ -53043,7 +53067,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "No Profiles Yet"
+            "value": "Inga profiler ännu"
           }
         },
         "sw": {
@@ -53103,7 +53127,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "No Profiles Yet"
+            "value": "尚無檔案"
           }
         }
       }
@@ -53347,7 +53371,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Date"
+            "value": "Födelsedatum"
           }
         },
         "sw": {
@@ -53407,7 +53431,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Date"
+            "value": "出生日期"
           }
         }
       }
@@ -53651,7 +53675,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Time"
+            "value": "Födelsetid"
           }
         },
         "sw": {
@@ -53711,7 +53735,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Time"
+            "value": "出生時間"
           }
         }
       }
@@ -53955,7 +53979,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Location"
+            "value": "Födelseort"
           }
         },
         "sw": {
@@ -54015,7 +54039,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Location"
+            "value": "出生地點"
           }
         }
       }
@@ -54259,7 +54283,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Name"
+            "value": "Namn"
           }
         },
         "sw": {
@@ -54319,7 +54343,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Name"
+            "value": "姓名"
           }
         }
       }
@@ -54563,7 +54587,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Precise birth time improves accuracy"
+            "value": "Exakt födelsetid förbättrar noggrannheten"
           }
         },
         "sw": {
@@ -54623,7 +54647,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Precise birth time improves accuracy"
+            "value": "精確的出生時間可提高準確性"
           }
         }
       }
@@ -54867,7 +54891,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter your birth time"
+            "value": "Ange din födelsetid"
           }
         },
         "sw": {
@@ -54927,7 +54951,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter your birth time"
+            "value": "輸入您的出生時間"
           }
         }
       }
@@ -55171,7 +55195,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter birth location"
+            "value": "Ange födelseort"
           }
         },
         "sw": {
@@ -55231,7 +55255,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter birth location"
+            "value": "輸入出生地點"
           }
         }
       }
@@ -55475,7 +55499,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Manage Profiles"
+            "value": "Hantera profiler"
           }
         },
         "sw": {
@@ -55535,7 +55559,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Manage Profiles"
+            "value": "管理檔案"
           }
         }
       }
@@ -55779,7 +55803,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter name"
+            "value": "Ange namn"
           }
         },
         "sw": {
@@ -55839,7 +55863,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter name"
+            "value": "輸入姓名"
           }
         }
       }
@@ -56083,7 +56107,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter birth details to create a profile"
+            "value": "Ange födelseuppgifter för att skapa profil"
           }
         },
         "sw": {
@@ -56143,7 +56167,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter birth details to create a profile"
+            "value": "輸入出生詳細資訊以建立檔案"
           }
         }
       }
@@ -56387,7 +56411,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "New Profile"
+            "value": "Ny profil"
           }
         },
         "sw": {
@@ -56447,7 +56471,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "New Profile"
+            "value": "新檔案"
           }
         }
       }
@@ -56691,7 +56715,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld reports"
+            "value": "%lld rapporter"
           }
         },
         "sw": {
@@ -56751,7 +56775,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld reports"
+            "value": "%lld 份報告"
           }
         }
       }
@@ -56995,7 +57019,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose a profile to continue"
+            "value": "Välj en profil för att fortsätta"
           }
         },
         "sw": {
@@ -57055,7 +57079,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose a profile to continue"
+            "value": "選擇檔案以繼續"
           }
         }
       }
@@ -57299,7 +57323,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select Profile"
+            "value": "Välj profil"
           }
         },
         "sw": {
@@ -57359,7 +57383,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select Profile"
+            "value": "選擇檔案"
           }
         }
       }
@@ -57603,7 +57627,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create %@ Report"
+            "value": "Skapa %@ rapport"
           }
         },
         "sw": {
@@ -57663,7 +57687,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create %@ Report"
+            "value": "建立 %@ 報告"
           }
         }
       }
@@ -57730,6 +57754,18 @@
             "state": "translated",
             "value": "%d رصيد متاح"
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d krediter tillgängliga"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d 點數可用"
+          }
         }
       }
     },
@@ -57794,6 +57830,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "لا يوجد رصيد"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inga krediter"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無點數"
           }
         }
       }
@@ -57870,6 +57918,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "तारीख और समय:"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datum och tid:"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日期和時間："
           }
         }
       }
@@ -58114,7 +58174,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ at %@"
+            "value": "%@ kl %@"
           }
         },
         "sw": {
@@ -58174,7 +58234,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ at %@"
+            "value": "%@ 在 %@"
           }
         }
       }
@@ -58241,6 +58301,18 @@
             "state": "translated",
             "value": "تم معالجة هذا الشراء مسبقاً."
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detta köp har redan behandlats."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此購買已處理。"
+          }
         }
       }
     },
@@ -58305,6 +58377,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "يجب أن يكون رصيدك متاحاً الآن."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Din kredit bör redan vara tillgänglig."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "您的點數應已可用。"
           }
         }
       }
@@ -58371,6 +58455,18 @@
             "state": "translated",
             "value": "حاول مرة أخرى أو تواصل مع الدعم."
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Försök igen eller kontakta support."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請重試或聯繫支援。"
+          }
         }
       }
     },
@@ -58435,6 +58531,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "ليس لديك رصيد كافٍ."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du har inte tillräckligt med krediter."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "您的點數不足。"
           }
         }
       }
@@ -58501,6 +58609,18 @@
             "state": "translated",
             "value": "اشترِ رصيداً للمتابعة."
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Köp kredit för att fortsätta."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購買點數以繼續。"
+          }
         }
       }
     },
@@ -58565,6 +58685,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "فشل تحميل المنتجات. حاول مرة أخرى."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kunde inte ladda produkter."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "載入產品失敗。請重試。"
           }
         }
       }
@@ -58631,6 +58763,18 @@
             "state": "translated",
             "value": "لا يوجد اتصال بالإنترنت."
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ingen internetanslutning."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無網路連接。"
+          }
         }
       }
     },
@@ -58695,6 +58839,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "تحقق من اتصالك وحاول مرة أخرى."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kontrollera anslutningen och försök igen."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "檢查連接並重試。"
           }
         }
       }
@@ -58761,6 +58917,18 @@
             "state": "translated",
             "value": "المنتج غير متاح."
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Produkten är inte tillgänglig."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "產品不可用。"
+          }
         }
       }
     },
@@ -58825,6 +58993,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "حاول لاحقاً أو تواصل مع الدعم."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Försök igen senare."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請稍後重試。"
           }
         }
       }
@@ -58891,6 +59071,18 @@
             "state": "translated",
             "value": "فشل الشراء. حاول مرة أخرى."
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Köp misslyckades. Försök igen."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購買失敗。請重試。"
+          }
         }
       }
     },
@@ -58955,6 +59147,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "فشل حفظ الشراء."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kunde inte spara köp."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "儲存購買失敗。"
           }
         }
       }
@@ -59021,6 +59225,18 @@
             "state": "translated",
             "value": "فشل التحقق من الشراء."
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Köpverifiering misslyckades."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購買驗證失敗。"
+          }
         }
       }
     },
@@ -59085,6 +59301,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "حاول الشراء مرة أخرى."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Försök köpa igen."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請重新嘗試購買。"
           }
         }
       }
@@ -59328,7 +59556,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Access your reports anytime"
+            "value": "Tillgång till dina rapporter när som helst"
           }
         },
         "sw": {
@@ -59388,7 +59616,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Access your reports anytime"
+            "value": "隨時存取您的報告"
           }
         }
       }
@@ -59632,7 +59860,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lifetime Access"
+            "value": "Livstidstillgång"
           }
         },
         "sw": {
@@ -59692,7 +59920,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lifetime Access"
+            "value": "終身存取"
           }
         }
       }
@@ -59936,7 +60164,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Analysis based on astrological sources"
+            "value": "Analys baserad på astrologiska källor"
           }
         },
         "sw": {
@@ -59996,7 +60224,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Analysis based on astrological sources"
+            "value": "基於占星來源的分析"
           }
         }
       }
@@ -60240,7 +60468,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Professional Literature"
+            "value": "Professionell litteratur"
           }
         },
         "sw": {
@@ -60300,7 +60528,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Professional Literature"
+            "value": "專業文獻"
           }
         }
       }
@@ -60544,7 +60772,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Save and share your report"
+            "value": "Spara och dela din rapport"
           }
         },
         "sw": {
@@ -60604,7 +60832,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Save and share your report"
+            "value": "儲存和分享您的報告"
           }
         }
       }
@@ -60848,7 +61076,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "PDF Export"
+            "value": "PDF-export"
           }
         },
         "sw": {
@@ -60908,7 +61136,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "PDF Export"
+            "value": "PDF 匯出"
           }
         }
       }
@@ -61152,7 +61380,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tailored to your birth chart"
+            "value": "Anpassad till ditt födelsehoroskop"
           }
         },
         "sw": {
@@ -61212,7 +61440,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tailored to your birth chart"
+            "value": "根據您的本命盤定製"
           }
         }
       }
@@ -61456,7 +61684,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Personalized Report"
+            "value": "Personlig rapport"
           }
         },
         "sw": {
@@ -61516,7 +61744,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Personalized Report"
+            "value": "個人化報告"
           }
         }
       }
@@ -61760,7 +61988,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "What You Get"
+            "value": "Vad du får"
           }
         },
         "sw": {
@@ -61820,7 +62048,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "What You Get"
+            "value": "您將獲得什麼"
           }
         }
       }
@@ -63040,7 +63268,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "以 %@ 購買"
+            "value": "購買 %@"
           }
         }
       }
@@ -63106,6 +63334,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "مجاني"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GRATIS"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "免費"
           }
         }
       }
@@ -63349,7 +63589,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "one-time payment"
+            "value": "engångsbetalning"
           }
         },
         "sw": {
@@ -63409,7 +63649,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "one-time payment"
+            "value": "一次性付款"
           }
         }
       }
@@ -63482,6 +63722,18 @@
             "state": "translated",
             "value": "الدفع غير متاح"
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Betalning ej tillgänglig"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "付款不可用"
+          }
         }
       }
     },
@@ -63547,6 +63799,18 @@
             "state": "translated",
             "value": "التقرير متاح"
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rapport tillgänglig"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "報告可用"
+          }
         }
       }
     },
@@ -63611,6 +63875,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "فتح التقرير"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lås upp rapport"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解鎖報告"
           }
         }
       }
@@ -63854,7 +64130,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Purchase Confirmation"
+            "value": "Bekräfta köp"
           }
         },
         "sw": {
@@ -63914,7 +64190,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Purchase Confirmation"
+            "value": "購買確認"
           }
         }
       }
@@ -64159,7 +64435,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Denna information är endast för underhållning och utgör inte medicinsk, psykologisk eller professionell rådgivning."
+            "value": "Denna information är endast för underhållning."
           }
         },
         "sw": {
@@ -64219,7 +64495,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "此資訊僅供娛樂，不構成醫療、心理或專業建議。"
+            "value": "此資訊僅供娛樂目的。"
           }
         }
       }
@@ -64463,7 +64739,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Purchase a report to see it here"
+            "value": "Köp en rapport för att se den här"
           }
         },
         "sw": {
@@ -64523,7 +64799,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Purchase a report to see it here"
+            "value": "購買報告以在此查看"
           }
         }
       }
@@ -64767,7 +65043,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "No Reports Yet"
+            "value": "Inga rapporter ännu"
           }
         },
         "sw": {
@@ -64827,7 +65103,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "No Reports Yet"
+            "value": "尚無報告"
           }
         }
       }
@@ -65071,7 +65347,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export PDF"
+            "value": "Exportera PDF"
           }
         },
         "sw": {
@@ -65131,7 +65407,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export PDF"
+            "value": "匯出 PDF"
           }
         }
       }
@@ -65375,7 +65651,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Failed to export report"
+            "value": "Kunde inte exportera rapport"
           }
         },
         "sw": {
@@ -65435,7 +65711,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Failed to export report"
+            "value": "匯出報告失敗"
           }
         }
       }
@@ -65679,7 +65955,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export Error"
+            "value": "Exportfel"
           }
         },
         "sw": {
@@ -65739,7 +66015,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export Error"
+            "value": "匯出錯誤"
           }
         }
       }
@@ -65983,7 +66259,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generating PDF..."
+            "value": "Genererar PDF..."
           }
         },
         "sw": {
@@ -66043,7 +66319,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generating PDF..."
+            "value": "正在生成 PDF..."
           }
         }
       }
@@ -66287,7 +66563,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Report exported successfully"
+            "value": "Rapport exporterad framgångsrikt"
           }
         },
         "sw": {
@@ -66347,7 +66623,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Report exported successfully"
+            "value": "報告已成功匯出"
           }
         }
       }
@@ -66591,7 +66867,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export Complete"
+            "value": "Export slutförd"
           }
         },
         "sw": {
@@ -66651,7 +66927,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export Complete"
+            "value": "匯出完成"
           }
         }
       }
@@ -66895,7 +67171,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generated with AstroSvitla"
+            "value": "Genererad med AstroSvitla"
           }
         },
         "sw": {
@@ -66955,7 +67231,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generated with AstroSvitla"
+            "value": "由 AstroSvitla 生成"
           }
         }
       }
@@ -67199,7 +67475,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generation Logs"
+            "value": "Genereringsloggar"
           }
         },
         "sw": {
@@ -67259,7 +67535,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generation Logs"
+            "value": "生成日誌"
           }
         }
       }
@@ -67503,7 +67779,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your Personal Astrological Analysis"
+            "value": "Din personliga astrologiska analys"
           }
         },
         "sw": {
@@ -67563,7 +67839,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your Personal Astrological Analysis"
+            "value": "您的個人占星分析"
           }
         }
       }
@@ -67807,7 +68083,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "No knowledge snippets found"
+            "value": "Inga kunskapsutdrag hittades"
           }
         },
         "sw": {
@@ -67867,7 +68143,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "No knowledge snippets found"
+            "value": "未找到知識片段"
           }
         }
       }
@@ -68111,7 +68387,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reports"
+            "value": "Rapporter"
           }
         },
         "sw": {
@@ -68171,7 +68447,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reports"
+            "value": "報告"
           }
         }
       }
@@ -68415,7 +68691,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Note: %@"
+            "value": "Anteckning: %@"
           }
         },
         "sw": {
@@ -68475,7 +68751,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Note: %@"
+            "value": "註：%@"
           }
         }
       }
@@ -68719,7 +68995,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Orphan Report"
+            "value": "Föräldralös rapport"
           }
         },
         "sw": {
@@ -68779,7 +69055,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Orphan Report"
+            "value": "孤立報告"
           }
         }
       }
@@ -69023,7 +69299,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Detailed Analysis"
+            "value": "Detaljerad analys"
           }
         },
         "sw": {
@@ -69083,7 +69359,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Detailed Analysis"
+            "value": "詳細分析"
           }
         }
       }
@@ -69327,7 +69603,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Detailed Analysis"
+            "value": "Detaljerad analys"
           }
         },
         "sw": {
@@ -69387,7 +69663,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Detailed Analysis"
+            "value": "詳細分析"
           }
         }
       }
@@ -69631,7 +69907,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Influences"
+            "value": "Nyckelinflytanden"
           }
         },
         "sw": {
@@ -69691,7 +69967,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Influences"
+            "value": "關鍵影響"
           }
         }
       }
@@ -69935,7 +70211,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Natal Chart"
+            "value": "Födelsehoroskop"
           }
         },
         "sw": {
@@ -69995,7 +70271,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Natal Chart"
+            "value": "本命盤"
           }
         }
       }
@@ -70239,7 +70515,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "Rekommendationer"
           }
         },
         "sw": {
@@ -70299,7 +70575,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "建議"
           }
         }
       }
@@ -70543,7 +70819,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Summary"
+            "value": "Sammanfattning"
           }
         },
         "sw": {
@@ -70603,7 +70879,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Summary"
+            "value": "摘要"
           }
         }
       }
@@ -70847,7 +71123,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share to Instagram"
+            "value": "Dela på Instagram"
           }
         },
         "sw": {
@@ -70907,7 +71183,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share to Instagram"
+            "value": "分享到 Instagram"
           }
         }
       }
@@ -71151,7 +71427,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "No sources used"
+            "value": "Inga källor använda"
           }
         },
         "sw": {
@@ -71211,7 +71487,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "No sources used"
+            "value": "未使用任何來源"
           }
         }
       }
@@ -71455,7 +71731,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sources used"
+            "value": "Använda källor"
           }
         },
         "sw": {
@@ -71515,7 +71791,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sources used"
+            "value": "已使用的來源"
           }
         }
       }
@@ -71592,6 +71868,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "रिपोर्ट:"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rapport:"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "報告："
           }
         }
       }
@@ -71835,7 +72123,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unable to delete report."
+            "value": "Kunde inte ta bort rapport."
           }
         },
         "sw": {
@@ -71895,7 +72183,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unable to delete report."
+            "value": "無法刪除報告。"
           }
         }
       }
@@ -72139,7 +72427,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unable to load saved reports."
+            "value": "Kunde inte ladda sparade rapporter."
           }
         },
         "sw": {
@@ -72199,7 +72487,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unable to load saved reports."
+            "value": "無法載入已儲存的報告。"
           }
         }
       }
@@ -72503,7 +72791,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "≈%1$d min"
+            "value": "≈%1$d 分鐘"
           }
         }
       }
@@ -72747,7 +73035,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Not linked to a birth chart"
+            "value": "Inte kopplad till födelsehoroskop"
           }
         },
         "sw": {
@@ -72807,7 +73095,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Not linked to a birth chart"
+            "value": "未連結到本命盤"
           }
         }
       }
@@ -73051,7 +73339,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unnamed profile"
+            "value": "Namnlös profil"
           }
         },
         "sw": {
@@ -73111,7 +73399,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unnamed profile"
+            "value": "未命名檔案"
           }
         }
       }
@@ -73191,6 +73479,18 @@
             "state": "translated",
             "value": "यह कैसे काम करता है"
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hur det fungerar"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工作原理"
+          }
         }
       }
     },
@@ -73267,6 +73567,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "ऐप सुविधाओं के बारे में जानें"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lär dig om appfunktioner"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "了解應用程式功能"
           }
         }
       }
@@ -73511,7 +73823,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Made with ❤️ in Ukraine"
+            "value": "Gjord med ❤️ i Ukraina"
           }
         },
         "sw": {
@@ -73571,7 +73883,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Made with ❤️ in Ukraine"
+            "value": "在烏克蘭用 ❤️ 製作"
           }
         }
       }
@@ -73876,7 +74188,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Version"
+            "value": "版本"
           }
         }
       }
@@ -74121,7 +74433,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendation"
+            "value": "Rekommendation"
           }
         },
         "sw": {
@@ -74181,7 +74493,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendation"
+            "value": "推薦"
           }
         }
       }
@@ -74426,7 +74738,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommended"
+            "value": "Rekommenderad"
           }
         },
         "sw": {
@@ -74486,7 +74798,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommended"
+            "value": "推薦"
           }
         }
       }
@@ -74791,7 +75103,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "tokens"
+            "value": "令牌"
           }
         }
       }
@@ -75095,7 +75407,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld tokens"
+            "value": "%lld 個令牌"
           }
         }
       }
@@ -75340,7 +75652,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dev Mode disabled"
+            "value": "Dev-läge inaktiverat"
           }
         },
         "sw": {
@@ -75400,7 +75712,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dev Mode disabled"
+            "value": "開發模式已停用"
           }
         }
       }
@@ -75645,7 +75957,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dev Mode enabled"
+            "value": "Dev-läge aktiverat"
           }
         },
         "sw": {
@@ -75705,7 +76017,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dev Mode enabled"
+            "value": "開發模式已啟用"
           }
         }
       }
@@ -75950,7 +76262,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Preview Onboarding"
+            "value": "Förhandsgranska introduktion"
           }
         },
         "sw": {
@@ -76010,7 +76322,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Preview Onboarding"
+            "value": "預覽引導"
           }
         }
       }
@@ -76255,7 +76567,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Show onboarding flow without resetting state"
+            "value": "Visa introduktionsflöde utan att återställa tillstånd"
           }
         },
         "sw": {
@@ -76315,7 +76627,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Show onboarding flow without resetting state"
+            "value": "在不重設狀態的情況下顯示引導流程"
           }
         }
       }
@@ -76560,7 +76872,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reset Onboarding"
+            "value": "Återställ introduktion"
           }
         },
         "sw": {
@@ -76620,7 +76932,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reset Onboarding"
+            "value": "重設引導"
           }
         }
       }
@@ -76865,7 +77177,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Clear completed state and restart app"
+            "value": "Rensa tillstånd och starta om appen"
           }
         },
         "sw": {
@@ -76925,7 +77237,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Clear completed state and restart app"
+            "value": "清除完成狀態並重新啟動應用程式"
           }
         }
       }
@@ -77170,7 +77482,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Change in Settings"
+            "value": "Ändra i Inställningar"
           }
         },
         "sw": {
@@ -77230,7 +77542,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Change in Settings"
+            "value": "在設定中更改"
           }
         }
       }
@@ -77780,7 +78092,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hur vi hanterar dina uppgifter"
+            "value": "Hur vi hanterar dina data"
           }
         },
         "sw": {
@@ -78390,7 +78702,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Få hjälp & kontakta oss"
+            "value": "Få hjälp"
           }
         },
         "sw": {
@@ -78450,7 +78762,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "取得協助並聯絡我們"
+            "value": "獲得幫助"
           }
         }
       }
@@ -79000,7 +79312,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appanvändarvillkor"
+            "value": "Villkor för appanvändning"
           }
         },
         "sw": {
@@ -79060,7 +79372,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "應用程式使用條款"
+            "value": "應用程式使用條件"
           }
         }
       }
@@ -79305,7 +79617,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Manage Profiles"
+            "value": "Hantera profiler"
           }
         },
         "sw": {
@@ -79365,7 +79677,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Manage Profiles"
+            "value": "管理檔案"
           }
         }
       }
@@ -79610,7 +79922,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add, edit, or delete profiles"
+            "value": "Lägg till, redigera eller ta bort profiler"
           }
         },
         "sw": {
@@ -79670,7 +79982,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add, edit, or delete profiles"
+            "value": "新增、編輯或刪除檔案"
           }
         }
       }
@@ -79915,7 +80227,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "About"
+            "value": "Om"
           }
         },
         "sw": {
@@ -79975,7 +80287,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "About"
+            "value": "關於"
           }
         }
       }
@@ -80220,7 +80532,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "AI Model"
+            "value": "AI-modell"
           }
         },
         "sw": {
@@ -80280,7 +80592,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "AI Model"
+            "value": "AI 模型"
           }
         }
       }
@@ -80525,7 +80837,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appearance"
+            "value": "Utseende"
           }
         },
         "sw": {
@@ -80585,7 +80897,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appearance"
+            "value": "外觀"
           }
         }
       }
@@ -80890,7 +81202,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Data"
+            "value": "資料"
           }
         }
       }
@@ -81135,7 +81447,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dev Tools"
+            "value": "Dev-verktyg"
           }
         },
         "sw": {
@@ -81195,7 +81507,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dev Tools"
+            "value": "開發工具"
           }
         }
       }
@@ -81440,7 +81752,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Language"
+            "value": "Språk"
           }
         },
         "sw": {
@@ -81500,7 +81812,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Language"
+            "value": "語言"
           }
         }
       }
@@ -82050,7 +82362,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Onboarding"
+            "value": "Introduktion"
           }
         },
         "sw": {
@@ -82110,7 +82422,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Onboarding"
+            "value": "引導"
           }
         }
       }
@@ -82355,7 +82667,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Profiles"
+            "value": "Profiler"
           }
         },
         "sw": {
@@ -82415,7 +82727,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Profiles"
+            "value": "檔案"
           }
         }
       }
@@ -82660,7 +82972,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appearance"
+            "value": "Utseende"
           }
         },
         "sw": {
@@ -82720,7 +83032,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appearance"
+            "value": "外觀"
           }
         }
       }
@@ -82965,7 +83277,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dark"
+            "value": "Mörkt"
           }
         },
         "sw": {
@@ -83025,7 +83337,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dark"
+            "value": "深色"
           }
         }
       }
@@ -83270,7 +83582,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Light"
+            "value": "Ljust"
           }
         },
         "sw": {
@@ -83330,7 +83642,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Light"
+            "value": "淺色"
           }
         }
       }
@@ -83635,7 +83947,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "System"
+            "value": "系統"
           }
         }
       }
@@ -83880,7 +84192,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "App Theme"
+            "value": "Apptema"
           }
         },
         "sw": {
@@ -83940,7 +84252,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "App Theme"
+            "value": "應用程式主題"
           }
         }
       }
@@ -84489,7 +84801,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 slides for maximum impact"
+            "value": "5 bilder för maximal effekt"
           }
         },
         "sw": {
@@ -84549,7 +84861,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 slides for maximum impact"
+            "value": "5張幻燈片以獲得最大影響"
           }
         }
       }
@@ -84793,7 +85105,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Perfect for Stories"
+            "value": "Perfekt för Stories"
           }
         },
         "sw": {
@@ -84853,7 +85165,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Perfect for Stories"
+            "value": "適合故事"
           }
         }
       }
@@ -85097,7 +85409,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Summary and top 3 influences"
+            "value": "Sammanfattning och topp 3 inflytanden"
           }
         },
         "sw": {
@@ -85157,7 +85469,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Summary and top 3 influences"
+            "value": "摘要和前3大影響"
           }
         }
       }
@@ -85401,7 +85713,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "3 personalized tips"
+            "value": "3 personliga tips"
           }
         },
         "sw": {
@@ -85461,7 +85773,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "3 personalized tips"
+            "value": "3條個人化建議"
           }
         }
       }
@@ -85705,7 +86017,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Full Carousel"
+            "value": "Full karusell"
           }
         },
         "sw": {
@@ -85765,7 +86077,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Full Carousel"
+            "value": "完整輪播"
           }
         }
       }
@@ -86009,7 +86321,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chart Only"
+            "value": "Endast horoskop"
           }
         },
         "sw": {
@@ -86069,7 +86381,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chart Only"
+            "value": "僅星盤"
           }
         }
       }
@@ -86313,7 +86625,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Insights"
+            "value": "Nyckelinsikter"
           }
         },
         "sw": {
@@ -86373,7 +86685,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Insights"
+            "value": "關鍵洞察"
           }
         }
       }
@@ -86617,7 +86929,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "Rekommendationer"
           }
         },
         "sw": {
@@ -86677,7 +86989,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "建議"
           }
         }
       }
@@ -86743,6 +87055,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "أبرز النقاط"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HÖJDPUNKTER"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "亮點"
           }
         }
       }
@@ -86987,7 +87311,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 images will be shared. Create a carousel post in Instagram."
+            "value": "5 bilder kommer att delas."
           }
         },
         "sw": {
@@ -87047,7 +87371,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 images will be shared. Create a carousel post in Instagram."
+            "value": "將分享5張圖片。"
           }
         }
       }
@@ -87292,7 +87616,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your Natal Chart"
+            "value": "Ditt födelsehoroskop"
           }
         },
         "sw": {
@@ -87352,7 +87676,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your Natal Chart"
+            "value": "您的本命盤"
           }
         }
       }
@@ -87419,6 +87743,18 @@
             "state": "translated",
             "value": "تنزيل من App Store"
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ladda ner från App Store"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "從 App Store 下載"
+          }
         }
       }
     },
@@ -87483,6 +87819,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "خرائط الميلاد"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Födelsehoroskop"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本命盤"
           }
         }
       }
@@ -87549,6 +87897,18 @@
             "state": "translated",
             "value": "رؤى عميقة"
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Djupa insikter"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "深度洞察"
+          }
         }
       }
     },
@@ -87613,6 +87973,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "مخصص"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personligt"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "個人化"
           }
         }
       }
@@ -87857,7 +88229,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Get your full report"
+            "value": "Få din fullständiga rapport"
           }
         },
         "sw": {
@@ -87917,7 +88289,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Get your full report"
+            "value": "獲取完整報告"
           }
         }
       }
@@ -87983,6 +88355,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "أبرز النقاط"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HÖJDPUNKTER"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "亮點"
           }
         }
       }
@@ -88227,7 +88611,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share to Instagram"
+            "value": "Dela på Instagram"
           }
         },
         "sw": {
@@ -88287,7 +88671,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share to Instagram"
+            "value": "分享到 Instagram"
           }
         }
       }
@@ -88532,7 +88916,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Preparing templates..."
+            "value": "Förbereder mallar..."
           }
         },
         "sw": {
@@ -88592,7 +88976,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Preparing templates..."
+            "value": "正在準備範本..."
           }
         }
       }
@@ -88837,7 +89221,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share to Instagram"
+            "value": "Dela på Instagram"
           }
         },
         "sw": {
@@ -88897,7 +89281,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share to Instagram"
+            "value": "分享到 Instagram"
           }
         }
       }
@@ -89142,7 +89526,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "KEY INFLUENCES"
+            "value": "NYCKELINFLYTANDEN"
           }
         },
         "sw": {
@@ -89202,7 +89586,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "KEY INFLUENCES"
+            "value": "關鍵影響"
           }
         }
       }
@@ -89269,6 +89653,18 @@
             "state": "translated",
             "value": "الرؤى الرئيسية"
           }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NYCKELINSIKTER"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "關鍵洞察"
+          }
         }
       }
     },
@@ -89333,6 +89729,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "التأثير الرئيسي"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HUVUDINFLYTANDE"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "主要影響"
           }
         }
       }
@@ -89577,7 +89985,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "No preview available"
+            "value": "Förhandsgranskning ej tillgänglig"
           }
         },
         "sw": {
@@ -89637,7 +90045,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "No preview available"
+            "value": "無可用預覽"
           }
         }
       }
@@ -89882,7 +90290,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "Rekommendationer"
           }
         },
         "sw": {
@@ -89942,7 +90350,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "建議"
           }
         }
       }
@@ -90186,7 +90594,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Home"
+            "value": "Hem"
           }
         },
         "sw": {
@@ -90246,7 +90654,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Home"
+            "value": "主頁"
           }
         }
       }
@@ -90490,7 +90898,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reports"
+            "value": "Rapporter"
           }
         },
         "sw": {
@@ -90550,7 +90958,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reports"
+            "value": "報告"
           }
         }
       }
@@ -90794,7 +91202,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Settings"
+            "value": "Inställningar"
           }
         },
         "sw": {
@@ -90854,7 +91262,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Settings"
+            "value": "設定"
           }
         }
       }
@@ -91098,7 +91506,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Discover your cosmic path"
+            "value": "Upptäck din kosmiska väg"
           }
         },
         "sw": {
@@ -91158,7 +91566,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Discover your cosmic path"
+            "value": "發現您的宇宙之路"
           }
         }
       }
@@ -91402,7 +91810,7 @@
         "sv": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generated with Zorya"
+            "value": "Genererad med Zorya"
           }
         },
         "sw": {
@@ -91462,7 +91870,7 @@
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generated with Zorya"
+            "value": "由 Zorya 生成"
           }
         }
       }
