@@ -6439,7 +6439,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "OK"
+            "value": "Aceptar"
           }
         },
         "et": {
@@ -7304,13 +7304,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "View natal chart"
+            "value": "عرض خريطة الميلاد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "View natal chart"
+            "value": "Виж натална карта"
           }
         },
         "bn": {
@@ -7609,13 +7609,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Already purchased"
+            "value": "تم الشراء مسبقاً"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Already purchased"
+            "value": "Вече закупено"
           }
         },
         "bn": {
@@ -7913,13 +7913,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Career"
+            "value": "المهنة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Career"
+            "value": "Кариера"
           }
         },
         "bn": {
@@ -8218,13 +8218,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Career & success"
+            "value": "المهنة والنجاح"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Career & success"
+            "value": "Кариера и успех"
           }
         },
         "bn": {
@@ -8522,13 +8522,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Finances"
+            "value": "المالية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Finances"
+            "value": "Финанси"
           }
         },
         "bn": {
@@ -8827,13 +8827,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Money & abundance"
+            "value": "المال والوفرة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Money & abundance"
+            "value": "Пари и изобилие"
           }
         },
         "bn": {
@@ -9131,13 +9131,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "General"
+            "value": "عام"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "General"
+            "value": "Общо"
           }
         },
         "bn": {
@@ -9436,13 +9436,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "General overview"
+            "value": "نظرة عامة شاملة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "General overview"
+            "value": "Общ преглед"
           }
         },
         "bn": {
@@ -9770,7 +9770,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wohlbefinden"
+            "value": "Wellness"
           }
         },
         "el": {
@@ -10349,13 +10349,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select area"
+            "value": "اختر المجال"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select area"
+            "value": "Избери област"
           }
         },
         "bn": {
@@ -10653,13 +10653,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Relationships"
+            "value": "العلاقات"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Relationships"
+            "value": "Взаимоотношения"
           }
         },
         "bn": {
@@ -10958,13 +10958,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Love & partnership"
+            "value": "الحب والشراكة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Love & partnership"
+            "value": "Любов и партньорство"
           }
         },
         "bn": {
@@ -11263,13 +11263,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select a life area for a detailed astrological report"
+            "value": "اختر مجالاً من حياتك للحصول على تقرير فلكي مفصّل"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select a life area for a detailed astrological report"
+            "value": "Избери житейска област за подробен астрологичен доклад"
           }
         },
         "bn": {
@@ -11568,13 +11568,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose analysis area"
+            "value": "اختر مجال التحليل"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose analysis area"
+            "value": "Избери област за анализ"
           }
         },
         "bn": {
@@ -12784,13 +12784,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Clear saved data"
+            "value": "مسح البيانات المحفوظة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Clear saved data"
+            "value": "Изчисти запазените данни"
           }
         },
         "bn": {
@@ -13088,13 +13088,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Date"
+            "value": "التاريخ"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Date"
+            "value": "Дата"
           }
         },
         "bn": {
@@ -13392,13 +13392,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Location"
+            "value": "الموقع"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Location"
+            "value": "Местоположение"
           }
         },
         "bn": {
@@ -13696,13 +13696,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Name (optional)"
+            "value": "الاسم (اختياري)"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Name (optional)"
+            "value": "Име (незадължително)"
           }
         },
         "bn": {
@@ -14000,13 +14000,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Time"
+            "value": "الوقت"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Time"
+            "value": "Час"
           }
         },
         "bn": {
@@ -14304,13 +14304,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter exact birth details. Precise time ensures accurate house calculation."
+            "value": "أدخل تفاصيل الميلاد بدقة. الوقت الدقيق يضمن حساب البيوت بشكل صحيح."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter exact birth details. Precise time ensures accurate house calculation."
+            "value": "Въведи точни данни за раждане. Точният час осигурява правилно изчисляване на домовете."
           }
         },
         "bn": {
@@ -14609,13 +14609,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select location"
+            "value": "اختر الموقع"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select location"
+            "value": "Избери местоположение"
           }
         },
         "bn": {
@@ -14913,13 +14913,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth data"
+            "value": "بيانات الميلاد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth data"
+            "value": "Данни за раждане"
           }
         },
         "bn": {
@@ -15217,13 +15217,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth data"
+            "value": "بيانات الميلاد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth data"
+            "value": "Данни за раждане"
           }
         },
         "bn": {
@@ -15521,13 +15521,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Person"
+            "value": "الشخص"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Person"
+            "value": "Човек"
           }
         },
         "bn": {
@@ -15825,13 +15825,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your Chart"
+            "value": "خريطتك"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your Chart"
+            "value": "Твоята карта"
           }
         },
         "bn": {
@@ -16129,13 +16129,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deep Analysis"
+            "value": "تحليل معمّق"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deep Analysis"
+            "value": "Дълбок анализ"
           }
         },
         "bn": {
@@ -16433,13 +16433,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cover"
+            "value": "الغلاف"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cover"
+            "value": "Корица"
           }
         },
         "bn": {
@@ -16737,13 +16737,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Get Your Full Report"
+            "value": "احصل على تقريرك الكامل"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Get Your Full Report"
+            "value": "Получи пълния си доклад"
           }
         },
         "bn": {
@@ -17041,13 +17041,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Influences"
+            "value": "التأثيرات الرئيسية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Influences"
+            "value": "Ключови влияния"
           }
         },
         "bn": {
@@ -17345,13 +17345,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "التوصيات"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "Препоръки"
           }
         },
         "bn": {
@@ -17650,13 +17650,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Analysis"
+            "value": "التحليل"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Analysis"
+            "value": "Анализ"
           }
         },
         "bn": {
@@ -17955,13 +17955,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Swipe for insights"
+            "value": "اسحب للمزيد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Swipe for insights"
+            "value": "Плъзни за прозрения"
           }
         },
         "bn": {
@@ -18260,13 +18260,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Get Your Report"
+            "value": "احصل على تقريرك"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Get Your Report"
+            "value": "Получи доклада си"
           }
         },
         "bn": {
@@ -18565,13 +18565,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Influences"
+            "value": "التأثيرات الرئيسية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Influences"
+            "value": "Ключови влияния"
           }
         },
         "bn": {
@@ -18870,13 +18870,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "التوصيات"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "Препоръки"
           }
         },
         "bn": {
@@ -19174,13 +19174,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ascendant"
+            "value": "الطالع"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ascendant"
+            "value": "Асцендент"
           }
         },
         "bn": {
@@ -19478,13 +19478,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Orb: %@"
+            "value": "المدار: %@"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Orb: %@"
+            "value": "Орб: %@"
           }
         },
         "bn": {
@@ -19782,13 +19782,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculation Date"
+            "value": "تاريخ الحساب"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculation Date"
+            "value": "Дата на изчисление"
           }
         },
         "bn": {
@@ -20086,13 +20086,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Coordinates"
+            "value": "الإحداثيات"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Coordinates"
+            "value": "Координати"
           }
         },
         "bn": {
@@ -20390,13 +20390,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Date"
+            "value": "التاريخ"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Date"
+            "value": "Дата"
           }
         },
         "bn": {
@@ -20694,13 +20694,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chart Details"
+            "value": "تفاصيل الخريطة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chart Details"
+            "value": "Детайли на картата"
           }
         },
         "bn": {
@@ -20998,13 +20998,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "House %lld"
+            "value": "البيت %lld"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "House %lld"
+            "value": "Дом %lld"
           }
         },
         "bn": {
@@ -21302,13 +21302,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Loading chart..."
+            "value": "جارٍ تحميل الخريطة..."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Loading chart..."
+            "value": "Зареждане на карта..."
           }
         },
         "bn": {
@@ -21606,13 +21606,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Location"
+            "value": "الموقع"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Location"
+            "value": "Местоположение"
           }
         },
         "bn": {
@@ -21910,13 +21910,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Midheaven"
+            "value": "وسط السماء"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Midheaven"
+            "value": "Средата на небето"
           }
         },
         "bn": {
@@ -22214,13 +22214,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Name"
+            "value": "الاسم"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Name"
+            "value": "Име"
           }
         },
         "bn": {
@@ -22518,13 +22518,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "%1$@ House %2$lld"
+            "value": "%1$@ البيت %2$lld"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "%1$@ House %2$lld"
+            "value": "%1$@ Дом %2$lld"
           }
         },
         "bn": {
@@ -22822,13 +22822,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Speed: %@"
+            "value": "السرعة: %@"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Speed: %@"
+            "value": "Скорост: %@"
           }
         },
         "bn": {
@@ -23126,13 +23126,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rendering chart..."
+            "value": "جارٍ رسم الخريطة..."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rendering chart..."
+            "value": "Изобразяване на карта..."
           }
         },
         "bn": {
@@ -23430,13 +23430,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unable to render chart"
+            "value": "تعذر رسم الخريطة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unable to render chart"
+            "value": "Неуспешно изобразяване на карта"
           }
         },
         "bn": {
@@ -23734,13 +23734,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Angles"
+            "value": "الزوايا"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Angles"
+            "value": "Ъгли"
           }
         },
         "bn": {
@@ -24038,13 +24038,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aspects (%lld)"
+            "value": "الجوانب (%lld)"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aspects (%lld)"
+            "value": "Аспекти (%lld)"
           }
         },
         "bn": {
@@ -24342,13 +24342,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Data"
+            "value": "بيانات الميلاد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Data"
+            "value": "Данни за раждане"
           }
         },
         "bn": {
@@ -24646,13 +24646,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Houses (%lld)"
+            "value": "البيوت (%lld)"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Houses (%lld)"
+            "value": "Домове (%lld)"
           }
         },
         "bn": {
@@ -24950,13 +24950,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Metadata"
+            "value": "البيانات الوصفية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Metadata"
+            "value": "Метаданни"
           }
         },
         "bn": {
@@ -25254,13 +25254,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Planets (%lld)"
+            "value": "الكواكب (%lld)"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Planets (%lld)"
+            "value": "Планети (%lld)"
           }
         },
         "bn": {
@@ -25558,13 +25558,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Time"
+            "value": "الوقت"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Time"
+            "value": "Час"
           }
         },
         "bn": {
@@ -25862,13 +25862,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Timezone"
+            "value": "المنطقة الزمنية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Timezone"
+            "value": "Часова зона"
           }
         },
         "bn": {
@@ -26166,13 +26166,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chart Visualization Unavailable"
+            "value": "تصور الخريطة غير متاح"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chart Visualization Unavailable"
+            "value": "Визуализацията на картата не е налична"
           }
         },
         "bn": {
@@ -26470,7 +26470,7 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "DEV"
+            "value": "تطوير"
           }
         },
         "bg": {
@@ -26774,13 +26774,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Invalid response from server"
+            "value": "استجابة غير صالحة من الخادم"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Invalid response from server"
+            "value": "Невалиден отговор от сървъра"
           }
         },
         "bn": {
@@ -27078,13 +27078,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "API key is missing"
+            "value": "مفتاح API مفقود"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "API key is missing"
+            "value": "Липсва API ключ"
           }
         },
         "bn": {
@@ -27382,13 +27382,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "No content received"
+            "value": "لم يتم استلام أي محتوى"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "No content received"
+            "value": "Няма получено съдържание"
           }
         },
         "bn": {
@@ -27686,13 +27686,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Too many requests. Please try again later."
+            "value": "طلبات كثيرة جداً. يرجى المحاولة لاحقاً."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Too many requests. Please try again later."
+            "value": "Твърде много заявки. Моля, опитай по-късно."
           }
         },
         "bn": {
@@ -27990,13 +27990,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Service temporarily unavailable"
+            "value": "الخدمة غير متاحة مؤقتاً"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Service temporarily unavailable"
+            "value": "Услугата временно не е налична"
           }
         },
         "bn": {
@@ -28294,13 +28294,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Operation cancelled"
+            "value": "تم إلغاء العملية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Operation cancelled"
+            "value": "Операцията е отменена"
           }
         },
         "bn": {
@@ -28598,13 +28598,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Failed to fetch chart"
+            "value": "فشل في جلب الخريطة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Failed to fetch chart"
+            "value": "Неуспешно извличане на карта"
           }
         },
         "bn": {
@@ -28902,13 +28902,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Coordinates not found"
+            "value": "لم يتم العثور على الإحداثيات"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Coordinates not found"
+            "value": "Координатите не са намерени"
           }
         },
         "bn": {
@@ -29510,13 +29510,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Network error: %@"
+            "value": "خطأ في الشبكة: %@"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Network error: %@"
+            "value": "Мрежова грешка: %@"
           }
         },
         "bn": {
@@ -29814,13 +29814,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Failed to create profile"
+            "value": "فشل في إنشاء الملف الشخصي"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Failed to create profile"
+            "value": "Неуспешно създаване на профил"
           }
         },
         "bn": {
@@ -30118,13 +30118,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Please select a profile"
+            "value": "يرجى اختيار ملف شخصي"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Please select a profile"
+            "value": "Моля, избери профил"
           }
         },
         "bn": {
@@ -30422,13 +30422,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Report not found"
+            "value": "لم يتم العثور على التقرير"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Report not found"
+            "value": "Докладът не е намерен"
           }
         },
         "bn": {
@@ -31030,7 +31030,7 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "ID: %@"
+            "value": "المعرف: %@"
           }
         },
         "bg": {
@@ -31334,13 +31334,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculating natal chart for %@"
+            "value": "جارٍ حساب خريطة الميلاد لـ %@"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculating natal chart for %@"
+            "value": "Изчисляване на натална карта за %@"
           }
         },
         "bn": {
@@ -31638,13 +31638,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculating"
+            "value": "جارٍ الحساب"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculating"
+            "value": "Изчисляване"
           }
         },
         "bn": {
@@ -31942,13 +31942,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculating Chart"
+            "value": "جارٍ حساب الخريطة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Calculating Chart"
+            "value": "Изчисляване на карта"
           }
         },
         "bn": {
@@ -32254,310 +32254,17 @@
             "state": "translated",
             "value": "Створюємо персоналізований звіт для"
           }
-        }
-      }
-    },
-    "loading.generating.description %@": {
-      "extractionState": "stale",
-      "localizations": {
+        },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generating %@ report"
+            "value": "جارٍ إنشاء تقريرك الشخصي لـ"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Erstelle %@-Bericht"
-          }
-        },
-        "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generando informe de %@"
-          }
-        },
-        "et": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "fa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "fil": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Génération du rapport %@"
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generazione report %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@レポートを生成中"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ 리포트 생성 중"
-          }
-        },
-        "lt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "lv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "ms": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gerando relatório de %@"
-          }
-        },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Генерация отчёта %@"
-          }
-        },
-        "sk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "sl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "sr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "sw": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "th": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ raporu oluşturuluyor"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Генерація звіту %@"
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Generating %@ report"
+            "value": "Създаване на персонализиран доклад за"
           }
         }
       }
@@ -32567,13 +32274,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generating"
+            "value": "جارٍ الإنشاء"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generating"
+            "value": "Генериране"
           }
         },
         "bn": {
@@ -32871,13 +32578,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "This may take a minute..."
+            "value": "قد يستغرق هذا دقيقة..."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "This may take a minute..."
+            "value": "Това може да отнеме минута..."
           }
         },
         "bn": {
@@ -33175,13 +32882,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generating Report"
+            "value": "جارٍ إنشاء التقرير"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generating Report"
+            "value": "Генериране на доклад"
           }
         },
         "bn": {
@@ -33479,13 +33186,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start typing the city and country (minimum 3 characters)."
+            "value": "ابدأ بكتابة المدينة والبلد (3 أحرف كحد أدنى)."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start typing the city and country (minimum 3 characters)."
+            "value": "Започни да пишеш града и държавата (минимум 3 символа)."
           }
         },
         "bn": {
@@ -33783,13 +33490,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Searching…"
+            "value": "جارٍ البحث..."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Searching…"
+            "value": "Търсене..."
           }
         },
         "bn": {
@@ -34087,13 +33794,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "No matches found. Try a different spelling."
+            "value": "لم يتم العثور على نتائج. جرب إملاءً مختلفاً."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "No matches found. Try a different spelling."
+            "value": "Няма намерени съвпадения. Опитай различно изписване."
           }
         },
         "bn": {
@@ -34391,13 +34098,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Search location"
+            "value": "البحث عن موقع"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Search location"
+            "value": "Търси местоположение"
           }
         },
         "bn": {
@@ -34695,13 +34402,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld books"
+            "value": "%lld كتب"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld books"
+            "value": "%lld книги"
           }
         },
         "bn": {
@@ -34999,13 +34706,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld chunks"
+            "value": "%lld أجزاء"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld chunks"
+            "value": "%lld части"
           }
         },
         "bn": {
@@ -35303,13 +35010,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld chunks used"
+            "value": "%lld أجزاء مستخدمة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld chunks used"
+            "value": "%lld използвани части"
           }
         },
         "bn": {
@@ -35607,13 +35314,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cost"
+            "value": "التكلفة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cost"
+            "value": "Цена"
           }
         },
         "bn": {
@@ -35911,13 +35618,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Database Empty"
+            "value": "قاعدة البيانات فارغة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Database Empty"
+            "value": "Базата данни е празна"
           }
         },
         "bn": {
@@ -36215,13 +35922,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "No knowledge sources available"
+            "value": "لا توجد مصادر معرفية متاحة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "No knowledge sources available"
+            "value": "Няма налични източници на знания"
           }
         },
         "bn": {
@@ -36519,13 +36226,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "External Books"
+            "value": "كتب خارجية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "External Books"
+            "value": "Външни книги"
           }
         },
         "bn": {
@@ -36823,13 +36530,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "From Our Database"
+            "value": "من قاعدة بياناتنا"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "From Our Database"
+            "value": "От нашата база данни"
           }
         },
         "bn": {
@@ -37127,13 +36834,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generation Date"
+            "value": "تاريخ الإنشاء"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generation Date"
+            "value": "Дата на генериране"
           }
         },
         "bn": {
@@ -37431,13 +37138,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Model"
+            "value": "النموذج"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Model"
+            "value": "Модел"
           }
         },
         "bn": {
@@ -37735,13 +37442,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "No sources cited"
+            "value": "لم يتم الاستشهاد بأي مصادر"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "No sources cited"
+            "value": "Няма цитирани източници"
           }
         },
         "bn": {
@@ -38039,13 +37746,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Processing Time"
+            "value": "وقت المعالجة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Processing Time"
+            "value": "Време за обработка"
           }
         },
         "bn": {
@@ -39255,13 +38962,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Metadata"
+            "value": "البيانات الوصفية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Metadata"
+            "value": "Метаданни"
           }
         },
         "bn": {
@@ -39559,13 +39266,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Notes"
+            "value": "ملاحظات"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Notes"
+            "value": "Бележки"
           }
         },
         "bn": {
@@ -39863,13 +39570,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sources Overview"
+            "value": "نظرة عامة على المصادر"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sources Overview"
+            "value": "Преглед на източници"
           }
         },
         "bn": {
@@ -40167,13 +39874,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vector Database"
+            "value": "قاعدة البيانات المتجهية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Vector Database"
+            "value": "Векторна база данни"
           }
         },
         "bn": {
@@ -40471,13 +40178,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Snippets Provided"
+            "value": "المقتطفات المقدمة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Snippets Provided"
+            "value": "Предоставени фрагменти"
           }
         },
         "bn": {
@@ -40775,13 +40482,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sources Cited"
+            "value": "المصادر المستشهد بها"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sources Cited"
+            "value": "Цитирани източници"
           }
         },
         "bn": {
@@ -41079,13 +40786,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generation Logs"
+            "value": "سجلات الإنشاء"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generation Logs"
+            "value": "Логове за генериране"
           }
         },
         "bn": {
@@ -41383,13 +41090,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Completion Tokens"
+            "value": "رموز الإكمال"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Completion Tokens"
+            "value": "Токени за завършване"
           }
         },
         "bn": {
@@ -41687,13 +41394,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prompt Tokens"
+            "value": "رموز الطلب"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Prompt Tokens"
+            "value": "Токени за заявка"
           }
         },
         "bn": {
@@ -41991,13 +41698,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Total Tokens"
+            "value": "إجمالي الرموز"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Total Tokens"
+            "value": "Общо токени"
           }
         },
         "bn": {
@@ -42599,13 +42306,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start"
+            "value": "ابدأ"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start"
+            "value": "Старт"
           }
         },
         "bn": {
@@ -42629,7 +42336,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start"
+            "value": "Starten"
           }
         },
         "el": {
@@ -42647,7 +42354,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Comenzar"
+            "value": "Empezar"
           }
         },
         "et": {
@@ -42677,7 +42384,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Commencer"
+            "value": "Démarrer"
           }
         },
         "gu": {
@@ -42903,13 +42610,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "OK"
+            "value": "حسناً"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "OK"
+            "value": "ОК"
           }
         },
         "bn": {
@@ -42951,7 +42658,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "OK"
+            "value": "Aceptar"
           }
         },
         "et": {
@@ -43208,13 +42915,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create Profile"
+            "value": "إنشاء ملف شخصي"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create Profile"
+            "value": "Създай профил"
           }
         },
         "bn": {
@@ -43513,13 +43220,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Next"
+            "value": "التالي"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Next"
+            "value": "Напред"
           }
         },
         "bn": {
@@ -43818,13 +43525,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start"
+            "value": "ابدأ"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start"
+            "value": "Започни"
           }
         },
         "bn": {
@@ -43896,7 +43603,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Commencer"
+            "value": "Démarrer"
           }
         },
         "gu": {
@@ -44123,13 +43830,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "First analysis in 2 minutes"
+            "value": "التحليل الأول في دقيقتين"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "First analysis in 2 minutes"
+            "value": "Първият анализ за 2 минути"
           }
         },
         "bn": {
@@ -44428,13 +44135,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Takes only 2 minutes"
+            "value": "يستغرق دقيقتين فقط"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Takes only 2 minutes"
+            "value": "Отнема само 2 минути"
           }
         },
         "bn": {
@@ -44733,13 +44440,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Discover what the stars say about your career, relationships, and finances — no registration, no subscriptions."
+            "value": "اكتشف ما تقوله النجوم عن مهنتك وعلاقاتك وأموالك — بدون تسجيل، بدون اشتراكات."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Discover what the stars say about your career, relationships, and finances — no registration, no subscriptions."
+            "value": "Открий какво казват звездите за кариерата, взаимоотношенията и финансите ти — без регистрация, без абонаменти."
           }
         },
         "bn": {
@@ -45038,13 +44745,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your first astrological analysis in 2 minutes"
+            "value": "أول تحليل فلكي لك في دقيقتين"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your first astrological analysis in 2 minutes"
+            "value": "Първият ти астрологичен анализ за 2 минути"
           }
         },
         "bn": {
@@ -45343,13 +45050,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "No registration"
+            "value": "بدون تسجيل"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "No registration"
+            "value": "Без регистрация"
           }
         },
         "bn": {
@@ -45648,13 +45355,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "We made the process as quick and simple as possible."
+            "value": "جعلنا العملية سريعة وبسيطة قدر الإمكان."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "We made the process as quick and simple as possible."
+            "value": "Направихме процеса възможно най-бърз и прост."
           }
         },
         "bn": {
@@ -45953,13 +45660,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "📝 Enter birth date — 30 sec"
+            "value": "📝 أدخل تاريخ الميلاد — 30 ثانية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "📝 Enter birth date — 30 sec"
+            "value": "📝 Въведи дата на раждане — 30 сек"
           }
         },
         "bn": {
@@ -46258,13 +45965,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "🎯 Choose analysis area — 10 sec"
+            "value": "🎯 اختر مجال التحليل — 10 ثواني"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "🎯 Choose analysis area — 10 sec"
+            "value": "🎯 Избери област за анализ — 10 сек"
           }
         },
         "bn": {
@@ -46563,13 +46270,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "✨ Get your personal report — 60 sec"
+            "value": "✨ احصل على تقريرك الشخصي — 60 ثانية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "✨ Get your personal report — 60 sec"
+            "value": "✨ Получи персонален доклад — 60 сек"
           }
         },
         "bn": {
@@ -46868,13 +46575,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "~2 min total"
+            "value": "~دقيقتين إجمالاً"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "~2 min total"
+            "value": "~2 мин общо"
           }
         },
         "bn": {
@@ -47173,13 +46880,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Three simple steps to insights"
+            "value": "ثلاث خطوات بسيطة للرؤى"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Three simple steps to insights"
+            "value": "Три прости стъпки към прозрения"
           }
         },
         "bn": {
@@ -47478,13 +47185,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "💰 Finances and material potential"
+            "value": "💰 المالية والإمكانات المادية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "💰 Finances and material potential"
+            "value": "💰 Финанси и материален потенциал"
           }
         },
         "bn": {
@@ -47783,13 +47490,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "💼 Career and professional growth"
+            "value": "💼 المهنة والنمو المهني"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "💼 Career and professional growth"
+            "value": "💼 Кариера и професионален растеж"
           }
         },
         "bn": {
@@ -48088,13 +47795,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "❤️ Relationships and partnership"
+            "value": "❤️ العلاقات والشراكة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "❤️ Relationships and partnership"
+            "value": "❤️ Взаимоотношения и партньорство"
           }
         },
         "bn": {
@@ -48393,13 +48100,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "🏥 Health and energy"
+            "value": "🏥 الصحة والطاقة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "🏥 Health and energy"
+            "value": "🏥 Здраве и енергия"
           }
         },
         "bn": {
@@ -48698,13 +48405,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "⭐️ General personality portrait"
+            "value": "⭐️ صورة الشخصية العامة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "⭐️ General personality portrait"
+            "value": "⭐️ Общ портрет на личността"
           }
         },
         "bn": {
@@ -49003,13 +48710,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "from $5.99 per report"
+            "value": "من $5.99 لكل تقرير"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "from $5.99 per report"
+            "value": "от $5.99 на доклад"
           }
         },
         "bn": {
@@ -49308,13 +49015,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Each report is a deep AI analysis of your natal chart with practical advice."
+            "value": "كل تقرير هو تحليل ذكاء اصطناعي عميق لخريطة ميلادك مع نصائح عملية."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Each report is a deep AI analysis of your natal chart with practical advice."
+            "value": "Всеки доклад е задълбочен AI анализ на наталната ти карта с практични съвети."
           }
         },
         "bn": {
@@ -49613,13 +49320,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 areas of your life under control"
+            "value": "5 مجالات من حياتك تحت السيطرة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 areas of your life under control"
+            "value": "5 области от живота ти под контрол"
           }
         },
         "bn": {
@@ -49691,7 +49398,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 domaines de votre vie sous contrôle"
+            "value": "5 domaines de votre đời sous contrôle"
           }
         },
         "gu": {
@@ -49918,13 +49625,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start for free"
+            "value": "ابدأ مجاناً"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start for free"
+            "value": "Започни безплатно"
           }
         },
         "bn": {
@@ -50223,13 +49930,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "🔒 100% privacy — data never leaves device"
+            "value": "🔒 خصوصية 100% — البيانات لا تغادر جهازك"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "🔒 100% privacy — data never leaves device"
+            "value": "🔒 100% поверителност — данните не напускат устройството"
           }
         },
         "bn": {
@@ -50528,13 +50235,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "⚡️ Instant natal chart calculation"
+            "value": "⚡️ حساب فوري لخريطة الميلاد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "⚡️ Instant natal chart calculation"
+            "value": "⚡️ Мигновено изчисляване на натална карта"
           }
         },
         "bn": {
@@ -50833,13 +50540,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "📚 Analysis based on classical astrology"
+            "value": "📚 تحليل مبني على علم التنجيم الكلاسيكي"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "📚 Analysis based on classical astrology"
+            "value": "📚 Анализ, базиран на класическа астрология"
           }
         },
         "bn": {
@@ -51138,13 +50845,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your data stays only on your device. Start now — first profile is free."
+            "value": "بياناتك تبقى على جهازك فقط. ابدأ الآن — أول ملف شخصي مجاني."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your data stays only on your device. Start now — first profile is free."
+            "value": "Данните ти остават само на устройството ти. Започни сега — първият профил е безплатен."
           }
         },
         "bn": {
@@ -51443,13 +51150,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ready to see your chart?"
+            "value": "مستعد لرؤية خريطتك؟"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ready to see your chart?"
+            "value": "Готов да видиш картата си?"
           }
         },
         "bn": {
@@ -51748,13 +51455,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Skip"
+            "value": "تخطي"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Skip"
+            "value": "Пропусни"
           }
         },
         "bn": {
@@ -52053,13 +51760,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Step %1$lld of %2$lld"
+            "value": "الخطوة %1$lld من %2$lld"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Step %1$lld of %2$lld"
+            "value": "Стъпка %1$lld от %2$lld"
           }
         },
         "bn": {
@@ -52358,13 +52065,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld planets • %lld aspects"
+            "value": "%lld كواكب • %lld جوانب"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld planets • %lld aspects"
+            "value": "%lld планети • %lld аспекти"
           }
         },
         "bn": {
@@ -52662,13 +52369,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create Profile"
+            "value": "إنشاء ملف شخصي"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create Profile"
+            "value": "Създай профил"
           }
         },
         "bn": {
@@ -52966,13 +52673,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Active"
+            "value": "نشط"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Active"
+            "value": "Активен"
           }
         },
         "bn": {
@@ -53265,323 +52972,18 @@
         }
       }
     },
-    "profile.continue.with": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "with"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "з"
-          }
-        }
-      }
-    },
     "profile.continue.with %@": {
-      "extractionState": "stale",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continue with %@"
+            "value": "المتابعة مع %@"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Weiter mit %@"
-          }
-        },
-        "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continuar con %@"
-          }
-        },
-        "et": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "fa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "fil": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continuer avec %@"
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continua con %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@で続ける"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@로 계속"
-          }
-        },
-        "lt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "lv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "ms": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continuar com %@"
-          }
-        },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Продолжить с %@"
-          }
-        },
-        "sk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "sl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "sr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "sw": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "th": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ ile devam et"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Продовжити з %@"
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Continue with %@"
+            "value": "Продължи с %@"
           }
         }
       }
@@ -53591,13 +52993,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add a new profile"
+            "value": "أضف ملفاً شخصياً جديداً"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add a new profile"
+            "value": "Добави нов профил"
           }
         },
         "bn": {
@@ -53895,13 +53297,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create New Profile"
+            "value": "إنشاء ملف شخصي جديد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create New Profile"
+            "value": "Създай нов профил"
           }
         },
         "bn": {
@@ -54199,13 +53601,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Delete Profile"
+            "value": "حذف الملف الشخصي"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Delete Profile"
+            "value": "Изтрий профил"
           }
         },
         "bn": {
@@ -54503,13 +53905,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create your first profile to get started"
+            "value": "أنشئ أول ملف شخصي لك للبدء"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create your first profile to get started"
+            "value": "Създай първия си профил, за да започнеш"
           }
         },
         "bn": {
@@ -54807,13 +54209,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create profiles from the Home tab to get started with personalized natal charts and reports"
+            "value": "أنشئ ملفات شخصية من علامة التبويب الرئيسية للبدء بخرائط الميلاد والتقارير المخصصة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create profiles from the Home tab to get started with personalized natal charts and reports"
+            "value": "Създай профили от раздел Начало, за да започнеш с персонализирани натални карти и доклади"
           }
         },
         "bn": {
@@ -55111,13 +54513,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "No profiles yet"
+            "value": "لا توجد ملفات شخصية بعد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "No profiles yet"
+            "value": "Все още няма профили"
           }
         },
         "bn": {
@@ -55415,13 +54817,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "No Profiles Yet"
+            "value": "لا توجد ملفات شخصية بعد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "No Profiles Yet"
+            "value": "Все още няма профили"
           }
         },
         "bn": {
@@ -55719,13 +55121,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Date"
+            "value": "تاريخ الميلاد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Date"
+            "value": "Дата на раждане"
           }
         },
         "bn": {
@@ -56023,13 +55425,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Time"
+            "value": "وقت الميلاد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Time"
+            "value": "Час на раждане"
           }
         },
         "bn": {
@@ -56327,13 +55729,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Location"
+            "value": "مكان الميلاد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Birth Location"
+            "value": "Място на раждане"
           }
         },
         "bn": {
@@ -56631,13 +56033,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Name"
+            "value": "الاسم"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Name"
+            "value": "Име"
           }
         },
         "bn": {
@@ -56935,13 +56337,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Precise birth time improves accuracy"
+            "value": "وقت الميلاد الدقيق يحسّن الدقة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Precise birth time improves accuracy"
+            "value": "Точният час на раждане подобрява точността"
           }
         },
         "bn": {
@@ -57239,13 +56641,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter your birth time"
+            "value": "أدخل وقت ميلادك"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter your birth time"
+            "value": "Въведи часа на раждане"
           }
         },
         "bn": {
@@ -57543,13 +56945,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter birth location"
+            "value": "أدخل مكان الميلاد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter birth location"
+            "value": "Въведи място на раждане"
           }
         },
         "bn": {
@@ -57847,13 +57249,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Manage Profiles"
+            "value": "إدارة الملفات الشخصية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Manage Profiles"
+            "value": "Управление на профили"
           }
         },
         "bn": {
@@ -58151,13 +57553,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter name"
+            "value": "أدخل الاسم"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter name"
+            "value": "Въведи име"
           }
         },
         "bn": {
@@ -58455,13 +57857,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Profiles"
+            "value": "الملفات الشخصية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Profiles"
+            "value": "Профили"
           }
         },
         "bn": {
@@ -58759,13 +58161,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter birth details to create a profile"
+            "value": "أدخل تفاصيل الميلاد لإنشاء ملف شخصي"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Enter birth details to create a profile"
+            "value": "Въведи данни за раждане, за да създадеш профил"
           }
         },
         "bn": {
@@ -59063,13 +58465,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "New Profile"
+            "value": "ملف شخصي جديد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "New Profile"
+            "value": "Нов профил"
           }
         },
         "bn": {
@@ -59362,323 +58764,18 @@
         }
       }
     },
-    "profile.reports.count": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reports:"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Звітів:"
-          }
-        }
-      }
-    },
     "profile.reports.count %lld": {
-      "extractionState": "stale",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld reports"
+            "value": "%lld تقارير"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld Berichte"
-          }
-        },
-        "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld informes"
-          }
-        },
-        "et": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "fa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "fil": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld rapports"
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld report"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lldレポート"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld개 리포트"
-          }
-        },
-        "lt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "lv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "ms": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld relatórios"
-          }
-        },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld отчётов"
-          }
-        },
-        "sk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "sl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "sr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "sw": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "th": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld rapor"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld звітів"
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld reports"
+            "value": "%lld доклади"
           }
         }
       }
@@ -59688,13 +58785,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose a profile to continue"
+            "value": "اختر ملفاً شخصياً للمتابعة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Choose a profile to continue"
+            "value": "Избери профил, за да продължиш"
           }
         },
         "bn": {
@@ -59992,13 +59089,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select Profile"
+            "value": "اختر الملف الشخصي"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select Profile"
+            "value": "Избери профил"
           }
         },
         "bn": {
@@ -60291,323 +59388,18 @@
         }
       }
     },
-    "purchase.action.create": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Створити"
-          }
-        }
-      }
-    },
     "purchase.action.create %@": {
-      "extractionState": "stale",
       "localizations": {
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create %@ Report"
+            "value": "إنشاء تقرير %@"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@-Bericht erstellen"
-          }
-        },
-        "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Crear informe de %@"
-          }
-        },
-        "et": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "fa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "fil": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Créer un rapport %@"
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Crea report %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@レポートを作成"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ 리포트 만들기"
-          }
-        },
-        "lt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "lv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "ms": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Criar relatório de %@"
-          }
-        },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Создать отчёт %@"
-          }
-        },
-        "sk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "sl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "sr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "sw": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "th": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ raporu oluştur"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Створити звіт %@"
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Create %@ Report"
+            "value": "Създай доклад %@"
           }
         }
       }
@@ -60625,6 +59417,18 @@
             "state": "translated",
             "value": "Дата і час:"
           }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التاريخ والوقت:"
+          }
+        },
+        "bg": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дата и час:"
+          }
         }
       }
     },
@@ -60634,13 +59438,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ at %@"
+            "value": "%@ في %@"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ at %@"
+            "value": "%@ в %@"
           }
         },
         "bn": {
@@ -60938,13 +59742,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Access your reports anytime"
+            "value": "الوصول إلى تقاريرك في أي وقت"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Access your reports anytime"
+            "value": "Достъп до докладите ти по всяко време"
           }
         },
         "bn": {
@@ -61242,13 +60046,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lifetime Access"
+            "value": "وصول مدى الحياة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lifetime Access"
+            "value": "Доживотен достъп"
           }
         },
         "bn": {
@@ -61546,13 +60350,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Analysis based on astrological sources"
+            "value": "تحليل مبني على مصادر فلكية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Analysis based on astrological sources"
+            "value": "Анализ, базиран на астрологични източници"
           }
         },
         "bn": {
@@ -61850,13 +60654,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Professional Literature"
+            "value": "أدبيات احترافية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Professional Literature"
+            "value": "Професионална литература"
           }
         },
         "bn": {
@@ -62154,13 +60958,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Save and share your report"
+            "value": "احفظ وشارك تقريرك"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Save and share your report"
+            "value": "Запази и сподели доклада си"
           }
         },
         "bn": {
@@ -62458,13 +61262,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "PDF Export"
+            "value": "تصدير PDF"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "PDF Export"
+            "value": "PDF експорт"
           }
         },
         "bn": {
@@ -62762,13 +61566,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tailored to your birth chart"
+            "value": "مصمم خصيصاً لخريطة ميلادك"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tailored to your birth chart"
+            "value": "Пригоден към наталната ти карта"
           }
         },
         "bn": {
@@ -63066,13 +61870,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Personalized Report"
+            "value": "تقرير مخصص"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Personalized Report"
+            "value": "Персонализиран доклад"
           }
         },
         "bn": {
@@ -63370,13 +62174,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "What You Get"
+            "value": "ما ستحصل عليه"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "What You Get"
+            "value": "Какво получаваш"
           }
         },
         "bn": {
@@ -63674,13 +62478,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "100% satisfaction guaranteed"
+            "value": "ضمان رضا 100%"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "100% satisfaction guaranteed"
+            "value": "100% гаранция за удовлетворение"
           }
         },
         "bn": {
@@ -63722,7 +62526,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "100% garantía de satisfacción"
+            "value": "100% satisfacción garantizada"
           }
         },
         "et": {
@@ -63752,7 +62556,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Garantie satisfaction 100%"
+            "value": "100% satisfaction garantie"
           }
         },
         "gu": {
@@ -63978,13 +62782,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "one-time payment"
+            "value": "دفعة واحدة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "one-time payment"
+            "value": "еднократно плащане"
           }
         },
         "bn": {
@@ -64282,13 +63086,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Purchase Confirmation"
+            "value": "تأكيد الشراء"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Purchase Confirmation"
+            "value": "Потвърждение на покупка"
           }
         },
         "bn": {
@@ -64586,13 +63390,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pinch to zoom"
+            "value": "اقرص للتكبير"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pinch to zoom"
+            "value": "Щипни, за да увеличиш"
           }
         },
         "bn": {
@@ -65195,13 +63999,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Purchase a report to see it here"
+            "value": "اشترِ تقريراً لرؤيته هنا"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Purchase a report to see it here"
+            "value": "Закупи доклад, за да го видиш тук"
           }
         },
         "bn": {
@@ -65499,13 +64303,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "No Reports Yet"
+            "value": "لا توجد تقارير بعد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "No Reports Yet"
+            "value": "Все още няма доклади"
           }
         },
         "bn": {
@@ -65803,13 +64607,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export PDF"
+            "value": "تصدير PDF"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export PDF"
+            "value": "Експортирай PDF"
           }
         },
         "bn": {
@@ -66107,13 +64911,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Failed to export report"
+            "value": "فشل في تصدير التقرير"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Failed to export report"
+            "value": "Неуспешен експорт на доклад"
           }
         },
         "bn": {
@@ -66411,13 +65215,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export Error"
+            "value": "خطأ في التصدير"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export Error"
+            "value": "Грешка при експорт"
           }
         },
         "bn": {
@@ -66715,13 +65519,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generating PDF..."
+            "value": "جارٍ إنشاء PDF..."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generating PDF..."
+            "value": "Генериране на PDF..."
           }
         },
         "bn": {
@@ -67019,13 +65823,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Report exported successfully"
+            "value": "تم تصدير التقرير بنجاح"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Report exported successfully"
+            "value": "Докладът е експортиран успешно"
           }
         },
         "bn": {
@@ -67323,13 +66127,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export Complete"
+            "value": "اكتمل التصدير"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Export Complete"
+            "value": "Експортът е завършен"
           }
         },
         "bn": {
@@ -67627,13 +66431,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generated with AstroSvitla"
+            "value": "تم الإنشاء بواسطة AstroSvitla"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generated with AstroSvitla"
+            "value": "Генерирано с AstroSvitla"
           }
         },
         "bn": {
@@ -67931,13 +66735,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generation Logs"
+            "value": "سجلات الإنشاء"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generation Logs"
+            "value": "Логове за генериране"
           }
         },
         "bn": {
@@ -68235,13 +67039,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your Personal Astrological Analysis"
+            "value": "تحليلك الفلكي الشخصي"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your Personal Astrological Analysis"
+            "value": "Твоят личен астрологичен анализ"
           }
         },
         "bn": {
@@ -68539,13 +67343,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "No knowledge snippets found"
+            "value": "لم يتم العثور على مقتطفات معرفية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "No knowledge snippets found"
+            "value": "Няма намерени фрагменти от знания"
           }
         },
         "bn": {
@@ -68843,13 +67647,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reports"
+            "value": "التقارير"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reports"
+            "value": "Доклади"
           }
         },
         "bn": {
@@ -69053,7 +67857,7 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Отчёты"
+            "value": "Отчеты"
           }
         },
         "sk": {
@@ -69147,13 +67951,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Note: %@"
+            "value": "ملاحظة: %@"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Note: %@"
+            "value": "Бележка: %@"
           }
         },
         "bn": {
@@ -69451,13 +68255,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Orphan Report"
+            "value": "تقرير يتيم"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Orphan Report"
+            "value": "Осиротял доклад"
           }
         },
         "bn": {
@@ -69755,13 +68559,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Detailed Analysis"
+            "value": "تحليل مفصّل"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Detailed Analysis"
+            "value": "Подробен анализ"
           }
         },
         "bn": {
@@ -70059,13 +68863,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Detailed Analysis"
+            "value": "تحليل مفصّل"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Detailed Analysis"
+            "value": "Подробен анализ"
           }
         },
         "bn": {
@@ -70363,13 +69167,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Influences"
+            "value": "التأثيرات الرئيسية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Influences"
+            "value": "Ключови влияния"
           }
         },
         "bn": {
@@ -70667,13 +69471,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Natal Chart"
+            "value": "خريطة الميلاد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Natal Chart"
+            "value": "Натална карта"
           }
         },
         "bn": {
@@ -70971,13 +69775,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "التوصيات"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "Препоръки"
           }
         },
         "bn": {
@@ -71275,13 +70079,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Summary"
+            "value": "ملخص"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Summary"
+            "value": "Резюме"
           }
         },
         "bn": {
@@ -71579,13 +70383,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share to Instagram"
+            "value": "مشاركة على Instagram"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share to Instagram"
+            "value": "Сподели в Instagram"
           }
         },
         "bn": {
@@ -71883,13 +70687,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "No sources used"
+            "value": "لم تُستخدم مصادر"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "No sources used"
+            "value": "Няма използвани източници"
           }
         },
         "bn": {
@@ -72187,13 +70991,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sources used"
+            "value": "المصادر المستخدمة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sources used"
+            "value": "Използвани източници"
           }
         },
         "bn": {
@@ -72499,310 +71303,17 @@
             "state": "translated",
             "value": "Звіт:"
           }
-        }
-      }
-    },
-    "report.title.with_area %@": {
-      "extractionState": "stale",
-      "localizations": {
+        },
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ Report"
+            "value": "التقرير:"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "bn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "cs": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "da": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@-Bericht"
-          }
-        },
-        "el": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Informe de %@"
-          }
-        },
-        "et": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "fa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "fi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "fil": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "fr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rapport %@"
-          }
-        },
-        "gu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "he": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "hi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "hr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "hu": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "it": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Report %@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@レポート"
-          }
-        },
-        "kn": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ 리포트"
-          }
-        },
-        "lt": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "lv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "ml": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "mr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "ms": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "nb": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "nl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "pa": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "pl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Relatório de %@"
-          }
-        },
-        "ro": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Отчёт %@"
-          }
-        },
-        "sk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "sl": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "sr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "sv": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "sw": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "ta": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "te": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "th": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ raporu"
-          }
-        },
-        "uk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Звіт %@"
-          }
-        },
-        "ur": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ Report"
+            "value": "Доклад:"
           }
         }
       }
@@ -72812,13 +71323,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unable to delete report."
+            "value": "تعذر حذف التقرير."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unable to delete report."
+            "value": "Неуспешно изтриване на доклад."
           }
         },
         "bn": {
@@ -73116,13 +71627,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unable to load saved reports."
+            "value": "تعذر تحميل التقارير المحفوظة."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unable to load saved reports."
+            "value": "Неуспешно зареждане на запазени доклади."
           }
         },
         "bn": {
@@ -73420,13 +71931,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "≈%1$d min"
+            "value": "≈%1$d دقيقة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "≈%1$d min"
+            "value": "≈%1$d мин"
           }
         },
         "bn": {
@@ -73724,13 +72235,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Not linked to a birth chart"
+            "value": "غير مرتبط بخريطة ميلاد"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Not linked to a birth chart"
+            "value": "Не е свързан с натална карта"
           }
         },
         "bn": {
@@ -74028,13 +72539,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unnamed profile"
+            "value": "ملف شخصي بدون اسم"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unnamed profile"
+            "value": "Профил без име"
           }
         },
         "bn": {
@@ -74341,6 +72852,18 @@
             "state": "translated",
             "value": "Як це працює"
           }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "كيف يعمل"
+          }
+        },
+        "bg": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Как работи"
+          }
         }
       }
     },
@@ -74358,6 +72881,18 @@
             "state": "translated",
             "value": "Дізнайтеся про функції додатку"
           }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعرف على ميزات التطبيق"
+          }
+        },
+        "bg": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Научи повече за функциите на приложението"
+          }
         }
       }
     },
@@ -74367,13 +72902,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Made with ❤️ in Ukraine"
+            "value": "صُنع بـ ❤️ في أوكرانيا"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Made with ❤️ in Ukraine"
+            "value": "Направено с ❤️ в Украйна"
           }
         },
         "bn": {
@@ -74672,13 +73207,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Version"
+            "value": "الإصدار"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Version"
+            "value": "Версия"
           }
         },
         "bn": {
@@ -74977,13 +73512,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendation"
+            "value": "التوصية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendation"
+            "value": "Препоръка"
           }
         },
         "bn": {
@@ -75282,13 +73817,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommended"
+            "value": "موصى به"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommended"
+            "value": "Препоръчано"
           }
         },
         "bn": {
@@ -75587,13 +74122,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "tokens"
+            "value": "رموز"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "tokens"
+            "value": "токени"
           }
         },
         "bn": {
@@ -75891,13 +74426,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld tokens"
+            "value": "%lld رموز"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld tokens"
+            "value": "%lld токени"
           }
         },
         "bn": {
@@ -76196,13 +74731,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dev Mode disabled"
+            "value": "تم تعطيل وضع التطوير"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dev Mode disabled"
+            "value": "Dev режимът е изключен"
           }
         },
         "bn": {
@@ -76501,13 +75036,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dev Mode enabled"
+            "value": "تم تفعيل وضع التطوير"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dev Mode enabled"
+            "value": "Dev режимът е включен"
           }
         },
         "bn": {
@@ -76806,13 +75341,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Preview Onboarding"
+            "value": "معاينة الإعداد الأولي"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Preview Onboarding"
+            "value": "Преглед на въвеждане"
           }
         },
         "bn": {
@@ -77111,13 +75646,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Show onboarding flow without resetting state"
+            "value": "عرض تدفق الإعداد الأولي دون إعادة تعيين الحالة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Show onboarding flow without resetting state"
+            "value": "Покажи въвеждащия поток без нулиране на състоянието"
           }
         },
         "bn": {
@@ -77416,13 +75951,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reset Onboarding"
+            "value": "إعادة تعيين الإعداد الأولي"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reset Onboarding"
+            "value": "Нулирай въвеждането"
           }
         },
         "bn": {
@@ -77721,13 +76256,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Clear completed state and restart app"
+            "value": "مسح الحالة المكتملة وإعادة تشغيل التطبيق"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Clear completed state and restart app"
+            "value": "Изчисти завършеното състояние и рестартирай приложението"
           }
         },
         "bn": {
@@ -78026,13 +76561,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Change in Settings"
+            "value": "تغيير في الإعدادات"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Change in Settings"
+            "value": "Промени в Настройки"
           }
         },
         "bn": {
@@ -78331,13 +76866,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Manage Profiles"
+            "value": "إدارة الملفات الشخصية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Manage Profiles"
+            "value": "Управление на профили"
           }
         },
         "bn": {
@@ -78636,13 +77171,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add, edit, or delete profiles"
+            "value": "إضافة أو تعديل أو حذف الملفات الشخصية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Add, edit, or delete profiles"
+            "value": "Добави, редактирай или изтрий профили"
           }
         },
         "bn": {
@@ -78941,13 +77476,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "About"
+            "value": "حول"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "About"
+            "value": "За приложението"
           }
         },
         "bn": {
@@ -78971,7 +77506,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Über"
+            "value": "Über uns"
           }
         },
         "el": {
@@ -79246,13 +77781,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "AI Model"
+            "value": "نموذج الذكاء الاصطناعي"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "AI Model"
+            "value": "AI модел"
           }
         },
         "bn": {
@@ -79551,13 +78086,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appearance"
+            "value": "المظهر"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appearance"
+            "value": "Външен вид"
           }
         },
         "bn": {
@@ -79581,7 +78116,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Darstellung"
+            "value": "Erscheinungsbild"
           }
         },
         "el": {
@@ -79856,13 +78391,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Data"
+            "value": "البيانات"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Data"
+            "value": "Данни"
           }
         },
         "bn": {
@@ -80161,13 +78696,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dev Tools"
+            "value": "أدوات التطوير"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dev Tools"
+            "value": "Dev инструменти"
           }
         },
         "bn": {
@@ -80466,13 +79001,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Language"
+            "value": "اللغة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Language"
+            "value": "Език"
           }
         },
         "bn": {
@@ -80771,13 +79306,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Onboarding"
+            "value": "الإعداد الأولي"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Onboarding"
+            "value": "Въвеждане"
           }
         },
         "bn": {
@@ -81076,13 +79611,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Profiles"
+            "value": "الملفات الشخصية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Profiles"
+            "value": "Профили"
           }
         },
         "bn": {
@@ -81381,13 +79916,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appearance"
+            "value": "المظهر"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Appearance"
+            "value": "Външен вид"
           }
         },
         "bn": {
@@ -81411,7 +79946,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Darstellung"
+            "value": "Erscheinungsbild"
           }
         },
         "el": {
@@ -81686,13 +80221,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dark"
+            "value": "داكن"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dark"
+            "value": "Тъмна"
           }
         },
         "bn": {
@@ -81991,13 +80526,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Light"
+            "value": "فاتح"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Light"
+            "value": "Светла"
           }
         },
         "bn": {
@@ -82296,13 +80831,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "System"
+            "value": "النظام"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "System"
+            "value": "Системна"
           }
         },
         "bn": {
@@ -82601,13 +81136,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "App Theme"
+            "value": "سمة التطبيق"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "App Theme"
+            "value": "Тема на приложението"
           }
         },
         "bn": {
@@ -82954,7 +81489,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajustes"
+            "value": "Configuración"
           }
         },
         "et": {
@@ -83210,13 +81745,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 slides for maximum impact"
+            "value": "5 شرائح لأقصى تأثير"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 slides for maximum impact"
+            "value": "5 слайда за максимално въздействие"
           }
         },
         "bn": {
@@ -83514,13 +82049,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Perfect for Stories"
+            "value": "مثالي للقصص"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Perfect for Stories"
+            "value": "Перфектно за Stories"
           }
         },
         "bn": {
@@ -83818,13 +82353,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Summary and top 3 influences"
+            "value": "ملخص وأهم 3 تأثيرات"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Summary and top 3 influences"
+            "value": "Резюме и топ 3 влияния"
           }
         },
         "bn": {
@@ -84122,13 +82657,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "3 personalized tips"
+            "value": "3 نصائح مخصصة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "3 personalized tips"
+            "value": "3 персонализирани съвета"
           }
         },
         "bn": {
@@ -84152,7 +82687,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Empfehlungen teilen"
+            "value": "3 personalisierte Tipps"
           }
         },
         "el": {
@@ -84170,7 +82705,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Compartir recomendaciones"
+            "value": "3 consejos personalizados"
           }
         },
         "et": {
@@ -84200,7 +82735,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Partager les recommandations"
+            "value": "3 conseils personnalisés"
           }
         },
         "gu": {
@@ -84332,7 +82867,7 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Поделиться рекомендациями"
+            "value": "3 персональных совета"
           }
         },
         "sk": {
@@ -84426,13 +82961,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Full Carousel"
+            "value": "عرض كامل"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Full Carousel"
+            "value": "Пълна карусел"
           }
         },
         "bn": {
@@ -84730,13 +83265,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chart Only"
+            "value": "الخريطة فقط"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Chart Only"
+            "value": "Само карта"
           }
         },
         "bn": {
@@ -85034,13 +83569,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Insights"
+            "value": "الرؤى الرئيسية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Key Insights"
+            "value": "Ключови прозрения"
           }
         },
         "bn": {
@@ -85338,13 +83873,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "التوصيات"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "Препоръки"
           }
         },
         "bn": {
@@ -85642,13 +84177,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share not available for this report"
+            "value": "المشاركة غير متاحة لهذا التقرير"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share not available for this report"
+            "value": "Споделянето не е налично за този доклад"
           }
         },
         "bn": {
@@ -85947,13 +84482,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 images will be shared. Create a carousel post in Instagram."
+            "value": "سيتم مشاركة 5 صور. أنشئ منشور عرض شرائح في Instagram."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "5 images will be shared. Create a carousel post in Instagram."
+            "value": "Ще бъдат споделени 5 изображения. Създай карусел публикация в Instagram."
           }
         },
         "bn": {
@@ -86252,13 +84787,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your Natal Chart"
+            "value": "خريطة ميلادك"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Your Natal Chart"
+            "value": "Твоята натална карта"
           }
         },
         "bn": {
@@ -86557,13 +85092,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Get your full report"
+            "value": "احصل على تقريرك الكامل"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Get your full report"
+            "value": "Получи пълния си доклад"
           }
         },
         "bn": {
@@ -86862,13 +85397,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share to Instagram"
+            "value": "مشاركة على Instagram"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share to Instagram"
+            "value": "Сподели в Instagram"
           }
         },
         "bn": {
@@ -87167,13 +85702,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Preparing templates..."
+            "value": "جارٍ تحضير القوالب..."
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Preparing templates..."
+            "value": "Подготвяне на шаблони..."
           }
         },
         "bn": {
@@ -87472,13 +86007,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share to Instagram"
+            "value": "مشاركة على Instagram"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share to Instagram"
+            "value": "Сподели в Instagram"
           }
         },
         "bn": {
@@ -87777,13 +86312,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "KEY INFLUENCES"
+            "value": "التأثيرات الرئيسية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "KEY INFLUENCES"
+            "value": "КЛЮЧОВИ ВЛИЯНИЯ"
           }
         },
         "bn": {
@@ -88082,13 +86617,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "No preview available"
+            "value": "المعاينة غير متاحة"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "No preview available"
+            "value": "Прегледът не е наличен"
           }
         },
         "bn": {
@@ -88387,13 +86922,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "التوصيات"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Recommendations"
+            "value": "Препоръки"
           }
         },
         "bn": {
@@ -88691,13 +87226,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Home"
+            "value": "الرئيسية"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Home"
+            "value": "Начало"
           }
         },
         "bn": {
@@ -88721,7 +87256,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Start"
+            "value": "Startseite"
           }
         },
         "el": {
@@ -88995,13 +87530,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reports"
+            "value": "التقارير"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reports"
+            "value": "Доклади"
           }
         },
         "bn": {
@@ -89205,7 +87740,7 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Отчёты"
+            "value": "Отчеты"
           }
         },
         "sk": {
@@ -89299,13 +87834,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Settings"
+            "value": "الإعدادات"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Settings"
+            "value": "Настройки"
           }
         },
         "bn": {
@@ -89347,7 +87882,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ajustes"
+            "value": "Configuración"
           }
         },
         "et": {
@@ -89603,13 +88138,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Discover your cosmic path"
+            "value": "اكتشف مسارك الكوني"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Discover your cosmic path"
+            "value": "Открий космическия си път"
           }
         },
         "bn": {
@@ -89907,13 +88442,13 @@
         "ar": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generated with Zorya"
+            "value": "تم الإنشاء بواسطة Zorya"
           }
         },
         "bg": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generated with Zorya"
+            "value": "Генерирано с Zorya"
           }
         },
         "bn": {
