@@ -103,6 +103,7 @@ struct ProfileEmptyStateView: View {
                         }
                     }
                     .buttonStyle(.astroPrimary)
+                    .accessibilityIdentifier("createProfileButton")
                     .padding(.horizontal, 32)
 
                     // Subtle help text with icon

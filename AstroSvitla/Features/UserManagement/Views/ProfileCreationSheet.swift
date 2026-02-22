@@ -12,6 +12,8 @@ struct ProfileCreationSheet: View {
     @State private var coordinate: CLLocationCoordinate2D? = nil
     @State private var timezone: String = TimeZone.current.identifier
     @State private var showLocationSearch = false
+    @State private var showDatePicker = false
+    @State private var showTimePicker = false
     @FocusState private var focusedField: Field?
 
     private enum Field {
@@ -81,18 +83,23 @@ struct ProfileCreationSheet: View {
                                 .textCase(.uppercase)
                                 .tracking(0.5)
 
-                            DatePicker(
-                                "birth.field.date",
-                                selection: $birthDate,
-                                in: dateRange,
-                                displayedComponents: .date
-                            )
-                            .datePickerStyle(.compact)
-                            .labelsHidden()
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 8)
-                            .background(Color(.secondarySystemBackground))
-                            .cornerRadius(12)
+                            Button {
+                                focusedField = nil
+                                showDatePicker = true
+                            } label: {
+                                HStack {
+                                    Text(birthDate, style: .date)
+                                        .foregroundStyle(.primary)
+                                    Spacer()
+                                    Image(systemName: "calendar")
+                                        .foregroundStyle(Color.accentColor)
+                                }
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 14)
+                                .background(Color(.secondarySystemBackground))
+                                .cornerRadius(12)
+                            }
+                            .accessibilityIdentifier("profileDatePickerRow")
                         }
 
                         // Birth time
@@ -103,17 +110,23 @@ struct ProfileCreationSheet: View {
                                 .textCase(.uppercase)
                                 .tracking(0.5)
 
-                            DatePicker(
-                                "birth.field.time",
-                                selection: $birthTime,
-                                displayedComponents: .hourAndMinute
-                            )
-                            .datePickerStyle(.compact)
-                            .labelsHidden()
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 8)
-                            .background(Color(.secondarySystemBackground))
-                            .cornerRadius(12)
+                            Button {
+                                focusedField = nil
+                                showTimePicker = true
+                            } label: {
+                                HStack {
+                                    Text(birthTime, style: .time)
+                                        .foregroundStyle(.primary)
+                                    Spacer()
+                                    Image(systemName: "clock")
+                                        .foregroundStyle(Color.accentColor)
+                                }
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 14)
+                                .background(Color(.secondarySystemBackground))
+                                .cornerRadius(12)
+                            }
+                            .accessibilityIdentifier("profileTimePickerRow")
                         }
 
                         Divider()
@@ -187,7 +200,27 @@ struct ProfileCreationSheet: View {
                     }
                     .disabled(!isFormValid)
                     .fontWeight(.semibold)
+                    .accessibilityIdentifier("profileSaveButton")
                 }
+            }
+            .sheet(isPresented: $showDatePicker) {
+                ProfileDatePickerSheet(
+                    title: String(localized: "profile.field.birthdate"),
+                    selection: $birthDate,
+                    in: dateRange,
+                    displayedComponents: .date
+                )
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
+            }
+            .sheet(isPresented: $showTimePicker) {
+                ProfileDatePickerSheet(
+                    title: String(localized: "profile.field.birthtime"),
+                    selection: $birthTime,
+                    displayedComponents: .hourAndMinute
+                )
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
             }
             .sheet(isPresented: $showLocationSearch) {
                 NavigationStack {
@@ -213,6 +246,60 @@ struct ProfileCreationSheet: View {
         }
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
+    }
+}
+
+// MARK: - ProfileDatePickerSheet
+
+private struct ProfileDatePickerSheet: View {
+    let title: String
+    @Binding var selection: Date
+    var range: ClosedRange<Date>? = nil
+    let displayedComponents: DatePickerComponents
+
+    @Environment(\.dismiss) private var dismiss
+
+    init(
+        title: String,
+        selection: Binding<Date>,
+        in range: ClosedRange<Date>? = nil,
+        displayedComponents: DatePickerComponents
+    ) {
+        self.title = title
+        self._selection = selection
+        self.range = range
+        self.displayedComponents = displayedComponents
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Text(title)
+                    .font(.headline)
+                Spacer()
+                Button(String(localized: "action.done")) { dismiss() }
+                    .fontWeight(.semibold)
+                    .accessibilityIdentifier("profileDatePickerDoneButton")
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 16)
+
+            Divider()
+
+            if let range {
+                DatePicker("", selection: $selection, in: range, displayedComponents: displayedComponents)
+                    .datePickerStyle(.graphical)
+                    .labelsHidden()
+                    .padding(.horizontal)
+            } else {
+                DatePicker("", selection: $selection, displayedComponents: displayedComponents)
+                    .datePickerStyle(.graphical)
+                    .labelsHidden()
+                    .padding(.horizontal)
+            }
+
+            Spacer()
+        }
     }
 }
 

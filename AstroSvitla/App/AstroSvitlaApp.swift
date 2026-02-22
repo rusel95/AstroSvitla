@@ -48,6 +48,12 @@ struct AstroSvitlaApp: App {
         
         // 2. Configure RevenueCat SDK
         RevenueCatConfiguration.configure()
+
+        // UI Testing mode: skip onboarding, clear saved birth data
+        if CommandLine.arguments.contains("--uitesting") {
+            UserDefaults.standard.set(true, forKey: "com.astrosvitla.onboarding.completed")
+            UserDefaults.standard.synchronize()
+        }
         
         // Optional: Validate configuration
 #if DEBUG

@@ -7,6 +7,8 @@ struct BirthDataInputView: View {
 
     @FocusState private var focusedField: Field?
     @State private var showLocationSearch = false
+    @State private var showDatePicker = false
+    @State private var showTimePicker = false
 
     private enum Field {
         case name
@@ -22,8 +24,42 @@ struct BirthDataInputView: View {
             }
 
             Section {
-                DatePicker("birth.field.date", selection: $viewModel.birthDate, in: viewModel.dateRange, displayedComponents: .date)
-                DatePicker("birth.field.time", selection: $viewModel.birthTime, displayedComponents: .hourAndMinute)
+                // Date row — opens sheet instead of inline expansion
+                Button {
+                    focusedField = nil
+                    showDatePicker = true
+                } label: {
+                    HStack {
+                        Text("birth.field.date")
+                            .foregroundStyle(.primary)
+                        Spacer()
+                        Text(viewModel.birthDate, style: .date)
+                            .foregroundStyle(.secondary)
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .accessibilityIdentifier("datePickerRow")
+
+                // Time row — opens sheet instead of inline expansion
+                Button {
+                    focusedField = nil
+                    showTimePicker = true
+                } label: {
+                    HStack {
+                        Text("birth.field.time")
+                            .foregroundStyle(.primary)
+                        Spacer()
+                        Text(viewModel.birthTime, style: .time)
+                            .foregroundStyle(.secondary)
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .accessibilityIdentifier("timePickerRow")
+
                 Button {
                     showLocationSearch = true
                 } label: {
@@ -39,6 +75,7 @@ struct BirthDataInputView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+                .accessibilityIdentifier("locationPickerRow")
             } header: {
                 Text("birth.section.details")
             }
@@ -68,6 +105,27 @@ struct BirthDataInputView: View {
                 }
             }
         }
+        // Date picker sheet
+        .sheet(isPresented: $showDatePicker) {
+            DatePickerSheet(
+                title: String(localized: "birth.field.date"),
+                selection: $viewModel.birthDate,
+                in: viewModel.dateRange,
+                displayedComponents: .date
+            )
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
+        }
+        // Time picker sheet
+        .sheet(isPresented: $showTimePicker) {
+            DatePickerSheet(
+                title: String(localized: "birth.field.time"),
+                selection: $viewModel.birthTime,
+                displayedComponents: .hourAndMinute
+            )
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
+        }
         .sheet(isPresented: $showLocationSearch) {
             NavigationStack {
                 LocationSearchView(initialQuery: viewModel.location) { suggestion in
@@ -96,11 +154,75 @@ struct BirthDataInputView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(viewModel.isValid == false)
+                .accessibilityIdentifier("continueButton")
                 .padding(.horizontal)
                 .padding(.top, 12)
                 .padding(.bottom, 12)
             }
             .background(.ultraThinMaterial)
+        }
+    }
+}
+
+// MARK: - DatePickerSheet
+
+private struct DatePickerSheet: View {
+    let title: String
+    @Binding var selection: Date
+    var range: ClosedRange<Date>? = nil
+    let displayedComponents: DatePickerComponents
+
+    @Environment(\.dismiss) private var dismiss
+
+    init(
+        title: String,
+        selection: Binding<Date>,
+        in range: ClosedRange<Date>? = nil,
+        displayedComponents: DatePickerComponents
+    ) {
+        self.title = title
+        self._selection = selection
+        self.range = range
+        self.displayedComponents = displayedComponents
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Text(title)
+                    .font(.headline)
+                Spacer()
+                Button("action.done") { dismiss() }
+                    .fontWeight(.semibold)
+                    .accessibilityIdentifier("datePickerDoneButton")
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 16)
+
+            Divider()
+
+            if let range {
+                DatePicker(
+                    "",
+                    selection: $selection,
+                    in: range,
+                    displayedComponents: displayedComponents
+                )
+                .datePickerStyle(.graphical)
+                .labelsHidden()
+                .padding(.horizontal)
+            } else {
+                DatePicker(
+                    "",
+                    selection: $selection,
+                    displayedComponents: displayedComponents
+                )
+                .datePickerStyle(.graphical)
+                .labelsHidden()
+                .padding(.horizontal)
+            }
+
+            Spacer()
         }
     }
 }
